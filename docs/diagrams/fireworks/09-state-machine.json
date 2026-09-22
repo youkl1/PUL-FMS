@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 990,
+  "title": "状态机（双轨）",
+  "subtitle": "追溯码实例状态 × 单据状态 · 「入槽」为可选状态而非必经",
+  "containers": [
+    { "id": "code", "x": 40, "y": 100, "width": 1280, "height": 520, "label": "追溯码实例状态轨", "stroke": "#b7cdf0", "fill": "#eef4fb" },
+    { "id": "doc", "x": 40, "y": 660, "width": 1280, "height": 290, "label": "单据状态轨（7 类单据同构）", "stroke": "#b7e0c4", "fill": "#eef8f0" }
+  ],
+  "nodes": [
+    { "id": "C7", "kind": "rect", "x": 270, "y": 140, "width": 170, "height": 76, "type_label": "TERMINAL", "label": "已损耗销毁", "sublabel": "终态 · 不可恢复", "fill": "#f6f8fb", "stroke": "#2fb344" },
+    { "id": "C4", "kind": "rect", "x": 790, "y": 140, "width": 170, "height": 76, "type_label": "OPTIONAL", "label": "入槽", "sublabel": "可选状态", "fill": "#fff7e6", "stroke": "#d48806" },
+    { "id": "C6", "kind": "rect", "x": 60, "y": 290, "width": 140, "height": 76, "type_label": "TERMINAL", "label": "已退供应商", "sublabel": "终态", "fill": "#f6f8fb", "stroke": "#2fb344" },
+    { "id": "C1", "kind": "rect", "x": 270, "y": 290, "width": 170, "height": 76, "type_label": "STOCK", "label": "已入库 · 在架", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "C2", "kind": "rect", "x": 530, "y": 290, "width": 170, "height": 76, "type_label": "IN-TRANSIT", "label": "在途", "sublabel": "领用出库已审核", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "C3", "kind": "rect", "x": 790, "y": 290, "width": 170, "height": 76, "type_label": "PHARM-STOCK", "label": "药房库存", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "C5", "kind": "rect", "x": 1130, "y": 290, "width": 170, "height": 76, "type_label": "TERMINAL", "label": "已发药", "sublabel": "终态", "fill": "#f6f8fb", "stroke": "#2fb344" },
+    { "id": "C8", "kind": "rect", "x": 530, "y": 406, "width": 170, "height": 76, "type_label": "RETURNING", "label": "退回库房途中", "fill": "#ffffff", "stroke": "#206bc4" },
+
+    { "id": "D1", "kind": "rect", "x": 120, "y": 700, "width": 190, "height": 76, "type_label": "DRAFT", "label": "建单 · 草稿", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "D2", "kind": "rect", "x": 480, "y": 700, "width": 190, "height": 76, "type_label": "EFFECTIVE", "label": "已审核 · 生效", "sublabel": "进入库存集合推导", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "D3", "kind": "rect", "x": 120, "y": 840, "width": 190, "height": 76, "type_label": "TERMINAL", "label": "终态 · 不可改", "fill": "#f6f8fb", "stroke": "#2fb344" },
+    { "id": "DNOTE", "kind": "rect", "x": 900, "y": 740, "width": 360, "height": 76, "type_label": "NOTE", "label": "7 类单据同构", "sublabel": "采购入/采购退/领用/退回入/其他入/其他出/损耗", "fill": "#ffffff", "stroke": "#626976", "flat": true }
+  ],
+  "arrows": [
+    { "id": "t1", "source": "C1", "target": "C2", "source_port": "right", "target_port": "left", "flow": "control", "label": "领用出库" },
+    { "id": "t2", "source": "C2", "target": "C3", "source_port": "right", "target_port": "left", "flow": "control", "label": "确认入库" },
+    { "id": "t3", "source": "C3", "target": "C5", "source_port": "right", "target_port": "left", "flow": "control", "label": "出库扫码" },
+    { "id": "t4", "source": "C3", "target": "C4", "source_port": "top", "target_port": "bottom", "flow": "async", "label": "绑定入槽" },
+    { "id": "t5", "source": "C4", "target": "C5", "source_port": "right", "target_port": "top", "flow": "async", "label": "出库扫码" },
+    { "id": "t6", "source": "C1", "target": "C6", "source_port": "left", "target_port": "right", "flow": "feedback", "label": "采购退货" },
+    { "id": "t7", "source": "C1", "target": "C7", "source_port": "top", "target_port": "bottom", "flow": "feedback", "label": "损耗报损" },
+    { "id": "t9", "source": "C3", "target": "C8", "source_port": "bottom", "target_port": "right", "flow": "feedback", "label": "退回库房" },
+    { "id": "t10", "source": "C8", "target": "C1", "source_port": "left", "target_port": "bottom", "flow": "control", "label": "退回入库" },
+
+    { "id": "d1", "source": "D1", "target": "D2", "source_port": "right", "target_port": "left", "flow": "control", "label": "审核" },
+    { "id": "d2", "source": "D1", "target": "D3", "source_port": "bottom", "target_port": "top", "flow": "feedback", "label": "作废", "route_points": [[215, 808]] },
+    { "id": "d3", "source": "D2", "target": "D3", "source_port": "bottom", "target_port": "right", "flow": "control", "label": "闭环" }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 60,
+  "legend_y": 956,
+  "legend": [
+    { "flow": "control", "label": "主迁移 / 审核" },
+    { "flow": "feedback", "label": "出清 · 退回 · 作废" },
+    { "flow": "async", "label": "可选（入槽）" }
+  ],
+  "footer": "PUL-FMS · 09 状态机（双轨） · fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 978
+}

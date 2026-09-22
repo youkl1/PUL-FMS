@@ -74,11 +74,13 @@ minUnit {u:'片',per:7} = 拆零最小制剂单位
 
 ```
 docs/diagrams/
-  01-lifecycle.mmd … 11-usecase.mmd   # Mermaid 源文件，可 git diff
-  index.html                          # 浏览壳：左侧图清单、右侧渲染、可缩放
+  fireworks/NN-*.json      # fireworks-tech-graph 图源（绝对定位，可 git diff）
+  fireworks/NN-*.svg       # 渲染产物（几何校验通过：零交叉/无截断）
+  fireworks/NN-*.html      # 单图离线交互页（缩放/平移）
+  index.html               # 浏览壳：左侧图清单、右侧 SVG、缩放拖拽、#NN 深链
 ```
 
-浏览壳为单文件 HTML，本地起服务或双击即可用；用 Mermaid 本地库（不依赖外网 CDN，沿用项目硬规则）。
+**渲染管线变更（2026-09-22 下午，用户拍板）**：初版用 Mermaid（.mmd 文件仍保留在 docs/diagrams/ 作内容口径参考），因泳道图线条交叉不直观，改用 `~/.claude/skills/fireworks-tech-graph`（geometry-safe + wire-routing 质量门 + text_policy strict 防截断，中文原生，离线 SVG 输出）。浏览壳为单文件 HTML，需从 `docs/diagrams/` 起服务（`python -m http.server 9991`）访问。
 
 ---
 

@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "composition": {
+    "profile": "showcase",
+    "max_total_bends": 16,
+    "max_bridged_crossings": 4,
+    "min_segment_length": 8
+  },
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 850,
+  "title": "人工后台维护入口 → 补哪张表",
+  "subtitle": "6 类人工入口 · 3 张表 · 系统的兜底能力",
+  "containers": [
+    {
+      "id": "lane-entry",
+      "x": 40,
+      "y": 110,
+      "width": 460,
+      "height": 660,
+      "label": "人工维护入口",
+      "stroke": "#b7cdf0",
+      "fill": "#eef4fb"
+    },
+    {
+      "id": "lane-table",
+      "x": 840,
+      "y": 110,
+      "width": 480,
+      "height": 660,
+      "label": "补写的表",
+      "stroke": "#d0d5dd",
+      "fill": "#f6f8fb"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "E1",
+      "kind": "rect",
+      "x": 70,
+      "y": 150,
+      "width": 400,
+      "height": 58,
+      "type_label": "MANUAL",
+      "label": "手工建档（药品字典）",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "E2",
+      "kind": "rect",
+      "x": 70,
+      "y": 250,
+      "width": 400,
+      "height": 58,
+      "type_label": "IMPORT",
+      "label": "HIS 导入（药品字典）",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "E3",
+      "kind": "rect",
+      "x": 70,
+      "y": 350,
+      "width": 400,
+      "height": 58,
+      "type_label": "FIX",
+      "label": "异常码补录（bad-codes 台账）",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "E4",
+      "kind": "rect",
+      "x": 70,
+      "y": 450,
+      "width": 400,
+      "height": 58,
+      "type_label": "TOGGLE",
+      "label": "标识码停用 / 启用（标识码字典）",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "E5",
+      "kind": "rect",
+      "x": 70,
+      "y": 550,
+      "width": 400,
+      "height": 58,
+      "type_label": "ADJUST",
+      "label": "其他入库 / 其他出库（库存调整）",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "E6",
+      "kind": "rect",
+      "x": 70,
+      "y": 659,
+      "width": 400,
+      "height": 58,
+      "type_label": "LOSS",
+      "label": "损耗报损（损耗出库单）",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "T1",
+      "kind": "cylinder",
+      "x": 900,
+      "y": 160,
+      "width": 360,
+      "height": 110,
+      "label": "DRUGS 药品主表",
+      "sublabel": "换算链 / 基本单位 / 拆零",
+      "fill": "#ffffff",
+      "stroke": "#626976"
+    },
+    {
+      "id": "T2",
+      "kind": "cylinder",
+      "x": 900,
+      "y": 390,
+      "width": 360,
+      "height": 110,
+      "label": "IDCODES 标识码子表",
+      "sublabel": "7 位码 → 药品 / 等级 / 包装单位",
+      "fill": "#ffffff",
+      "stroke": "#626976"
+    },
+    {
+      "id": "T3",
+      "kind": "cylinder",
+      "x": 900,
+      "y": 624,
+      "width": 360,
+      "height": 110,
+      "label": "单据 + 码清单",
+      "sublabel": "库存集合推导的事实源",
+      "fill": "#ffffff",
+      "stroke": "#626976"
+    }
+  ],
+  "arrows": [
+    {
+      "id": "e1",
+      "source": "E1",
+      "target": "T1",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "write",
+      "label": "建档待审核·无码拦截",
+      "route_points": [[860, 170], [860, 197]]
+    },
+    {
+      "id": "e2",
+      "source": "E1",
+      "target": "T2",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "write",
+      "route_points": [[820, 188], [820, 427]]
+    },
+    {
+      "id": "e3",
+      "source": "E2",
+      "target": "T1",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "write",
+      "label": "编码匹配·幂等导入",
+      "route_points": [[520, 279], [520, 215]]
+    },
+    {
+      "id": "e4",
+      "source": "E3",
+      "target": "T2",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "write",
+      "label": "upsert 补码",
+      "route_points": [[760, 370], [760, 445]]
+    },
+    {
+      "id": "e5",
+      "source": "E3",
+      "target": "T1",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "write",
+      "route_points": [[700, 388], [700, 233]]
+    },
+    {
+      "id": "e6",
+      "source": "E4",
+      "target": "T2",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "write",
+      "label": "停用即扫码拦截",
+      "route_points": [[580, 479], [580, 463]]
+    },
+    {
+      "id": "e7",
+      "source": "E5",
+      "target": "T3",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "write",
+      "label": "审核入库存集合",
+      "route_points": [[600, 579], [600, 670]]
+    },
+    {
+      "id": "e8",
+      "source": "E6",
+      "target": "T3",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "write",
+      "label": "终态报损"
+    }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 560,
+  "legend_y": 800,
+  "legend": [
+    {
+      "flow": "write",
+      "label": "人工补写 / 维护"
+    }
+  ],
+  "footer": "PUL-FMS · 05 人工后台维护入口 → 补哪张表 · fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 824
+}

@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 1080,
+  "title": "码 ⇄ 药 ⇄ 单位 全链路转换",
+  "subtitle": "每节点四维：形态 / 转换 / 读写表 / 库存影响 · 蓝=已实现 橙=待设计",
+  "containers": [],
+  "nodes": [
+    {
+      "id": "N1",
+      "kind": "review_card",
+      "c4_type": "STEP 1 · DONE",
+      "x": 60,
+      "y": 104,
+      "width": 680,
+      "height": 92,
+      "label": "① 采购入库（扫码）",
+      "description": "形态：20 位追溯码 ｜ 转换：前 7 位查 IDCODES → 药品+等级+包装单位 ｜ 读写：读 IDCODES ｜ 写 TRACE_CODE + DOC_CODE ｜ 库存：+码 入在架",
+      "fill": "#e6f4ff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "N2",
+      "kind": "review_card",
+      "c4_type": "STEP 2 · DONE",
+      "x": 60,
+      "y": 240,
+      "width": 680,
+      "height": 92,
+      "label": "② 库房在架",
+      "description": "形态：存码；人看到的数字全是药品基本单位 ｜ 转换：units 换算链折合(1箱=60瓶) ｜ 读写：TRACE_CODE / DOC 集合推导 ｜ 库存：在架=集合加减（见图 08）",
+      "fill": "#e6f4ff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "N3",
+      "kind": "review_card",
+      "c4_type": "STEP 3 · DONE",
+      "x": 60,
+      "y": 376,
+      "width": 680,
+      "height": 92,
+      "label": "③ 领用出库",
+      "description": "形态：申请单(药·基本单位) ⇄ 码清单(逐码) 双层表达 ｜ 转换：扫码→码→药→折基本单位→与申请数比对 ｜ 读写：读 TRACE_CODE 校验在架 · 写领用出库单 ｜ 库存：−码 在架→在途",
+      "fill": "#e6f4ff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "N4",
+      "kind": "review_card",
+      "c4_type": "STEP 4 · DONE",
+      "x": 60,
+      "y": 512,
+      "width": 680,
+      "height": 92,
+      "label": "④ 药房入库",
+      "description": "形态：码（逐码确认）｜ 转换：无换算，仅归属变更 ｜ 读写：更新领用出库单状态 ｜ 库存：在途清零 → 药房库存 +码",
+      "fill": "#e6f4ff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "N5",
+      "kind": "review_card",
+      "c4_type": "STEP 5 · TODO",
+      "x": 60,
+      "y": 648,
+      "width": 680,
+      "height": 92,
+      "label": "⑤ 药房入槽【待设计】",
+      "description": "形态：码/药 ↔ 取药槽绑定 ｜ 转换：绑定关系（Round I 拍板后期再议）｜ 读写：新增绑定表（待定）｜ 库存：不变，仅位置到槽",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "N6",
+      "kind": "review_card",
+      "c4_type": "STEP 6 · TODO",
+      "x": 800,
+      "y": 648,
+      "width": 520,
+      "height": 92,
+      "label": "⑥ 医生处方【待设计】",
+      "description": "形态：药名+数量（药品级，不知具体码）｜ 转换：药→码映射（3 待决方案，见图 04）｜ 读写：写处方单 · 是否锁库存待决 ｜ 库存：锁定量？（待决）",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "N7",
+      "kind": "review_card",
+      "c4_type": "STEP 7 · TODO",
+      "x": 60,
+      "y": 784,
+      "width": 680,
+      "height": 92,
+      "label": "⑦ 出库扫码【待设计】",
+      "description": "形态：回到码 ｜ 转换：FEFO 分配/人工扫具体码 → 扣账 ｜ 读写：写发药出库单 ｜ 库存：−码 药房库存",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "N8",
+      "kind": "review_card",
+      "c4_type": "STEP 8 · TODO",
+      "x": 60,
+      "y": 920,
+      "width": 680,
+      "height": 92,
+      "label": "⑧ 病房【待设计】",
+      "description": "形态：码（患者级追溯？）｜ 转换：签收确认 ｜ 库存：终态",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    }
+  ],
+  "arrows": [
+    {
+      "id": "c1",
+      "source": "N1",
+      "target": "N2",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "c2",
+      "source": "N2",
+      "target": "N3",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "c3",
+      "source": "N3",
+      "target": "N4",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "c4",
+      "source": "N4",
+      "target": "N5",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "c5",
+      "source": "N5",
+      "target": "N7",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "c6",
+      "source": "N7",
+      "target": "N8",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "c7",
+      "source": "N6",
+      "target": "N7",
+      "source_port": "bottom",
+      "target_port": "right",
+      "flow": "control",
+      "stroke_width": 4.0,
+      "label": "处方驱动",
+      "route_points": [[1060, 830]]
+    },
+    {
+      "id": "c8",
+      "source": "N4",
+      "target": "N7",
+      "source_port": "left",
+      "target_port": "left",
+      "flow": "neutral",
+      "dashed": true,
+      "label": "不入槽路径",
+      "route_points": [[30, 558], [30, 830]]
+    }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 820,
+  "legend_y": 1000,
+  "legend": [
+    {
+      "flow": "control",
+      "label": "主链路"
+    },
+    {
+      "flow": "neutral",
+      "label": "并列路径（虚线）"
+    }
+  ],
+  "footer": "PUL-FMS · 07 码⇄药⇄单位全链路转换 · fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 1052
+}

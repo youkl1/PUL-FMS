@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 1095,
+  "title": "药房发药流程（后期设计）",
+  "subtitle": "处方驱动 · 入槽/不入槽双路径并列 · 处方→码映射 3 方案待决",
+  "containers": [
+    {
+      "id": "lane-doc",
+      "x": 40,
+      "y": 100,
+      "width": 1280,
+      "height": 110,
+      "label": "医生",
+      "stroke": "#b7cdf0",
+      "fill": "#eef4fb"
+    },
+    {
+      "id": "lane-sys",
+      "x": 40,
+      "y": 220,
+      "width": 1280,
+      "height": 340,
+      "label": "系统 · 处方→码映射【待决】",
+      "stroke": "#d0d5dd",
+      "fill": "#f6f8fb"
+    },
+    {
+      "id": "lane-pha",
+      "x": 40,
+      "y": 590,
+      "width": 1280,
+      "height": 346,
+      "label": "药房 · 药师",
+      "stroke": "#b7cdf0",
+      "fill": "#eef4fb"
+    },
+    {
+      "id": "lane-ward",
+      "x": 40,
+      "y": 961,
+      "width": 1280,
+      "height": 100,
+      "label": "病房",
+      "stroke": "#b7e0c4",
+      "fill": "#eef8f0"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "D1",
+      "kind": "rect",
+      "x": 530,
+      "y": 120,
+      "width": 300,
+      "height": 64,
+      "type_label": "RX",
+      "label": "开处方 · 药名+规格+数量",
+      "sublabel": "只到药品级 · 不知具体码",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "Y0",
+      "kind": "hexagon",
+      "x": 595,
+      "y": 258,
+      "width": 170,
+      "height": 80,
+      "type_label": "DECISION",
+      "label": "映射时机？",
+      "fill": "#fdecea",
+      "stroke": "#d63939"
+    },
+    {
+      "id": "YA",
+      "kind": "rect",
+      "x": 80,
+      "y": 400,
+      "width": 360,
+      "height": 110,
+      "type_label": "PLAN A",
+      "label": "方案 a：开单即锁码",
+      "sublabel": "FEFO 预分配 · 退改需释放锁",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "YB",
+      "kind": "rect",
+      "x": 500,
+      "y": 400,
+      "width": 360,
+      "height": 100,
+      "type_label": "PLAN B",
+      "label": "方案 b：锁药品级库存（推荐）",
+      "sublabel": "调剂时才分配码 · 兼容不入槽",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "YC",
+      "kind": "rect",
+      "x": 1040,
+      "y": 400,
+      "width": 260,
+      "height": 100,
+      "type_label": "PLAN C",
+      "label": "方案 c：完全后绑定",
+      "sublabel": "出库扫码才扣账 · 有超卖风险",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "P1",
+      "kind": "rect",
+      "x": 540,
+      "y": 613,
+      "width": 280,
+      "height": 64,
+      "type_label": "DISPENSE",
+      "label": "调剂：接收处方",
+      "sublabel": "按 FEFO 效期优先取药",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "P3",
+      "kind": "rect",
+      "x": 869,
+      "y": 610,
+      "width": 230,
+      "height": 70,
+      "type_label": "PATH B",
+      "label": "路径 B：货位直接取药",
+      "sublabel": "不入槽也能出",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "P2",
+      "kind": "rect",
+      "x": 540,
+      "y": 740,
+      "width": 280,
+      "height": 70,
+      "type_label": "PATH A",
+      "label": "路径 A：入槽取药",
+      "sublabel": "取药柜亮灯指引 · 槽位绑定",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "P4",
+      "kind": "rect",
+      "x": 843,
+      "y": 852,
+      "width": 300,
+      "height": 64,
+      "type_label": "SCAN OUT",
+      "label": "出库扫码 · 逐码确认 → 扣账",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "W1",
+      "kind": "rect",
+      "x": 843,
+      "y": 985,
+      "width": 300,
+      "height": 52,
+      "type_label": "WARD",
+      "label": "护士签收 / 患者用药",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    }
+  ],
+  "arrows": [
+    {
+      "id": "a01",
+      "source": "D1",
+      "target": "Y0",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "a02",
+      "source": "Y0",
+      "target": "YA",
+      "source_port": "left",
+      "target_port": "top",
+      "flow": "data"
+    },
+    {
+      "id": "a03",
+      "source": "Y0",
+      "target": "YB",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "data"
+    },
+    {
+      "id": "a04",
+      "source": "Y0",
+      "target": "YC",
+      "source_port": "right",
+      "target_port": "top",
+      "flow": "data"
+    },
+    {
+      "id": "a05",
+      "source": "YB",
+      "target": "P1",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "data"
+    },
+    {
+      "id": "a06",
+      "source": "YA",
+      "target": "P1",
+      "source_port": "bottom",
+      "target_port": "left",
+      "flow": "data"
+    },
+    {
+      "id": "a07",
+      "source": "P3",
+      "target": "P4",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "a08",
+      "source": "YC",
+      "target": "P4",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "data"
+    },
+    {
+      "id": "a09",
+      "source": "P1",
+      "target": "P2",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "a10",
+      "source": "P1",
+      "target": "P3",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control"
+    },
+    {
+      "id": "a11",
+      "source": "P2",
+      "target": "P4",
+      "source_port": "bottom",
+      "target_port": "left",
+      "flow": "control"
+    },
+    {
+      "id": "a12",
+      "source": "P4",
+      "target": "W1",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 90,
+  "legend_y": 1006,
+  "legend": [
+    {
+      "flow": "control",
+      "label": "主流程（已定型）"
+    },
+    {
+      "flow": "data",
+      "label": "后期 · 待决映射"
+    }
+  ],
+  "footer": "PUL-FMS · 04 药房发药流程（后期设计） · fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 1078
+}

@@ -1,0 +1,527 @@
+{
+  "canvas": {
+    "height": 940.0,
+    "width": 1360.0
+  },
+  "composition": {
+    "limits": {
+      "max_bends_per_edge": 2,
+      "max_bridged_crossings": 0,
+      "max_route_stretch": 1.35,
+      "max_total_bends": 8,
+      "min_container_gutter": 20.0,
+      "min_label_clearance": 4.0,
+      "min_node_gap": 40.0,
+      "min_segment_length": 16.0,
+      "profile": "showcase"
+    },
+    "metrics": {
+      "bridged_crossings": 0,
+      "max_route_stretch": 1.0,
+      "minimum_container_gutter": 30.0,
+      "minimum_node_gap": 40.0,
+      "shortest_segment": 40.0,
+      "total_bends": 0
+    },
+    "ok": true,
+    "profile": "showcase",
+    "score": 100,
+    "violations": []
+  },
+  "edges": [
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e1",
+      "length": 74.0,
+      "route": [
+        [
+          160.0,
+          186.0
+        ],
+        [
+          160.0,
+          260.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "SA",
+      "source_port": [
+        160.0,
+        186.0
+      ],
+      "target": "UC1",
+      "target_port": [
+        160.0,
+        260.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e2",
+      "length": 40.0,
+      "route": [
+        [
+          160.0,
+          320.0
+        ],
+        [
+          160.0,
+          360.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "UC1",
+      "source_port": [
+        160.0,
+        320.0
+      ],
+      "target": "UC2",
+      "target_port": [
+        160.0,
+        360.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e3",
+      "length": 74.0,
+      "route": [
+        [
+          420.0,
+          186.0
+        ],
+        [
+          420.0,
+          260.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "BUY",
+      "source_port": [
+        420.0,
+        186.0
+      ],
+      "target": "UC5",
+      "target_port": [
+        420.0,
+        260.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e4",
+      "length": 40.0,
+      "route": [
+        [
+          420.0,
+          320.0
+        ],
+        [
+          420.0,
+          360.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "UC5",
+      "source_port": [
+        420.0,
+        320.0
+      ],
+      "target": "UC7",
+      "target_port": [
+        420.0,
+        360.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e5",
+      "length": 74.0,
+      "route": [
+        [
+          680.0,
+          186.0
+        ],
+        [
+          680.0,
+          260.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "KEEP",
+      "source_port": [
+        680.0,
+        186.0
+      ],
+      "target": "UC3",
+      "target_port": [
+        680.0,
+        260.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e6",
+      "length": 40.0,
+      "route": [
+        [
+          680.0,
+          320.0
+        ],
+        [
+          680.0,
+          360.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "UC3",
+      "source_port": [
+        680.0,
+        320.0
+      ],
+      "target": "UC4",
+      "target_port": [
+        680.0,
+        360.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e7",
+      "length": 40.0,
+      "route": [
+        [
+          680.0,
+          420.0
+        ],
+        [
+          680.0,
+          460.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "UC4",
+      "source_port": [
+        680.0,
+        420.0
+      ],
+      "target": "UC6",
+      "target_port": [
+        680.0,
+        460.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e8",
+      "length": 40.0,
+      "route": [
+        [
+          680.0,
+          520.0
+        ],
+        [
+          680.0,
+          560.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "UC6",
+      "source_port": [
+        680.0,
+        520.0
+      ],
+      "target": "UC8",
+      "target_port": [
+        680.0,
+        560.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e9",
+      "length": 40.0,
+      "route": [
+        [
+          680.0,
+          620.0
+        ],
+        [
+          680.0,
+          660.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "UC8",
+      "source_port": [
+        680.0,
+        620.0
+      ],
+      "target": "UC9",
+      "target_port": [
+        680.0,
+        660.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e10",
+      "length": 40.0,
+      "route": [
+        [
+          680.0,
+          720.0
+        ],
+        [
+          680.0,
+          760.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "UC9",
+      "source_port": [
+        680.0,
+        720.0
+      ],
+      "target": "UC10",
+      "target_port": [
+        680.0,
+        760.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e11",
+      "length": 74.0,
+      "route": [
+        [
+          940.0,
+          186.0
+        ],
+        [
+          940.0,
+          260.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "PHAR",
+      "source_port": [
+        940.0,
+        186.0
+      ],
+      "target": "UC11",
+      "target_port": [
+        940.0,
+        260.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e12",
+      "length": 40.0,
+      "route": [
+        [
+          940.0,
+          320.0
+        ],
+        [
+          940.0,
+          360.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "UC11",
+      "source_port": [
+        940.0,
+        320.0
+      ],
+      "target": "UC12",
+      "target_port": [
+        940.0,
+        360.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e13",
+      "length": 40.0,
+      "route": [
+        [
+          940.0,
+          420.0
+        ],
+        [
+          940.0,
+          460.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "UC12",
+      "source_port": [
+        940.0,
+        420.0
+      ],
+      "target": "UC13",
+      "target_port": [
+        940.0,
+        460.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e14",
+      "length": 274.0,
+      "route": [
+        [
+          1200.0,
+          186.0
+        ],
+        [
+          1200.0,
+          460.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "DOCTOR",
+      "source_port": [
+        1200.0,
+        186.0
+      ],
+      "target": "UC14",
+      "target_port": [
+        1200.0,
+        460.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e15",
+      "length": 80.0,
+      "route": [
+        [
+          1110.0,
+          490.0
+        ],
+        [
+          1030.0,
+          490.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "UC14",
+      "source_port": [
+        1110.0,
+        490.0
+      ],
+      "target": "UC13",
+      "target_port": [
+        1030.0,
+        490.0
+      ],
+      "waypoints": []
+    }
+  ],
+  "input_schema": "v1",
+  "issues": [],
+  "mode": "architecture",
+  "ok": true,
+  "palette": {
+    "below_target": [],
+    "minimum_target": 4.5,
+    "ratios": {
+      "section_sub_fill": 4.76,
+      "text_muted": 4.76,
+      "text_primary": 17.74,
+      "text_secondary": 4.83
+    },
+    "scope": "default opaque canvas text tokens; not a full rendered accessibility audit",
+    "unsupported_tokens": []
+  },
+  "placements": {
+    "legend": {
+      "actual": [
+        58.0,
+        858.0
+      ],
+      "bounds": [
+        48.0,
+        844.0,
+        321.6,
+        890.0
+      ],
+      "moved": true,
+      "requested": [
+        60.0,
+        886.0
+      ]
+    }
+  },
+  "schema_version": 1,
+  "semantics": {
+    "details": {},
+    "ok": true,
+    "profile": "generic",
+    "style": 1,
+    "visual_theme": "Flat Icon"
+  },
+  "style": {
+    "id": 1,
+    "name": "Flat Icon"
+  },
+  "summary": {
+    "bridged_crossings": 0,
+    "edges": 15,
+    "nodes": 19
+  },
+  "text_metrics": "heuristic-v1",
+  "typography": {
+    "complete_text": true,
+    "hint": null,
+    "metrics": "heuristic widths; inspect the actual rendered font",
+    "truncated": []
+  }
+}

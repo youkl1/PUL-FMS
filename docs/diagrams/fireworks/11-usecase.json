@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 940,
+  "title": "用例图 · 角色 × 全场景",
+  "subtitle": "每列纵向链 = 该角色的用例集合 · 橙色虚线 = 后期用例",
+  "containers": [
+    {
+      "id": "sys",
+      "x": 40,
+      "y": 210,
+      "width": 1280,
+      "height": 650,
+      "label": "系统边界",
+      "stroke": "#b7cdf0",
+      "fill": "#eef4fb"
+    }
+  ],
+  "nodes": [
+    { "id": "SA", "kind": "user_avatar", "x": 85, "y": 110, "width": 150, "height": 76, "type_label": "SA", "label": "超级管理员", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "BUY", "kind": "user_avatar", "x": 345, "y": 110, "width": 150, "height": 76, "type_label": "BUYER", "label": "采购员", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "KEEP", "kind": "user_avatar", "x": 605, "y": 110, "width": 150, "height": 76, "type_label": "KEEPER", "label": "库房管理员", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "PHAR", "kind": "user_avatar", "x": 865, "y": 110, "width": 150, "height": 76, "type_label": "PHARMACIST", "label": "药房药师", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "DOCTOR", "kind": "user_avatar", "x": 1125, "y": 110, "width": 150, "height": 76, "type_label": "DOCTOR", "label": "医生", "sublabel": "后期", "fill": "#fff7e6", "stroke": "#d48806" },
+
+    { "id": "UC1", "kind": "rect", "x": 70, "y": 260, "width": 180, "height": 60, "type_label": "UC1", "label": "组织架构字典维护", "sublabel": "院区/库房/药房/柜/灯组", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "UC2", "kind": "rect", "x": 70, "y": 360, "width": 180, "height": 60, "type_label": "UC2", "label": "用户与角色权限管理", "fill": "#ffffff", "stroke": "#206bc4" },
+
+    { "id": "UC5", "kind": "rect", "x": 330, "y": 260, "width": 180, "height": 60, "type_label": "UC5", "label": "采购到货登记", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "UC7", "kind": "rect", "x": 330, "y": 360, "width": 180, "height": 60, "type_label": "UC7", "label": "采购退货", "fill": "#ffffff", "stroke": "#206bc4" },
+
+    { "id": "UC3", "kind": "rect", "x": 590, "y": 260, "width": 180, "height": 60, "type_label": "UC3", "label": "药品建档", "sublabel": "HIS 导入", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "UC4", "kind": "rect", "x": 590, "y": 360, "width": 180, "height": 60, "type_label": "UC4", "label": "标识码维护", "sublabel": "异常码补录", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "UC6", "kind": "rect", "x": 590, "y": 460, "width": 180, "height": 60, "type_label": "UC6", "label": "扫码入库", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "UC8", "kind": "rect", "x": 590, "y": 560, "width": 180, "height": 60, "type_label": "UC8", "label": "库存查询", "sublabel": "效期 FEFO", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "UC9", "kind": "rect", "x": 590, "y": 660, "width": 180, "height": 60, "type_label": "UC9", "label": "领用备货出库", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "UC10", "kind": "rect", "x": 590, "y": 760, "width": 180, "height": 60, "type_label": "UC10", "label": "退回/其他出入库", "sublabel": "损耗报损", "fill": "#ffffff", "stroke": "#206bc4" },
+
+    { "id": "UC11", "kind": "rect", "x": 850, "y": 260, "width": 180, "height": 60, "type_label": "UC11", "label": "确认药房入库", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "UC12", "kind": "rect", "x": 850, "y": 360, "width": 180, "height": 60, "type_label": "UC12", "label": "入槽绑定", "sublabel": "后期", "fill": "#fff7e6", "stroke": "#d48806" },
+    { "id": "UC13", "kind": "rect", "x": 850, "y": 460, "width": 180, "height": 60, "type_label": "UC13", "label": "调剂 · 出库扫码", "sublabel": "后期", "fill": "#fff7e6", "stroke": "#d48806" },
+
+    { "id": "UC14", "kind": "rect", "x": 1110, "y": 460, "width": 180, "height": 60, "type_label": "UC14", "label": "开处方", "sublabel": "后期", "fill": "#fff7e6", "stroke": "#d48806" }
+  ],
+  "arrows": [
+    { "id": "e1", "source": "SA", "target": "UC1", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "e2", "source": "UC1", "target": "UC2", "source_port": "bottom", "target_port": "top", "flow": "control" },
+
+    { "id": "e3", "source": "BUY", "target": "UC5", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "e4", "source": "UC5", "target": "UC7", "source_port": "bottom", "target_port": "top", "flow": "control" },
+
+    { "id": "e5", "source": "KEEP", "target": "UC3", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "e6", "source": "UC3", "target": "UC4", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "e7", "source": "UC4", "target": "UC6", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "e8", "source": "UC6", "target": "UC8", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "e9", "source": "UC8", "target": "UC9", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "e10", "source": "UC9", "target": "UC10", "source_port": "bottom", "target_port": "top", "flow": "control" },
+
+    { "id": "e11", "source": "PHAR", "target": "UC11", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "e12", "source": "UC11", "target": "UC12", "source_port": "bottom", "target_port": "top", "flow": "async" },
+    { "id": "e13", "source": "UC12", "target": "UC13", "source_port": "bottom", "target_port": "top", "flow": "async" },
+
+    { "id": "e14", "source": "DOCTOR", "target": "UC14", "source_port": "bottom", "target_port": "top", "flow": "async" },
+    { "id": "e15", "source": "UC14", "target": "UC13", "source_port": "left", "target_port": "right", "flow": "async", "label": "驱动" }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 60,
+  "legend_y": 886,
+  "legend": [
+    { "flow": "control", "label": "本期用例" },
+    { "flow": "async", "label": "后期用例 / 驱动" }
+  ],
+  "footer": "PUL-FMS · 11 用例图 · fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 908
+}

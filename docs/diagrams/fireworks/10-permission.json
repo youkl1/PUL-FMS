@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 1050,
+  "title": "权限模型 + 登录上下文",
+  "subtitle": "功能权限归角色 · 行数据归登录上下文自动隔离",
+  "containers": [
+    {
+      "id": "login",
+      "x": 50,
+      "y": 110,
+      "width": 1010,
+      "height": 300,
+      "label": "登录四段式",
+      "stroke": "#b7cdf0",
+      "fill": "#eef4fb"
+    },
+    {
+      "id": "model",
+      "x": 1080,
+      "y": 270,
+      "width": 260,
+      "height": 490,
+      "label": "权限叠加口径",
+      "stroke": "#b7e0c4",
+      "fill": "#eef8f0"
+    },
+    {
+      "id": "org",
+      "x": 400,
+      "y": 860,
+      "width": 460,
+      "height": 130,
+      "label": "授权来源",
+      "stroke": "#d0d5dd",
+      "fill": "#f6f8fb"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "L3",
+      "kind": "rect",
+      "x": 440,
+      "y": 130,
+      "width": 150,
+      "height": 64,
+      "type_label": "超管",
+      "label": "手动选院区",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "L6",
+      "kind": "rect",
+      "x": 875,
+      "y": 130,
+      "width": 150,
+      "height": 64,
+      "type_label": "双栖",
+      "label": "选模式大卡",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "L1",
+      "kind": "rect",
+      "x": 80,
+      "y": 270,
+      "width": 120,
+      "height": 70,
+      "type_label": "①",
+      "label": "账号密码",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "L2",
+      "kind": "hexagon",
+      "x": 250,
+      "y": 270,
+      "width": 130,
+      "height": 70,
+      "type_label": "②",
+      "label": "是否超管",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "L4",
+      "kind": "rect",
+      "x": 430,
+      "y": 270,
+      "width": 170,
+      "height": 70,
+      "type_label": "非超管",
+      "label": "自动进唯一院区",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "L5",
+      "kind": "hexagon",
+      "x": 650,
+      "y": 270,
+      "width": 170,
+      "height": 70,
+      "type_label": "③",
+      "label": "是否双栖用户",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "L7",
+      "kind": "rect",
+      "x": 860,
+      "y": 270,
+      "width": 180,
+      "height": 70,
+      "type_label": "④",
+      "label": "选具体库房/药房",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "CTX",
+      "kind": "rect",
+      "x": 870,
+      "y": 490,
+      "width": 160,
+      "height": 100,
+      "type_label": "CONTEXT",
+      "label": "登录上下文",
+      "sublabel": "模式/院区/库房/药房",
+      "fill": "#e6f4ff",
+      "stroke": "#206bc4",
+      "stroke_width": 2.6
+    },
+    {
+      "id": "M3",
+      "kind": "rect",
+      "x": 1110,
+      "y": 350,
+      "width": 140,
+      "height": 80,
+      "type_label": "SUPER",
+      "label": "超级用户",
+      "sublabel": "不选院区·不做业务",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "M2",
+      "kind": "rect",
+      "x": 1110,
+      "y": 500,
+      "width": 140,
+      "height": 80,
+      "type_label": "ROW-DATA",
+      "label": "行数据=登录上下文",
+      "sublabel": "自动隔离 + 本人",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "M1",
+      "kind": "rect",
+      "x": 1110,
+      "y": 630,
+      "width": 140,
+      "height": 80,
+      "type_label": "FUNC",
+      "label": "功能权限=角色",
+      "sublabel": "菜单树勾选",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "O1",
+      "kind": "rect",
+      "x": 435,
+      "y": 900,
+      "width": 160,
+      "height": 64,
+      "type_label": "CAMPUS",
+      "label": "所属院区",
+      "sublabel": "非超管必填唯一",
+      "fill": "#ffffff",
+      "stroke": "#626976"
+    },
+    {
+      "id": "O2",
+      "kind": "rect",
+      "x": 650,
+      "y": 900,
+      "width": 170,
+      "height": 64,
+      "type_label": "GRANT",
+      "label": "授权库房/药房",
+      "sublabel": "多选 · 决定候选",
+      "fill": "#ffffff",
+      "stroke": "#626976"
+    }
+  ],
+  "arrows": [
+    {
+      "id": "a1",
+      "source": "L1",
+      "target": "L2",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control"
+    },
+    {
+      "id": "a2",
+      "source": "L2",
+      "target": "L3",
+      "source_port": "top",
+      "target_port": "left",
+      "flow": "control",
+      "label": "是",
+      "label_style": "offset"
+    },
+    {
+      "id": "a3",
+      "source": "L3",
+      "target": "L4",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "a4",
+      "source": "L2",
+      "target": "L4",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control"
+    },
+    {
+      "id": "a5",
+      "source": "L4",
+      "target": "L5",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control"
+    },
+    {
+      "id": "a6",
+      "source": "L5",
+      "target": "L6",
+      "source_port": "top",
+      "target_port": "left",
+      "flow": "control",
+      "label": "是",
+      "label_style": "offset"
+    },
+    {
+      "id": "a7",
+      "source": "L6",
+      "target": "L7",
+      "flow": "control",
+      "source_port": "bottom",
+      "target_port": "top"
+    },
+    {
+      "id": "a8",
+      "source": "L5",
+      "target": "L7",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control"
+    },
+    {
+      "id": "a9",
+      "source": "L7",
+      "target": "CTX",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "b1",
+      "source": "O1",
+      "target": "L4",
+      "source_port": "top",
+      "target_port": "bottom",
+      "flow": "read"
+    },
+    {
+      "id": "b2",
+      "source": "O2",
+      "target": "L5",
+      "source_port": "top",
+      "target_port": "bottom",
+      "flow": "read"
+    },
+    {
+      "id": "c1",
+      "source": "M1",
+      "target": "CTX",
+      "source_port": "left",
+      "target_port": "bottom",
+      "flow": "feedback"
+    },
+    {
+      "id": "c2",
+      "source": "CTX",
+      "target": "M2",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "feedback"
+    }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 60,
+  "legend_y": 1006,
+  "legend": [
+    {
+      "flow": "control",
+      "label": "登录流程"
+    },
+    {
+      "flow": "read",
+      "label": "授权来源"
+    },
+    {
+      "flow": "feedback",
+      "label": "权限口径"
+    }
+  ],
+  "footer": "PUL-FMS · 10 权限模型 + 登录上下文 · fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 1028
+}

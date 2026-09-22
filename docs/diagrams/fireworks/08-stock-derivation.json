@@ -1,0 +1,378 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "composition": {
+    "profile": "showcase",
+    "max_total_bends": 18
+  },
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 1030,
+  "title": "库存推导：在架 = Σ加 − Σ减",
+  "subtitle": "7 类已审核单据集合加减 · 在架不加 status 字段 · 单一事实源在单据",
+  "containers": [
+    {
+      "id": "grp-plus",
+      "x": 60,
+      "y": 110,
+      "width": 580,
+      "height": 160,
+      "label": "加集合（已审核生效）",
+      "stroke": "#b7e0c4",
+      "fill": "#eef8f0"
+    },
+    {
+      "id": "grp-minus",
+      "x": 680,
+      "y": 110,
+      "width": 660,
+      "height": 160,
+      "label": "减集合（已审核生效）",
+      "stroke": "#d0d5dd",
+      "fill": "#f6f8fb"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "A1",
+      "kind": "rect",
+      "x": 90,
+      "y": 150,
+      "width": 140,
+      "height": 56,
+      "label": "采购入库单 ✓",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "A2",
+      "kind": "rect",
+      "x": 285,
+      "y": 150,
+      "width": 140,
+      "height": 56,
+      "label": "其他入库单 ✓",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "A3",
+      "kind": "rect",
+      "x": 480,
+      "y": 150,
+      "width": 140,
+      "height": 56,
+      "label": "退回入库单 ✓",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "M1",
+      "kind": "rect",
+      "x": 704,
+      "y": 150,
+      "width": 118,
+      "height": 56,
+      "label": "采购退货单 ✓",
+      "fill": "#ffffff",
+      "stroke": "#d63939"
+    },
+    {
+      "id": "M3",
+      "kind": "rect",
+      "x": 862,
+      "y": 150,
+      "width": 118,
+      "height": 56,
+      "label": "其他出库单 ✓",
+      "fill": "#ffffff",
+      "stroke": "#d63939"
+    },
+    {
+      "id": "M4",
+      "kind": "rect",
+      "x": 1020,
+      "y": 150,
+      "width": 118,
+      "height": 56,
+      "label": "损耗出库单 ✓",
+      "fill": "#ffffff",
+      "stroke": "#d63939"
+    },
+    {
+      "id": "M2",
+      "kind": "rect",
+      "x": 1178,
+      "y": 150,
+      "width": 118,
+      "height": 56,
+      "label": "领用出库单",
+      "fill": "#ffffff",
+      "stroke": "#d63939"
+    },
+    {
+      "id": "STOCK",
+      "kind": "cylinder",
+      "x": 520,
+      "y": 480,
+      "width": 320,
+      "height": 130,
+      "label": "在架库存",
+      "sublabel": "= Σ加 − Σ减 · 逐码带批次/效期/库位",
+      "fill": "#ffffff",
+      "stroke": "#626976"
+    },
+    {
+      "id": "TRANSIT",
+      "kind": "cylinder",
+      "x": 880,
+      "y": 660,
+      "width": 280,
+      "height": 100,
+      "label": "在途",
+      "sublabel": "= 领用出库单 status=已出库 的码单列",
+      "fill": "#ffffff",
+      "stroke": "#626976"
+    },
+    {
+      "id": "PHSTOCK",
+      "kind": "cylinder",
+      "x": 880,
+      "y": 840,
+      "width": 280,
+      "height": 100,
+      "label": "药房库存",
+      "sublabel": "= 确认药房入库的码",
+      "fill": "#ffffff",
+      "stroke": "#626976"
+    },
+    {
+      "id": "LOCK",
+      "kind": "cylinder",
+      "x": 140,
+      "y": 495,
+      "width": 280,
+      "height": 100,
+      "label": "处方锁定量",
+      "sublabel": "【待决，见图 04】",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "NOTE",
+      "kind": "review_card",
+      "c4_type": "DESIGN NOTE",
+      "x": 140,
+      "y": 700,
+      "width": 700,
+      "height": 100,
+      "label": "为什么不加 status 字段",
+      "description": "状态由单据集合推导，单一事实源在单据；加 status 等于双写，审核漏单即不一致。统计口径：库存按码存，展示按药品基本单位折（换算链）",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    }
+  ],
+  "arrows": [
+    {
+      "id": "a1",
+      "source": "A1",
+      "target": "STOCK",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control",
+      "route_points": [
+        [
+          160,
+          464
+        ],
+        [
+          626,
+          464
+        ]
+      ]
+    },
+    {
+      "id": "a2",
+      "source": "A2",
+      "target": "STOCK",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control",
+      "route_points": [
+        [
+          355,
+          448
+        ],
+        [
+          644,
+          448
+        ]
+      ]
+    },
+    {
+      "id": "a3",
+      "source": "A3",
+      "target": "STOCK",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control",
+      "route_points": [
+        [
+          550,
+          432
+        ],
+        [
+          662,
+          432
+        ]
+      ]
+    },
+    {
+      "id": "sa",
+      "source": "M1",
+      "target": "STOCK",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control",
+      "route_points": [
+        [
+          763,
+          340
+        ],
+        [
+          680,
+          340
+        ]
+      ]
+    },
+    {
+      "id": "sd",
+      "source": "M2",
+      "target": "STOCK",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control",
+      "route_points": [
+        [
+          1228,
+          400
+        ],
+        [
+          734,
+          400
+        ]
+      ]
+    },
+    {
+      "id": "sb",
+      "source": "M3",
+      "target": "STOCK",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control",
+      "route_points": [
+        [
+          921,
+          360
+        ],
+        [
+          698,
+          360
+        ]
+      ]
+    },
+    {
+      "id": "sc",
+      "source": "M4",
+      "target": "STOCK",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control",
+      "route_points": [
+        [
+          1079,
+          380
+        ],
+        [
+          716,
+          380
+        ]
+      ]
+    },
+    {
+      "id": "t1",
+      "source": "M2",
+      "target": "TRANSIT",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control",
+      "label": "审核出库即扣账",
+      "route_points": [
+        [
+          1246,
+          490
+        ],
+        [
+          1020,
+          490
+        ]
+      ]
+    },
+    {
+      "id": "t2",
+      "source": "TRANSIT",
+      "target": "PHSTOCK",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control",
+      "label": "确认药房入库"
+    },
+    {
+      "id": "k1",
+      "source": "LOCK",
+      "target": "STOCK",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "neutral",
+      "dashed": true
+    },
+    {
+      "id": "n1",
+      "source": "STOCK",
+      "target": "NOTE",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "neutral",
+      "dashed": true,
+      "route_points": [
+        [
+          680,
+          660
+        ],
+        [
+          490,
+          660
+        ]
+      ]
+    }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 140,
+  "legend_y": 862,
+  "legend": [
+    {
+      "flow": "control",
+      "label": "集合推导 / 主流程"
+    },
+    {
+      "flow": "neutral",
+      "label": "待决 / 注释（虚线）"
+    }
+  ],
+  "footer": "PUL-FMS · 08 库存推导：在架=Σ加−Σ减 · fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 1000
+}

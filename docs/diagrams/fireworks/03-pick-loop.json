@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 800,
+  "title": "领用出库 → 药房入库闭环",
+  "subtitle": "申请(药) ⇄ 备货(码) 双层表达 · 审核即扣账 · 在途闭环",
+  "containers": [
+    {
+      "id": "lane-ph",
+      "x": 40,
+      "y": 100,
+      "width": 1280,
+      "height": 125,
+      "label": "药房 · 申请人",
+      "stroke": "#b7cdf0",
+      "fill": "#eef4fb"
+    },
+    {
+      "id": "lane-wh",
+      "x": 40,
+      "y": 245,
+      "width": 1280,
+      "height": 165,
+      "label": "库房 · 备货员",
+      "stroke": "#b7e0c4",
+      "fill": "#eef8f0"
+    },
+    {
+      "id": "lane-sys",
+      "x": 40,
+      "y": 430,
+      "width": 1280,
+      "height": 250,
+      "label": "系统 · 码⇄药转换引擎",
+      "stroke": "#d0d5dd",
+      "fill": "#f6f8fb"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "H1",
+      "kind": "rect",
+      "x": 80,
+      "y": 138,
+      "width": 220,
+      "height": 64,
+      "type_label": "APPLY",
+      "label": "提交领用申请单（药品口径）",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "H5",
+      "kind": "rect",
+      "x": 1100,
+      "y": 138,
+      "width": 200,
+      "height": 64,
+      "type_label": "CONFIRM",
+      "label": "确认药房入库 · 在途清零",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "W1",
+      "kind": "rect",
+      "x": 80,
+      "y": 292,
+      "width": 220,
+      "height": 68,
+      "type_label": "POOL",
+      "label": "申请单池选单（或一步式领用）",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "W2",
+      "kind": "rect",
+      "x": 370,
+      "y": 292,
+      "width": 250,
+      "height": 68,
+      "type_label": "DUAL VIEW",
+      "label": "双层表达：药品明细 ⇄ 码清单",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "W3",
+      "kind": "rect",
+      "x": 680,
+      "y": 292,
+      "width": 180,
+      "height": 68,
+      "type_label": "SCAN",
+      "label": "扫码备货",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "W6",
+      "kind": "rect",
+      "x": 1100,
+      "y": 292,
+      "width": 200,
+      "height": 68,
+      "type_label": "AUDIT OUT",
+      "label": "审核出库 · 即扣账",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "Y1",
+      "kind": "rect",
+      "x": 640,
+      "y": 468,
+      "width": 260,
+      "height": 64,
+      "type_label": "PARSE",
+      "label": "parseCode 解析：码→药品·折基本单位",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "Y2",
+      "kind": "hexagon",
+      "x": 940,
+      "y": 458,
+      "width": 130,
+      "height": 84,
+      "type_label": "CHECK",
+      "label": "校验",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "Y3",
+      "kind": "rect",
+      "x": 1115,
+      "y": 468,
+      "width": 170,
+      "height": 64,
+      "type_label": "OK",
+      "label": "✓ 计入已备数",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "Y4",
+      "kind": "rect",
+      "x": 815,
+      "y": 585,
+      "width": 380,
+      "height": 60,
+      "type_label": "REJECT",
+      "label": "✕拦截：非在架/不在本单 ⚠重复/超申请 → 提示后重扫",
+      "fill": "#fdecea",
+      "stroke": "#d63939",
+      "flat": true
+    }
+  ],
+  "arrows": [
+    {
+      "id": "a1",
+      "source": "H1",
+      "target": "W1",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control",
+      "label": "申请单（药品口径）"
+    },
+    {
+      "id": "a2",
+      "source": "W1",
+      "target": "W2",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control"
+    },
+    {
+      "id": "a3",
+      "source": "W2",
+      "target": "W3",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control"
+    },
+    {
+      "id": "a4",
+      "source": "W3",
+      "target": "Y1",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "read",
+      "label": "扫 20 位追溯码"
+    },
+    {
+      "id": "a5",
+      "source": "Y1",
+      "target": "Y2",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "read"
+    },
+    {
+      "id": "a6",
+      "source": "Y2",
+      "target": "Y3",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control"
+    },
+    {
+      "id": "a7",
+      "source": "Y3",
+      "target": "W6",
+      "source_port": "top",
+      "target_port": "bottom",
+      "flow": "control",
+      "label": "备齐 → 可审核"
+    },
+    {
+      "id": "a8",
+      "source": "W6",
+      "target": "H5",
+      "source_port": "top",
+      "target_port": "bottom",
+      "flow": "control",
+      "label": "出库单 · 在途"
+    },
+    {
+      "id": "a9",
+      "source": "Y2",
+      "target": "Y4",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "feedback",
+      "label": "✕/⚠ 拦截"
+    }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 800,
+  "legend_y": 732,
+  "legend": [
+    {
+      "flow": "control",
+      "label": "主流程"
+    },
+    {
+      "flow": "read",
+      "label": "扫码解析"
+    },
+    {
+      "flow": "feedback",
+      "label": "校验拦截"
+    }
+  ],
+  "footer": "PUL-FMS · 03 领用出库→药房入库闭环 · fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 775
+}
