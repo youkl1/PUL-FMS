@@ -1,0 +1,41 @@
+%% 04 药房发药流程（后期设计图）——处方驱动，入槽/不入槽双路径并列，码映射 3 待决方案
+flowchart TB
+  subgraph DOC["医生"]
+    D1["开处方<br/>药名 + 规格 + 数量<br/>（只到药品级，不知具体码）"]
+  end
+
+  subgraph SYS["系统 · 处方 → 码映射【待决】"]
+    Y0{"映射时机<br/>（评审待拍板）"}
+    YA["方案 a：开单即锁码<br/>按 FEFO 预分配追溯码<br/>追溯最严；退改单需释放锁"]
+    YB["方案 b：锁药品级库存<br/>调剂时才分配具体码（推荐）<br/>灵活，兼容不入槽路径"]
+    YC["方案 c：完全后绑定<br/>出库扫码时才扣账<br/>最简单；有超卖风险"]
+  end
+
+  subgraph PH["药房 · 药师"]
+    P1["调剂：接收处方<br/>按 FEFO 效期优先取药"]
+    P2["路径 A：入槽取药<br/>取药柜亮灯指引<br/>（槽位绑定）"]
+    P3["路径 B：货位直接取药<br/>（不入槽也能出）"]
+    P4["出库扫码<br/>逐码确认 → 扣账"]
+  end
+
+  subgraph WARD["病房"]
+    W1["护士签收 / 患者用药"]
+  end
+
+  D1 --> Y0
+  Y0 -.-> YA
+  Y0 -.-> YB
+  Y0 -.-> YC
+  YA -.-> P1
+  YB -.-> P1
+  YC -.-> P4
+  P1 --> P2
+  P1 --> P3
+  P2 --> P4
+  P3 --> P4
+  P4 --> W1
+
+  classDef decision fill:#fdecea,stroke:#d63939;
+  classDef future fill:#fff7e6,stroke:#d48806,stroke-dasharray:5 5;
+  class Y0 decision;
+  class YA,YB,YC,P1,P2,P3,P4,D1,W1 future;

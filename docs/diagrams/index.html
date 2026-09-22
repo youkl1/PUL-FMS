@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PUL-FMS 图纸浏览 · 业务流程图与 UML 图</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"Microsoft YaHei",system-ui,sans-serif; height:100vh; display:flex; overflow:hidden; background:#f6f8fb; }
+  #side { width:280px; min-width:280px; background:#182433; color:#dbe2ea; display:flex; flex-direction:column; }
+  #side h1 { font-size:15px; padding:16px; color:#fff; border-bottom:1px solid rgba(255,255,255,.1); }
+  #side h1 small { display:block; font-size:11.5px; color:#8a97a8; margin-top:4px; font-weight:400; }
+  #list { flex:1; overflow-y:auto; padding:8px; }
+  .item { padding:9px 12px; border-radius:6px; cursor:pointer; font-size:13px; line-height:1.5; color:#b8c2ce; }
+  .item:hover { background:rgba(255,255,255,.06); }
+  .item.active { background:#206bc4; color:#fff; }
+  .item .no { display:inline-block; min-width:26px; color:#8a97a8; font-family:Consolas,monospace; }
+  .item.active .no { color:#bcd6f5; }
+  .grp { font-size:11px; color:#6b7a8d; padding:12px 12px 4px; letter-spacing:1px; }
+  #main { flex:1; display:flex; flex-direction:column; }
+  #bar { height:48px; background:#fff; border-bottom:1px solid #e3e8ee; display:flex; align-items:center; gap:8px; padding:0 16px; }
+  #bar .title { font-size:14px; font-weight:600; color:#182433; }
+  #bar .sp { flex:1; }
+  #bar button { border:1px solid #d4dbe3; background:#fff; border-radius:6px; padding:5px 12px; font-size:13px; cursor:pointer; color:#182433; }
+  #bar button:hover { background:#f0f4f8; }
+  #zoomPct { font-size:12.5px; color:#626976; min-width:44px; text-align:center; }
+  #view { flex:1; overflow:hidden; position:relative; cursor:grab; }
+  #view.drag { cursor:grabbing; }
+  #canvas { position:absolute; transform-origin:0 0; padding:32px; }
+  #hint { position:absolute; inset:0; display:none; align-items:center; justify-content:center; text-align:center; color:#874d00; font-size:14px; line-height:2; background:#fff7e6; padding:40px; }
+  code { background:#eef1f5; padding:1px 6px; border-radius:4px; font-family:Consolas,monospace; }
+</style>
+</head>
+<body>
+  <div id="side">
+    <h1>PUL-FMS 图纸<small>业务流程图 × UML · 共 11 张 · Mermaid 本地渲染</small></h1>
+    <div id="list"></div>
+  </div>
+  <div id="main">
+    <div id="bar">
+      <span class="title" id="title"></span>
+      <span class="sp"></span>
+      <button id="zoomOut">−</button>
+      <span id="zoomPct">100%</span>
+      <button id="zoomIn">＋</button>
+      <button id="zoomFit">适应窗口</button>
+    </div>
+    <div id="view">
+      <div id="canvas"><div class="mermaid" id="mm"></div></div>
+      <div id="hint">fetch 被浏览器拦截（file:// 协议不允许读本地文件）<br>请在本目录起服务：<code>python -m http.server 9991</code> 然后访问 <code>http://localhost:9991</code></div>
+    </div>
+  </div>
+<script src="vendor/mermaid.min.js"></script>
+<script>
+var DIAGRAMS = [
+  { grp: 'A 线 · 业务流程图（泳道）' },
+  { f: '01-lifecycle.mmd',   t: '药品全生命周期总览' },
+  { f: '02-purchase-in.mmd', t: '采购入库（异常码人工兜底）' },
+  { f: '03-pick-loop.mmd',   t: '领用出库 → 药房入库闭环' },
+  { f: '04-dispensing.mmd',  t: '药房发药（后期设计 · 3 待决方案）' },
+  { f: '05-manual-ops.mmd',  t: '人工后台维护入口总览' },
+  { grp: 'B 线 · 机制与数据图' },
+  { f: '06-data-model.mmd',  t: '数据模型 ER（字段级）' },
+  { f: '07-conversion.mmd',  t: '码⇄药⇄单位 全链路转换' },
+  { f: '08-stock-derivation.mmd', t: '库存推导（集合加减法）' },
+  { f: '09-state-machine.mmd', t: '状态机（码实例 × 单据 双轨）' },
+  { f: '10-permission.mmd',  t: '权限模型 + 登录上下文' },
+  { f: '11-usecase.mmd',     t: '用例图（按角色）' }
+];
+var zoom = 1, panX = 0, panY = 0, cur = null;
+var canvas = document.getElementById('canvas'), view = document.getElementById('view');
+
+mermaid.initialize({ startOnLoad: false, theme: 'default', flowchart: { htmlLabels: true }, themeVariables: { fontFamily: 'Microsoft YaHei, sans-serif' } });
+
+function apply() {
+  canvas.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + zoom + ')';
+  document.getElementById('zoomPct').textContent = Math.round(zoom * 100) + '%';
+}
+function fit() {
+  var svg = canvas.querySelector('svg');
+  if (!svg) return;
+  var r = svg.getBoundingClientRect(), vw = view.clientWidth, vh = view.clientHeight;
+  var w = r.width / zoom, h = r.height / zoom;
+  zoom = Math.min(vw / (w + 80), vh / (h + 80), 3);
+  panX = (vw - w * zoom) / 2; panY = (vh - h * zoom) / 2;
+  apply();
+}
+async function show(idx) {
+  var d = DIAGRAMS[idx]; if (!d || !d.f) return;
+  cur = idx;
+  Object.keys(itemEls).forEach(function (k) { itemEls[k].classList.toggle('active', Number(k) === idx); });
+  document.getElementById('title').textContent = d.f.replace('.mmd', '') + ' · ' + d.t;
+  history.replaceState(null, '', '#' + d.f.slice(0, 2));
+  var mm = document.getElementById('mm');
+  mm.removeAttribute('data-processed');
+  try {
+    mm.textContent = await (await fetch(d.f)).text();
+  } catch (e) {
+    document.getElementById('hint').style.display = 'flex';
+    return;
+  }
+  document.getElementById('hint').style.display = 'none';
+  zoom = 1; panX = 0; panY = 0;
+  await mermaid.run({ nodes: [mm] });
+  setTimeout(fit, 50);
+}
+// 侧栏清单（itemEls 记录「图序号 → 元素」映射，grp 行不占位）
+var list = document.getElementById('list');
+var itemEls = {};
+DIAGRAMS.forEach(function (d, i) {
+  if (d.grp) { var g = document.createElement('div'); g.className = 'grp'; g.textContent = d.grp; list.appendChild(g); return; }
+  var el = document.createElement('div');
+  el.className = 'item';
+  el.innerHTML = '<span class="no">' + d.f.slice(0, 2) + '</span>' + d.t;
+  el.onclick = function () { show(i); };
+  list.appendChild(el);
+  itemEls[i] = el;
+});
+// 缩放 / 拖拽
+document.getElementById('zoomIn').onclick = function () { zoom = Math.min(zoom * 1.25, 4); apply(); };
+document.getElementById('zoomOut').onclick = function () { zoom = Math.max(zoom / 1.25, 0.2); apply(); };
+document.getElementById('zoomFit').onclick = fit;
+view.addEventListener('wheel', function (e) { e.preventDefault(); zoom = Math.min(Math.max(zoom * (e.deltaY < 0 ? 1.1 : 0.9), 0.2), 4); apply(); }, { passive: false });
+var drag = null;
+view.addEventListener('mousedown', function (e) { drag = { x: e.clientX - panX, y: e.clientY - panY }; view.classList.add('drag'); });
+window.addEventListener('mousemove', function (e) { if (drag) { panX = e.clientX - drag.x; panY = e.clientY - drag.y; apply(); } });
+window.addEventListener('mouseup', function () { drag = null; view.classList.remove('drag'); });
+// 初始打开：支持 #01 深链（评审时可直接发某张图的链接）
+var initIdx = 1;
+var m = (location.hash || '').match(/^#(\d{2})$/);
+if (m) DIAGRAMS.forEach(function (d, i) { if (d.f && d.f.slice(0, 2) === m[1]) initIdx = i; });
+show(initIdx);
+</script>
+</body>
+</html>

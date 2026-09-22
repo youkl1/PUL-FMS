@@ -1,0 +1,43 @@
+%% 11 用例图——按角色 × 全场景（含后期用例，橙色虚线）
+flowchart LR
+  SA["👤 超级管理员"]
+  BUY["👤 采购员"]
+  KEEP["👤 库房管理员"]
+  PHAR["👤 药房药师"]
+  DOCTOR["👤 医生（后期）"]
+
+  subgraph SYS["PUL-FMS 药品现场精细化管理系统"]
+    UC1(["院区/库房/药房/柜/灯组 字典维护"])
+    UC2(["用户与角色权限管理"])
+    UC3(["药品建档 · HIS 导入"])
+    UC4(["标识码维护 · 异常码补录"])
+    UC5(["采购到货登记"])
+    UC6(["扫码入库"])
+    UC7(["采购退货"])
+    UC8(["库存查询 · 效期 FEFO"])
+    UC9(["领用备货出库"])
+    UC10(["退回/其他出入库 · 损耗报损"])
+    UC11(["确认药房入库"])
+    UC12(["入槽绑定（后期）"])
+    UC13(["调剂 · 出库扫码（后期）"])
+    UC14(["开处方（后期）"])
+  end
+
+  SA --> UC1
+  SA --> UC2
+  BUY --> UC5
+  BUY --> UC7
+  KEEP --> UC3
+  KEEP --> UC4
+  KEEP --> UC6
+  KEEP --> UC8
+  KEEP --> UC9
+  KEEP --> UC10
+  PHAR --> UC11
+  PHAR -.-> UC12
+  PHAR -.-> UC13
+  DOCTOR -.-> UC14
+  UC14 -.->|"驱动"| UC13
+
+  classDef future fill:#fff7e6,stroke:#d48806,stroke-dasharray:5 5,color:#874d00;
+  class UC12,UC13,UC14 future;
