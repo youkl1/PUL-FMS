@@ -1,0 +1,7 @@
+/* index.css — 工作台专属样式 */
+.desktop-preview .row-cards .card { height: 100%; }
+.desktop-preview .list-group-item { font-size: 13px; padding: 10px 16px; }
+
+/* 模块导览卡片 hover（工作台 + guide 页共用） */
+a.card.card-link { transition: box-shadow .2s ease-out, transform .2s ease-out; }
+a.card.card-link:hover { box-shadow: 0 4px 16px rgba(32,107,196,.15); transform: translateY(-2px); }

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="prototype-category" content="web-admin">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 基础平台骨架">
+  <title>模块导览 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css">
+  <link rel="stylesheet" href="styles/index.css">
+  <style>
+    body { background: #F5F7FA !important; }
+    .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
+    .pi-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+    .pi-badge { flex-shrink: 0; padding: 2px 8px; background: var(--wa-primary-light); color: var(--wa-primary); border: 1px solid var(--wa-primary-border); border-radius: 4px; font-size: 11px; font-weight: 500; }
+    .pi-title { margin: 0; font-size: 16px; font-weight: 600; color: var(--wa-text-title); white-space: nowrap; }
+    .pi-subtitle { font-size: 12px; color: var(--wa-text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pi-header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .pi-main { grid-template-columns: 1fr !important; max-width: 1920px !important; padding: 12px 20px !important; gap: 12px !important; }
+    .pi-desktop-col { min-width: 0; overflow: auto; background: var(--pi-card-bg); border: 1px solid var(--pi-border); border-radius: var(--pi-radius); }
+    .pi-desktop-col .desktop-preview { width: 100%; min-width: 1280px; min-height: 720px; }
+  </style>
+</head>
+<body>
+  <div class="pi-layout">
+    <header class="pi-header">
+      <div class="pi-header-left">
+        <span class="pi-badge">Web 管理后台</span>
+        <h1 class="pi-title">模块导览</h1>
+        <span class="pi-subtitle">原型页 · 先看懂业务再点功能 · 流程图 + 案例 + 正/逆/兜底入口</span>
+      </div>
+      <div class="pi-header-right">
+        <a class="pi-back" href="plan.html">← 返回方案总览</a>
+      </div>
+    </header>
+
+    <main class="pi-main">
+      <div class="pi-desktop-col">
+        <div class="desktop-preview" id="desktopPreview"></div>
+      </div>
+    </main>
+  </div>
+
+  <div class="plan-badge" id="planBadge"
+    style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
+           background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
+           font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 基础平台骨架</span>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="scripts/store.js"></script>
+  <script src="scripts/data.js"></script>
+  <script src="scripts/app-shell.js"></script>
+  <script src="scripts/guide-data.js"></script>
+  <script src="scripts/guide.js"></script>
+  <script>
+    document.getElementById('planBadge').addEventListener('click', function () { window.location.href = 'plan.html'; });
+  </script>
+</body>
+</html>
