@@ -38,35 +38,40 @@ GD.order.forEach(function (m) { ok('order ' + m.key + ' → NAV 组「' + m.grou
 
 // 2) 每个模块 menus 键集 == NAV 组键集（双向，防漏防多）
 GD.order.forEach(function (m) {
+  var mod = GD.modules[m.key] || {};
   var want = (navGroups[m.group] || []).slice().sort();
-  var got = Object.keys(GD.modules[m.key].menus || {}).sort();
+  var got = Object.keys(mod.menus || {}).sort();
   ok(m.group + ' menus 键与 NAV 对齐', JSON.stringify(want) === JSON.stringify(got));
 });
 
 // 3) 除医保/组织/系统（纯维护类）外每模块至少一个 fix 兜底入口
 GD.order.forEach(function (m) {
   if (m.key === 'mi' || m.key === 'sys' || m.key === 'org') return;
-  var menus = GD.modules[m.key].menus || {};
+  var mod = GD.modules[m.key] || {};
+  var menus = mod.menus || {};
   ok(m.group + ' 有兜底入口', Object.keys(menus).some(function (k) { return menus[k].cat === 'fix'; }));
 });
 
 // 4) diagrams 图文件存在（引用 docs 唯一源，不拷贝）
 GD.order.forEach(function (m) {
-  (GD.modules[m.key].diagrams || []).forEach(function (dg) {
+  var mod = GD.modules[m.key] || {};
+  (mod.diagrams || []).forEach(function (dg) {
     ok(m.group + ' 图 ' + dg.f + ' 存在',
-      fs.existsSync(path.join(dir, '..', '..', '..', 'docs', 'diagrams', 'fireworks', dg.f)));
+      fs.existsSync(path.join(dir, '..', '..', '..', '..', 'docs', 'diagrams', 'fireworks', dg.f)));
   });
 });
 
 // 5) xlinks 指向真实 NAV 键
 GD.order.forEach(function (m) {
-  (GD.modules[m.key].xlinks || []).forEach(function (x) { ok(m.group + ' xlink ' + x.key + ' 有效', !!navKeys[x.key]); });
+  var mod = GD.modules[m.key] || {};
+  (mod.xlinks || []).forEach(function (x) { ok(m.group + ' xlink ' + x.key + ' 有效', !!navKeys[x.key]); });
 });
 
 // 6) 「仅扫码·人工通道规划中」标注落在约定三处（pick/disp/wardSign）
 ['pick', 'disp', 'wardSign'].forEach(function (k) {
   var found = GD.order.some(function (m) {
-    var meta = (GD.modules[m.key].menus || {})[k];
+    var mod = GD.modules[m.key] || {};
+    var meta = (mod.menus || {})[k];
     return meta && /规划中/.test(meta.note || '');
   });
   ok('标注 ' + k + ' 人工通道规划中', found);
