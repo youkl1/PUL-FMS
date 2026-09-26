@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 1040,
+  "title": "盘点流程：期初 → 盘点 → 盈亏出口（正/逆/兜底全路径）",
+  "subtitle": "期初建账 → 盘点单 → 实盘录入 → 比对盈亏 → 盘盈入库/盘亏出库 → 盈亏查询 · 无码/码损走人工兜底",
+  "containers": [
+    { "id": "lane-counter", "x": 40, "y": 100, "width": 1280, "height": 150, "label": "盘点员", "stroke": "#b7cdf0", "fill": "#eef4fb" },
+    { "id": "lane-sys", "x": 40, "y": 270, "width": 1280, "height": 500, "label": "系统 · 账面比对", "stroke": "#d0d5dd", "fill": "#f6f8fb" },
+    { "id": "lane-manual", "x": 40, "y": 800, "width": 1280, "height": 140, "label": "人工兜底", "stroke": "#e3a8a8", "fill": "#fdecea" }
+  ],
+  "nodes": [
+    { "id": "N1", "kind": "rect", "x": 70, "y": 125, "width": 240, "height": 64, "type_label": "INIT", "label": "期初盘点（建账）", "sublabel": "首次建账 · 账面初始化", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "N2", "kind": "rect", "x": 390, "y": 125, "width": 220, "height": 64, "type_label": "CREATE", "label": "创建盘点单", "sublabel": "盘点任务 · 范围/节点", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "N3", "kind": "rect", "x": 690, "y": 125, "width": 220, "height": 64, "type_label": "COUNT", "label": "录入实盘数", "sublabel": "逐货位录入实盘数量", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "N4", "kind": "rect", "x": 990, "y": 125, "width": 220, "height": 64, "type_label": "SUBMIT", "label": "提交审核", "sublabel": "审核后盈亏生效", "fill": "#ffffff", "stroke": "#206bc4" },
+
+    { "id": "S1", "kind": "rect", "x": 980, "y": 300, "width": 240, "height": 64, "type_label": "SNAPSHOT", "label": "账面数快照", "sublabel": "提交时锁定账面数", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "S2", "kind": "hexagon", "x": 1010, "y": 420, "width": 180, "height": 84, "type_label": "COMPARE", "label": "比对盈亏", "fill": "#fff7e6", "stroke": "#d48806" },
+    { "id": "S3", "kind": "rect", "x": 960, "y": 555, "width": 280, "height": 70, "type_label": "GAIN · 正向", "label": "盘盈 → 盘盈入库（库存+）", "sublabel": "库存+ · 生成盘盈入库单", "fill": "#e6f4ff", "stroke": "#206bc4" },
+    { "id": "S4", "kind": "rect", "x": 480, "y": 427, "width": 280, "height": 70, "type_label": "LOSS · 逆向", "label": "盘亏 → 盘亏出库（库存−）", "sublabel": "库存− · 账面5片实4→亏1片", "fill": "#fff7e6", "stroke": "#d48806" },
+    { "id": "Q1", "kind": "rect", "x": 480, "y": 670, "width": 280, "height": 64, "type_label": "REPORT", "label": "盈亏查询（导出）", "sublabel": "盈亏台账 · 支持导出", "fill": "#ffffff", "stroke": "#2fb344" },
+    { "id": "NOTE", "kind": "rect", "x": 120, "y": 300, "width": 320, "height": 76, "type_label": "RULE", "label": "盘点不拦截过期/冻结码", "sublabel": "kind=count 不拦 · 只记录盈亏", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+
+    { "id": "M1", "kind": "rect", "x": 240, "y": 838, "width": 240, "height": 64, "type_label": "FALLBACK", "label": "发现无码/码损", "sublabel": "录入实盘时发现 · 无法扫码", "fill": "#fdecea", "stroke": "#d63939" },
+    { "id": "M2", "kind": "rect", "x": 570, "y": 838, "width": 240, "height": 64, "type_label": "RECORD", "label": "无码药品记录", "sublabel": "登记台账 · 案例：另1盒码损", "fill": "#fdecea", "stroke": "#d63939" },
+    { "id": "M3", "kind": "rect", "x": 900, "y": 838, "width": 220, "height": 64, "type_label": "FIX", "label": "异常标识码补录", "sublabel": "补录标识码 · 回写台账", "fill": "#fdecea", "stroke": "#d63939" }
+  ],
+  "arrows": [
+    { "id": "a01", "source": "N1", "target": "N2", "source_port": "right", "target_port": "left", "flow": "control" },
+    { "id": "a02", "source": "N2", "target": "N3", "source_port": "right", "target_port": "left", "flow": "control" },
+    { "id": "a03", "source": "N3", "target": "N4", "source_port": "right", "target_port": "left", "flow": "control" },
+    { "id": "a04", "source": "N4", "target": "S1", "source_port": "bottom", "target_port": "top", "flow": "control", "label": "提交触发" },
+    { "id": "a05", "source": "S1", "target": "S2", "source_port": "bottom", "target_port": "top", "flow": "control", "label": "账面数 vs 实盘数" },
+    { "id": "a06", "source": "S2", "target": "S3", "source_port": "bottom", "target_port": "top", "flow": "data", "label": "盘盈" },
+    { "id": "a07", "source": "S2", "target": "S4", "source_port": "left", "target_port": "right", "flow": "data", "label": "盘亏" },
+    { "id": "a08", "source": "S4", "target": "Q1", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "a09", "source": "S3", "target": "Q1", "source_port": "bottom", "target_port": "right", "flow": "control" },
+    { "id": "a11", "source": "M1", "target": "M2", "source_port": "right", "target_port": "left", "flow": "feedback" },
+    { "id": "a12", "source": "M2", "target": "M3", "source_port": "right", "target_port": "left", "flow": "feedback" }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 60,
+  "legend_y": 974,
+  "legend": [
+    { "flow": "control", "label": "主流程（盘点）" },
+    { "flow": "data", "label": "盈亏出口（正/逆）" },
+    { "flow": "feedback", "label": "人工兜底" }
+  ],
+  "footer": "PUL-FMS · 14 盘点流程 · 蓝=盘盈正向 橙=盘亏逆向 红=人工兜底 · fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 1012
+}
