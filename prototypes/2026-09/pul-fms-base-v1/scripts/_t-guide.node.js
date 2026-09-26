@@ -61,10 +61,12 @@ GD.order.forEach(function (m) {
   });
 });
 
-// 5) xlinks 指向真实 NAV 键
+// 5) xlinks 指向真实 NAV 键且可跳转（无 href 时兜底卡会无声消失，必须响）
 GD.order.forEach(function (m) {
   var mod = GD.modules[m.key] || {};
-  (mod.xlinks || []).forEach(function (x) { ok(m.group + ' xlink ' + x.key + ' 有效', !!navKeys[x.key]); });
+  (mod.xlinks || []).forEach(function (x) {
+    ok(m.group + ' xlink ' + x.key + ' 有效', !!(navKeys[x.key] && navKeys[x.key].href));
+  });
 });
 
 // 6) 「仅扫码·人工通道规划中」标注落在约定三处（pick/disp/wardSign）
