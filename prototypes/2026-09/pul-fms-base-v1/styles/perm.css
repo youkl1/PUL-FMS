@@ -1,0 +1,24 @@
+/* perm.css — 菜单管理页专属样式 */
+.perm-layout { display: grid; grid-template-columns: 5fr 7fr; gap: 16px; align-items: start; }
+
+/* 左侧菜单资源树（复用 org-tree 虚线树，加选中/展开交互） */
+.perm-tree-box { max-height: 560px; overflow: auto; padding: 6px 8px; }
+.perm-tree-box ul { padding-left: 18px; }
+.pnode-row { display: flex; align-items: center; gap: 2px; }
+.pnode-toggle {
+  width: 16px; flex-shrink: 0; text-align: center; cursor: pointer;
+  color: #94a3b8; font-size: 11px; user-select: none;
+}
+.pnode-name {
+  cursor: pointer; padding: 2px 6px; border-radius: 4px; font-size: 13px; color: #1e293b;
+  transition: background 150ms ease-out;
+}
+.pnode-name:hover { background: #f1f5f9; }
+.pnode-name.selected { background: #dbeafe; color: #1d4ed8; font-weight: 600; }
+.pnode-name.is-off { color: #94a3b8; text-decoration: line-through; }
+.pnode-badge { font-size: 10px; color: #94a3b8; margin-left: 4px; }
+
+/* 右侧子节点表 */
+.perm-crumb { font-size: 12px; color: #64748b; }
+.perm-crumb b { color: #1e293b; }
+tr.row-off > td { opacity: .55; }

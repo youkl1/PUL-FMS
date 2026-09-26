@@ -1,0 +1,24 @@
+/* login.css — 登录页专属样式 */
+.login-screen { min-height: 720px; background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%); }
+.login-brand { display: inline-flex; align-items: center; gap: 10px; }
+.login-brand-icon {
+  width: 44px; height: 44px; border-radius: 12px; background: #3b82f6; color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 16px rgba(59,130,246,.35);
+}
+.login-brand-name { font-size: 28px; font-weight: 700; color: #1e293b; letter-spacing: .02em; }
+.demo-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.demo-chip {
+  padding: 4px 10px; border: 1px solid #dbe2ea; border-radius: 20px;
+  font-size: 11.5px; color: #475569; cursor: pointer; background: #f8fafc;
+  transition: all 150ms ease-out; user-select: none;
+}
+.demo-chip:hover { border-color: #3b82f6; color: #1d4ed8; background: #eff6ff; }
+.demo-chip.active { border-color: #3b82f6; color: #fff; background: #3b82f6; }
+.login-error { margin-top: 10px; font-size: 12px; color: #dc2626; text-align: center; min-height: 18px; }
+.login-shake { animation: loginShake .3s ease-in-out; }
+@keyframes loginShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}

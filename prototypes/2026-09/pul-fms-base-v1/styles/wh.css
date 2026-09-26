@@ -1,0 +1,41 @@
+/* wh.css — 库房业务共用：统计条 / 效期预警 / 双层表达备货区 / 单位切换 */
+/* 框架无此组件说明：Tabler 无「库房统计条」「备货双栏」组件，按框架视觉语言（主色/圆角/间距）自写 */
+
+/* ===== 统计条（库房库存顶部） ===== */
+.wh-stats { display: flex; gap: 12px; margin-bottom: 12px; }
+.wh-stat { flex: 1; background: #fff; border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px 16px; }
+.wh-stat-num { font-size: 24px; font-weight: 700; color: #1E293B; line-height: 1.2; }
+.wh-stat-label { font-size: 12.5px; color: #64748B; margin-top: 2px; }
+.wh-stat.warn .wh-stat-num { color: #F59E0B; }
+.wh-stat.bad .wh-stat-num { color: #D63939; }
+.wh-stat.ok .wh-stat-num { color: #2FB344; }
+
+/* ===== 效期预警标色（正常=默认 / 预警=黄 / 过期=红底行） ===== */
+.wh-exp-badge { display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 12px; }
+.wh-exp-badge.ok { background: #EAF7EE; color: #2FB344; }
+.wh-exp-badge.warn { background: #FEF3E2; color: #F59E0B; }
+.wh-exp-badge.bad { background: #FDECEC; color: #D63939; }
+tr.wh-row-expired > td { background: #FDF2F4; }
+
+/* ===== 单位切换（库房库存：基本单位 ⇄ 大包装） ===== */
+.wh-unit-toggle { display: inline-flex; border: 1px solid #D9DEE4; border-radius: 6px; overflow: hidden; }
+.wh-unit-toggle button { border: none; background: #fff; padding: 6px 14px; font-size: 12.5px; color: #64748B; cursor: pointer; font-family: inherit; }
+.wh-unit-toggle button.active { background: #2563EB; color: #fff; }
+
+/* ===== 备货区双层表达（左药品明细 ⇄ 右码清单） ===== */
+.wh-pick-grid { display: grid; grid-template-columns: 5fr 7fr; gap: 12px; }
+.wh-pick-grid .card { margin-bottom: 0; }
+@media (max-width: 1400px) { .wh-pick-grid { grid-template-columns: 1fr; } }
+
+/* 申请单项选卡（领用备货出库左侧单池） */
+.wh-req-card { border: 1px solid #E5E7EB; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; cursor: pointer; background: #fff; }
+.wh-req-card:hover { border-color: #BFDBFE; background: #F8FAFC; }
+.wh-req-card.sel { border-color: #2563EB; background: #EFF6FF; }
+.wh-req-no { font-weight: 600; font-size: 13.5px; color: #1E293B; }
+.wh-req-meta { font-size: 12px; color: #64748B; margin-top: 2px; }
+
+/* 备货进度（药品明细行内：已备/申请） */
+.wh-pick-diff { font-weight: 700; }
+.wh-pick-diff.full { color: #2FB344; }
+.wh-pick-diff.part { color: #F59E0B; }
+.wh-pick-diff.over { color: #D63939; }

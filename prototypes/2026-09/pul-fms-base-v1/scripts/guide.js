@@ -21,8 +21,8 @@
     fix: ['兜底', 'bg-red-lt'],
     qry: ['查询', 'bg-azure-lt']
   };
-  // 流程图路径唯一入口：引用 docs 源（不拷贝），换目录只改这里
-  var DIAGRAM_BASE = '../../../docs/diagrams/fireworks/';
+  // 流程图路径唯一入口：图已迁入 prototypes/shared/diagrams（部署同步范围内，线上线下同一份）
+  var DIAGRAM_BASE = '../../shared/diagrams/fireworks/';
 
   function navGroup(name) {
     return (window.AppShell.NAV || []).filter(function (e) { return e.name === name; })[0] || null;

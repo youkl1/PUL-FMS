@@ -1,0 +1,2869 @@
+/* ============================================================
+ * prototype-intro.css — 原型介绍区统一样式
+ * 总分联动：plan.html（总）+ 6 个单页（分）
+ * 设计原则：灰白底 + 白卡 + 蓝主色 + 灰阶文字，无渐变无阴影堆叠
+ * ============================================================ */
+
+/* ---------- 全局变量（8pt 节奏 + 语义色） ---------- */
+:root {
+  --pi-bg: #F5F7FA;
+  --pi-card-bg: #FFFFFF;
+  --pi-border: #E5E7EB;
+  --pi-primary: #2563EB;
+  --pi-primary-hover: #1D4ED8;
+  --pi-primary-light: #EFF6FF;
+  --pi-primary-border: #BFDBFE;
+  --pi-text-title: #111827;
+  --pi-text-body: #1F2937;      /* 7.5:1 on white */
+  --pi-text-secondary: #4B5563; /* 6.0:1 on white */
+  --pi-text-muted: #6B7280;     /* 4.6:1 on white（提至 AA） */
+  --pi-text-disabled: #9CA3AF;  /* 仅用于装饰性文字 */
+  --pi-success: #047857;
+  --pi-success-bg: #ECFDF5;
+  --pi-success-border: #A7F3D0;
+  --pi-radius: 8px;
+  --pi-thumb-bg: #E5E7EB;
+  --pi-thumb-el: #6B7280;
+  /* 8pt 间距节奏 */
+  --pi-space-1: 4px;
+  --pi-space-2: 8px;
+  --pi-space-3: 16px;
+  --pi-space-4: 24px;
+  --pi-space-5: 32px;
+  --pi-space-6: 48px;
+  /* 焦点环 */
+  --pi-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+  /* 过渡 */
+  --pi-transition: 200ms ease-out;
+}
+
+/* 键盘焦点环（所有可交互元素统一） */
+.plan-tab:focus-visible,
+.plan-func-item:focus-visible,
+.plan-toggle-all:focus-visible,
+.plan-page-card:focus-visible,
+.pi-back:focus-visible,
+.plan-hero-cta:focus-visible,
+.plan-compare-link:focus-visible {
+  outline: none;
+  box-shadow: var(--pi-focus-ring);
+  border-radius: 6px;
+}
+
+/* ---------- 页面布局壳（单页用） ---------- */
+.pi-layout {
+  min-height: 100vh;
+  background: var(--pi-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.pi-header {
+  background: var(--pi-card-bg);
+  border-bottom: 1px solid var(--pi-border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.pi-header-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--pi-text-title);
+}
+
+.pi-header-sub {
+  font-size: 12px;
+  color: var(--pi-text-muted);
+}
+
+.pi-back {
+  font-size: 13px;
+  color: var(--pi-primary);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pi-back:hover {
+  text-decoration: underline;
+}
+
+.pi-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+  padding: 24px 32px;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: start;
+}
+
+.pi-phone-col {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+  min-height: 700px; /* 缩比例后的高度 */
+}
+
+.pi-phone-col .phone-frame {
+  transform: translateX(-50%) scale(0.72);
+  transform-origin: top center;
+}
+
+.pi-intro-col {
+  min-width: 0;
+  background: var(--pi-card-bg);
+  border: 1px solid var(--pi-border);
+  border-radius: var(--pi-radius);
+}
+
+/* 窄屏堆叠 */
+@media (max-width: 1023px) {
+  .pi-main {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 16px 12px;
+  }
+  .pi-phone-col {
+    min-height: 700px;
+  }
+}
+
+/* ---------- 介绍卡（单页右侧） ---------- */
+.pi-intro {
+  background: var(--pi-card-bg);
+  padding: 32px 32px 36px;
+}
+
+.pi-intro-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--pi-text-title);
+  margin: 0 0 6px 0;
+  letter-spacing: 0.2px;
+}
+
+.pi-intro-tagline {
+  font-size: 13px;
+  color: var(--pi-text-muted);
+  margin: 0 0 28px 0;
+  line-height: 1.5;
+}
+
+.pi-section {
+  margin-bottom: 26px;
+  padding-bottom: 0;
+  border-bottom: none;
+  counter-increment: section;
+}
+
+.pi-section:last-child {
+  margin-bottom: 0;
+}
+
+.pi-sections {
+  counter-reset: section;
+}
+
+.pi-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--pi-text-title);
+  letter-spacing: 0.2px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pi-section-title::before {
+  counter-increment: sec;
+  content: counter(sec, decimal-leading-zero);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: var(--pi-text-title);
+  color: #fff;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  flex-shrink: 0;
+}
+
+.pi-intro {
+  counter-reset: sec;
+}
+
+/* 章节标题后随行值（如：使用角色 自营司机·陈明） */
+.pi-section-title-inline {
+  margin-left: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--pi-text-body);
+  letter-spacing: 0;
+}
+
+/* 内容统一缩进：与章节标题文字对齐（序号块 24px + gap 10px = 34px） */
+.pi-section-body,
+.pi-quote,
+.pi-meta,
+.pi-steps,
+.pi-example,
+.pi-chain {
+  margin-left: 34px;
+}
+
+.pi-section-body {
+  font-size: 14px;
+  color: var(--pi-text-body);
+  line-height: 1.7;
+}
+
+.pi-section-body strong {
+  color: var(--pi-text-title);
+  font-weight: 600;
+}
+
+.pi-quote {
+  color: var(--pi-text-title);
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+.pi-meta {
+  font-size: 13px;
+  color: var(--pi-text-muted);
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+/* ---------- 步骤列表 ---------- */
+.pi-steps {
+  list-style: none;
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.pi-steps li {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--pi-text-body);
+  line-height: 1.6;
+  align-items: flex-start;
+}
+
+.pi-steps li:last-child {
+  margin-bottom: 0;
+}
+
+.pi-step-num {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--pi-primary);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 1px;
+}
+
+/* ---------- 示例高亮卡 ---------- */
+.pi-example {
+  background: #F9FAFB;
+  border: 1px solid var(--pi-border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--pi-text-body);
+  line-height: 1.6;
+}
+
+.pi-example-key {
+  color: var(--pi-primary);
+  font-weight: 600;
+}
+
+/* ---------- 链路（页面串联） ---------- */
+.pi-chain {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.pi-chain-item {
+  background: #EFF6FF;
+  color: #1E40AF;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.pi-chain-arrow {
+  color: var(--pi-text-muted);
+}
+
+/* ---------- 迷你手机缩略图（纯 CSS） ---------- */
+.pi-mini-phone {
+  width: 120px;
+  height: 220px;
+  background: var(--pi-card-bg);
+  border: 2px solid var(--pi-thumb-el);
+  border-radius: 16px;
+  padding: 8px 6px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+}
+
+.pi-mini-phone::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 4px;
+  background: var(--pi-thumb-el);
+  border-radius: 2px;
+}
+
+.pi-mini-row {
+  height: 8px;
+  background: var(--pi-thumb-bg);
+  border-radius: 2px;
+}
+
+.pi-mini-row.short { width: 60%; }
+.pi-mini-row.mid { width: 80%; }
+
+.pi-mini-block {
+  flex: 1;
+  background: var(--pi-thumb-bg);
+  border-radius: 4px;
+  min-height: 32px;
+}
+
+.pi-mini-block.highlight {
+  background: #DBEAFE;
+  border: 1px solid var(--pi-primary);
+}
+
+.pi-mini-btn {
+  height: 18px;
+  background: var(--pi-primary);
+  border-radius: 4px;
+  margin-top: auto;
+}
+
+/* ---------- 聊天气泡缩略图 ---------- */
+.pi-mini-chat {
+  width: 120px;
+  height: 220px;
+  background: var(--pi-card-bg);
+  border: 2px solid var(--pi-thumb-el);
+  border-radius: 16px;
+  padding: 14px 8px 8px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pi-mini-bubble {
+  background: var(--pi-thumb-bg);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 10px;
+  color: var(--pi-text-body);
+  line-height: 1.4;
+}
+
+.pi-mini-bubble.me {
+  background: #DBEAFE;
+  align-self: flex-end;
+  width: 70%;
+}
+
+.pi-mini-bubble.other {
+  align-self: flex-start;
+  width: 75%;
+}
+
+/* ============================================================
+ * plan.html 专用样式
+ * ============================================================ */
+
+.plan-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.plan-hero {
+  background: var(--pi-card-bg);
+  border: 1px solid var(--pi-border);
+  border-radius: var(--pi-radius);
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.plan-hero-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--pi-text-title);
+  margin: 0 0 var(--pi-space-2) 0;
+  letter-spacing: 0.2px;
+}
+
+.plan-hero-sub {
+  font-size: 14px;
+  color: var(--pi-text-secondary);
+  margin: 0 0 var(--pi-space-3) 0;
+  line-height: 1.6;
+}
+
+.plan-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pi-primary);
+  color: #fff;
+  padding: 0 var(--pi-space-4);
+  min-height: 44px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background var(--pi-transition);
+}
+
+.plan-hero-cta:hover {
+  background: var(--pi-primary-hover);
+}
+
+.plan-hero-phones {
+  display: flex;
+  gap: 12px;
+}
+
+.plan-section {
+  background: var(--pi-card-bg);
+  border: 1px solid var(--pi-border);
+  border-radius: var(--pi-radius);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.plan-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--pi-text-title);
+  padding-left: 12px;
+  border-left: 3px solid var(--pi-primary);
+  margin: 0 0 16px 0;
+}
+
+.plan-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.plan-bullets li {
+  padding: 8px 0 8px 20px;
+  position: relative;
+  font-size: 14px;
+  color: var(--pi-text-body);
+  line-height: 1.6;
+}
+
+.plan-bullets li::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 16px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--pi-primary);
+}
+
+/* ---------- 角色卡 ---------- */
+.plan-roles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.plan-role-card {
+  background: #F9FAFB;
+  border: 1px solid var(--pi-border);
+  border-radius: var(--pi-radius);
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+}
+
+.plan-role-avatar {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--pi-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.plan-role-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.plan-role-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pi-text-title);
+  margin-bottom: 2px;
+}
+
+.plan-role-tag {
+  font-size: 12px;
+  color: var(--pi-primary);
+  margin-bottom: 6px;
+}
+
+.plan-role-desc {
+  font-size: 12px;
+  color: var(--pi-text-body);
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.plan-role-pages {
+  font-size: 11px;
+  color: var(--pi-text-muted);
+}
+
+/* ---------- 故事卡 ---------- */
+.plan-stories {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.plan-story-card {
+  background: #F9FAFB;
+  border-left: 3px solid var(--pi-primary);
+  border-radius: 4px;
+  padding: 14px 16px;
+}
+
+.plan-story-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pi-primary);
+  margin-bottom: 8px;
+}
+
+.plan-story-body {
+  font-size: 13px;
+  color: var(--pi-text-body);
+  line-height: 1.7;
+}
+
+.plan-story-body strong {
+  color: var(--pi-text-title);
+  font-weight: 600;
+}
+
+.plan-story-chain {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--pi-border);
+}
+
+/* ---------- 方案核心 ---------- */
+.plan-core-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+  .plan-core-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plan-core-card {
+  background: #EFF6FF;
+  border: 1px solid var(--pi-primary);
+  border-radius: var(--pi-radius);
+  padding: 16px;
+  text-align: center;
+}
+
+.plan-core-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pi-primary);
+  margin-bottom: 8px;
+}
+
+.plan-core-card-body {
+  font-size: 13px;
+  color: var(--pi-text-body);
+  line-height: 1.6;
+}
+
+.plan-core-phones {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* ---------- 对照表 ---------- */
+.plan-compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.plan-compare-table th {
+  background: #EFF6FF;
+  color: #1E40AF;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #BFDBFE;
+  font-size: 13px;
+}
+
+.plan-compare-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--pi-border);
+  color: var(--pi-text-body);
+  vertical-align: top;
+}
+
+.plan-compare-table tr:last-child td {
+  border-bottom: none;
+}
+
+.plan-compare-table .key-col {
+  font-weight: 600;
+  color: var(--pi-text-title);
+  background: #F9FAFB;
+  width: 100px;
+}
+
+.plan-compare-link {
+  color: var(--pi-primary);
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.plan-compare-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- 场景卡 ---------- */
+.plan-scenes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.plan-scene-card {
+  background: #F9FAFB;
+  border: 1px solid var(--pi-border);
+  border-radius: var(--pi-radius);
+  padding: 16px;
+  position: relative;
+}
+
+.plan-scene-card.star {
+  border-color: var(--pi-primary);
+  background: #EFF6FF;
+}
+
+.plan-scene-badge {
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  background: var(--pi-primary);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.plan-scene-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pi-text-title);
+  margin-bottom: 8px;
+}
+
+.plan-scene-flow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 12px 0;
+  padding: 10px;
+  background: var(--pi-card-bg);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--pi-text-body);
+  flex-wrap: wrap;
+}
+
+.plan-scene-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--pi-text-title);
+  font-weight: 500;
+}
+
+.plan-scene-icon svg {
+  color: var(--pi-primary);
+  flex-shrink: 0;
+}
+
+.plan-scene-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px 0;
+  font-size: 12px;
+  color: var(--pi-text-body);
+}
+
+.plan-scene-steps li {
+  padding: 4px 0 4px 16px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.plan-scene-steps li::before {
+  content: counter(step);
+  counter-increment: step;
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  background: var(--pi-primary);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.plan-scene-steps {
+  counter-reset: step;
+}
+
+.plan-scene-pages {
+  font-size: 12px;
+  color: var(--pi-text-secondary);
+  padding-top: var(--pi-space-2);
+  border-top: 1px dashed var(--pi-border);
+}
+
+.plan-scene-pages a {
+  color: var(--pi-primary);
+  text-decoration: none;
+}
+
+.plan-scene-pages a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- 页面导览 ---------- */
+.plan-pages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.plan-page-card {
+  background: #F9FAFB;
+  border: 1px solid var(--pi-border);
+  border-radius: var(--pi-radius);
+  padding: 16px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.plan-page-card:hover {
+  border-color: var(--pi-primary);
+}
+
+.plan-page-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pi-text-title);
+}
+
+.plan-page-card-desc {
+  font-size: 12px;
+  color: var(--pi-text-muted);
+  line-height: 1.4;
+}
+
+.plan-page-card-cta {
+  font-size: 12px;
+  color: var(--pi-primary);
+  font-weight: 500;
+  margin-top: auto;
+}
+
+/* ---------- 数据表 ---------- */
+.plan-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.plan-data-table th {
+  background: #EFF6FF;
+  color: #1E40AF;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #BFDBFE;
+}
+
+.plan-data-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--pi-border);
+  color: var(--pi-text-body);
+}
+
+.plan-data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.plan-data-table .key-col {
+  font-weight: 600;
+  color: var(--pi-text-title);
+  background: #F9FAFB;
+}
+
+/* ---------- plan 移动端适配 ---------- */
+@media (max-width: 768px) {
+  .plan-container {
+    padding: 16px 12px;
+  }
+
+  .plan-hero {
+    grid-template-columns: 1fr;
+    padding: 24px;
+  }
+
+  .plan-hero-title {
+    font-size: 22px;
+  }
+
+  .plan-section {
+    padding: 16px;
+  }
+}
+
+/* ============================================================
+ * plan.html 新增区块
+ * ============================================================ */
+
+/* ---------- 方案定位（背景与痛点下的锚点句） ---------- */
+.plan-positioning {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #EFF6FF;
+  border-left: 3px solid var(--pi-primary);
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--pi-text-body);
+  line-height: 1.7;
+}
+
+.plan-positioning strong {
+  color: var(--pi-text-title);
+}
+
+/* ---------- 业务流程 ---------- */
+.plan-flow-legend {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.plan-flow-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.plan-flow-tag svg {
+  flex-shrink: 0;
+}
+
+.plan-flow-tag.done {
+  background: #ECFDF5;
+  color: #047857;
+  border: 1px solid #A7F3D0;
+}
+
+.plan-flow-tag.pending {
+  background: #F9FAFB;
+  color: var(--pi-text-secondary);
+  border: 1px dashed var(--pi-border);
+}
+
+.plan-flow-track {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 16px;
+  background: #F9FAFB;
+  border: 1px solid var(--pi-border);
+  border-radius: var(--pi-radius);
+}
+
+.plan-flow-step {
+  flex: 1;
+  min-width: 140px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: var(--pi-card-bg);
+  border: 1px solid var(--pi-border);
+}
+
+.plan-flow-step.done {
+  border-color: var(--pi-primary);
+  background: #EFF6FF;
+}
+
+.plan-flow-step.pending {
+  border-style: dashed;
+  border-color: var(--pi-border);
+  background: #F9FAFB;
+  opacity: 0.7;
+}
+
+.plan-flow-step-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pi-text-title);
+  margin-bottom: 4px;
+}
+
+.plan-flow-step.done .plan-flow-step-name {
+  color: var(--pi-primary);
+}
+
+.plan-flow-step.pending .plan-flow-step-name {
+  color: var(--pi-text-muted);
+}
+
+.plan-flow-step-desc {
+  font-size: 12px;
+  color: var(--pi-text-body);
+  line-height: 1.5;
+}
+
+.plan-flow-step.pending .plan-flow-step-desc {
+  color: var(--pi-text-muted);
+}
+
+.plan-flow-arrow {
+  align-self: center;
+  color: var(--pi-text-muted);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.plan-flow-branch {
+  margin-top: 12px;
+}
+
+.plan-flow-branch-label {
+  font-size: 12px;
+  color: var(--pi-text-muted);
+  margin-bottom: 6px;
+  padding-left: 4px;
+}
+
+.plan-flow-branch-label::before {
+  content: '└';
+  margin-right: 6px;
+  color: var(--pi-border);
+}
+
+.plan-flow-qa {
+  margin-top: 20px;
+}
+
+.plan-flow-qa-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pi-text-title);
+  margin-bottom: 12px;
+}
+
+/* ---------- 方案核心卡片 · 流程标签 ---------- */
+.plan-core-flow {
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--pi-primary);
+  background: rgba(37, 99, 235, 0.08);
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* ---------- 开放问题 ---------- */
+.plan-open-questions {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--pi-border);
+}
+
+.plan-open-questions-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pi-text-title);
+  margin: 0 0 12px 0;
+}
+
+/* 流程轨道移动端 */
+@media (max-width: 768px) {
+  .plan-flow-track {
+    flex-direction: column;
+  }
+  .plan-flow-arrow {
+    transform: rotate(90deg);
+    align-self: center;
+  }
+}
+
+/* ---------- 场景叙事 ---------- */
+.plan-scene-narrative {
+  font-size: 13px;
+  color: var(--pi-text-body);
+  line-height: 1.7;
+  margin: 8px 0 12px 0;
+  padding: 10px 12px;
+  background: var(--pi-card-bg);
+  border-left: 3px solid var(--pi-primary);
+  border-radius: 4px;
+}
+
+.plan-scene-card.star .plan-scene-narrative {
+  border-left-color: #1D4ED8;
+  background: #fff;
+}
+
+/* ---------- 大阶段轨道 ---------- */
+.plan-phase-track {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  background: linear-gradient(90deg, #EFF6FF 0%, #F9FAFB 100%);
+  border: 1px solid var(--pi-border);
+  border-radius: var(--pi-radius);
+  margin-bottom: 20px;
+}
+
+.plan-phase {
+  flex: 1;
+  min-width: 140px;
+  text-align: center;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--pi-card-bg);
+  border: 1px solid var(--pi-border);
+  color: var(--pi-text-muted);
+}
+
+.plan-phase.done {
+  background: var(--pi-primary);
+  color: #fff;
+  border-color: var(--pi-primary);
+}
+
+.plan-phase-arrow {
+  color: var(--pi-text-muted);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ---------- 阶段详情 ---------- */
+.plan-phase-detail {
+  margin-bottom: 20px;
+  padding: 14px;
+  background: #F9FAFB;
+  border: 1px solid var(--pi-border);
+  border-radius: var(--pi-radius);
+}
+
+.plan-phase-detail-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  padding-left: 8px;
+  border-left: 3px solid var(--pi-border);
+  color: var(--pi-text-muted);
+}
+
+.plan-phase-detail-title.done {
+  color: var(--pi-primary);
+  border-left-color: var(--pi-primary);
+}
+
+.plan-phase-detail-title.pending {
+  color: var(--pi-text-muted);
+  border-left-color: var(--pi-border);
+}
+
+.plan-phase-detail .plan-flow-track {
+  background: var(--pi-card-bg);
+  padding: 12px;
+}
+
+.plan-phase-qa {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--pi-card-bg);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--pi-text-body);
+  line-height: 1.6;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.plan-phase-qa strong {
+  color: var(--pi-text-title);
+  font-weight: 600;
+}
+
+/* ---------- 功能模块 ---------- */
+.plan-func-modules {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.plan-func-module {
+  padding: 14px;
+  background: #F9FAFB;
+  border: 1px solid var(--pi-border);
+  border-radius: var(--pi-radius);
+}
+
+.plan-func-module.pending {
+  border-style: dashed;
+  opacity: 0.75;
+}
+
+.plan-func-module-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pi-text-title);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.plan-func-module-flow {
+  font-size: 11px;
+  color: var(--pi-primary);
+  margin-bottom: 8px;
+}
+
+.plan-func-module-desc {
+  font-size: 12px;
+  color: var(--pi-text-body);
+  line-height: 1.6;
+}
+
+/* ---------- 页面功能模块标签 ---------- */
+.plan-page-card {
+  position: relative;
+}
+
+.plan-page-module-tag {
+  align-self: flex-start;
+  font-size: 12px;
+  color: var(--pi-primary);
+  background: var(--pi-primary-light);
+  padding: 3px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--pi-primary-border);
+  font-weight: 500;
+}
+
+/* ---------- Section 头部（带展开全部按钮） ---------- */
+.plan-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.plan-section-header .plan-section-title {
+  margin: 0;
+}
+
+.plan-toggle-all {
+  flex-shrink: 0;
+  padding: 0 var(--pi-space-3);
+  min-height: 44px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--pi-primary);
+  background: var(--pi-primary-light);
+  border: 1px solid var(--pi-primary-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--pi-transition);
+  font-family: inherit;
+}
+
+.plan-toggle-all:hover {
+  background: #DBEAFE;
+  border-color: var(--pi-primary);
+}
+
+/* ---------- Tab 切换 ---------- */
+.plan-tabs {
+  display: flex;
+  gap: var(--pi-space-1);
+  padding: var(--pi-space-1);
+  background: #F9FAFB;
+  border: 1px solid var(--pi-border);
+  border-radius: 8px;
+  margin-bottom: var(--pi-space-3);
+  overflow-x: auto;
+}
+
+.plan-tab {
+  flex: 1;
+  min-width: max-content;
+  min-height: 44px;
+  padding: 0 var(--pi-space-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--pi-text-body);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--pi-transition);
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.plan-tab:hover {
+  color: var(--pi-primary);
+  background: rgba(37, 99, 235, 0.06);
+}
+
+.plan-tab.active {
+  background: var(--pi-primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.plan-tab.pending {
+  color: var(--pi-text-secondary);
+  border: 1px dashed var(--pi-border);
+}
+
+.plan-tab.pending.active {
+  background: var(--pi-text-secondary);
+  color: #fff;
+  border-color: var(--pi-text-secondary);
+}
+
+/* ---------- 方案核心 · 对照行 ---------- */
+.plan-core-divider {
+  height: 1px;
+  background: rgba(37, 99, 235, 0.15);
+  margin: 12px 0;
+}
+
+.plan-core-compare {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.plan-core-compare-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.plan-core-compare-label {
+  flex-shrink: 0;
+  padding: 1px 6px;
+  background: var(--pi-primary);
+  color: #fff;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.plan-core-compare-value {
+  flex: 1;
+  color: var(--pi-text-body);
+}
+
+/* ---------- 功能介绍 · 左右两栏 ---------- */
+.plan-func-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.plan-func-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #F9FAFB;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--pi-border);
+}
+
+.plan-func-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pi-space-2);
+  padding: 0 var(--pi-space-3);
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--pi-text-body);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--pi-transition);
+  font-family: inherit;
+  text-align: left;
+}
+
+.plan-func-item:hover {
+  background: rgba(37, 99, 235, 0.06);
+  color: var(--pi-primary);
+}
+
+.plan-func-item.active {
+  background: var(--pi-primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.plan-func-item.active .plan-flow-tag {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.plan-func-item-name {
+  flex: 1;
+}
+
+/* ---------- 功能面板 ---------- */
+.plan-func-panel {
+  display: none;
+  animation: planFadeIn 200ms ease-out;
+}
+
+.plan-func-panel.active {
+  display: block;
+}
+
+.plan-phase-detail {
+  animation: planFadeIn 200ms ease-out;
+}
+
+@keyframes planFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plan-func-panel,
+  .plan-phase-detail {
+    animation: none;
+  }
+}
+
+.plan-func-panel-flow {
+  font-size: 12px;
+  color: var(--pi-primary);
+}
+
+.plan-func-panel-desc {
+  font-size: 13px;
+  color: var(--pi-text-body);
+  line-height: 1.7;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #F9FAFB;
+  border-radius: 6px;
+}
+
+/* ---------- 页面跳转关系 ---------- */
+.plan-page-card-flow {
+  font-size: 12px;
+  color: var(--pi-text-secondary);
+  font-family: 'SF Mono', Menlo, monospace;
+  background: #F9FAFB;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-top: var(--pi-space-1);
+}
+
+/* ============================================================
+ * 业务流程 · 角色 × 阶段 二级 Tab
+ * ============================================================ */
+
+/* ---------- 角色一级 Tab ---------- */
+.plan-role-tabs {
+  display: flex;
+  gap: var(--pi-space-2);
+  margin-bottom: var(--pi-space-3);
+  flex-wrap: wrap;
+}
+
+.plan-role-tab {
+  flex: 1;
+  min-width: max-content;
+  min-height: 44px;
+  padding: 0 var(--pi-space-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pi-space-2);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--pi-text-body);
+  background: var(--pi-card-bg);
+  border: 1px solid var(--pi-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--pi-transition);
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.plan-role-tab svg {
+  flex-shrink: 0;
+  color: var(--pi-text-muted);
+}
+
+.plan-role-tab:hover {
+  border-color: var(--pi-primary);
+  color: var(--pi-primary);
+}
+
+.plan-role-tab.active {
+  background: var(--pi-primary);
+  border-color: var(--pi-primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.plan-role-tab.active svg {
+  color: #fff;
+}
+
+.plan-role-tab:focus-visible {
+  outline: none;
+  box-shadow: var(--pi-focus-ring);
+}
+
+/* ---------- 角色卡 · 可点击切换（融合角色卡 + Tab） ---------- */
+.plan-role-card {
+  cursor: pointer;
+  position: relative;
+  transition: all var(--pi-transition);
+  border: 1px solid var(--pi-border);
+}
+
+.plan-role-card:hover {
+  border-color: var(--pi-primary-border);
+  background: #F3F7FF;
+}
+
+.plan-role-card.active {
+  border: 2px solid var(--pi-primary);
+  background: var(--pi-primary-light);
+  padding: 15px; /* 抵消 2px 边框，保持尺寸一致 */
+}
+
+.plan-role-card:focus-visible {
+  outline: none;
+  box-shadow: var(--pi-focus-ring);
+}
+
+.plan-role-card-badge {
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  background: var(--pi-primary);
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  display: none;
+}
+
+.plan-role-card.active .plan-role-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.plan-role-scenes {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--pi-border);
+}
+
+.plan-role-scenes-label {
+  font-size: 11px;
+  color: var(--pi-text-muted);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.plan-role-scenes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  color: var(--pi-text-body);
+  line-height: 1.6;
+}
+
+.plan-role-scenes-list li {
+  padding: 2px 0 2px 14px;
+  position: relative;
+}
+
+.plan-role-scenes-list li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--pi-primary);
+}
+
+/* ---------- 当前角色小标签（流程区顶部） ---------- */
+.plan-current-role {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  margin-bottom: var(--pi-space-3);
+  background: var(--pi-primary-light);
+  border: 1px solid var(--pi-primary-border);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--pi-text-body);
+}
+
+.plan-current-role strong {
+  color: var(--pi-primary);
+  font-weight: 600;
+}
+
+/* ---------- 阶段面板 · 场景背景 ---------- */
+.plan-phase-scene {
+  padding: 10px 14px;
+  margin-bottom: var(--pi-space-3);
+  background: #F9FAFB;
+  border-left: 3px solid var(--pi-primary);
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--pi-text-secondary);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.plan-phase-scene strong {
+  color: var(--pi-text-title);
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* ============================================================
+ * 三层级：客户类型 → 角色 → 流程
+ * ============================================================ */
+
+/* ---------- 客户类型 Tab（一级） ---------- */
+.plan-customer-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--pi-space-3);
+  margin-bottom: var(--pi-space-4);
+}
+
+@media (max-width: 768px) {
+  .plan-customer-tabs {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plan-customer-tab {
+  padding: var(--pi-space-3);
+  background: var(--pi-card-bg);
+  border: 2px solid var(--pi-border);
+  border-radius: var(--pi-radius);
+  cursor: pointer;
+  transition: all var(--pi-transition);
+  font-family: inherit;
+  text-align: left;
+  min-height: 44px;
+}
+
+.plan-customer-tab:hover {
+  border-color: var(--pi-primary-border);
+  background: #F8FAFF;
+}
+
+.plan-customer-tab.active {
+  border-color: var(--pi-primary);
+  background: var(--pi-primary-light);
+}
+
+.plan-customer-tab:focus-visible {
+  outline: none;
+  box-shadow: var(--pi-focus-ring);
+}
+
+.plan-customer-tab-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pi-text-title);
+  margin-bottom: 4px;
+}
+
+.plan-customer-tab.active .plan-customer-tab-name {
+  color: var(--pi-primary);
+}
+
+.plan-customer-tab-desc {
+  font-size: 12px;
+  color: var(--pi-text-secondary);
+  margin-bottom: 6px;
+}
+
+.plan-customer-tab-roles {
+  font-size: 11px;
+  color: var(--pi-text-muted);
+}
+
+/* ---------- 角色 Tab（二级 · 动态生成） ---------- */
+.plan-role-tabs-dynamic {
+  display: flex;
+  gap: var(--pi-space-2);
+  margin-bottom: var(--pi-space-3);
+  flex-wrap: wrap;
+}
+
+.plan-role-tab-dynamic {
+  flex: 1;
+  min-width: max-content;
+  min-height: 44px;
+  padding: 0 var(--pi-space-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pi-space-2);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--pi-text-body);
+  background: var(--pi-card-bg);
+  border: 1px solid var(--pi-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--pi-transition);
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.plan-role-tab-dynamic:hover {
+  border-color: var(--pi-primary);
+  color: var(--pi-primary);
+}
+
+.plan-role-tab-dynamic.active {
+  background: var(--pi-primary);
+  border-color: var(--pi-primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.plan-role-tab-dynamic:focus-visible {
+  outline: none;
+  box-shadow: var(--pi-focus-ring);
+}
+
+/* ---------- 业务流程图（Mermaid） ---------- */
+.plan-mermaid-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pi-space-3);
+  padding: 10px 14px;
+  margin-bottom: var(--pi-space-3);
+  background: var(--pi-card-bg);
+  border: 1px solid var(--pi-border);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--pi-text-sub);
+}
+
+.plan-mermaid-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.plan-mermaid-legend-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1.5px solid var(--pi-border);
+  background: #fff;
+}
+
+.plan-mermaid-legend-swatch.swatch-photo {
+  background: var(--pi-primary-light);
+  border-color: var(--pi-primary);
+}
+
+.plan-mermaid-legend-swatch.swatch-decision {
+  background: #FEF3C7;
+  border-color: #F59E0B;
+  transform: rotate(45deg);
+  width: 12px;
+  height: 12px;
+}
+
+.plan-mermaid-legend-line {
+  display: inline-block;
+  width: 24px;
+  height: 0;
+  border-top: 2px solid var(--pi-text-body);
+}
+
+.plan-mermaid-legend-line.line-reverse {
+  border-top: 2px dashed var(--pi-danger);
+}
+
+.plan-mermaid {
+  padding: var(--pi-space-4);
+  background: var(--pi-card-bg);
+  border: 1px solid var(--pi-border);
+  border-radius: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.plan-mermaid svg {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
+  /* mermaid v10 render() 只内联 max-width，不设 height；
+     不写 height:auto（对无固有高度 SVG 会塌缩），
+     由 plan.html 在 render 后按 viewBox 宽高比显式定高。 */
+}
+
+/* ---------- 流程详情容器 ---------- */
+.plan-flow-content {
+  animation: planFadeIn 200ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plan-flow-content {
+    animation: none;
+  }
+}
+
+.plan-flow-meta {
+  display: flex;
+  gap: var(--pi-space-2);
+  margin-bottom: var(--pi-space-3);
+  flex-wrap: wrap;
+}
+
+.plan-flow-meta-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: var(--pi-primary-light);
+  color: var(--pi-primary);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.plan-flow-photo-point {
+  margin-top: var(--pi-space-3);
+  padding: var(--pi-space-3);
+  background: var(--pi-success-bg);
+  border-left: 3px solid var(--pi-success);
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--pi-text-body);
+  line-height: 1.6;
+}
+
+.plan-flow-photo-point strong {
+  color: var(--pi-success);
+  font-weight: 600;
+}
+
+.plan-flow-photo-point ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+}
+
+.plan-flow-photo-point li {
+  padding: 4px 0 4px 18px;
+  position: relative;
+}
+
+.plan-flow-photo-point li::before {
+  content: '📷';
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+}
+
+.plan-flow-exception {
+  margin-top: var(--pi-space-3);
+  padding: var(--pi-space-3);
+  background: #FEF3C7;
+  border-left: 3px solid #F59E0B;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--pi-text-body);
+  line-height: 1.6;
+}
+
+.plan-flow-exception strong {
+  color: #D97706;
+  font-weight: 600;
+}
+
+.plan-flow-exception ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+}
+
+.plan-flow-exception li {
+  padding: 4px 0 4px 18px;
+  position: relative;
+}
+
+.plan-flow-exception li::before {
+  content: '⚠';
+  position: absolute;
+  left: 0;
+  color: #F59E0B;
+  font-weight: 600;
+}
+
+.plan-role-panel {
+  display: none;
+  animation: planFadeIn 200ms ease-out;
+}
+
+.plan-role-panel.active {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plan-role-panel {
+    animation: none;
+  }
+}
+
+/* ---------- 在途运输 · 现状不改造 标识 ---------- */
+.plan-tab.status-quo {
+  color: var(--pi-text-muted);
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0 6px,
+      rgba(107, 114, 128, 0.08) 6px 12px
+    );
+  border: 1px dashed var(--pi-border);
+}
+
+.plan-tab.status-quo.active {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(75, 85, 99, 0.92) 0 6px,
+      rgba(75, 85, 99, 0.85) 6px 12px
+    );
+  color: #fff;
+  border-color: var(--pi-text-secondary);
+  border-style: solid;
+}
+
+.plan-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  margin-left: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(107, 114, 128, 0.12);
+  color: var(--pi-text-secondary);
+  border-radius: 8px;
+  line-height: 1.4;
+}
+
+.plan-tab-badge.done {
+  background: rgba(4, 120, 87, 0.12);
+  color: var(--pi-success);
+}
+
+.plan-tab-badge.pending {
+  background: rgba(107, 114, 128, 0.12);
+  color: var(--pi-text-secondary);
+}
+
+.plan-tab.active .plan-tab-badge {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+.plan-tab.status-quo.active .plan-tab-badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+/* ---------- 阶段 · 现状面板（灰底） ---------- */
+.plan-phase-detail.status-quo {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      #F9FAFB 0 12px,
+      #F3F4F6 12px 24px
+    );
+  border-style: dashed;
+}
+
+.plan-flow-tag.status-quo {
+  background: #F3F4F6;
+  color: var(--pi-text-secondary);
+  border: 1px solid var(--pi-border);
+}
+
+/* ---------- 🔜 步骤下的解决思路行 ---------- */
+.plan-flow-step-solution {
+  margin-top: var(--pi-space-2);
+  padding: 6px 10px;
+  background: var(--pi-primary-light);
+  border-left: 2px solid var(--pi-primary);
+  border-radius: 3px;
+  font-size: 12px;
+  color: var(--pi-text-body);
+  line-height: 1.5;
+}
+
+.plan-flow-step-solution strong {
+  color: var(--pi-primary);
+  font-weight: 600;
+}
+
+/* ---------- 节点详情 Modal ---------- */
+.plan-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--pi-space-4);
+}
+
+.plan-modal.open {
+  display: flex;
+}
+
+.plan-modal-mask {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.plan-modal-panel {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  max-height: 80vh;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #F3F4F6;
+  border-radius: 50%;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--pi-text-sub);
+  cursor: pointer;
+  transition: all var(--pi-transition);
+  z-index: 1;
+}
+
+.plan-modal-close:hover {
+  background: #E5E7EB;
+  color: var(--pi-text-title);
+}
+
+.plan-modal-body {
+  padding: var(--pi-space-5);
+  overflow-y: auto;
+}
+
+/* 头部 */
+.plan-node-header {
+  margin-bottom: var(--pi-space-4);
+  padding-bottom: var(--pi-space-3);
+  border-bottom: 1px solid var(--pi-border);
+}
+
+.plan-node-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--pi-text-title);
+  margin-bottom: 8px;
+}
+
+.plan-node-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.plan-node-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.plan-node-badge.role {
+  background: var(--pi-primary-light);
+  color: var(--pi-primary);
+}
+
+.plan-node-badge.photo {
+  background: var(--pi-success-bg);
+  color: var(--pi-success);
+}
+
+/* 业务详情区块（灰底） */
+.plan-node-section {
+  margin-bottom: var(--pi-space-4);
+  padding: var(--pi-space-3);
+  background: #F9FAFB;
+  border-radius: 6px;
+}
+
+.plan-node-section-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pi-text-sub);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.plan-node-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 13px;
+  color: var(--pi-text-body);
+  line-height: 1.7;
+}
+
+.plan-node-list li {
+  margin-bottom: 4px;
+}
+
+/* 拍照点（绿色） */
+.plan-node-photo {
+  margin-top: var(--pi-space-3);
+  padding: var(--pi-space-3);
+  background: var(--pi-success-bg);
+  border-left: 3px solid var(--pi-success);
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--pi-text-body);
+  line-height: 1.6;
+}
+
+.plan-node-photo strong {
+  color: var(--pi-success);
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.plan-node-photo ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
+/* 异常分支（红色） */
+.plan-node-reverse {
+  margin-top: var(--pi-space-3);
+  padding: var(--pi-space-3);
+  background: #FEF2F2;
+  border-left: 3px solid var(--pi-danger);
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--pi-text-body);
+  line-height: 1.6;
+}
+
+.plan-node-reverse strong {
+  color: var(--pi-danger);
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.plan-node-reverse ul {
+  margin: 4px 0 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.plan-node-reverse li {
+  margin-bottom: 4px;
+}
+
+/* 功能亮点区块（蓝框） */
+.plan-node-highlights {
+  margin-top: var(--pi-space-4);
+  padding: var(--pi-space-3);
+  background: #EFF6FF;
+  border: 1.5px solid var(--pi-primary);
+  border-radius: 6px;
+}
+
+.plan-node-highlights-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pi-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.plan-node-highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+}
+
+.plan-highlight-card {
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid var(--pi-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--pi-transition);
+  text-decoration: none;
+  display: block;
+}
+
+.plan-highlight-card:hover {
+  border-color: var(--pi-primary);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+}
+
+.plan-highlight-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pi-text-title);
+  margin-bottom: 4px;
+}
+
+.plan-highlight-card-desc {
+  font-size: 11px;
+  color: var(--pi-text-sub);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.plan-highlight-card-link {
+  font-size: 11px;
+  color: var(--pi-primary);
+  font-weight: 500;
+}
+
+/* Mermaid 节点可点击提示 */
+.plan-mermaid svg .node {
+  cursor: pointer;
+  transition: opacity var(--pi-transition);
+}
+
+.plan-mermaid svg .node:hover {
+  opacity: 0.85;
+}
+
+/* 功能清单中的可点击项 */
+.plan-node-feature-link {
+  color: var(--pi-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.plan-node-feature-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- 功能状态 Badge ---------- */
+.plan-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.plan-status-badge.done {
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.plan-status-badge.pending {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.plan-status-badge.suggested {
+  background: #F3F4F6;
+  color: #6B7280;
+}
+
+/* ---------- 功能点列表（⑥ 功能介绍 / ② 节点弹窗 通用） ---------- */
+.plan-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.plan-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid var(--pi-border);
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  transition: border-color var(--pi-transition);
+}
+
+.plan-feature-item:hover {
+  border-color: var(--pi-primary);
+}
+
+.plan-feature-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.plan-feature-item-name {
+  font-weight: 500;
+  color: var(--pi-text-title);
+  margin-bottom: 2px;
+}
+
+.plan-feature-item-desc {
+  font-size: 12px;
+  color: var(--pi-text-sub);
+}
+
+.plan-feature-item-link {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--pi-primary);
+  text-decoration: none;
+}
+
+.plan-feature-item-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- 功能点列表 · 紧凑版 ---------- */
+.plan-feature-list {
+  gap: 4px;
+}
+
+.plan-feature-item {
+  padding: 6px 10px;
+  gap: 8px;
+  border: none;
+  border-bottom: 1px solid var(--pi-border);
+  border-radius: 0;
+  background: transparent;
+  font-size: 13px;
+  align-items: center;
+}
+
+.plan-feature-item:last-child {
+  border-bottom: none;
+}
+
+.plan-feature-item:hover {
+  border-color: var(--pi-border);
+  background: var(--pi-primary-light);
+}
+
+.plan-feature-item-name {
+  display: inline;
+  font-size: 13px;
+  margin-bottom: 0;
+}
+
+.plan-feature-item-desc {
+  display: inline;
+  margin-left: 6px;
+  font-size: 12px;
+}
+
+.plan-feature-item-link {
+  display: inline;
+  margin-top: 0;
+  margin-left: 6px;
+}
+
+/* ---------- 一级：优先级横向 Tab ---------- */
+.plan-priority-tabs {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.plan-priority-tab {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid var(--pi-border);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--pi-transition);
+}
+
+.plan-priority-tab:hover {
+  border-color: var(--pi-primary);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+}
+
+.plan-priority-tab.active {
+  border-color: var(--pi-primary);
+  background: #EEF2FF;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
+}
+
+.plan-priority-tab-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.plan-priority-tab-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pi-text-main);
+}
+
+.plan-priority-tab-desc {
+  font-size: 12px;
+  color: var(--pi-text-sub);
+}
+
+.plan-priority-badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.plan-priority-badge.p0 {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.plan-priority-badge.p1 {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.plan-priority-badge.p2 {
+  background: #E0E7FF;
+  color: #4F46E5;
+}
+
+/* ---------- 二级：功能模块按钮（横向） ---------- */
+.plan-func-modules {
+  background: #F9FAFB;
+  border: 1px solid var(--pi-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.plan-func-tab-group-items {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.plan-func-tab-group-items[hidden] {
+  display: none;
+}
+
+.plan-func-modules .plan-func-item {
+  padding: 6px 14px;
+  background: #fff;
+  border: 1px solid var(--pi-border);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--pi-text-body);
+  cursor: pointer;
+  transition: all var(--pi-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.plan-func-modules .plan-func-item:hover {
+  border-color: var(--pi-primary);
+  color: var(--pi-primary);
+}
+
+.plan-func-modules .plan-func-item.active {
+  background: var(--pi-primary);
+  border-color: var(--pi-primary);
+  color: #fff;
+}
+
+/* ---------- 三级：功能清单 ---------- */
+.plan-func-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ---------- 功能清单 3 列布局 ---------- */
+.plan-func-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--pi-space-3);
+}
+
+@media (max-width: 900px) {
+  .plan-func-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plan-func-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.plan-func-column-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--pi-border);
+}
+
+.plan-func-column-count {
+  font-size: 12px;
+  color: var(--pi-text-sub);
+}
+
+.plan-func-column-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ---------- 功能卡片（带依赖箭头） ---------- */
+.plan-feature-card {
+  position: relative;
+  padding: 10px 12px;
+  background: var(--pi-card-bg);
+  border: 1px solid var(--pi-border);
+  border-radius: 6px;
+  transition: all var(--pi-transition);
+}
+
+.plan-feature-card:hover {
+  border-color: var(--pi-primary);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+}
+
+.plan-feature-arrow {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: var(--pi-text-sub);
+  line-height: 1;
+}
+
+.plan-feature-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.plan-feature-card-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pi-text-title);
+}
+
+.plan-feature-card-desc {
+  font-size: 12px;
+  color: var(--pi-text-sub);
+  line-height: 1.4;
+}
+
+.plan-feature-card-deps {
+  font-size: 11px;
+  color: var(--pi-text-sub);
+  font-style: italic;
+  padding: 2px 6px;
+  background: var(--pi-primary-light);
+  border-radius: 3px;
+  margin-top: 4px;
+}
+
+.plan-feature-card-link {
+  font-size: 11px;
+  color: var(--pi-primary);
+  text-decoration: none;
+  margin-top: 4px;
+}
+
+.plan-feature-card-link:hover {
+  text-decoration: underline;
+}
+
+/* ================= 司机标准 P0 闭环 ================= */
+
+.plan-loop-intro {
+  font-size: 13px;
+  color: var(--pi-text-sub);
+  line-height: 1.7;
+  margin: 0 0 16px;
+}
+
+.plan-loop-intro strong {
+  color: var(--pi-primary);
+  font-weight: 600;
+}
+
+.plan-loop-steps {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 1100px) {
+  .plan-loop-steps { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .plan-loop-steps { grid-template-columns: repeat(2, 1fr); }
+}
+
+.plan-loop-step {
+  background: #fff;
+  border: 1px solid var(--pi-border);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  transition: all 0.2s ease;
+}
+
+.plan-loop-step:hover {
+  border-color: var(--pi-primary);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+}
+
+.plan-loop-step.is-key {
+  background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+  border-color: var(--pi-primary);
+}
+
+.plan-loop-step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--pi-primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.plan-loop-step-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pi-text);
+  margin-bottom: 4px;
+}
+
+.plan-loop-step-desc {
+  font-size: 11px;
+  color: var(--pi-text-sub);
+  line-height: 1.5;
+}
+
+.plan-loop-step-list {
+  margin: 6px 0 0;
+  padding-left: 14px;
+  font-size: 11px;
+  color: var(--pi-text-sub);
+  line-height: 1.6;
+}
+
+.plan-loop-step-list li {
+  margin-bottom: 2px;
+}
+
+/* 状态 → 模板映射表 */
+
+.plan-state-map {
+  background: #fff;
+  border: 1px solid var(--pi-border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.plan-state-map-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pi-text);
+  margin-bottom: 12px;
+  padding-left: 8px;
+  border-left: 3px solid var(--pi-primary);
+}
+
+.plan-state-map-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.plan-state-map-row {
+  display: grid;
+  grid-template-columns: 160px 24px 140px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #F9FAFB;
+}
+
+.plan-state-map-row.head {
+  background: transparent;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--pi-text-sub);
+  padding: 4px 12px;
+}
+
+.plan-state-arrow {
+  color: var(--pi-primary);
+  font-weight: 700;
+  text-align: center;
+}
+
+.plan-state-badge,
+.plan-template-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.plan-state-badge.state-pending {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.plan-state-badge.state-picked {
+  background: #DBEAFE;
+  color: #1E40AF;
+}
+
+.plan-state-badge.state-rejected {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+.plan-template-badge.tpl-pickup {
+  background: #2563EB;
+  color: #fff;
+}
+
+.plan-template-badge.tpl-sign {
+  background: #059669;
+  color: #fff;
+}
+
+.plan-template-badge.tpl-retake {
+  background: #DC2626;
+  color: #fff;
+}
+
+.plan-state-desc {
+  font-size: 12px;
+  color: var(--pi-text-sub);
+}
+
+@media (max-width: 720px) {
+  .plan-state-map-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .plan-state-arrow { display: none; }
+}

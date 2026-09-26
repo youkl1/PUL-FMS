@@ -52,12 +52,12 @@ GD.order.forEach(function (m) {
   ok(m.group + ' 有兜底入口', Object.keys(menus).some(function (k) { return menus[k].cat === 'fix'; }));
 });
 
-// 4) diagrams 图文件存在（引用 docs 唯一源，不拷贝）
+// 4) diagrams 图文件存在（prototypes/shared/diagrams 唯一源，scripts/ 上三级到 prototypes/）
 GD.order.forEach(function (m) {
   var mod = GD.modules[m.key] || {};
   (mod.diagrams || []).forEach(function (dg) {
     ok(m.group + ' 图 ' + dg.f + ' 存在',
-      fs.existsSync(path.join(dir, '..', '..', '..', '..', 'docs', 'diagrams', 'fireworks', dg.f)));
+      fs.existsSync(path.join(dir, '..', '..', '..', 'shared', 'diagrams', 'fireworks', dg.f)));
   });
 });
 

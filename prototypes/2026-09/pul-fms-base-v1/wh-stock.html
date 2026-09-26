@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="prototype-category" content="web-admin">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 库房业务">
+  <title>库房库存 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css">
+  <link rel="stylesheet" href="styles/purchase.css">
+  <link rel="stylesheet" href="styles/wh.css">
+  <style>
+    body { background: #F5F7FA !important; }
+    .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
+    .pi-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+    .pi-badge { flex-shrink: 0; padding: 2px 8px; background: var(--wa-primary-light); color: var(--wa-primary); border: 1px solid var(--wa-primary-border); border-radius: 4px; font-size: 11px; font-weight: 500; }
+    .pi-title { margin: 0; font-size: 16px; font-weight: 600; color: var(--wa-text-title); white-space: nowrap; }
+    .pi-subtitle { font-size: 12px; color: var(--wa-text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pi-header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .pi-main { grid-template-columns: 1fr !important; max-width: 1920px !important; padding: 12px 20px !important; gap: 12px !important; }
+    .pi-desktop-col { min-width: 0; overflow: auto; background: var(--pi-card-bg); border: 1px solid var(--pi-border); border-radius: var(--pi-radius); }
+    .pi-desktop-col .desktop-preview { width: 100%; min-width: 1280px; min-height: 720px; }
+    #btnIntroDetail { border: 1px solid var(--wa-border); background: var(--wa-bg-white); color: var(--wa-text-body); padding: 6px 14px; border-radius: 6px; font-size: 13px; cursor: pointer; transition: all var(--wa-transition); margin-right: 8px; font-family: inherit; }
+    #btnIntroDetail:hover { border-color: var(--wa-primary); color: var(--wa-primary); background: var(--wa-primary-light); }
+  </style>
+</head>
+<body>
+  <div class="pi-layout">
+    <header class="pi-header">
+      <div class="pi-header-left">
+        <span class="pi-badge">Web 管理后台</span>
+        <h1 class="pi-title">库房库存</h1>
+        <span class="pi-subtitle">原型页 · 在架码集合的呈现层：药品汇总⇄码明细 · 效期预警 · 单位切换 · 在途数</span>
+      </div>
+      <div class="pi-header-right">
+        <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
+        <a class="pi-back" href="plan.html">← 返回方案总览</a>
+      </div>
+    </header>
+
+    <main class="pi-main">
+      <div class="pi-desktop-col">
+        <div class="desktop-preview" id="desktopPreview"></div>
+      </div>
+    </main>
+  </div>
+
+  <div class="detail-modal-overlay" id="introModal" style="display:none;">
+    <div class="detail-modal">
+      <button class="close-detail-modal" id="btnIntroClose" type="button">×</button>
+      <div class="detail-modal-header">
+        <div class="detail-modal-icon">📊</div>
+        <div class="detail-modal-title-wrap">
+          <h2>库房库存</h2>
+          <p class="subtitle">库房业务 · 在架码集合的呈现层（推论 1：库存 = 码的集合，数量为派生值）</p>
+        </div>
+      </div>
+      <p class="lead"><strong>一句话概括：</strong>库存不是「品规+数量」，而是在架追溯码的集合——本页把码集合按 药品×批次 聚合成汇总视图（数量=码 count 派生），可下钻逐码明细、切换单位、看效期预警与在途数。</p>
+      <div class="section">
+        <div class="section-title">使用角色 + 上下游</div>
+        <div class="card-grid">
+          <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
+            <div class="info-card-title">药库管理员 / 院区管理员</div>
+            <div class="info-card-desc">查库存、看效期、核对码明细；备货拣货前确认批次与库位</div></div></div>
+          <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
+            <div class="info-card-title">上下游</div>
+            <div class="info-card-desc">上游：采购入库/其他入库/退回入库审核后码进集合；下游：领用/损耗/其他出库审核后码出集合；在途=已领出未入药房</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">如何使用</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">看总览</div><div class="step-desc">顶部统计条：在架品种/在架码数/在途/效期预警/已过期</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">查批次</div><div class="step-desc">按药品/批次/效期状态筛选；行按效期升序（FEFO 近效期在前），过期红底</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">下钻码</div><div class="step-desc">点「码明细」看该批次的每一个追溯码、库位与来源单据；右上角切换 包装单位⇄基本单位</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">示例</div>
+        <div class="example-box"><div class="example-title">单位切换（码⇄药换算的呈现层）</div>
+          <div class="example-text">加罗新在架 2 个箱码（包装单位=箱）→ 切「基本单位」显示 120 瓶（换算链 1箱=60瓶）；健脾生血片批次 250805 效期 2026-12-09 ≤180 天 → 黄色「预警」标色。</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">场景呼应</div>
+        <div class="example-list"><div class="example-item">
+          <div class="example-item-title">库房库存（本页）= 全部出入库单据的净结果</div>
+          <div class="example-item-desc">推论 2：所有单据 = 码的状态迁移批处理。在架 = 采购入库+其他入库+退回入库 − 采购退货−领用−损耗−其他出库；盘点 = 校验账面码集合 = 实物码集合（盘点管理）。</div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-badge" id="planBadge"
+    style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
+           background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
+           font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 库房业务</span>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="scripts/store.js"></script>
+  <script src="scripts/data.js"></script>
+  <script src="scripts/drug-data.js"></script>
+  <script src="scripts/purchase-data.js"></script>
+  <script src="scripts/purchase-shared.js"></script>
+  <script src="scripts/wh-data.js"></script>
+  <script src="scripts/app-shell.js"></script>
+  <script src="scripts/wh-stock.js"></script>
+  <script>
+    (function(){
+      var modal = document.getElementById('introModal');
+      function openIntro(){ modal.style.display = 'flex'; requestAnimationFrame(function(){ modal.classList.add('show'); }); }
+      function closeIntro(){ modal.classList.remove('show'); modal.style.display = 'none'; }
+      document.getElementById('btnIntroDetail').addEventListener('click', openIntro);
+      document.getElementById('btnIntroClose').addEventListener('click', closeIntro);
+      modal.addEventListener('click', function(e){ if (e.target === modal) closeIntro(); });
+      document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.style.display !== 'none') closeIntro(); });
+      document.getElementById('planBadge').addEventListener('click', function() { window.location.href = 'plan.html'; });
+    })();
+  </script>
+</body>
+</html>

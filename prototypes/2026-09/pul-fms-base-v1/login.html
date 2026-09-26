@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="prototype-category" content="web-admin">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 基础平台骨架">
+  <title>登录 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css">
+  <link rel="stylesheet" href="styles/login.css">
+  <style>
+    body { background: #F5F7FA !important; }
+    .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
+    .pi-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+    .pi-badge { flex-shrink: 0; padding: 2px 8px; background: var(--wa-primary-light); color: var(--wa-primary); border: 1px solid var(--wa-primary-border); border-radius: 4px; font-size: 11px; font-weight: 500; }
+    .pi-title { margin: 0; font-size: 16px; font-weight: 600; color: var(--wa-text-title); white-space: nowrap; }
+    .pi-subtitle { font-size: 12px; color: var(--wa-text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pi-header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .pi-main { grid-template-columns: 1fr !important; max-width: 1920px !important; padding: 12px 20px !important; gap: 12px !important; }
+    .pi-desktop-col { min-width: 0; overflow: auto; background: var(--pi-card-bg); border: 1px solid var(--pi-border); border-radius: var(--pi-radius); }
+    .pi-desktop-col .desktop-preview { width: 100%; min-width: 1280px; min-height: 720px; }
+    #btnIntroDetail { border: 1px solid var(--wa-border); background: var(--wa-bg-white); color: var(--wa-text-body); padding: 6px 14px; border-radius: 6px; font-size: 13px; cursor: pointer; transition: all var(--wa-transition); margin-right: 8px; font-family: inherit; }
+    #btnIntroDetail:hover { border-color: var(--wa-primary); color: var(--wa-primary); background: var(--wa-primary-light); }
+    /* 框架无此组件：登录第二步的「库房管理/药房管理」模式选择大卡（沿用 Tabler 视觉语言） */
+    .mode-cards { display: flex; gap: 10px; }
+    .mode-card { flex: 1; padding: 14px 8px; border: 1.5px solid var(--wa-border, #dce1e7); border-radius: 8px; background: #fff; font-size: 14px; font-weight: 500; color: var(--wa-text-body, #354052); cursor: pointer; transition: all 150ms ease-out; font-family: inherit; }
+    .mode-card:hover { border-color: #206bc4; color: #206bc4; }
+    .mode-card.active { border-color: #206bc4; background: #e8f1fb; color: #206bc4; }
+  </style>
+</head>
+<body>
+  <div class="pi-layout">
+    <header class="pi-header">
+      <div class="pi-header-left">
+        <span class="pi-badge">Web 管理后台</span>
+        <h1 class="pi-title">登录页</h1>
+        <span class="pi-subtitle">原型页 · 统一身份入口（账号 → 院区 → 库房管理/药房管理 → 具体库房/药房）</span>
+      </div>
+      <div class="pi-header-right">
+        <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
+        <a class="pi-back" href="plan.html">← 返回方案总览</a>
+      </div>
+    </header>
+
+    <main class="pi-main">
+      <div class="pi-desktop-col">
+        <div class="desktop-preview" id="desktopPreview">
+          <!-- Tabler 登录页 -->
+          <div class="login-screen d-flex flex-column">
+            <div class="flex-fill d-flex flex-column justify-content-center py-4">
+              <div class="container-tight py-4">
+                <div class="text-center mb-4">
+                  <div class="login-brand">
+                    <span class="login-brand-icon" id="brandIcon"></span>
+                    <span class="login-brand-name">PUL-FMS</span>
+                  </div>
+                  <div class="text-secondary mt-2" style="font-size:13px;">药品单位级精细化管理系统 · Pharmaceutical Unit-Level Fine Management</div>
+                </div>
+                <div class="card card-md" style="max-width: 400px; margin: 0 auto;">
+                  <div class="card-body">
+                    <!-- 第一步：账号密码 -->
+                    <div id="step1">
+                      <h2 class="h3 text-center mb-1">登录系统</h2>
+                      <p class="text-secondary text-center mb-3" style="font-size:12px;">先验证账号，再按角色数据范围决定是否需要选院区/库房</p>
+                      <div class="mb-3">
+                        <label class="form-label">账号</label>
+                        <input type="text" class="form-control" id="inpAccount" placeholder="请输入账号" autocomplete="off">
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">密码</label>
+                        <input type="password" class="form-control" id="inpPwd" placeholder="请输入密码">
+                      </div>
+                      <div class="mb-2">
+                        <div class="form-label" style="font-size:12px;color:#64748b;">演示账号（点击快速填充，密码统一 123456）</div>
+                        <div class="demo-chips" id="demoChips"></div>
+                      </div>
+                      <div class="form-footer">
+                        <button type="button" class="btn btn-primary w-100" id="btnLogin">登 录</button>
+                      </div>
+                    </div>
+                    <!-- 第二步：选院区（超管）→ 选业务模块（双栖用户）→ 选具体库房/药房 -->
+                    <div id="step2" style="display:none;">
+                      <h2 class="h3 text-center mb-1" id="step2Title">选择工作上下文</h2>
+                      <p class="text-secondary text-center mb-3" style="font-size:12px;" id="step2Desc"></p>
+                      <div class="mb-3">
+                        <label class="form-label">院区 <span class="text-secondary" style="font-size:11px;" id="orgHint"></span></label>
+                        <select class="form-select" id="selOrg"></select>
+                      </div>
+                      <div class="mb-3" id="modeField" style="display:none;">
+                        <label class="form-label">业务模块（您同时属于库房与药房，请先选择）</label>
+                        <div class="mode-cards" id="modeCards">
+                          <button type="button" class="mode-card" data-mode="库房管理">🏬 库房管理</button>
+                          <button type="button" class="mode-card" data-mode="药房管理">💊 药房管理</button>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label" id="nodeLabel">库房 / 药房</label>
+                        <select class="form-select" id="selNode"></select>
+                      </div>
+                      <div class="form-footer">
+                        <button type="button" class="btn btn-primary w-100" id="btnEnter">进入系统</button>
+                      </div>
+                      <div class="text-center mt-2">
+                        <a href="javascript:void 0" id="btnBack" style="font-size:12px;">← 换个账号</a>
+                      </div>
+                    </div>
+                    <div class="login-error" id="loginError"></div>
+                  </div>
+                </div>
+                <div class="text-center text-secondary mt-3" style="font-size:12px;">
+                  多院区单实例 · 行数据按登录所选库房/药房自动隔离，再按本人隔离
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 详情弹窗：本页介绍 -->
+  <div class="detail-modal-overlay" id="introModal" style="display:none;">
+    <div class="detail-modal">
+      <button class="close-detail-modal" id="btnIntroClose" type="button">×</button>
+      <div class="detail-modal-header">
+        <div class="detail-modal-icon">🔐</div>
+        <div class="detail-modal-title-wrap">
+          <h2>登录页</h2>
+          <p class="subtitle">系统统一身份入口 · 权限体系的起点</p>
+        </div>
+      </div>
+      <p class="lead"><strong>一句话概括：</strong>所有用户从这里进入系统（客户新版登录流程 2026-09-21）：超级用户先选院区，非超级用户自动进入其唯一所属院区；既属于库房又属于药房的用户必须先选「库房管理 / 药房管理」，再选具体库房/药房——登录上下文是行数据自动隔离的第一道闸门。</p>
+
+      <div class="section">
+        <div class="section-title">使用角色 + 上下游</div>
+        <div class="card-grid">
+          <div class="info-card">
+            <div class="info-card-icon">👥</div>
+            <div class="info-card-body">
+              <div class="info-card-title">超级用户 + 业务用户</div>
+              <div class="info-card-desc">超级用户不指定院区（只做权限/字典，不参与业务）；业务用户指定唯一院区 + 授权多个库房/药房</div>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🔀</div>
+            <div class="info-card-body">
+              <div class="info-card-title">上下游</div>
+              <div class="info-card-desc">上游：浏览器直接访问 → 本页；下游：登录成功 → 工作台，顶栏显示当前上下文（院区-库房/药房）并可随时「部门切换」</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">如何使用</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">输入账号密码</div><div class="step-desc">或点击下方演示账号芯片一键填充（演示密码统一 123456）；禁用账号直接拒绝</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">院区分流</div><div class="step-desc">超级用户选院区；非超级用户自动进入其唯一所属院区（只读展示）</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">选业务模块（仅双栖用户）</div><div class="step-desc">既属于库房又属于药房 → 先点「库房管理 / 药房管理」大卡，再选具体库房/药房；单一授权用户直达工作台</div></div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">示例</div>
+        <div class="example-box">
+          <div class="example-title">场景示例</div>
+          <div class="example-text">用 <strong>keeper.wang</strong>（库管员，仅授权中心库）登录 → <strong>无任何选择直接进工作台</strong>；用 <strong>yq.sun</strong>（授权分院库（东）+ 急诊药房（东））登录 → 院区锁定「东院区」→ 必须先选「库房管理 / 药房管理」→ 再选具体节点；用 <strong>admin</strong>（超级用户）登录 → 先选院区，再选模块与节点。</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">场景呼应</div>
+        <div class="example-list">
+          <div class="example-item">
+            <div class="example-item-title">登录页 → 工作台 → 各业务页</div>
+            <div class="example-item-desc">登录态通过 sessionStorage 跨页共享；未登录直接访问业务页时自动注入演示账号并标记「演示模式」，方便评审时从任意页开始讲解。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-badge" id="planBadge"
+    style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
+           background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
+           font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 基础平台骨架</span>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="scripts/store.js"></script>
+  <script src="scripts/data.js"></script>
+  <script src="scripts/app-shell.js"></script>
+  <script src="scripts/login.js"></script>
+  <script>
+    (function(){
+      var modal = document.getElementById('introModal');
+      var btn = document.getElementById('btnIntroDetail');
+      var closeBtn = document.getElementById('btnIntroClose');
+      function openIntro(){ modal.style.display = 'flex'; requestAnimationFrame(function(){ modal.classList.add('show'); }); }
+      function closeIntro(){ modal.classList.remove('show'); modal.style.display = 'none'; }
+      btn.addEventListener('click', openIntro);
+      closeBtn.addEventListener('click', closeIntro);
+      modal.addEventListener('click', function(e){ if (e.target === modal) closeIntro(); });
+      document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.style.display !== 'none') closeIntro(); });
+      var badge = document.getElementById('planBadge');
+      if (badge) badge.addEventListener('click', function() { window.location.href = 'plan.html'; });
+    })();
+  </script>
+</body>
+</html>

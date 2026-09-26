@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="prototype-category" content="web-admin">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 库房业务">
+  <title>损耗明细查询 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css">
+  <link rel="stylesheet" href="styles/purchase.css">
+  <link rel="stylesheet" href="styles/wh.css">
+  <style>
+    body { background: #F5F7FA !important; }
+    .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
+    .pi-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+    .pi-badge { flex-shrink: 0; padding: 2px 8px; background: var(--wa-primary-light); color: var(--wa-primary); border: 1px solid var(--wa-primary-border); border-radius: 4px; font-size: 11px; font-weight: 500; }
+    .pi-title { margin: 0; font-size: 16px; font-weight: 600; color: var(--wa-text-title); white-space: nowrap; }
+    .pi-subtitle { font-size: 12px; color: var(--wa-text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pi-header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .pi-main { grid-template-columns: 1fr !important; max-width: 1920px !important; padding: 12px 20px !important; gap: 12px !important; }
+    .pi-desktop-col { min-width: 0; overflow: auto; background: var(--pi-card-bg); border: 1px solid var(--pi-border); border-radius: var(--pi-radius); }
+    .pi-desktop-col .desktop-preview { width: 100%; min-width: 1280px; min-height: 720px; }
+    #btnIntroDetail { border: 1px solid var(--wa-border); background: var(--wa-bg-white); color: var(--wa-text-body); padding: 6px 14px; border-radius: 6px; font-size: 13px; cursor: pointer; transition: all var(--wa-transition); margin-right: 8px; font-family: inherit; }
+    #btnIntroDetail:hover { border-color: var(--wa-primary); color: var(--wa-primary); background: var(--wa-primary-light); }
+  </style>
+</head>
+<body>
+  <div class="pi-layout">
+    <header class="pi-header">
+      <div class="pi-header-left">
+        <span class="pi-badge">Web 管理后台</span>
+        <h1 class="pi-title">损耗明细查询</h1>
+        <span class="pi-subtitle">原型页 · 药品汇总（数量=码 count 派生）→ 单据下钻 → 深链损耗出库单</span>
+      </div>
+      <div class="pi-header-right">
+        <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
+        <a class="pi-back" href="plan.html">← 返回方案总览</a>
+      </div>
+    </header>
+
+    <main class="pi-main">
+      <div class="pi-desktop-col">
+        <div class="desktop-preview" id="desktopPreview"></div>
+      </div>
+    </main>
+  </div>
+
+  <div class="detail-modal-overlay" id="introModal" style="display:none;">
+    <div class="detail-modal">
+      <button class="close-detail-modal" id="btnIntroClose" type="button">×</button>
+      <div class="detail-modal-header">
+        <div class="detail-modal-icon">🔍</div>
+        <div class="detail-modal-title-wrap">
+          <h2>损耗明细查询</h2>
+          <p class="subtitle">库房业务 · 管理者视角：看药不看码，数量全部由码集合派生</p>
+        </div>
+      </div>
+      <p class="lead"><strong>一句话概括：</strong>把全部损耗单的码按 药品×批次 聚合成汇总视图（损耗量=码 count），点行下钻到单据与逐码明细，可深链回损耗出库单。</p>
+      <div class="section">
+        <div class="section-title">使用角色 + 上下游</div>
+        <div class="card-grid">
+          <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
+            <div class="info-card-title">院区管理员 / 药剂科主任</div>
+            <div class="info-card-desc">按月看损耗结构与原因分布，定位异常损耗</div></div></div>
+          <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
+            <div class="info-card-title">上下游</div>
+            <div class="info-card-desc">上游：损耗出库单（日常报损/盘亏转入/数据迁移三来源合并）；下游：追溯码查询可继续追单盒轨迹</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">如何使用</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">筛范围</div><div class="step-desc">按时间区间/损耗原因/来源/药品名筛选</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">看汇总</div><div class="step-desc">药品×批次一行：损耗数量（码 count 派生）+ 涉及单据数</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">下钻</div><div class="step-desc">点行看该批次的单据与逐码明细；「查看单据」深链到损耗出库单</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">示例</div>
+        <div class="example-box"><div class="example-title">来源合并查询</div>
+          <div class="example-text">查「乳酸依沙吖啶溶液」→ 汇总 1 盒（来源=数据迁移，老系统历史报损）；查「健脾生血片」→ 1 盒（日常报损·破损）。按「来源=盘亏转入」筛选可单独看盘点差异损耗。</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">场景呼应</div>
+        <div class="example-list"><div class="example-item">
+          <div class="example-item-title">损耗明细查询（本页）⇄ 损耗出库单 ⇄ 台账管理</div>
+          <div class="example-item-desc">与采购明细查询同模式（汇总→下钻→深链）；推论 1 的报表面：页面上的每个数字都能点开看到对应的码。</div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-badge" id="planBadge"
+    style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
+           background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
+           font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 库房业务</span>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="scripts/store.js"></script>
+  <script src="scripts/data.js"></script>
+  <script src="scripts/drug-data.js"></script>
+  <script src="scripts/purchase-data.js"></script>
+  <script src="scripts/purchase-shared.js"></script>
+  <script src="scripts/wh-data.js"></script>
+  <script src="scripts/app-shell.js"></script>
+  <script src="scripts/wh-loss-query.js"></script>
+  <script>
+    (function(){
+      var modal = document.getElementById('introModal');
+      function openIntro(){ modal.style.display = 'flex'; requestAnimationFrame(function(){ modal.classList.add('show'); }); }
+      function closeIntro(){ modal.classList.remove('show'); modal.style.display = 'none'; }
+      document.getElementById('btnIntroDetail').addEventListener('click', openIntro);
+      document.getElementById('btnIntroClose').addEventListener('click', closeIntro);
+      modal.addEventListener('click', function(e){ if (e.target === modal) closeIntro(); });
+      modal.addEventListener('click', function(e){ if (e.target === modal) closeIntro(); });
+      document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.style.display !== 'none') closeIntro(); });
+      document.getElementById('planBadge').addEventListener('click', function() { window.location.href = 'plan.html'; });
+    })();
+  </script>
+</body>
+</html>

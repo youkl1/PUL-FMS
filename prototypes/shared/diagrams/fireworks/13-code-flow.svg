@@ -1,0 +1,214 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1540 640" width="1540" height="640" data-generator="fireworks-tech-graph" data-schema-version="1" data-text-metrics="heuristic-v1" data-style-id="1" data-visual-theme="Flat Icon" data-diagram-type="architecture" data-motion-scene="" data-semantic-profile="generic" data-semantic-valid="true" data-quality-profile="showcase" data-max-bends-per-edge="2" data-max-total-bends="8" data-max-route-stretch="1.35" data-max-bridged-crossings="0" data-min-node-gap="40.0" data-min-container-gutter="20.0" data-min-label-clearance="4.0" data-min-segment-length="16.0">
+  <defs>
+    <marker id="arrowA" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrowB" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+    </marker>
+    <marker id="arrowC" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/>
+    </marker>
+    <marker id="arrowE" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f97316"/>
+    </marker>
+    <marker id="arrowF" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrowG" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ef4444"/>
+    </marker>
+    <marker id="arrowH" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280"/>
+    </marker>
+    <filter id="shadowSoft" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.12"/>
+    </filter>
+    <filter id="shadowGlass" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="16" flood-color="#020617" flood-opacity="0.28"/>
+    </filter>
+    <style>
+    text { font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', 'Microsoft JhengHei', 'SimHei', sans-serif; }
+    .title { font-size: 30px; font-weight: 700; fill: #111827; }
+    .subtitle { font-size: 14px; font-weight: 500; fill: #6b7280; }
+    .section { font-size: 13px; font-weight: 700; fill: #2563eb; letter-spacing: 1.4px; }
+    .section-sub { font-size: 12px; font-weight: 500; fill: #64748b; }
+    .node-title { font-weight: 700; fill: #111827; }
+    .node-sub { font-weight: 500; fill: #6b7280; }
+    .node-type { font-size: 12px; font-weight: 700; fill: #64748b; letter-spacing: 0.08em; }
+    .arrow-label { font-size: 12px; font-weight: 600; fill: #6b7280; }
+    .legend { font-size: 12px; font-weight: 500; fill: #6b7280; }
+    .footnote { font-size: 12px; font-weight: 500; fill: #64748b; }
+    .metric-label { font-size: 8.5px; font-weight: 700; fill: #64748b; text-transform: uppercase; }
+    .metric-value { font-size: 9.5px; font-weight: 700; fill: #111827; }
+    </style>
+  </defs>
+  <rect data-graph-role="background" width="1540.0" height="640.0" fill="#ffffff"/>
+  <text x="770.0" y="56" text-anchor="middle" class="title">箱码全链路 · 码怎么转</text>
+  <text x="770.0" y="82" text-anchor="middle" class="subtitle">阿莫西林 1箱=60盒 · 发货时客户已确认 60 个一级盒码 · 箱码只写 code2 从不在架</text>
+  <g id="col0" data-graph-role="container" data-container-id="col0" data-semantic-role="boundary" data-graph-bounds="40,100,250,500">
+  <rect data-graph-role="container" x="40.0" y="100.0" width="210.0" height="400.0" rx="16.0" fill="#f6f8fb" stroke="#d0d5dd" stroke-width="1.4" stroke-dasharray="6 5"/>
+  <text x="58.0" y="124.0" class="section">发货确认</text>
+    <rect id="col0-header" data-graph-role="reserved" data-reserved-kind="container-header" x="48" y="106" width="82" height="30" fill="none" stroke="none"/>
+  </g>
+  <g id="col1" data-graph-role="container" data-container-id="col1" data-semantic-role="boundary" data-graph-bounds="290,100,500,500">
+  <rect data-graph-role="container" x="290.0" y="100.0" width="210.0" height="400.0" rx="16.0" fill="#eef4fb" stroke="#b7cdf0" stroke-width="1.4" stroke-dasharray="6 5"/>
+  <text x="308.0" y="124.0" class="section">⓪ 采购到货</text>
+    <rect id="col1-header" data-graph-role="reserved" data-reserved-kind="container-header" x="298" y="106" width="94.22" height="30" fill="none" stroke="none"/>
+  </g>
+  <g id="col2" data-graph-role="container" data-container-id="col2" data-semantic-role="boundary" data-graph-bounds="540,100,750,500">
+  <rect data-graph-role="container" x="540.0" y="100.0" width="210.0" height="400.0" rx="16.0" fill="#eef4fb" stroke="#b7cdf0" stroke-width="1.4" stroke-dasharray="6 5"/>
+  <text x="558.0" y="124.0" class="section">① 采购入库</text>
+    <rect id="col2-header" data-graph-role="reserved" data-reserved-kind="container-header" x="548" y="106" width="94.22" height="30" fill="none" stroke="none"/>
+  </g>
+  <g id="col3" data-graph-role="container" data-container-id="col3" data-semantic-role="boundary" data-graph-bounds="790,100,1000,500">
+  <rect data-graph-role="container" x="790.0" y="100.0" width="210.0" height="400.0" rx="16.0" fill="#eef8f0" stroke="#b7e0c4" stroke-width="1.4" stroke-dasharray="6 5"/>
+  <text x="808.0" y="124.0" class="section">② 领用出库</text>
+    <rect id="col3-header" data-graph-role="reserved" data-reserved-kind="container-header" x="798" y="106" width="94.22" height="30" fill="none" stroke="none"/>
+  </g>
+  <g id="col4" data-graph-role="container" data-container-id="col4" data-semantic-role="boundary" data-graph-bounds="1040,100,1250,500">
+  <rect data-graph-role="container" x="1040.0" y="100.0" width="210.0" height="400.0" rx="16.0" fill="#eef4fb" stroke="#b7cdf0" stroke-width="1.4" stroke-dasharray="6 5"/>
+  <text x="1058.0" y="124.0" class="section">③ 药房入库</text>
+    <rect id="col4-header" data-graph-role="reserved" data-reserved-kind="container-header" x="1048" y="106" width="94.22" height="30" fill="none" stroke="none"/>
+  </g>
+  <g id="col5" data-graph-role="container" data-container-id="col5" data-semantic-role="boundary" data-graph-bounds="1290,100,1500,500">
+  <rect data-graph-role="container" x="1290.0" y="100.0" width="210.0" height="400.0" rx="16.0" fill="#fff7e6" stroke="#e0b26a" stroke-width="1.4" stroke-dasharray="6 5"/>
+  <text x="1308.0" y="124.0" class="section">④ 拆零发药</text>
+    <rect id="col5-header" data-graph-role="reserved" data-reserved-kind="container-header" x="1298" y="106" width="94.22" height="30" fill="none" stroke="none"/>
+  </g>
+  <path id="hc0" data-graph-role="edge" data-edge-id="hc0" data-source="C0" data-target="C1" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 230,192 L 310,192" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
+  <path id="hc1" data-graph-role="edge" data-edge-id="hc1" data-source="C1" data-target="C2" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 480,192 L 560,192" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
+  <path id="hc2" data-graph-role="edge" data-edge-id="hc2" data-source="C2" data-target="C3" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 730,192 L 810,192" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
+  <path id="hc3" data-graph-role="edge" data-edge-id="hc3" data-source="C3" data-target="C4" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 980,192 L 1060,192" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
+  <path id="hc4" data-graph-role="edge" data-edge-id="hc4" data-source="C4" data-target="C5" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1230,192 L 1310,192" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
+  <path id="vt0" data-graph-role="edge" data-edge-id="vt0" data-source="C0" data-target="T0" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 145,232 L 145,272" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)"/>
+  <path id="vt1" data-graph-role="edge" data-edge-id="vt1" data-source="C1" data-target="T1" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 395,232 L 395,272" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)"/>
+  <path id="vt2" data-graph-role="edge" data-edge-id="vt2" data-source="C2" data-target="T2" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 645,232 L 645,272" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)"/>
+  <path id="vt3" data-graph-role="edge" data-edge-id="vt3" data-source="C3" data-target="T3" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 895,232 L 895,272" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)"/>
+  <path id="vt4" data-graph-role="edge" data-edge-id="vt4" data-source="C4" data-target="T4" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1145,232 L 1145,272" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)"/>
+  <path id="vt5" data-graph-role="edge" data-edge-id="vt5" data-source="C5" data-target="T5" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1395,232 L 1395,272" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)"/>
+  <path id="vk0" data-graph-role="edge" data-edge-id="vk0" data-source="T0" data-target="K0" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 145,352 L 145,392" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="vk1" data-graph-role="edge" data-edge-id="vk1" data-source="T1" data-target="K1" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 395,352 L 395,392" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="vk2" data-graph-role="edge" data-edge-id="vk2" data-source="T2" data-target="K2" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 645,352 L 645,392" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="vk3" data-graph-role="edge" data-edge-id="vk3" data-source="T3" data-target="K3" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 895,352 L 895,392" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="vk4" data-graph-role="edge" data-edge-id="vk4" data-source="T4" data-target="K4" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1145,352 L 1145,392" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="vk5" data-graph-role="edge" data-edge-id="vk5" data-source="T5" data-target="K5" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1395,352 L 1395,392" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <g id="node-C0" data-graph-role="node" data-node-id="C0" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,152,230,232">
+  <rect x="60.0" y="152.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#626976" stroke-width="1.8"/>
+  <text x="145.0" y="170.0" text-anchor="middle" class="node-type">SHIP</text>
+  <text data-text-role="title" data-full-text="60 个一级盒码" data-text-max-width="146.0" x="145.0" y="198.0" text-anchor="middle" class="node-title" font-size="18">60 个一级盒码</text>
+  <text data-text-role="subtitle" data-full-text="客户发货时确认" data-text-max-width="146.0" x="145.0" y="220.0" text-anchor="middle" class="node-sub" font-size="12">客户发货时确认</text>
+  </g>
+  <g id="node-T0" data-graph-role="node" data-node-id="T0" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,272,230,352">
+  <rect x="60.0" y="272.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#626976" stroke-width="1.8"/>
+  <text x="145.0" y="290.0" text-anchor="middle" class="node-type">PLAT</text>
+  <text data-text-role="title" data-full-text="监管平台码单" data-text-max-width="146.0" x="145.0" y="318.0" text-anchor="middle" class="node-title" font-size="18">监管平台码单</text>
+  <text data-text-role="subtitle" data-full-text="本院无表" data-text-max-width="146.0" x="145.0" y="340.0" text-anchor="middle" class="node-sub" font-size="12">本院无表</text>
+  </g>
+  <g id="node-K0" data-graph-role="node" data-node-id="K0" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,392,230,472">
+  <rect x="60.0" y="392.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#2fb344" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text x="145.0" y="410.0" text-anchor="middle" class="node-type">STOCK</text>
+  <text data-text-role="title" data-full-text="本院库存 0" data-text-max-width="146.0" x="145.0" y="438.0" text-anchor="middle" class="node-title" font-size="18">本院库存 0</text>
+  <text data-text-role="subtitle" data-full-text="尚未拉取" data-text-max-width="146.0" x="145.0" y="460.0" text-anchor="middle" class="node-sub" font-size="12">尚未拉取</text>
+  </g>
+  <g id="node-C1" data-graph-role="node" data-node-id="C1" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="310,152,480,232">
+  <rect x="310.0" y="152.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#206bc4" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text x="395.0" y="170.0" text-anchor="middle" class="node-type">ARRIVE</text>
+  <text data-text-role="title" data-full-text="仍是 60 盒码" data-text-max-width="146.0" x="395.0" y="198.0" text-anchor="middle" class="node-title" font-size="18">仍是 60 盒码</text>
+  <text data-text-role="subtitle" data-full-text="code2 = 箱码" data-text-max-width="146.0" x="395.0" y="220.0" text-anchor="middle" class="node-sub" font-size="12">code2 = 箱码</text>
+  </g>
+  <g id="node-T1" data-graph-role="node" data-node-id="T1" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="310,272,480,352">
+  <rect x="310.0" y="272.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#626976" stroke-width="1.8"/>
+  <text x="395.0" y="290.0" text-anchor="middle" class="node-type">WRITE</text>
+  <text data-text-role="title" data-full-text="ARRIVE+CODE×60" data-text-max-width="146.0" x="395.0" y="318.0" text-anchor="middle" class="node-title" font-size="17.19">ARRIVE+CODE×60</text>
+  <text data-text-role="subtitle" data-full-text="药品行由码聚合" data-text-max-width="146.0" x="395.0" y="340.0" text-anchor="middle" class="node-sub" font-size="12">药品行由码聚合</text>
+  </g>
+  <g id="node-K1" data-graph-role="node" data-node-id="K1" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="310,392,480,472">
+  <rect x="310.0" y="392.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#2fb344" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text x="395.0" y="410.0" text-anchor="middle" class="node-type">STOCK</text>
+  <text data-text-role="title" data-full-text="库存仍 0" data-text-max-width="146.0" x="395.0" y="438.0" text-anchor="middle" class="node-title" font-size="18">库存仍 0</text>
+  <text data-text-role="subtitle" data-full-text="到货单≠在架" data-text-max-width="146.0" x="395.0" y="460.0" text-anchor="middle" class="node-sub" font-size="12">到货单≠在架</text>
+  </g>
+  <g id="node-C2" data-graph-role="node" data-node-id="C2" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="560,152,730,232">
+  <rect x="560.0" y="152.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#206bc4" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text x="645.0" y="170.0" text-anchor="middle" class="node-type">IN</text>
+  <text data-text-role="title" data-full-text="60 盒码入在架" data-text-max-width="146.0" x="645.0" y="198.0" text-anchor="middle" class="node-title" font-size="18">60 盒码入在架</text>
+  <text data-text-role="subtitle" data-full-text="核对拷贝·不展开" data-text-max-width="146.0" x="645.0" y="220.0" text-anchor="middle" class="node-sub" font-size="12">核对拷贝·不展开</text>
+  </g>
+  <g id="node-T2" data-graph-role="node" data-node-id="T2" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="560,272,730,352">
+  <rect x="560.0" y="272.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#626976" stroke-width="1.8"/>
+  <text x="645.0" y="290.0" text-anchor="middle" class="node-type">WRITE</text>
+  <text data-text-role="title" data-full-text="DOC+TRACE×60" data-text-max-width="146.0" x="645.0" y="318.0" text-anchor="middle" class="node-title" font-size="18">DOC+TRACE×60</text>
+  <text data-text-role="subtitle" data-full-text="审核后才在架" data-text-max-width="146.0" x="645.0" y="340.0" text-anchor="middle" class="node-sub" font-size="12">审核后才在架</text>
+  </g>
+  <g id="node-K2" data-graph-role="node" data-node-id="K2" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="560,392,730,472">
+  <rect x="560.0" y="392.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#2fb344" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text x="645.0" y="410.0" text-anchor="middle" class="node-type">STOCK</text>
+  <text data-text-role="title" data-full-text="在架 60 盒" data-text-max-width="146.0" x="645.0" y="438.0" text-anchor="middle" class="node-title" font-size="18">在架 60 盒</text>
+  <text data-text-role="subtitle" data-full-text="1 箱 = 60 盒" data-text-max-width="146.0" x="645.0" y="460.0" text-anchor="middle" class="node-sub" font-size="12">1 箱 = 60 盒</text>
+  </g>
+  <g id="node-C3" data-graph-role="node" data-node-id="C3" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="810,152,980,232">
+  <rect x="810.0" y="152.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#206bc4" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text x="895.0" y="170.0" text-anchor="middle" class="node-type">PICK</text>
+  <text data-text-role="title" data-full-text="扫走 2 个盒码" data-text-max-width="146.0" x="895.0" y="198.0" text-anchor="middle" class="node-title" font-size="18">扫走 2 个盒码</text>
+  <text data-text-role="subtitle" data-full-text="申请 2 盒" data-text-max-width="146.0" x="895.0" y="220.0" text-anchor="middle" class="node-sub" font-size="12">申请 2 盒</text>
+  </g>
+  <g id="node-T3" data-graph-role="node" data-node-id="T3" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="810,272,980,352">
+  <rect x="810.0" y="272.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#626976" stroke-width="1.8"/>
+  <text x="895.0" y="290.0" text-anchor="middle" class="node-type">WRITE</text>
+  <text data-text-role="title" data-full-text="REQ+领用 DOC" data-text-max-width="146.0" x="895.0" y="318.0" text-anchor="middle" class="node-title" font-size="18">REQ+领用 DOC</text>
+  <text data-text-role="subtitle" data-full-text="DOC_CODE ×2" data-text-max-width="146.0" x="895.0" y="340.0" text-anchor="middle" class="node-sub" font-size="12">DOC_CODE ×2</text>
+  </g>
+  <g id="node-K3" data-graph-role="node" data-node-id="K3" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="810,392,980,472">
+  <rect x="810.0" y="392.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#2fb344" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text x="895.0" y="410.0" text-anchor="middle" class="node-type">STOCK</text>
+  <text data-text-role="title" data-full-text="在架 58 · 在途 2" data-text-max-width="146.0" x="895.0" y="438.0" text-anchor="middle" class="node-title" font-size="17.42">在架 58 · 在途 2</text>
+  </g>
+  <g id="node-C4" data-graph-role="node" data-node-id="C4" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1060,152,1230,232">
+  <rect x="1060.0" y="152.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#206bc4" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text x="1145.0" y="170.0" text-anchor="middle" class="node-type">PHARM</text>
+  <text data-text-role="title" data-full-text="2 盒改到货位" data-text-max-width="146.0" x="1145.0" y="198.0" text-anchor="middle" class="node-title" font-size="18">2 盒改到货位</text>
+  <text data-text-role="subtitle" data-full-text="无换算" data-text-max-width="146.0" x="1145.0" y="220.0" text-anchor="middle" class="node-sub" font-size="12">无换算</text>
+  </g>
+  <g id="node-T4" data-graph-role="node" data-node-id="T4" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1060,272,1230,352">
+  <rect x="1060.0" y="272.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#626976" stroke-width="1.8"/>
+  <text x="1145.0" y="290.0" text-anchor="middle" class="node-type">WRITE</text>
+  <text data-text-role="title" data-full-text="DOC 闭环" data-text-max-width="146.0" x="1145.0" y="318.0" text-anchor="middle" class="node-title" font-size="18">DOC 闭环</text>
+  <text data-text-role="subtitle" data-full-text="改 TRACE.location" data-text-max-width="146.0" x="1145.0" y="340.0" text-anchor="middle" class="node-sub" font-size="12">改 TRACE.location</text>
+  </g>
+  <g id="node-K4" data-graph-role="node" data-node-id="K4" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1060,392,1230,472">
+  <rect x="1060.0" y="392.0" width="170.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#2fb344" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text x="1145.0" y="410.0" text-anchor="middle" class="node-type">STOCK</text>
+  <text data-text-role="title" data-full-text="在架 58 · 药房 2" data-text-max-width="146.0" x="1145.0" y="438.0" text-anchor="middle" class="node-title" font-size="17.42">在架 58 · 药房 2</text>
+  </g>
+  <g id="node-C5" data-graph-role="node" data-node-id="C5" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1310,152,1480,232">
+  <rect x="1310.0" y="152.0" width="170.0" height="80.0" rx="10.0" fill="#fff7e6" stroke="#d48806" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text x="1395.0" y="170.0" text-anchor="middle" class="node-type">SPLIT</text>
+  <text data-text-role="title" data-full-text="打开盒发 2 片" data-text-max-width="146.0" x="1395.0" y="198.0" text-anchor="middle" class="node-title" font-size="18">打开盒发 2 片</text>
+  <text data-text-role="subtitle" data-full-text="…0001 剩 5 片" data-text-max-width="146.0" x="1395.0" y="220.0" text-anchor="middle" class="node-sub" font-size="12">…0001 剩 5 片</text>
+  </g>
+  <g id="node-T5" data-graph-role="node" data-node-id="T5" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1310,272,1480,352">
+  <rect x="1310.0" y="272.0" width="170.0" height="80.0" rx="10.0" fill="#fff7e6" stroke="#d48806" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text x="1395.0" y="290.0" text-anchor="middle" class="node-type">WRITE</text>
+  <text data-text-role="title" data-full-text="发药 DOC" data-text-max-width="146.0" x="1395.0" y="318.0" text-anchor="middle" class="node-title" font-size="18">发药 DOC</text>
+  <text data-text-role="subtitle" data-full-text="splitQty = 5" data-text-max-width="146.0" x="1395.0" y="340.0" text-anchor="middle" class="node-sub" font-size="12">splitQty = 5</text>
+  </g>
+  <g id="node-K5" data-graph-role="node" data-node-id="K5" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1310,392,1480,472">
+  <rect x="1310.0" y="392.0" width="170.0" height="80.0" rx="10.0" fill="#fff7e6" stroke="#d48806" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text x="1395.0" y="410.0" text-anchor="middle" class="node-type">STOCK</text>
+  <text data-text-role="title" data-full-text="1 盒 + 5 片" data-text-max-width="146.0" x="1395.0" y="438.0" text-anchor="middle" class="node-title" font-size="18">1 盒 + 5 片</text>
+  <text data-text-role="subtitle" data-full-text="在架仍 58" data-text-max-width="146.0" x="1395.0" y="460.0" text-anchor="middle" class="node-sub" font-size="12">在架仍 58</text>
+  </g>
+  <g id="legend" data-graph-role="legend">
+    <rect id="legend-zone" data-graph-role="reserved" data-reserved-kind="legend" x="50" y="514" width="398" height="46" rx="10" fill="none" stroke="none"/>
+    <line data-graph-role="decoration" x1="60.0" y1="528.0" x2="90.0" y2="528.0" stroke="#7c3aed" stroke-width="2.4" marker-end="url(#arrowA)"/>
+    <text data-graph-role="decoration" x="100.0" y="532.0" class="legend">码形态（主流程）</text>
+    <line data-graph-role="decoration" x1="224.0" y1="528.0" x2="254.0" y2="528.0" stroke="#f97316" stroke-width="2.4" marker-end="url(#arrowE)"/>
+    <text data-graph-role="decoration" x="264.0" y="532.0" class="legend">本步落表</text>
+    <line data-graph-role="decoration" x1="340.0" y1="528.0" x2="370.0" y2="528.0" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arrowC)"/>
+    <text data-graph-role="decoration" x="380.0" y="532.0" class="legend">库存数字</text>
+  </g>
+  <g id="footer" data-graph-role="reserved" data-graph-bounds="48,604,510,620">
+  <text x="48.0" y="616.0" class="footnote">PUL-FMS · 13 箱码实例 · 码转全流程 · 到货单不是库存 · fireworks-tech-graph Style 1</text>
+  </g>
+</svg>

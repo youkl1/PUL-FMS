@@ -1,0 +1,4 @@
+# 截图工具产物（浏览器配置/缓存垃圾，不入库）
+**/_shots/*
+!**/fireworks/_shots/_shot-*.png
+_shots${p}.png

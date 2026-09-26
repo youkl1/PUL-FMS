@@ -1,0 +1,72 @@
+/* purchase.css — 采购模块共用：步骤引导条 / 状态灯 / 三页签 / 扫码弹窗 / 核对反馈 */
+:root {
+  --pch-ok: #2FB344;
+  --pch-warn: #F59E0B;
+  --pch-bad: #D63939;
+  --pch-muted: #94A3B8;
+}
+
+/* ===== 步骤引导条（傻瓜式：①建单 → ②核对 → ③审核） ===== */
+.pch-steps { display: flex; align-items: center; gap: 0; margin-bottom: 12px; background: #fff; border: 1px solid #E5E7EB; border-radius: 8px; padding: 10px 16px; }
+.pch-step { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.pch-step-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; background: #EEF2F7; color: var(--pch-muted); flex-shrink: 0; }
+.pch-step-txt { font-size: 13px; color: var(--pch-muted); white-space: nowrap; }
+.pch-step-sub { font-size: 11px; color: #B0BAC9; white-space: nowrap; }
+.pch-step-line { flex: 1; height: 2px; background: #E5E7EB; margin: 0 12px; min-width: 20px; }
+.pch-step.cur .pch-step-num { background: #2563EB; color: #fff; }
+.pch-step.cur .pch-step-txt { color: #1E293B; font-weight: 600; }
+.pch-step.done .pch-step-num { background: var(--pch-ok); color: #fff; }
+.pch-step.done .pch-step-txt { color: var(--pch-ok); }
+.pch-step-action { margin-left: auto; flex-shrink: 0; }
+
+/* ===== 状态灯（下载/解析/审核 三列） ===== */
+.pch-light { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; }
+.pch-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.pch-light.ok { color: var(--pch-ok); } .pch-light.ok .pch-dot { background: var(--pch-ok); }
+.pch-light.bad { color: var(--pch-bad); } .pch-light.bad .pch-dot { background: var(--pch-bad); }
+.pch-light.mute { color: var(--pch-muted); } .pch-light.mute .pch-dot { background: #CBD5E1; }
+
+/* ===== 三页签（码详情 / 药品清单 / 异常码） ===== */
+.pch-tabs { display: flex; gap: 4px; border-bottom: 2px solid #E5E7EB; padding: 0 12px; }
+.pch-tab { padding: 8px 16px; font-size: 13.5px; color: #64748B; cursor: pointer; border: none; background: none;
+  border-bottom: 2px solid transparent; margin-bottom: -2px; font-family: inherit; }
+.pch-tab:hover { color: #2563EB; }
+.pch-tab.active { color: #2563EB; font-weight: 600; border-bottom-color: #2563EB; }
+.pch-tab .pch-tab-badge { display: inline-block; min-width: 18px; padding: 0 5px; margin-left: 4px; border-radius: 9px;
+  background: var(--pch-bad); color: #fff; font-size: 11px; line-height: 18px; text-align: center; }
+.pch-tab-panel { padding: 0; }
+
+/* ===== 页签工具行（核对进度 + 扫码入口） ===== */
+.pch-tabbar { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid #EEF2F7; background: #FAFBFC; }
+.pch-progress { flex: 1; max-width: 320px; height: 8px; border-radius: 4px; background: #EEF2F7; overflow: hidden; }
+.pch-progress > i { display: block; height: 100%; background: var(--pch-ok); border-radius: 4px; transition: width 300ms ease-out; }
+.pch-progress-txt { font-size: 12.5px; color: #64748B; white-space: nowrap; }
+
+/* ===== 扫码弹窗（大输入框 + 即时反馈；复用 app-modal 壳） ===== */
+.pch-scan-input { width: 100%; font-size: 18px !important; padding: 12px 14px !important; letter-spacing: 1px;
+  border: 2px solid #2563EB !important; border-radius: 8px; font-family: "Consolas", monospace; }
+.pch-scan-result { min-height: 64px; max-height: 168px; overflow: auto; margin-top: 12px; border: 1px solid #E5E7EB; border-radius: 8px; background: #FAFBFC; padding: 8px 10px; }
+.pch-scan-item { display: flex; align-items: center; gap: 8px; padding: 5px 4px; font-size: 13px; border-bottom: 1px dashed #EEF2F7; }
+.pch-scan-item:last-child { border-bottom: none; }
+.pch-scan-item .code { font-family: "Consolas", monospace; font-size: 12.5px; color: #334155; }
+.pch-scan-item.ok .msg { color: var(--pch-ok); }
+.pch-scan-item.bad .msg { color: var(--pch-bad); font-weight: 600; }
+.pch-scan-item.warn .msg { color: var(--pch-warn); font-weight: 600; }
+.pch-scan-flags { display: flex; gap: 18px; margin-top: 12px; font-size: 13px; color: #475569; }
+.pch-scan-empty { text-align: center; color: #B0BAC9; padding: 18px 0; font-size: 12.5px; }
+
+/* ===== 行内验收勾选 ===== */
+.pch-check { width: 17px; height: 17px; cursor: pointer; accent-color: var(--pch-ok); }
+tr.pch-row-bad { background: #FEF2F2; }
+tr.pch-row-unconfirmed { background: #FDF2F4; } /* 到货单医院未确认（对齐老系统粉底行） */
+tr.pch-row-unconfirmed.pch-doc-sel { background: #E7F1FD; }
+tr.pch-row-checked td { color: #64748B; }
+/* 选择列表：人工验收入库的选中态（蓝底，区别于验收后的灰字） */
+tr.pch-row-picked > td { background: #DBEAFE; }
+tr.pch-row-picked:hover > td { background: #BFDBFE; }
+
+/* 单据列表选中行 */
+tr.pch-doc-sel > td { background: #EFF6FF !important; }
+tbody tr.pch-doc-row { cursor: pointer; }
+tbody tr.pch-doc-row:hover > td { background: #F8FAFC; }

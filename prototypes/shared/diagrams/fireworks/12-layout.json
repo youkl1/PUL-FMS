@@ -1,0 +1,543 @@
+{
+  "canvas": {
+    "height": 1180.0,
+    "width": 1580.0
+  },
+  "composition": {
+    "limits": {
+      "max_bends_per_edge": 12,
+      "max_bridged_crossings": 8,
+      "max_route_stretch": 5.0,
+      "max_total_bends": 100,
+      "min_container_gutter": 0.0,
+      "min_label_clearance": 2.0,
+      "min_node_gap": 0.0,
+      "min_segment_length": 0.0,
+      "profile": "standard"
+    },
+    "metrics": {
+      "bridged_crossings": 0,
+      "max_route_stretch": 1.643,
+      "minimum_container_gutter": null,
+      "minimum_node_gap": 2.0,
+      "shortest_segment": 1.0,
+      "total_bends": 22
+    },
+    "ok": true,
+    "profile": "standard",
+    "score": 78,
+    "violations": []
+  },
+  "edges": [
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e1",
+      "length": 40.0,
+      "route": [
+        [
+          220.0,
+          580.0
+        ],
+        [
+          220.0,
+          620.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "DRUGS_r14",
+      "source_port": [
+        220.0,
+        580.0
+      ],
+      "target": "IDCODES",
+      "target_port": [
+        220.0,
+        620.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 4,
+      "bridges": [],
+      "crossings": [],
+      "id": "e2",
+      "length": 707.0,
+      "route": [
+        [
+          380.0,
+          813.0
+        ],
+        [
+          415.0,
+          813.0
+        ],
+        [
+          415.0,
+          167.0
+        ],
+        [
+          416.0,
+          167.0
+        ],
+        [
+          416.0,
+          168.0
+        ],
+        [
+          440.0,
+          168.0
+        ]
+      ],
+      "route_stretch": 1.003,
+      "source": "IDCODES_r06",
+      "source_port": [
+        380.0,
+        813.0
+      ],
+      "target": "TRACE_CODE",
+      "target_port": [
+        440.0,
+        168.0
+      ],
+      "waypoints": [
+        [
+          415.0,
+          813.0
+        ],
+        [
+          415.0,
+          167.0
+        ]
+      ]
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e3",
+      "length": 36.0,
+      "route": [
+        [
+          600.0,
+          524.0
+        ],
+        [
+          600.0,
+          560.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "TRACE_CODE_r12",
+      "source_port": [
+        600.0,
+        524.0
+      ],
+      "target": "DOC_CODE",
+      "target_port": [
+        600.0,
+        560.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 8,
+      "bridges": [],
+      "crossings": [],
+      "id": "e4",
+      "length": 500.0,
+      "route": [
+        [
+          820.0,
+          168.0
+        ],
+        [
+          790.0,
+          168.0
+        ],
+        [
+          790.0,
+          167.0
+        ],
+        [
+          784.0,
+          167.0
+        ],
+        [
+          784.0,
+          578.0
+        ],
+        [
+          790.0,
+          578.0
+        ],
+        [
+          790.0,
+          586.0
+        ],
+        [
+          780.4,
+          586.0
+        ],
+        [
+          780.4,
+          578.0
+        ],
+        [
+          760.0,
+          578.0
+        ]
+      ],
+      "route_stretch": 1.064,
+      "source": "DOC",
+      "source_port": [
+        820.0,
+        168.0
+      ],
+      "target": "DOC_CODE",
+      "target_port": [
+        760.0,
+        578.0
+      ],
+      "waypoints": [
+        [
+          790.0,
+          167.0
+        ],
+        [
+          790.0,
+          578.0
+        ]
+      ]
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e5",
+      "length": 36.0,
+      "route": [
+        [
+          980.0,
+          794.0
+        ],
+        [
+          980.0,
+          830.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "REQ_r07",
+      "source_port": [
+        980.0,
+        794.0
+      ],
+      "target": "REQ_ITEM",
+      "target_port": [
+        980.0,
+        830.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 6,
+      "bridges": [],
+      "crossings": [],
+      "id": "e6",
+      "length": 1840.0,
+      "route": [
+        [
+          380.0,
+          168.0
+        ],
+        [
+          395.0,
+          168.0
+        ],
+        [
+          395.0,
+          167.0
+        ],
+        [
+          380.0,
+          167.0
+        ],
+        [
+          380.0,
+          186.0
+        ],
+        [
+          36.0,
+          186.0
+        ],
+        [
+          36.0,
+          848.0
+        ],
+        [
+          395.0,
+          848.0
+        ],
+        [
+          820.0,
+          848.0
+        ]
+      ],
+      "route_stretch": 1.643,
+      "source": "DRUGS",
+      "source_port": [
+        380.0,
+        168.0
+      ],
+      "target": "REQ_ITEM",
+      "target_port": [
+        820.0,
+        848.0
+      ],
+      "waypoints": [
+        [
+          395.0,
+          167.0
+        ],
+        [
+          395.0,
+          848.0
+        ]
+      ]
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e8",
+      "length": 38.0,
+      "route": [
+        [
+          1360.0,
+          272.0
+        ],
+        [
+          1360.0,
+          310.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "WAREHOUSE_r03",
+      "source_port": [
+        1360.0,
+        272.0
+      ],
+      "target": "WH_LOCATION",
+      "target_port": [
+        1360.0,
+        310.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e9",
+      "length": 38.0,
+      "route": [
+        [
+          1360.0,
+          562.0
+        ],
+        [
+          1360.0,
+          600.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "PHARMACY_r03",
+      "source_port": [
+        1360.0,
+        562.0
+      ],
+      "target": "PH_LOCATION",
+      "target_port": [
+        1360.0,
+        600.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 4,
+      "bridges": [],
+      "crossings": [],
+      "id": "e10",
+      "length": 432.0,
+      "route": [
+        [
+          1520.0,
+          458.0
+        ],
+        [
+          1548.0,
+          458.0
+        ],
+        [
+          1548.0,
+          501.0
+        ],
+        [
+          1548.0,
+          791.0
+        ],
+        [
+          1544.0,
+          791.0
+        ],
+        [
+          1544.0,
+          748.0
+        ],
+        [
+          1520.0,
+          748.0
+        ]
+      ],
+      "route_stretch": 1.49,
+      "source": "PHARMACY",
+      "source_port": [
+        1520.0,
+        458.0
+      ],
+      "target": "CABINET",
+      "target_port": [
+        1520.0,
+        748.0
+      ],
+      "waypoints": [
+        [
+          1548.0,
+          501.0
+        ],
+        [
+          1548.0,
+          791.0
+        ]
+      ]
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e11",
+      "length": 38.0,
+      "route": [
+        [
+          1360.0,
+          852.0
+        ],
+        [
+          1360.0,
+          890.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "CABINET_r03",
+      "source_port": [
+        1360.0,
+        852.0
+      ],
+      "target": "CAB_CELL",
+      "target_port": [
+        1360.0,
+        890.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "e13",
+      "length": 60.0,
+      "route": [
+        [
+          1140.0,
+          168.0
+        ],
+        [
+          1200.0,
+          168.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "DOC",
+      "source_port": [
+        1140.0,
+        168.0
+      ],
+      "target": "WAREHOUSE",
+      "target_port": [
+        1200.0,
+        168.0
+      ],
+      "waypoints": []
+    }
+  ],
+  "input_schema": "v1",
+  "issues": [],
+  "mode": "architecture",
+  "ok": true,
+  "palette": {
+    "below_target": [],
+    "minimum_target": 4.5,
+    "ratios": {
+      "section_sub_fill": 4.76,
+      "text_muted": 4.76,
+      "text_primary": 17.74,
+      "text_secondary": 4.83
+    },
+    "scope": "default opaque canvas text tokens; not a full rendered accessibility audit",
+    "unsupported_tokens": []
+  },
+  "placements": {
+    "legend": {
+      "actual": [
+        58.0,
+        1098.0
+      ],
+      "bounds": [
+        48.0,
+        1084.0,
+        326.16,
+        1130.0
+      ],
+      "moved": true,
+      "requested": [
+        60.0,
+        1120.0
+      ]
+    }
+  },
+  "schema_version": 1,
+  "semantics": {
+    "details": {},
+    "ok": true,
+    "profile": "generic",
+    "style": 1,
+    "visual_theme": "Flat Icon"
+  },
+  "style": {
+    "id": 1,
+    "name": "Flat Icon"
+  },
+  "summary": {
+    "bridged_crossings": 0,
+    "edges": 11,
+    "nodes": 97
+  },
+  "text_metrics": "heuristic-v1",
+  "typography": {
+    "complete_text": true,
+    "hint": null,
+    "metrics": "heuristic widths; inspect the actual rendered font",
+    "truncated": []
+  }
+}

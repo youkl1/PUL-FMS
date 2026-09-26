@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1540,
+  "height": 640,
+  "title": "箱码全链路 · 码怎么转",
+  "subtitle": "阿莫西林 1箱=60盒 · 发货时客户已确认 60 个一级盒码 · 箱码只写 code2 从不在架",
+  "containers": [
+    { "id": "col0", "x": 40, "y": 100, "width": 210, "height": 400, "label": "发货确认", "stroke": "#d0d5dd", "fill": "#f6f8fb" },
+    { "id": "col1", "x": 290, "y": 100, "width": 210, "height": 400, "label": "⓪ 采购到货", "stroke": "#b7cdf0", "fill": "#eef4fb" },
+    { "id": "col2", "x": 540, "y": 100, "width": 210, "height": 400, "label": "① 采购入库", "stroke": "#b7cdf0", "fill": "#eef4fb" },
+    { "id": "col3", "x": 790, "y": 100, "width": 210, "height": 400, "label": "② 领用出库", "stroke": "#b7e0c4", "fill": "#eef8f0" },
+    { "id": "col4", "x": 1040, "y": 100, "width": 210, "height": 400, "label": "③ 药房入库", "stroke": "#b7cdf0", "fill": "#eef4fb" },
+    { "id": "col5", "x": 1290, "y": 100, "width": 210, "height": 400, "label": "④ 拆零发药", "stroke": "#e0b26a", "fill": "#fff7e6" }
+  ],
+  "nodes": [
+    { "id": "C0", "kind": "rect", "x": 60, "y": 152, "width": 170, "height": 80, "type_label": "SHIP", "label": "60 个一级盒码", "sublabel": "客户发货时确认", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "T0", "kind": "rect", "x": 60, "y": 272, "width": 170, "height": 80, "type_label": "PLAT", "label": "监管平台码单", "sublabel": "本院无表", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "K0", "kind": "rect", "x": 60, "y": 392, "width": 170, "height": 80, "type_label": "STOCK", "label": "本院库存 0", "sublabel": "尚未拉取", "fill": "#ffffff", "stroke": "#2fb344" },
+
+    { "id": "C1", "kind": "rect", "x": 310, "y": 152, "width": 170, "height": 80, "type_label": "ARRIVE", "label": "仍是 60 盒码", "sublabel": "code2 = 箱码", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "T1", "kind": "rect", "x": 310, "y": 272, "width": 170, "height": 80, "type_label": "WRITE", "label": "ARRIVE+CODE×60", "sublabel": "药品行由码聚合", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "K1", "kind": "rect", "x": 310, "y": 392, "width": 170, "height": 80, "type_label": "STOCK", "label": "库存仍 0", "sublabel": "到货单≠在架", "fill": "#ffffff", "stroke": "#2fb344" },
+
+    { "id": "C2", "kind": "rect", "x": 560, "y": 152, "width": 170, "height": 80, "type_label": "IN", "label": "60 盒码入在架", "sublabel": "核对拷贝·不展开", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "T2", "kind": "rect", "x": 560, "y": 272, "width": 170, "height": 80, "type_label": "WRITE", "label": "DOC+TRACE×60", "sublabel": "审核后才在架", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "K2", "kind": "rect", "x": 560, "y": 392, "width": 170, "height": 80, "type_label": "STOCK", "label": "在架 60 盒", "sublabel": "1 箱 = 60 盒", "fill": "#ffffff", "stroke": "#2fb344" },
+
+    { "id": "C3", "kind": "rect", "x": 810, "y": 152, "width": 170, "height": 80, "type_label": "PICK", "label": "扫走 2 个盒码", "sublabel": "申请 2 盒", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "T3", "kind": "rect", "x": 810, "y": 272, "width": 170, "height": 80, "type_label": "WRITE", "label": "REQ+领用 DOC", "sublabel": "DOC_CODE ×2", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "K3", "kind": "rect", "x": 810, "y": 392, "width": 170, "height": 80, "type_label": "STOCK", "label": "在架 58 · 在途 2", "fill": "#ffffff", "stroke": "#2fb344" },
+
+    { "id": "C4", "kind": "rect", "x": 1060, "y": 152, "width": 170, "height": 80, "type_label": "PHARM", "label": "2 盒改到货位", "sublabel": "无换算", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "T4", "kind": "rect", "x": 1060, "y": 272, "width": 170, "height": 80, "type_label": "WRITE", "label": "DOC 闭环", "sublabel": "改 TRACE.location", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "K4", "kind": "rect", "x": 1060, "y": 392, "width": 170, "height": 80, "type_label": "STOCK", "label": "在架 58 · 药房 2", "fill": "#ffffff", "stroke": "#2fb344" },
+
+    { "id": "C5", "kind": "rect", "x": 1310, "y": 152, "width": 170, "height": 80, "type_label": "SPLIT", "label": "打开盒发 2 片", "sublabel": "…0001 剩 5 片", "fill": "#fff7e6", "stroke": "#d48806" },
+    { "id": "T5", "kind": "rect", "x": 1310, "y": 272, "width": 170, "height": 80, "type_label": "WRITE", "label": "发药 DOC", "sublabel": "splitQty = 5", "fill": "#fff7e6", "stroke": "#d48806" },
+    { "id": "K5", "kind": "rect", "x": 1310, "y": 392, "width": 170, "height": 80, "type_label": "STOCK", "label": "1 盒 + 5 片", "sublabel": "在架仍 58", "fill": "#fff7e6", "stroke": "#d48806" }
+  ],
+  "arrows": [
+    { "id": "hc0", "source": "C0", "target": "C1", "source_port": "right", "target_port": "left", "flow": "control" },
+    { "id": "hc1", "source": "C1", "target": "C2", "source_port": "right", "target_port": "left", "flow": "control" },
+    { "id": "hc2", "source": "C2", "target": "C3", "source_port": "right", "target_port": "left", "flow": "control" },
+    { "id": "hc3", "source": "C3", "target": "C4", "source_port": "right", "target_port": "left", "flow": "control" },
+    { "id": "hc4", "source": "C4", "target": "C5", "source_port": "right", "target_port": "left", "flow": "control" },
+
+    { "id": "vt0", "source": "C0", "target": "T0", "source_port": "bottom", "target_port": "top", "flow": "data" },
+    { "id": "vt1", "source": "C1", "target": "T1", "source_port": "bottom", "target_port": "top", "flow": "data" },
+    { "id": "vt2", "source": "C2", "target": "T2", "source_port": "bottom", "target_port": "top", "flow": "data" },
+    { "id": "vt3", "source": "C3", "target": "T3", "source_port": "bottom", "target_port": "top", "flow": "data" },
+    { "id": "vt4", "source": "C4", "target": "T4", "source_port": "bottom", "target_port": "top", "flow": "data" },
+    { "id": "vt5", "source": "C5", "target": "T5", "source_port": "bottom", "target_port": "top", "flow": "data" },
+
+    { "id": "vk0", "source": "T0", "target": "K0", "source_port": "bottom", "target_port": "top", "flow": "read" },
+    { "id": "vk1", "source": "T1", "target": "K1", "source_port": "bottom", "target_port": "top", "flow": "read" },
+    { "id": "vk2", "source": "T2", "target": "K2", "source_port": "bottom", "target_port": "top", "flow": "read" },
+    { "id": "vk3", "source": "T3", "target": "K3", "source_port": "bottom", "target_port": "top", "flow": "read" },
+    { "id": "vk4", "source": "T4", "target": "K4", "source_port": "bottom", "target_port": "top", "flow": "read" },
+    { "id": "vk5", "source": "T5", "target": "K5", "source_port": "bottom", "target_port": "top", "flow": "read" }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 60,
+  "legend_y": 528,
+  "legend": [
+    { "flow": "control", "label": "码形态（主流程）" },
+    { "flow": "data", "label": "本步落表" },
+    { "flow": "read", "label": "库存数字" }
+  ],
+  "footer": "PUL-FMS · 13 箱码实例 · 码转全流程 · 到货单不是库存 · fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 616
+}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="prototype-category" content="web-admin">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 库房业务">
+  <title>领用备货出库 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css">
+  <link rel="stylesheet" href="styles/purchase.css">
+  <link rel="stylesheet" href="styles/wh.css">
+  <style>
+    body { background: #F5F7FA !important; }
+    .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
+    .pi-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+    .pi-badge { flex-shrink: 0; padding: 2px 8px; background: var(--wa-primary-light); color: var(--wa-primary); border: 1px solid var(--wa-primary-border); border-radius: 4px; font-size: 11px; font-weight: 500; }
+    .pi-title { margin: 0; font-size: 16px; font-weight: 600; color: var(--wa-text-title); white-space: nowrap; }
+    .pi-subtitle { font-size: 12px; color: var(--wa-text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pi-header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .pi-main { grid-template-columns: 1fr !important; max-width: 1920px !important; padding: 12px 20px !important; gap: 12px !important; }
+    .pi-desktop-col { min-width: 0; overflow: auto; background: var(--pi-card-bg); border: 1px solid var(--pi-border); border-radius: var(--pi-radius); }
+    .pi-desktop-col .desktop-preview { width: 100%; min-width: 1280px; min-height: 720px; }
+    #btnIntroDetail { border: 1px solid var(--wa-border); background: var(--wa-bg-white); color: var(--wa-text-body); padding: 6px 14px; border-radius: 6px; font-size: 13px; cursor: pointer; transition: all var(--wa-transition); margin-right: 8px; font-family: inherit; }
+    #btnIntroDetail:hover { border-color: var(--wa-primary); color: var(--wa-primary); background: var(--wa-primary-light); }
+  </style>
+</head>
+<body>
+  <div class="pi-layout">
+    <header class="pi-header">
+      <div class="pi-header-left">
+        <span class="pi-badge">Web 管理后台</span>
+        <h1 class="pi-title">领用备货出库</h1>
+        <span class="pi-subtitle">原型页 · 库房主流程：申请单池 → 备货（药品明细⇄码清单双层表达）→ 扫码 → 审核出库</span>
+      </div>
+      <div class="pi-header-right">
+        <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
+        <a class="pi-back" href="plan.html">← 返回方案总览</a>
+      </div>
+    </header>
+
+    <main class="pi-main">
+      <div class="pi-desktop-col">
+        <div class="desktop-preview" id="desktopPreview"></div>
+      </div>
+    </main>
+  </div>
+
+  <div class="detail-modal-overlay" id="introModal" style="display:none;">
+    <div class="detail-modal">
+      <button class="close-detail-modal" id="btnIntroClose" type="button">×</button>
+      <div class="detail-modal-header">
+        <div class="detail-modal-icon">📦</div>
+        <div class="detail-modal-title-wrap">
+          <h2>领用备货出库</h2>
+          <p class="subtitle">库房业务 · 码状态机 ② 库房在架 → 领出在途 → 药房在架</p>
+        </div>
+      </div>
+      <p class="lead"><strong>一句话概括：</strong>库房侧主流程：药房发来领用申请（药视角：品规+数量）→ 库管员拣货扫码（码视角：逐码销账）→ 审核出库，码进「在途」；药品明细与码清单同屏实时联动，扫满申请数自动提示。</p>
+      <div class="section">
+        <div class="section-title">使用角色 + 上下游</div>
+        <div class="card-grid">
+          <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
+            <div class="info-card-title">药库管理员</div>
+            <div class="info-card-desc">接申请单 → 按品规数量拣货 → 扫码确认每一盒 → 审核出库</div></div></div>
+          <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
+            <div class="info-card-title">上下游</div>
+            <div class="info-card-desc">上游：药房「领用申请」；下游：药房「领用入库」闭环在途（本页仍可「确认药房入库」一键演示）；高频场景走「一步式领用」跳过备货</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">如何使用</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">选申请单</div><div class="step-desc">顶部单池点选「待备货」申请单，左侧药品明细列出申请数</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">扫码备货</div><div class="step-desc">「扫码备货」逐码扫入：在架码√加入、非在架码×拦截、超申请数!提示；扫箱码自动按换算链折成基本单位</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">审核出库</div><div class="step-desc">确认 申请数 vs 实出数 差异后审核：码从在架扣除、进入「在途」，申请单转已完成</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">示例</div>
+        <div class="example-box"><div class="example-title">码⇄药转换现场</div>
+          <div class="example-text">住院药房申请「加罗新 60 瓶」→ 库管员扫 1 个箱码（1箱=60瓶）→ 右侧码清单 +1 码，左侧已备数 +60 瓶，差额归零变绿可出库——人看的是药，系统记的是码，换算链在中间实时转换。</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">场景呼应</div>
+        <div class="example-list"><div class="example-item">
+          <div class="example-item-title">领用备货出库（本页）⇄ 药房·领用申请 / 领用入库 ⇄ 退回入库</div>
+          <div class="example-item-desc">S2 一步式领用：申请→出库→入库成对闭环；领错/多用退回走「退回入库」。出库审核即扣账（在途单列展示），与采购「下载/手动」同哲学：一步式是无单兜底通道。</div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-badge" id="planBadge"
+    style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
+           background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
+           font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 库房业务</span>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="scripts/store.js"></script>
+  <script src="scripts/data.js"></script>
+  <script src="scripts/drug-data.js"></script>
+  <script src="scripts/purchase-data.js"></script>
+  <script src="scripts/purchase-shared.js"></script>
+  <script src="scripts/wh-data.js"></script>
+  <script src="scripts/app-shell.js"></script>
+  <script src="scripts/wh-pick.js"></script>
+  <script>
+    (function(){
+      var modal = document.getElementById('introModal');
+      function openIntro(){ modal.style.display = 'flex'; requestAnimationFrame(function(){ modal.classList.add('show'); }); }
+      function closeIntro(){ modal.classList.remove('show'); modal.style.display = 'none'; }
+      document.getElementById('btnIntroDetail').addEventListener('click', openIntro);
+      document.getElementById('btnIntroClose').addEventListener('click', closeIntro);
+      modal.addEventListener('click', function(e){ if (e.target === modal) closeIntro(); });
+      document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.style.display !== 'none') closeIntro(); });
+      document.getElementById('planBadge').addEventListener('click', function() { window.location.href = 'plan.html'; });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 830,
+  "title": "处方赋码业务流程（本期新增）",
+  "subtitle": "四泳道：HIS / 系统 / 发药药师 / 医保 · 覆盖处方即时赋码 + 在架批量赋码双入口 · 有码药走方案 b 常规发药（已定，不在本图展开）",
+  "containers": [
+    {
+      "id": "lane-his",
+      "x": 40,
+      "y": 100,
+      "width": 1280,
+      "height": 100,
+      "label": "HIS",
+      "stroke": "#b7cdf0",
+      "fill": "#eef4fb"
+    },
+    {
+      "id": "lane-sys",
+      "x": 40,
+      "y": 210,
+      "width": 1280,
+      "height": 200,
+      "label": "系统 · 赋码引擎",
+      "stroke": "#d0d5dd",
+      "fill": "#f6f8fb"
+    },
+    {
+      "id": "lane-pha",
+      "x": 40,
+      "y": 420,
+      "width": 1280,
+      "height": 160,
+      "label": "发药药师",
+      "stroke": "#b7e0c4",
+      "fill": "#eef8f0"
+    },
+    {
+      "id": "lane-yb",
+      "x": 40,
+      "y": 590,
+      "width": 1280,
+      "height": 140,
+      "label": "医保",
+      "stroke": "#e8c07a",
+      "fill": "#fff7e6"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "H1",
+      "kind": "rect",
+      "x": 130,
+      "y": 120,
+      "width": 300,
+      "height": 60,
+      "type_label": "RX",
+      "label": "处方下达",
+      "sublabel": "含无码药：中药饮片/院内制剂",
+      "fill": "#ffffff",
+      "stroke": "#2e75b6"
+    },
+    {
+      "id": "S1",
+      "kind": "rect",
+      "x": 150,
+      "y": 270,
+      "width": 260,
+      "height": 64,
+      "type_label": "SYS",
+      "label": "拉取处方·逐行验码",
+      "sublabel": "对照标识码字典查码",
+      "fill": "#ffffff",
+      "stroke": "#475467"
+    },
+    {
+      "id": "S2",
+      "kind": "hexagon",
+      "x": 460,
+      "y": 262,
+      "width": 200,
+      "height": 80,
+      "type_label": "判断",
+      "label": "药品有码？",
+      "sublabel": "有码→直接发药 · 无码→赋码",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "S3",
+      "kind": "rect",
+      "x": 700,
+      "y": 270,
+      "width": 280,
+      "height": 64,
+      "type_label": "SYS",
+      "label": "生成院内赋码",
+      "sublabel": "20位=7位标识码+9位批次+4位流水",
+      "fill": "#ffffff",
+      "stroke": "#475467"
+    },
+    {
+      "id": "S4",
+      "kind": "rect",
+      "x": 1020,
+      "y": 270,
+      "width": 280,
+      "height": 64,
+      "type_label": "SYS",
+      "label": "码绑处方·写台账",
+      "sublabel": "码状态=已赋码·全程可追溯",
+      "fill": "#ffffff",
+      "stroke": "#475467"
+    },
+    {
+      "id": "P0",
+      "kind": "rect",
+      "x": 80,
+      "y": 450,
+      "width": 280,
+      "height": 64,
+      "type_label": "药师",
+      "label": "批量赋码（提前贴码）",
+      "sublabel": "选在架无码药·批量生成码签",
+      "fill": "#ffffff",
+      "stroke": "#2f9e6e"
+    },
+    {
+      "id": "P2",
+      "kind": "rect",
+      "x": 1020,
+      "y": 450,
+      "width": 280,
+      "height": 64,
+      "type_label": "药师",
+      "label": "打印码签·粘贴·扫码发药",
+      "sublabel": "处方+码双核对",
+      "fill": "#ffffff",
+      "stroke": "#2f9e6e"
+    },
+    {
+      "id": "M1",
+      "kind": "rect",
+      "x": 1020,
+      "y": 620,
+      "width": 280,
+      "height": 64,
+      "type_label": "YB",
+      "label": "扫码结算",
+      "sublabel": "无码不支付·拆零豁免",
+      "fill": "#ffffff",
+      "stroke": "#d48806"
+    }
+  ],
+  "arrows": [
+    { "id": "a1", "source": "H1", "target": "S1", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "a2", "source": "S1", "target": "S2", "source_port": "right", "target_port": "left", "flow": "control" },
+    { "id": "a4", "source": "S2", "target": "S3", "source_port": "right", "target_port": "left", "flow": "control" },
+    { "id": "a5", "source": "S3", "target": "S4", "source_port": "right", "target_port": "left", "flow": "control" },
+    { "id": "a6", "source": "S4", "target": "P2", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "a7", "source": "P0", "target": "P2", "source_port": "right", "target_port": "left", "flow": "control" },
+    { "id": "a8", "source": "P2", "target": "M1", "source_port": "bottom", "target_port": "top", "flow": "control" }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 40,
+  "legend_y": 762,
+  "legend": [
+    { "flow": "control", "label": "主流程（本期新增）" }
+  ],
+  "footer": "合规锚点：医保发〔2025〕7号 —— 2025-07-01 起定点医药机构「先扫码后结算」无码不支付；拆零发放与零散针剂明文豁免。",
+  "footer_x": 40,
+  "footer_y": 800
+}

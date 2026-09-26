@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>箱码全链路 · 表存储实例</title>
+<style>
+  :root { --blue:#206bc4; --ink:#182433; --muted:#626976; --line:#e3e8ee; --bg:#f6f8fb; --ok:#2fb344; --warn:#d48806; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:"Microsoft YaHei",system-ui,sans-serif; color:var(--ink); background:var(--bg); display:flex; height:100vh; overflow:hidden; }
+  nav { width:220px; min-width:220px; background:#182433; color:#dbe2ea; overflow-y:auto; padding:16px 0; }
+  nav h1 { font-size:14px; color:#fff; padding:0 16px 12px; border-bottom:1px solid rgba(255,255,255,.1); margin-bottom:8px; }
+  nav h1 small { display:block; font-size:11px; color:#8a97a8; font-weight:400; margin-top:4px; }
+  nav a { display:block; padding:8px 16px; color:#b8c2ce; text-decoration:none; font-size:13px; line-height:1.4; }
+  nav a:hover, nav a.on { background:#206bc4; color:#fff; }
+  nav .grp { font-size:11px; color:#6b7a8d; padding:14px 16px 4px; letter-spacing:1px; }
+  main { flex:1; overflow-y:auto; padding:28px 40px 80px; }
+  .wrap { max-width:1080px; }
+  h2 { font-size:22px; margin:32px 0 10px; }
+  h3 { font-size:16px; margin:22px 0 8px; color:var(--blue); }
+  p, li { font-size:14px; line-height:1.7; color:#2c3642; }
+  .lead { color:var(--muted); margin-bottom:18px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:8px; padding:16px 18px; margin:12px 0 20px; }
+  .card.warn { border-left:4px solid var(--warn); }
+  .card.ok { border-left:4px solid var(--blue); }
+  .kv { display:grid; grid-template-columns:160px 1fr; gap:8px 16px; font-size:13.5px; }
+  .kv b { color:var(--muted); font-weight:400; }
+  table { width:100%; border-collapse:collapse; font-size:13px; background:#fff; margin:8px 0 16px; }
+  th, td { border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top; }
+  th { background:#eef4fb; font-weight:600; white-space:nowrap; }
+  td.note { color:var(--muted); font-size:12.5px; }
+  .scroll { overflow-x:auto; }
+  .chip { display:inline-block; font-size:11px; padding:1px 8px; border-radius:10px; background:#e6f4ff; color:var(--blue); margin-left:6px; }
+  .chip.g { background:#e9f7ee; color:var(--ok); }
+  .chip.o { background:#fff7e6; color:var(--warn); }
+  code { font-family:Consolas,monospace; background:#eef1f5; padding:1px 5px; border-radius:3px; font-size:12.5px; }
+  .codebar { font-family:Consolas,monospace; background:#182433; color:#fff; padding:14px 16px; border-radius:8px; font-size:15px; letter-spacing:.5px; margin:10px 0 16px; }
+  .codebar span { padding:2px 6px; border-radius:4px; }
+  .c1 { background:#206bc4; }
+  .c2 { background:#2fb344; }
+  .c3 { background:#d48806; }
+  .legend { font-size:12.5px; color:var(--muted); margin-bottom:16px; }
+  ul { padding-left:20px; margin:8px 0 16px; }
+  .back { font-size:13px; color:var(--blue); text-decoration:none; }
+  .back:hover { text-decoration:underline; }
+  .flowimg { width:100%; height:auto; display:block; background:#fff; border:1px solid var(--line); border-radius:8px; }</style>
+</head>
+<body>
+<nav>
+  <h1>箱码实例<small>表存储模拟 · 阿莫西林</small></h1>
+  <a href="index.html" class="back">← 返回图纸清单</a>
+  <div class="grp">口径</div>
+  <a href="#flow">码转全流程</a>
+  <a href="#unit">基础单位在哪</a>
+  <div class="grp">字典（只读）</div>
+  <a href="#dict-drug">药品主表</a>
+  <a href="#dict-id">标识码子表</a>
+  <a href="#dict-org">组织</a>
+  <div class="grp">五步存储</div>
+  <a href="#s0">⓪ 采购到货</a>
+  <a href="#s1">① 采购入库</a>
+  <a href="#s2">② 领用出库</a>
+  <a href="#s3">③ 药房入库</a>
+  <a href="#s4">④ 拆零发药</a>
+  <div class="grp">对照</div>
+  <a href="#cmp">五时刻库存</a>
+  <a href="#one">第 1 盒码去过哪</a>
+</nav>
+<main>
+<div class="wrap">
+
+<p class="lead">供应商发货确认 <strong>60 个一级盒码</strong> → 医院拉取到货单（不到在架）→ 入库核对审核 → 领用 2 盒 → 入药房 → 打开 1 盒发出 2 片。数字：1 箱 = 60 盒，1 盒 = 7 片。</p>
+
+<h2 id="flow">码转全流程</h2>
+<p class="legend">每一列三层：<strong>码形态 → 写哪些表 → 库存数字</strong>。到货单不是库存；箱码只写在 60 条盒码的 <code>code2</code>，从不单独在架。</p>
+<div class="scroll">
+  <img class="flowimg" src="fireworks/13-code-flow.svg" alt="箱码全链路 · 码怎么转">
+</div>
+<p class="legend"><a class="back" href="fireworks/13-code-flow.html">全屏看图</a>　·　发货时客户已逐码确认，医院入库只核对、不再展开。</p>
+
+<h2 id="unit">基础单位在哪？</h2>
+<div class="card warn">
+  <p><strong>不在追溯码里，也不在标识码里。</strong>库存基本单位 <code>baseUnit</code> 写在<strong>药品主表 DRUGS</strong>，等于换算链 <code>units</code> 的链尾（eq=1 的那一档）。</p>
+</div>
+<div class="card ok">
+  <div class="kv">
+    <b>库存基本单位</b><span>药品主表 <code>DRUGS.baseUnit</code>。本例 = <strong>盒</strong>。申请单数量、界面库存数字都用它。</span>
+    <b>最小销售包装</b><span>标识码子表 <code>IDCODES</code> 里 <code>level=1</code> 的那条，其 <code>packUnit</code> 就是最小销售包装单位。设计约定：<strong>应当等于 baseUnit</strong>。本例 level=1 → 盒。</span>
+    <b>本码包装单位</b><span>标识码 <code>IDCODES.packUnit</code>。同一药可有多条：level=1 盒、level=2 箱、level=3 大箱。扫到哪一级，这一码就代表那一层。</span>
+    <b>追溯码上有没有单位？</b><span><strong>没有。</strong>20 位码 = 7 位标识码 + 9 位序列 + 4 位校验。单位全靠前 7 位去查标识码，再关联药品主表做换算。</span>
+    <b>片 / 粒呢？</b><span>更小一档，叫拆零单位 <code>DRUGS.minUnit</code>（本例 1 盒 = 7 片）。<strong>不是</strong>库存基本单位，只在药房拆零时用；片没有独立追溯码。</span>
+  </div>
+</div>
+<p class="legend">一句话：<strong>药定基本单位，码定包装层级，追溯码只是实例编号。</strong>约定「1 个一级码 = 1 个基本单位」，所以在架码的行数 = 药的盒数。</p>
+
+<div class="codebar">
+  <span class="c1">6934180</span><span class="c2">000000001</span><span class="c3">0001</span>
+</div>
+<p class="legend"><span style="color:#206bc4">■ 标识码 7 位</span> → 查 IDCODES（本例是箱，level=2）　<span style="color:#2fb344">■ 序列号 9 位</span> → 这一箱的唯一号　<span style="color:#d48806">■ 校验 4 位</span></p>
+
+<h2 id="dict-drug">0. 字典（全程只读）</h2>
+<h3>药品主表 DRUGS <span class="chip">1 行 · 基本单位在这里</span></h3>
+<div class="scroll">
+<table>
+  <tr><th>字段</th><th>值</th><th>中文注释</th></tr>
+  <tr><td>drugCode</td><td>YP010201</td><td class="note">主键，药品编码</td></tr>
+  <tr><td>drugName</td><td>阿莫西林胶囊</td><td class="note">品名</td></tr>
+  <tr><td>formSpec / dosForm</td><td>0.25g / 胶囊剂</td><td class="note">规格 / 剂型</td></tr>
+  <tr><td>baseUnit</td><td><strong>盒</strong></td><td class="note">库存基本单位 = 换算链尾</td></tr>
+  <tr><td>units</td><td>[{箱,60},{盒,1}]</td><td class="note">1 箱 = 60 盒</td></tr>
+  <tr><td>minUnit</td><td>{片, per:7}</td><td class="note">拆零：1 盒 = 7 片，不是基本单位</td></tr>
+  <tr><td>warehouse / status</td><td>中心库 / 启用</td><td class="note">按库房分别建档</td></tr>
+</table>
+</div>
+
+<h3 id="dict-id">标识码子表 IDCODES <span class="chip">2 行 · 包装层级在这里</span></h3>
+<div class="scroll">
+<table>
+  <tr><th>idcode</th><th>level</th><th>packUnit</th><th>packSpec</th><th>drugCode</th><th>中文注释</th></tr>
+  <tr><td>6934180</td><td>2</td><td>箱</td><td>箱60盒</td><td>YP010201</td><td class="note">2 级箱码。发货确认时已绑定 60 个一级盒码。箱码不进在架</td></tr>
+  <tr><td>6934172</td><td>1</td><td><strong>盒</strong></td><td>盒7片</td><td>YP010201</td><td class="note">最小销售包装。packUnit=盒 = DRUGS.baseUnit。库存真实载体</td></tr>
+</table>
+</div>
+
+<h3 id="dict-org">组织（本例用到的行）</h3>
+<div class="scroll">
+<table>
+  <tr><th>表</th><th>code</th><th>name</th><th>注释</th></tr>
+  <tr><td>库房 WAREHOUSE</td><td>WH001</td><td>中心库</td><td class="note">中心院区 · 常温库</td></tr>
+  <tr><td>库位 WH_LOCATION</td><td>A-01-02</td><td>A 区 1 排 2 位</td><td class="note">入库上架库位</td></tr>
+  <tr><td>药房 PHARMACY</td><td>PH001</td><td>门诊药房</td><td class="note">领用目的地</td></tr>
+  <tr><td>货位 PH_LOCATION</td><td>M-01</td><td>门诊 1 号货位</td><td class="note">药房入库后的位置</td></tr>
+</table>
+</div>
+
+<h2 id="s0">⓪ 采购到货 · 平台码单（不是库存）</h2>
+<p>监管平台「下载单据」拉取。供应商发货时<strong>已经确认 60 个一级盒码</strong>，医院侧不再把箱码展开。箱码只写在每条盒码的 <code>code2</code>。</p>
+<p>本步结束：到货单上 <strong>60 盒码</strong>，本院在架仍 <strong>0</strong>。</p>
+<div class="card warn">
+  <p><strong>到货单 ≠ 库存。</strong>独立表 <code>ARRIVE</code>，不是 <code>DOC</code> 的一种 docType。生成入库单并审核后，码才进入 <code>TRACE_CODE</code>。</p>
+</div>
+
+<h3>到货单 ARRIVE <span class="chip">+1 行 · 独立表</span></h3>
+<div class="scroll">
+<table>
+  <tr><th>字段</th><th>值</th><th>中文注释</th></tr>
+  <tr><td>orderNo</td><td>204-13914965</td><td class="note">主键，平台采购订单号（截图「采购订单号」）</td></tr>
+  <tr><td>orderTime</td><td>2026-09-23 08:40:12</td><td class="note">订单时间</td></tr>
+  <tr><td>supplier / shipper</td><td>三明鹭燕医药有限公司</td><td class="note">供应商 / 发货企业，本例相同</td></tr>
+  <tr><td>receiver</td><td>本院中心库</td><td class="note">收货企业</td></tr>
+  <tr><td>docType</td><td>销售出库</td><td class="note">对方单据类型（供应商视角）</td></tr>
+  <tr><td>source</td><td>拉取</td><td class="note">拉取 = 监管平台；断网可手动建单</td></tr>
+  <tr><td>confirm</td><td>已确认</td><td class="note">医院确认到货。码在发货时已由客户确认</td></tr>
+  <tr><td>downloaded</td><td>否</td><td class="note">尚未生成入库单。到货入库后改为「是」</td></tr>
+  <tr><td>invoice</td><td>FP2026092301</td><td class="note">发票号，生成入库单时可改</td></tr>
+</table>
+</div>
+
+<h3>到货药品行 ARRIVE_LINE <span class="chip">派生 · 不落表</span></h3>
+<p class="legend">人读视图，按标识码+批次聚合（原型 <code>summarize()</code>）。数量用基本单位「盒」，不是 1 箱。</p>
+<div class="scroll">
+<table>
+  <tr><th>药品通用名</th><th>制剂规格</th><th>包装规格</th><th>批次号</th><th>生产日期</th><th>有效期至</th><th>数量</th><th>单位</th><th>批准文号</th><th>生产企业</th></tr>
+  <tr><td>阿莫西林胶囊</td><td>0.25g</td><td>盒7片</td><td>250901</td><td>2025-09-01</td><td>2027-08-31</td><td><strong>60</strong></td><td>盒</td><td>国药准字H12345678</td><td class="note">某制药有限公司</td></tr>
+</table>
+</div>
+
+<h3>到货码明细 ARRIVE_CODE <span class="chip">+60 行 · 全是一级盒码</span></h3>
+<p class="legend">发货时客户已确认。入库前无库位、未验收。箱码不单独成行。</p>
+<div class="scroll">
+<table>
+  <tr><th>code（20 位盒码）</th><th>level</th><th>batch</th><th>expDate</th><th>code2 父箱码</th><th>location</th><th>checked</th><th>注释</th></tr>
+  <tr><td>69341720001000010001</td><td>1</td><td>250901</td><td>2027-08-31</td><td>69341800000000010001</td><td>（空）</td><td>否</td><td class="note">第 1 盒</td></tr>
+  <tr><td>69341720001000020002</td><td>1</td><td>250901</td><td>2027-08-31</td><td>69341800000000010001</td><td>（空）</td><td>否</td><td class="note">第 2 盒</td></tr>
+  <tr><td colspan="8" class="note">… 第 3～59 盒，字段相同，序列号 000100003～000100059</td></tr>
+  <tr><td>69341720001000600060</td><td>1</td><td>250901</td><td>2027-08-31</td><td>69341800000000010001</td><td>（空）</td><td>否</td><td class="note">第 60 盒</td></tr>
+</table>
+</div>
+<p class="legend">本步不动：DRUGS / IDCODES / DOC / TRACE_CODE / REQ。码还在到货单上。</p>
+
+<h2 id="s1">① 采购入库 · 核对后入在架</h2>
+<p>到货入库：把到货单 60 个盒码拷到入库单 <code>CGRK20260923001</code>，<code>ARRIVE.downloaded</code> 改为「是」。扫码是核对（可扫箱码一次核 60 子码），<strong>不再展开</strong>。审核后这 60 个码才写入 <code>TRACE_CODE</code>、计入在架。</p>
+<p>本步结束：在架 <strong>60 盒 = 1 箱</strong>。</p>
+
+<h3>单据 DOC <span class="chip">+1 行</span></h3>
+<div class="scroll">
+<table>
+  <tr><th>billNo</th><th>docType</th><th>warehouse</th><th>supplier</th><th>status</th><th>中文注释</th></tr>
+  <tr><td>CGRK20260923001</td><td>采购入库</td><td>中心库</td><td>三明鹭燕医药有限公司</td><td>已审核</td><td class="note">来源到货单 204-13914965。审核后这 60 个码才计入在架</td></tr>
+</table>
+</div>
+
+<h3>追溯码实例 TRACE_CODE <span class="chip">+60 行 · 全是一级盒码</span></h3>
+<p class="legend">没有 status 字段。在架 / 在途靠单据集合推导。level 恒 = 1。</p>
+<div class="scroll">
+<table>
+  <tr><th>code（20 位盒码）</th><th>前 7 位</th><th>batch</th><th>expDate</th><th>level</th><th>location</th><th>code2 父箱码</th><th>注释</th></tr>
+  <tr><td>69341720001000010001</td><td>6934172</td><td>250901</td><td>2027-08-31</td><td>1</td><td>A-01-02</td><td>69341800000000010001</td><td class="note">第 1 盒</td></tr>
+  <tr><td>69341720001000020002</td><td>6934172</td><td>250901</td><td>2027-08-31</td><td>1</td><td>A-01-02</td><td>69341800000000010001</td><td class="note">第 2 盒</td></tr>
+  <tr><td colspan="8" class="note">… 第 3～59 盒，字段相同，序列号 000100003～000100059</td></tr>
+  <tr><td>69341720001000600060</td><td>6934172</td><td>250901</td><td>2027-08-31</td><td>1</td><td>A-01-02</td><td>69341800000000010001</td><td class="note">第 60 盒</td></tr>
+</table>
+</div>
+
+<h3>单据-码清单 DOC_CODE <span class="chip">+60 行</span></h3>
+<div class="scroll">
+<table>
+  <tr><th>billNo</th><th>code</th><th>checked</th><th>注释</th></tr>
+  <tr><td>CGRK20260923001</td><td>69341720001000010001</td><td>是</td><td class="note">第 1 盒随入库单</td></tr>
+  <tr><td>CGRK20260923001</td><td>69341720001000020002</td><td>是</td><td class="note">第 2 盒</td></tr>
+  <tr><td colspan="4" class="note">… 第 3～59 盒</td></tr>
+  <tr><td>CGRK20260923001</td><td>69341720001000600060</td><td>是</td><td class="note">第 60 盒</td></tr>
+</table>
+</div>
+<p class="legend">本步不动：DRUGS / IDCODES / REQ。码从到货单拷来，箱码命中字典，异常码台账 BAD_CODES 为空。</p>
+
+<h2 id="s2">② 领用出库 · 药房申请 2 盒</h2>
+<p>申请是药口径（2 盒），备货是码口径（扫 2 个一级盒码）。TRACE_CODE <strong>不删行、不改 status</strong>。</p>
+<p>本步结束：库房在架 <strong>58 盒</strong>，在途 <strong>2 盒</strong>。</p>
+
+<h3>领用申请单 REQ + 申请行 REQ_ITEM</h3>
+<div class="scroll">
+<table>
+  <tr><th>表</th><th>主键</th><th>关键字段</th><th>注释</th></tr>
+  <tr><td>REQ</td><td>LY20260923001</td><td>门诊药房 ← 中心库 · 申请人陈静 · 已完成</td><td class="note">申请单没有码</td></tr>
+  <tr><td>REQ_ITEM</td><td>(LY20260923001, YP010201)</td><td>qty = <strong>2</strong></td><td class="note">2 是盒 = baseUnit，不是箱</td></tr>
+</table>
+</div>
+
+<h3>单据 DOC <span class="chip">+1 行领用出库</span></h3>
+<div class="scroll">
+<table>
+  <tr><th>billNo</th><th>docType</th><th>warehouse</th><th>pharmacy</th><th>status</th><th>注释</th></tr>
+  <tr><td>LYCK20260923001</td><td>领用出库</td><td>中心库</td><td>门诊药房</td><td>已出库</td><td class="note">审核即扣账；药房尚未确认</td></tr>
+</table>
+</div>
+
+<h3>单据-码清单 DOC_CODE <span class="chip">+2 行</span></h3>
+<div class="scroll">
+<table>
+  <tr><th>billNo</th><th>code</th><th>注释</th></tr>
+  <tr><td>LYCK20260923001</td><td>69341720001000010001</td><td class="note">FEFO 扫走第 1 盒</td></tr>
+  <tr><td>LYCK20260923001</td><td>69341720001000020002</td><td class="note">第 2 盒</td></tr>
+</table>
+</div>
+<p class="legend">同一条码同时出现在入库单 DOC_CODE 和出库单 DOC_CODE —— 这就是「码随单转」。在架 = 60 − 2 = 58。</p>
+
+<h2 id="s3">③ 药房入库 · 领用单闭环</h2>
+<p>无换算，只改归属。不新增 TRACE_CODE，不新增 DOC_CODE。</p>
+<p>本步结束：在途 <strong>0</strong>，药房库存 <strong>2 盒</strong>，库房在架仍 <strong>58 盒</strong>。</p>
+<div class="scroll">
+<table>
+  <tr><th>表</th><th>改什么</th><th>改前</th><th>改后</th><th>注释</th></tr>
+  <tr><td>DOC</td><td>LYCK20260923001.status</td><td>已出库</td><td>药房已入库</td><td class="note">闭环，这张单的码离开在途</td></tr>
+  <tr><td>TRACE_CODE</td><td>…0001.location</td><td>A-01-02</td><td>M-01</td><td class="note">整盒未拆</td></tr>
+  <tr><td>TRACE_CODE</td><td>…0002.location</td><td>A-01-02</td><td>M-01</td><td class="note">整盒未拆</td></tr>
+</table>
+</div>
+
+<h2 id="s4">④ 药房拆零发药 <span class="chip o">推荐口径 · 待设计</span></h2>
+<p>片没有独立追溯码，不能把 1 个盒码再展开成 7 行 TRACE_CODE。打开 <code>…0001</code> 发出 2 片，盒内剩 5 片；<code>…0002</code> 不动。</p>
+<p>人读药房库存：阿莫西林 <strong>1 盒 + 5 片</strong>。</p>
+
+<h3>单据 DOC <span class="chip o">+1 行发药出库</span></h3>
+<div class="scroll">
+<table>
+  <tr><th>billNo</th><th>docType</th><th>pharmacy</th><th>status</th><th>注释</th></tr>
+  <tr><td>FYCK20260923001</td><td>发药出库</td><td>门诊药房</td><td>已发药</td><td class="note">后期单据类型</td></tr>
+</table>
+</div>
+
+<h3>追溯码实例 TRACE_CODE（改 1 行）</h3>
+<div class="scroll">
+<table>
+  <tr><th>code</th><th>split 改前</th><th>split 改后</th><th>splitQty 改后</th><th>注释</th></tr>
+  <tr><td>69341720001000010001</td><td>否</td><td><strong>是</strong></td><td><strong>5</strong></td><td class="note">7 − 发出 2 = 剩余 5 片。写在原盒码上</td></tr>
+  <tr><td>69341720001000020002</td><td>否</td><td>否</td><td>（空）</td><td class="note">整盒未动</td></tr>
+</table>
+</div>
+
+<h3>单据-码清单 DOC_CODE <span class="chip o">+1 行</span></h3>
+<div class="scroll">
+<table>
+  <tr><th>位置</th><th>记什么</th><th>本例</th></tr>
+  <tr><td>TRACE_CODE.splitQty</td><td>该盒码当前剩余片数</td><td>5</td></tr>
+  <tr><td>DOC_CODE.splitQty</td><td>本单从该码消耗的片数</td><td>2</td></tr>
+</table>
+</div>
+
+<h2 id="cmp">五个时刻对照</h2>
+<div class="scroll">
+<table>
+  <tr><th>时刻</th><th>ARRIVE_CODE</th><th>TRACE_CODE 行数</th><th>库房在架</th><th>在途</th><th>药房整盒</th><th>药房已拆</th></tr>
+  <tr><td>⓪ 到货拉取后</td><td>60</td><td>0</td><td>0</td><td>0</td><td>0</td><td>—</td></tr>
+  <tr><td>① 采购入库审核后</td><td>60（已下载）</td><td>60</td><td>60 盒</td><td>0</td><td>0</td><td>—</td></tr>
+  <tr><td>② 领用出库审核后</td><td>60</td><td>60（不删行）</td><td>58 盒</td><td>2 盒</td><td>0</td><td>—</td></tr>
+  <tr><td>③ 药房确认入库后</td><td>60</td><td>60</td><td>58 盒</td><td>0</td><td>2 盒</td><td>—</td></tr>
+  <tr><td>④ 拆零发 2 片后</td><td>60</td><td>60</td><td>58 盒</td><td>0</td><td>1 盒</td><td>1 盒（剩 5 片）</td></tr>
+</table>
+</div>
+
+<h2 id="one">第 1 盒码去过哪些表</h2>
+<p>码 <code>69341720001000010001</code>：</p>
+<div class="scroll">
+<table>
+  <tr><th>时刻</th><th>DRUGS</th><th>IDCODES</th><th>ARRIVE / CODE</th><th>TRACE_CODE</th><th>DOC</th><th>DOC_CODE</th><th>REQ</th></tr>
+  <tr><td>字典</td><td>阿莫西林 1 行</td><td>箱+盒各 1 行</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+  <tr><td>⓪ 到货</td><td>只读</td><td>只读</td><td>插入该盒码</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+  <tr><td>① 入库</td><td>只读 baseUnit=盒</td><td>前 7 位命中盒码</td><td>downloaded=是</td><td>插入该行</td><td>采购入库单</td><td>入库单 × 该码</td><td>—</td></tr>
+  <tr><td>② 出库</td><td>只读</td><td>只读</td><td>只读</td><td>行还在</td><td>领用出库单</td><td>出库单 × 该码</td><td>申请 2 盒</td></tr>
+  <tr><td>③ 入药房</td><td>只读</td><td>只读</td><td>只读</td><td>改 location</td><td>改状态</td><td>不新增</td><td>—</td></tr>
+  <tr><td>④ 拆零</td><td>只读 minUnit</td><td>只读</td><td>只读</td><td>split=是, qty=5</td><td>发药单</td><td>发药单 × 该码</td><td>—</td></tr>
+</table>
+</div>
+<p class="legend">箱码 <code>69341800000000010001</code> 只出现在 60 条盒码的 code2 里（到货单就开始写），从不单独成为在架行。</p>
+
+<div class="card">
+  <p>Markdown 源：[12-box-code-instance.md](12-box-code-instance.md)　·　表结构图：图纸清单里的「12 表结构 ER」</p>
+</div>
+
+</div>
+</main>
+<script>
+(function () {
+  var links = document.querySelectorAll('nav a[href^="#"]');
+  function sync() {
+    var id = (location.hash || '#flow').slice(1);
+    links.forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + id); });
+  }
+  window.addEventListener('hashchange', sync);
+  links.forEach(function (a) { a.addEventListener('click', function () { setTimeout(sync, 0); }); });
+  sync();
+})();
+</script>
+</body>
+</html>

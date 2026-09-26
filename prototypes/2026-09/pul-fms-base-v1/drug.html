@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="prototype-category" content="web-admin">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 基础管理">
+  <title>药品字典 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css">
+  <link rel="stylesheet" href="styles/purchase.css">
+  <style>
+    body { background: #F5F7FA !important; }
+    .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
+    .pi-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+    .pi-badge { flex-shrink: 0; padding: 2px 8px; background: var(--wa-primary-light); color: var(--wa-primary); border: 1px solid var(--wa-primary-border); border-radius: 4px; font-size: 11px; font-weight: 500; }
+    .pi-title { margin: 0; font-size: 16px; font-weight: 600; color: var(--wa-text-title); white-space: nowrap; }
+    .pi-subtitle { font-size: 12px; color: var(--wa-text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pi-header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .pi-main { grid-template-columns: 1fr !important; max-width: 1920px !important; padding: 12px 20px !important; gap: 12px !important; }
+    .pi-desktop-col { min-width: 0; overflow: auto; background: var(--pi-card-bg); border: 1px solid var(--pi-border); border-radius: var(--pi-radius); }
+    .pi-desktop-col .desktop-preview { width: 100%; min-width: 1280px; min-height: 720px; }
+    #btnIntroDetail { border: 1px solid var(--wa-border); background: var(--wa-bg-white); color: var(--wa-text-body); padding: 6px 14px; border-radius: 6px; font-size: 13px; cursor: pointer; transition: all var(--wa-transition); margin-right: 8px; font-family: inherit; }
+    #btnIntroDetail:hover { border-color: var(--wa-primary); color: var(--wa-primary); background: var(--wa-primary-light); }
+  </style>
+</head>
+<body>
+  <div class="pi-layout">
+    <header class="pi-header">
+      <div class="pi-header-left">
+        <span class="pi-badge">Web 管理后台</span>
+        <h1 class="pi-title">药品字典</h1>
+        <span class="pi-subtitle">原型页 · 主子表主表：药品级属性 + 单位换算链 + 拆零标记（码⇄药转换层地基）</span>
+      </div>
+      <div class="pi-header-right">
+        <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
+        <a class="pi-back" href="plan.html">← 返回方案总览</a>
+      </div>
+    </header>
+
+    <main class="pi-main">
+      <div class="pi-desktop-col">
+        <div class="desktop-preview" id="desktopPreview"></div>
+      </div>
+    </main>
+  </div>
+
+  <div class="detail-modal-overlay" id="introModal" style="display:none;">
+    <div class="detail-modal">
+      <button class="close-detail-modal" id="btnIntroClose" type="button">×</button>
+      <div class="detail-modal-header">
+        <div class="detail-modal-icon">💊</div>
+        <div class="detail-modal-title-wrap">
+          <h2>药品字典</h2>
+          <p class="subtitle">基础管理 · 主子表之主表：药品级属性与单位换算链</p>
+        </div>
+      </div>
+      <p class="lead"><strong>一句话概括：</strong>一条药品 ↔ 多条标识码。本页维护药品级属性：品名/规格/厂家/批准文号、单位换算链（1箱=60瓶）、拆零标记——它们是「码进药出」转换层的数据地基。药品必须指定所属库房，同一标识码在不同库房分别建档；药品可手工新增，也可通过 HIS 接口导入（HIS 有更新时可重复导入，幂等更新）。</p>
+      <div class="section">
+        <div class="section-title">使用角色 + 上下游</div>
+        <div class="card-grid">
+          <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
+            <div class="info-card-title">系统管理员（信息科）</div>
+            <div class="info-card-desc">维护药品档案与换算关系；新增药品默认「待审核」，审核后启用</div></div></div>
+          <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
+            <div class="info-card-title">上下游</div>
+            <div class="info-card-desc">下游全系统：采购/库房/药房所有单据的码解析、单位切换、拆零发药都读本表；子表维护见「标识码字典」</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">如何使用</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">查药品</div><div class="step-desc">按所属库房/通用名/编码/分类/拆零标记筛选，点行查看该药品的标识码子表</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">维护换算</div><div class="step-desc">编辑弹窗维护基本单位、大包装换算（1箱=60瓶）、拆零最小单位（1盒=7片）</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">HIS 导入</div><div class="step-desc">点「HIS 导入」选目标库房 → 目录内按编码匹配：新药品建档（待审核）、已有药品幂等更新，可多次重复导入</div></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">审核启用</div><div class="step-desc">新增药品为「待审核」，点「审核」转为启用后才参与业务解析</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">示例</div>
+        <div class="example-box"><div class="example-title">单位换算链（U0-U3 落地口径）</div>
+          <div class="example-text">加罗新：换算链 箱→瓶（1箱 = 60瓶），库存基本单位=瓶 → 库房扫 2 个箱码，库房库存可切换显示「2 箱」或「120 瓶」；依姆多拆零标记「1盒 = 7片」，门诊拆零=是 → 药房发药可按片拆零。</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">场景呼应</div>
+        <div class="example-list"><div class="example-item">
+          <div class="example-item-title">药品字典（本页）↔ 标识码字典 ↔ 全业务单据</div>
+          <div class="example-item-desc">架构原则 3/8：字典主子表 + 双层表达。本表是全系统「码⇄药」转换的唯一事实源（PUL_DRUG），采购模块经 flat() 兼容层读取，老口径不变。</div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-badge" id="planBadge"
+    style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
+           background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
+           font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 基础管理</span>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="scripts/store.js"></script>
+  <script src="scripts/data.js"></script>
+  <script src="scripts/facility-data.js"></script>
+  <script src="scripts/drug-data.js"></script>
+  <script src="scripts/purchase-shared.js"></script>
+  <script src="scripts/app-shell.js"></script>
+  <script src="scripts/drug.js"></script>
+  <script>
+    (function(){
+      var modal = document.getElementById('introModal');
+      function openIntro(){ modal.style.display = 'flex'; requestAnimationFrame(function(){ modal.classList.add('show'); }); }
+      function closeIntro(){ modal.classList.remove('show'); modal.style.display = 'none'; }
+      document.getElementById('btnIntroDetail').addEventListener('click', openIntro);
+      document.getElementById('btnIntroClose').addEventListener('click', closeIntro);
+      modal.addEventListener('click', function(e){ if (e.target === modal) closeIntro(); });
+      document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.style.display !== 'none') closeIntro(); });
+      document.getElementById('planBadge').addEventListener('click', function() { window.location.href = 'plan.html'; });
+    })();
+  </script>
+</body>
+</html>
