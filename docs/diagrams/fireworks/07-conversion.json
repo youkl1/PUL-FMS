@@ -5,22 +5,35 @@
   "style": 1,
   "quality_profile": "showcase",
   "text_policy": "strict",
-  "width": 1360,
-  "height": 1080,
+  "width": 1440,
+  "height": 1200,
   "title": "码 ⇄ 药 ⇄ 单位 全链路转换",
-  "subtitle": "每节点四维：形态 / 转换 / 读写表 / 库存影响 · 蓝=已实现 橙=待设计",
+  "subtitle": "每节点四维：形态 / 转换 / 读写表 / 库存影响（含案例 · 阿莫西林 1箱=60盒）· 蓝=已实现 橙=原型未建（方案 2026-09-23 已拍板）",
   "containers": [],
   "nodes": [
+    {
+      "id": "GLOSSARY",
+      "kind": "review_card",
+      "c4_type": "术语速览 · GLOSSARY",
+      "x": 60,
+      "y": 104,
+      "width": 1320,
+      "height": 84,
+      "label": "三种「码」与「在架」是什么",
+      "description": "标识码（7 位）= 药品品种码，一药一码，存 IDCODES 字典；例 6934172 → 阿莫西林胶囊 0.25g ｜ 追溯码（20 位）= 每盒实物药唯一码 = 标识码 7 位 + 序列号 9 位 + 校验 4 位；例 6934172 001234567 8901 ｜ 在架 = 追溯码实例已入库、未被任何出库单占用，即库房货架上真实躺着的药 ｜ 码等级：1 级=最小包装（盒/瓶）· 2 级=中包 · 3 级=箱；扫上级码按换算链展开为一级码入库",
+      "fill": "#f6f8fb",
+      "stroke": "#626976"
+    },
     {
       "id": "N1",
       "kind": "review_card",
       "c4_type": "STEP 1 · DONE",
       "x": 60,
-      "y": 104,
-      "width": 680,
+      "y": 228,
+      "width": 820,
       "height": 92,
       "label": "① 采购入库（扫码）",
-      "description": "形态：20 位追溯码 ｜ 转换：前 7 位查 IDCODES → 药品+等级+包装单位 ｜ 读写：读 IDCODES ｜ 写 TRACE_CODE + DOC_CODE ｜ 库存：+码 入在架",
+      "description": "形态：20 位追溯码 ｜ 转换：前 7 位查 IDCODES → 药品+等级+包装单位；箱/中包码按换算链展开为一级码 ｜ 读写：读 IDCODES · 写 TRACE_CODE + 入库单 ｜ 库存：扫 1 码 = 1 盒入在架（在架 0→1）",
       "fill": "#e6f4ff",
       "stroke": "#206bc4"
     },
@@ -29,11 +42,11 @@
       "kind": "review_card",
       "c4_type": "STEP 2 · DONE",
       "x": 60,
-      "y": 240,
-      "width": 680,
+      "y": 364,
+      "width": 820,
       "height": 92,
       "label": "② 库房在架",
-      "description": "形态：存码；人看到的数字全是药品基本单位 ｜ 转换：units 换算链折合(1箱=60瓶) ｜ 读写：TRACE_CODE / DOC 集合推导 ｜ 库存：在架=集合加减（见图 08）",
+      "description": "形态：底层 = 一级追溯码实例集合，界面数字全是药品基本单位 ｜ 转换：units 换算链折合（1 箱 = 60 盒）｜ 读写：TRACE_CODE / DOC 集合推导（图 08）｜ 库存：例 在架 3000 个码 → 界面显示「阿莫西林 3000 盒 = 50 箱」",
       "fill": "#e6f4ff",
       "stroke": "#206bc4"
     },
@@ -42,11 +55,11 @@
       "kind": "review_card",
       "c4_type": "STEP 3 · DONE",
       "x": 60,
-      "y": 376,
-      "width": 680,
+      "y": 500,
+      "width": 820,
       "height": 92,
       "label": "③ 领用出库",
-      "description": "形态：申请单(药·基本单位) ⇄ 码清单(逐码) 双层表达 ｜ 转换：扫码→码→药→折基本单位→与申请数比对 ｜ 读写：读 TRACE_CODE 校验在架 · 写领用出库单 ｜ 库存：−码 在架→在途",
+      "description": "形态：申请单（药 · 基本单位）⇄ 码清单（逐码）双层表达 ｜ 转换：扫码 → 药 → 折基本单位与申请数比对 ｜ 读写：读 TRACE_CODE 校验在架 · 写领用出库单 ｜ 库存：例 申请 120 盒 → 扫 120 码，在架 3000→2880，在途 +120",
       "fill": "#e6f4ff",
       "stroke": "#206bc4"
     },
@@ -55,11 +68,11 @@
       "kind": "review_card",
       "c4_type": "STEP 4 · DONE",
       "x": 60,
-      "y": 512,
-      "width": 680,
+      "y": 636,
+      "width": 820,
       "height": 92,
       "label": "④ 药房入库",
-      "description": "形态：码（逐码确认）｜ 转换：无换算，仅归属变更 ｜ 读写：更新领用出库单状态 ｜ 库存：在途清零 → 药房库存 +码",
+      "description": "形态：追溯码（逐码确认）｜ 转换：无换算，仅归属变更 ｜ 读写：更新领用出库单状态 ｜ 库存：例 120 个码在途清零 → 药房库存 +120 盒",
       "fill": "#e6f4ff",
       "stroke": "#206bc4"
     },
@@ -68,11 +81,11 @@
       "kind": "review_card",
       "c4_type": "STEP 5 · TODO",
       "x": 60,
-      "y": 648,
-      "width": 680,
+      "y": 772,
+      "width": 820,
       "height": 92,
-      "label": "⑤ 药房入槽【待设计】",
-      "description": "形态：码/药 ↔ 取药槽绑定 ｜ 转换：绑定关系（Round I 拍板后期再议）｜ 读写：新增绑定表（待定）｜ 库存：不变，仅位置到槽",
+      "label": "⑤ 药房入槽【方案已定】",
+      "description": "形态：码 / 药 ↔ 取药槽绑定 ｜ 转换：药 N:N 槽 主数据映射 · 灯 1:1 挂槽 ｜ 读写：药↔槽 映射表 ｜ 库存：不变，仅位置到槽；例 某盒阿莫西林 → 柜 1 · 层 2 · 槽 03",
       "fill": "#fff7e6",
       "stroke": "#d48806"
     },
@@ -80,12 +93,12 @@
       "id": "N6",
       "kind": "review_card",
       "c4_type": "STEP 6 · TODO",
-      "x": 800,
-      "y": 648,
-      "width": 520,
+      "x": 920,
+      "y": 772,
+      "width": 460,
       "height": 92,
-      "label": "⑥ 医生处方【待设计】",
-      "description": "形态：药名+数量（药品级，不知具体码）｜ 转换：药→码映射（3 待决方案，见图 04）｜ 读写：写处方单 · 是否锁库存待决 ｜ 库存：锁定量？（待决）",
+      "label": "⑥ 医生处方【已定 b】",
+      "description": "形态：药名+数量（药品级）｜ 转换：药→码映射 已定 b（图 04）｜ 读写：写处方单 · 锁药品级数量 ｜ 库存：例 开 2 盒 → 锁 2 盒不锁码",
       "fill": "#fff7e6",
       "stroke": "#d48806"
     },
@@ -94,11 +107,11 @@
       "kind": "review_card",
       "c4_type": "STEP 7 · TODO",
       "x": 60,
-      "y": 784,
-      "width": 680,
+      "y": 908,
+      "width": 820,
       "height": 92,
-      "label": "⑦ 出库扫码【待设计】",
-      "description": "形态：回到码 ｜ 转换：FEFO 分配/人工扫具体码 → 扣账 ｜ 读写：写发药出库单 ｜ 库存：−码 药房库存",
+      "label": "⑦ 出库扫码【调剂绑码】",
+      "description": "形态：回到追溯码 ｜ 转换：系统按 FEFO + 货位指定码 → 扫该码扣账 ｜ 读写：写发药出库单 ｜ 库存：例 发 2 盒 = 扣码 …901 / …902，药房库存 120→118",
       "fill": "#fff7e6",
       "stroke": "#d48806"
     },
@@ -107,11 +120,11 @@
       "kind": "review_card",
       "c4_type": "STEP 8 · TODO",
       "x": 60,
-      "y": 920,
-      "width": 680,
+      "y": 1044,
+      "width": 820,
       "height": 92,
-      "label": "⑧ 病房【待设计】",
-      "description": "形态：码（患者级追溯？）｜ 转换：签收确认 ｜ 库存：终态",
+      "label": "⑧ 病区签收【方案已定】",
+      "description": "形态：追溯码（患者级追溯）｜ 转换：患者级绑定已在发药时完成 · 病区按单签收 ｜ 库存：终态；例 2 盒阿莫西林病区签收 → 追溯闭环到患者",
       "fill": "#fff7e6",
       "stroke": "#d48806"
     }
@@ -174,7 +187,12 @@
       "flow": "control",
       "stroke_width": 4.0,
       "label": "处方驱动",
-      "route_points": [[1060, 830]]
+      "route_points": [
+        [
+          1150,
+          954
+        ]
+      ]
     },
     {
       "id": "c8",
@@ -185,12 +203,21 @@
       "flow": "neutral",
       "dashed": true,
       "label": "不入槽路径",
-      "route_points": [[30, 558], [30, 830]]
+      "route_points": [
+        [
+          32,
+          682
+        ],
+        [
+          32,
+          954
+        ]
+      ]
     }
   ],
   "legend_orientation": "horizontal",
-  "legend_x": 820,
-  "legend_y": 1000,
+  "legend_x": 920,
+  "legend_y": 1156,
   "legend": [
     {
       "flow": "control",
@@ -201,7 +228,7 @@
       "label": "并列路径（虚线）"
     }
   ],
-  "footer": "PUL-FMS · 07 码⇄药⇄单位全链路转换 · fireworks-tech-graph Style 1",
+  "footer": "PUL-FMS · 07 码⇄药⇄单位全链路转换 · 合规锚点：医保发〔2025〕7号 先扫码后结算（拆零/零散针剂除外）· fireworks-tech-graph Style 1",
   "footer_x": 48,
-  "footer_y": 1052
+  "footer_y": 1182
 }

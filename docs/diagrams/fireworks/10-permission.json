@@ -8,7 +8,7 @@
   "width": 1360,
   "height": 1050,
   "title": "权限模型 + 登录上下文",
-  "subtitle": "功能权限归角色 · 行数据归登录上下文自动隔离",
+  "subtitle": "功能权限 + 数据权限归角色 · 行数据归登录上下文自动隔离",
   "containers": [
     {
       "id": "login",
@@ -36,7 +36,7 @@
       "y": 860,
       "width": 460,
       "height": 130,
-      "label": "授权来源",
+      "label": "候选来源",
       "stroke": "#d0d5dd",
       "fill": "#f6f8fb"
     }
@@ -173,9 +173,9 @@
       "y": 630,
       "width": 140,
       "height": 80,
-      "type_label": "FUNC",
-      "label": "功能权限=角色",
-      "sublabel": "菜单树勾选",
+      "type_label": "ROLE",
+      "label": "权限归角色",
+      "sublabel": "菜单树+数据范围",
       "fill": "#ffffff",
       "stroke": "#2fb344"
     },
@@ -199,9 +199,9 @@
       "y": 900,
       "width": 170,
       "height": 64,
-      "type_label": "GRANT",
-      "label": "授权库房/药房",
-      "sublabel": "多选 · 决定候选",
+      "type_label": "ROLE",
+      "label": "角色数据范围",
+      "sublabel": "DataScope 五档",
       "fill": "#ffffff",
       "stroke": "#626976"
     }
@@ -326,7 +326,7 @@
     },
     {
       "flow": "read",
-      "label": "授权来源"
+      "label": "候选来源"
     },
     {
       "flow": "feedback",

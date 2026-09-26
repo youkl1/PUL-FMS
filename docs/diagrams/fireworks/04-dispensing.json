@@ -7,8 +7,8 @@
   "text_policy": "strict",
   "width": 1360,
   "height": 1095,
-  "title": "药房发药流程（后期设计）",
-  "subtitle": "处方驱动 · 入槽/不入槽双路径并列 · 处方→码映射 3 方案待决",
+  "title": "药房发药流程（方案已定 b）",
+  "subtitle": "处方驱动 · 入槽/不入槽双路径并列 · 处方→码映射 2026-09-23 拍板定为方案 b · 蓝=已定 橙=备选分支",
   "containers": [
     {
       "id": "lane-doc",
@@ -26,7 +26,7 @@
       "y": 220,
       "width": 1280,
       "height": 340,
-      "label": "系统 · 处方→码映射【待决】",
+      "label": "系统 · 处方→码映射【已定 b】",
       "stroke": "#d0d5dd",
       "fill": "#f6f8fb"
     },
@@ -68,12 +68,12 @@
     {
       "id": "Y0",
       "kind": "hexagon",
-      "x": 595,
+      "x": 580,
       "y": 258,
-      "width": 170,
+      "width": 200,
       "height": 80,
-      "type_label": "DECISION",
-      "label": "映射时机？",
+      "type_label": "DECISION · 已定",
+      "label": "映射时机",
       "fill": "#fdecea",
       "stroke": "#d63939"
     },
@@ -84,9 +84,9 @@
       "y": 400,
       "width": 360,
       "height": 110,
-      "type_label": "PLAN A",
+      "type_label": "备选 A · 不推荐",
       "label": "方案 a：开单即锁码",
-      "sublabel": "FEFO 预分配 · 退改需释放锁",
+      "sublabel": "开方与实物时序分离 · 退改需解锁",
       "fill": "#fff7e6",
       "stroke": "#d48806"
     },
@@ -97,11 +97,11 @@
       "y": 400,
       "width": 360,
       "height": 100,
-      "type_label": "PLAN B",
-      "label": "方案 b：锁药品级库存（推荐）",
-      "sublabel": "调剂时才分配码 · 兼容不入槽",
-      "fill": "#fff7e6",
-      "stroke": "#d48806"
+      "type_label": "已定方案 · 2026-09-23 拍板",
+      "label": "方案 b：锁药品级数量",
+      "sublabel": "调剂时按 FEFO + 货位分配码",
+      "fill": "#e6f4ff",
+      "stroke": "#206bc4"
     },
     {
       "id": "YC",
@@ -110,7 +110,7 @@
       "y": 400,
       "width": 260,
       "height": 100,
-      "type_label": "PLAN C",
+      "type_label": "备选 C · 不推荐",
       "label": "方案 c：完全后绑定",
       "sublabel": "出库扫码才扣账 · 有超卖风险",
       "fill": "#fff7e6",
@@ -151,7 +151,7 @@
       "height": 70,
       "type_label": "PATH A",
       "label": "路径 A：入槽取药",
-      "sublabel": "取药柜亮灯指引 · 槽位绑定",
+      "sublabel": "灯 1:1 挂槽 · 药 N:N 槽",
       "fill": "#fff7e6",
       "stroke": "#d48806"
     },
@@ -171,11 +171,11 @@
       "id": "W1",
       "kind": "rect",
       "x": 843,
-      "y": 985,
+      "y": 981,
       "width": 300,
-      "height": 52,
+      "height": 60,
       "type_label": "WARD",
-      "label": "护士签收 / 患者用药",
+      "label": "病区签收 · 患者已绑",
       "fill": "#fff7e6",
       "stroke": "#d48806"
     }
@@ -288,10 +288,10 @@
     },
     {
       "flow": "data",
-      "label": "后期 · 待决映射"
+      "label": "映射分支（a / c 备选）"
     }
   ],
-  "footer": "PUL-FMS · 04 药房发药流程（后期设计） · fireworks-tech-graph Style 1",
+  "footer": "PUL-FMS · 04 药房发药流程 · 蓝=已定方案 b · 橙=备选分支 · fireworks-tech-graph Style 1",
   "footer_x": 48,
   "footer_y": 1078
 }

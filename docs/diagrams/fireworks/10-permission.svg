@@ -45,7 +45,7 @@
   </defs>
   <rect data-graph-role="background" width="1360.0" height="1050.0" fill="#ffffff"/>
   <text x="680.0" y="56" text-anchor="middle" class="title">权限模型 + 登录上下文</text>
-  <text x="680.0" y="82" text-anchor="middle" class="subtitle">功能权限归角色 · 行数据归登录上下文自动隔离</text>
+  <text x="680.0" y="82" text-anchor="middle" class="subtitle">功能权限 + 数据权限归角色 · 行数据归登录上下文自动隔离</text>
   <g id="login" data-graph-role="container" data-container-id="login" data-semantic-role="boundary" data-graph-bounds="50,110,1060,410">
   <rect data-graph-role="container" x="50.0" y="110.0" width="1010.0" height="300.0" rx="16.0" fill="#eef4fb" stroke="#b7cdf0" stroke-width="1.4" stroke-dasharray="6 5"/>
   <text x="68.0" y="134.0" class="section">登录四段式</text>
@@ -58,7 +58,7 @@
   </g>
   <g id="org" data-graph-role="container" data-container-id="org" data-semantic-role="boundary" data-graph-bounds="400,860,860,990">
   <rect data-graph-role="container" x="400.0" y="860.0" width="460.0" height="130.0" rx="16.0" fill="#f6f8fb" stroke="#d0d5dd" stroke-width="1.4" stroke-dasharray="6 5"/>
-  <text x="418.0" y="884.0" class="section">授权来源</text>
+  <text x="418.0" y="884.0" class="section">候选来源</text>
     <rect id="org-header" data-graph-role="reserved" data-reserved-kind="container-header" x="408" y="866" width="82" height="30" fill="none" stroke="none"/>
   </g>
   <path id="a1" data-graph-role="edge" data-edge-id="a1" data-source="L1" data-target="L2" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 200,305 L 250,305" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
@@ -129,9 +129,9 @@
   </g>
   <g id="node-M1" data-graph-role="node" data-node-id="M1" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1110,630,1250,710">
   <rect x="1110.0" y="630.0" width="140.0" height="80.0" rx="10.0" fill="#ffffff" stroke="#2fb344" stroke-width="1.8" filter="url(#shadowSoft)"/>
-  <text x="1180.0" y="648.0" text-anchor="middle" class="node-type">FUNC</text>
-  <text data-text-role="title" data-full-text="功能权限=角色" data-text-max-width="116.0" x="1180.0" y="676.0" text-anchor="middle" class="node-title" font-size="16.32">功能权限=角色</text>
-  <text data-text-role="subtitle" data-full-text="菜单树勾选" data-text-max-width="116.0" x="1180.0" y="698.0" text-anchor="middle" class="node-sub" font-size="12">菜单树勾选</text>
+  <text x="1180.0" y="648.0" text-anchor="middle" class="node-type">ROLE</text>
+  <text data-text-role="title" data-full-text="权限归角色" data-text-max-width="116.0" x="1180.0" y="676.0" text-anchor="middle" class="node-title" font-size="18">权限归角色</text>
+  <text data-text-role="subtitle" data-full-text="菜单树+数据范围" data-text-max-width="116.0" x="1180.0" y="698.0" text-anchor="middle" class="node-sub" font-size="12">菜单树+数据范围</text>
   </g>
   <g id="node-O1" data-graph-role="node" data-node-id="O1" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="435,900,595,964">
   <rect x="435.0" y="900.0" width="160.0" height="64.0" rx="10.0" fill="#ffffff" stroke="#626976" stroke-width="1.8" filter="url(#shadowSoft)"/>
@@ -141,9 +141,9 @@
   </g>
   <g id="node-O2" data-graph-role="node" data-node-id="O2" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="650,900,820,964">
   <rect x="650.0" y="900.0" width="170.0" height="64.0" rx="10.0" fill="#ffffff" stroke="#626976" stroke-width="1.8" filter="url(#shadowSoft)"/>
-  <text x="735.0" y="918.0" text-anchor="middle" class="node-type">GRANT</text>
-  <text data-text-role="title" data-full-text="授权库房/药房" data-text-max-width="146.0" x="735.0" y="938.0" text-anchor="middle" class="node-title" font-size="18">授权库房/药房</text>
-  <text data-text-role="subtitle" data-full-text="多选 · 决定候选" data-text-max-width="146.0" x="735.0" y="960.0" text-anchor="middle" class="node-sub" font-size="12">多选 · 决定候选</text>
+  <text x="735.0" y="918.0" text-anchor="middle" class="node-type">ROLE</text>
+  <text data-text-role="title" data-full-text="角色数据范围" data-text-max-width="146.0" x="735.0" y="938.0" text-anchor="middle" class="node-title" font-size="18">角色数据范围</text>
+  <text data-text-role="subtitle" data-full-text="DataScope 五档" data-text-max-width="146.0" x="735.0" y="960.0" text-anchor="middle" class="node-sub" font-size="12">DataScope 五档</text>
   </g>
   <g id="a2-label" data-graph-role="label" data-owner="a2" data-graph-bounds="359.5,131,395.5,151">
   <text x="377.5" y="145.0" text-anchor="middle" class="arrow-label">是</text>
@@ -156,7 +156,7 @@
     <line data-graph-role="decoration" x1="58.0" y1="978.0" x2="88.0" y2="978.0" stroke="#7c3aed" stroke-width="2.4" marker-end="url(#arrowA)"/>
     <text data-graph-role="decoration" x="98.0" y="982.0" class="legend">登录流程</text>
     <line data-graph-role="decoration" x1="174.0" y1="978.0" x2="204.0" y2="978.0" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arrowC)"/>
-    <text data-graph-role="decoration" x="214.0" y="982.0" class="legend">授权来源</text>
+    <text data-graph-role="decoration" x="214.0" y="982.0" class="legend">候选来源</text>
     <line data-graph-role="decoration" x1="290.0" y1="978.0" x2="320.0" y2="978.0" stroke="#ef4444" stroke-width="2.4" marker-end="url(#arrowG)"/>
     <text data-graph-role="decoration" x="330.0" y="982.0" class="legend">权限口径</text>
   </g>

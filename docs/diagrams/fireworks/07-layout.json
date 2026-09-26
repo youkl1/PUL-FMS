@@ -1,7 +1,7 @@
 {
   "canvas": {
-    "height": 1080.0,
-    "width": 1360.0
+    "height": 1200.0,
+    "width": 1440.0
   },
   "composition": {
     "limits": {
@@ -17,10 +17,10 @@
     },
     "metrics": {
       "bridged_crossings": 0,
-      "max_route_stretch": 1.221,
+      "max_route_stretch": 1.206,
       "minimum_container_gutter": null,
-      "minimum_node_gap": 44.0,
-      "shortest_segment": 30.0,
+      "minimum_node_gap": 40.0,
+      "shortest_segment": 28.0,
       "total_bends": 3
     },
     "ok": true,
@@ -37,24 +37,24 @@
       "length": 44.0,
       "route": [
         [
-          400.0,
-          196.0
+          470.0,
+          320.0
         ],
         [
-          400.0,
-          240.0
+          470.0,
+          364.0
         ]
       ],
       "route_stretch": 1.0,
       "source": "N1",
       "source_port": [
-        400.0,
-        196.0
+        470.0,
+        320.0
       ],
       "target": "N2",
       "target_port": [
-        400.0,
-        240.0
+        470.0,
+        364.0
       ],
       "waypoints": []
     },
@@ -66,24 +66,24 @@
       "length": 44.0,
       "route": [
         [
-          400.0,
-          332.0
+          470.0,
+          456.0
         ],
         [
-          400.0,
-          376.0
+          470.0,
+          500.0
         ]
       ],
       "route_stretch": 1.0,
       "source": "N2",
       "source_port": [
-        400.0,
-        332.0
+        470.0,
+        456.0
       ],
       "target": "N3",
       "target_port": [
-        400.0,
-        376.0
+        470.0,
+        500.0
       ],
       "waypoints": []
     },
@@ -95,24 +95,24 @@
       "length": 44.0,
       "route": [
         [
-          400.0,
-          468.0
+          470.0,
+          592.0
         ],
         [
-          400.0,
-          512.0
+          470.0,
+          636.0
         ]
       ],
       "route_stretch": 1.0,
       "source": "N3",
       "source_port": [
-        400.0,
-        468.0
+        470.0,
+        592.0
       ],
       "target": "N4",
       "target_port": [
-        400.0,
-        512.0
+        470.0,
+        636.0
       ],
       "waypoints": []
     },
@@ -124,24 +124,24 @@
       "length": 44.0,
       "route": [
         [
-          400.0,
-          604.0
+          470.0,
+          728.0
         ],
         [
-          400.0,
-          648.0
+          470.0,
+          772.0
         ]
       ],
       "route_stretch": 1.0,
       "source": "N4",
       "source_port": [
-        400.0,
-        604.0
+        470.0,
+        728.0
       ],
       "target": "N5",
       "target_port": [
-        400.0,
-        648.0
+        470.0,
+        772.0
       ],
       "waypoints": []
     },
@@ -153,24 +153,24 @@
       "length": 44.0,
       "route": [
         [
-          400.0,
-          740.0
+          470.0,
+          864.0
         ],
         [
-          400.0,
-          784.0
+          470.0,
+          908.0
         ]
       ],
       "route_stretch": 1.0,
       "source": "N5",
       "source_port": [
-        400.0,
-        740.0
+        470.0,
+        864.0
       ],
       "target": "N7",
       "target_port": [
-        400.0,
-        784.0
+        470.0,
+        908.0
       ],
       "waypoints": []
     },
@@ -182,24 +182,24 @@
       "length": 44.0,
       "route": [
         [
-          400.0,
-          876.0
+          470.0,
+          1000.0
         ],
         [
-          400.0,
-          920.0
+          470.0,
+          1044.0
         ]
       ],
       "route_stretch": 1.0,
       "source": "N7",
       "source_port": [
-        400.0,
-        876.0
+        470.0,
+        1000.0
       ],
       "target": "N8",
       "target_port": [
-        400.0,
-        920.0
+        470.0,
+        1044.0
       ],
       "waypoints": []
     },
@@ -208,36 +208,36 @@
       "bridges": [],
       "crossings": [],
       "id": "c7",
-      "length": 410.0,
+      "length": 360.0,
       "route": [
         [
-          1060.0,
-          740.0
+          1150.0,
+          864.0
         ],
         [
-          1060.0,
-          830.0
+          1150.0,
+          954.0
         ],
         [
-          740.0,
-          830.0
+          880.0,
+          954.0
         ]
       ],
       "route_stretch": 1.0,
       "source": "N6",
       "source_port": [
-        1060.0,
-        740.0
+        1150.0,
+        864.0
       ],
       "target": "N7",
       "target_port": [
-        740.0,
-        830.0
+        880.0,
+        954.0
       ],
       "waypoints": [
         [
-          1060.0,
-          830.0
+          1150.0,
+          954.0
         ]
       ]
     },
@@ -246,44 +246,44 @@
       "bridges": [],
       "crossings": [],
       "id": "c8",
-      "length": 332.0,
+      "length": 328.0,
       "route": [
         [
           60.0,
-          558.0
+          682.0
         ],
         [
-          30.0,
-          558.0
+          32.0,
+          682.0
         ],
         [
-          30.0,
-          830.0
+          32.0,
+          954.0
         ],
         [
           60.0,
-          830.0
+          954.0
         ]
       ],
-      "route_stretch": 1.221,
+      "route_stretch": 1.206,
       "source": "N4",
       "source_port": [
         60.0,
-        558.0
+        682.0
       ],
       "target": "N7",
       "target_port": [
         60.0,
-        830.0
+        954.0
       ],
       "waypoints": [
         [
-          30.0,
-          558.0
+          32.0,
+          682.0
         ],
         [
-          30.0,
-          830.0
+          32.0,
+          954.0
         ]
       ]
     }
@@ -307,19 +307,19 @@
   "placements": {
     "legend": {
       "actual": [
-        820.0,
-        1000.0
+        920.0,
+        1156.0
       ],
       "bounds": [
-        810.0,
-        986.0,
-        1080.0,
-        1032.0
+        910.0,
+        1142.0,
+        1180.0,
+        1188.0
       ],
       "moved": false,
       "requested": [
-        820.0,
-        1000.0
+        920.0,
+        1156.0
       ]
     }
   },
@@ -338,7 +338,7 @@
   "summary": {
     "bridged_crossings": 0,
     "edges": 8,
-    "nodes": 8
+    "nodes": 9
   },
   "text_metrics": "heuristic-v1",
   "typography": {
