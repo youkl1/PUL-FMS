@@ -10,6 +10,7 @@ window.GUIDE_DATA = {
     { key: 'wh',     group: '库房管理', icon: 'warehouse' },
     { key: 'ph',     group: '药房管理', icon: 'box'       },
     { key: 'disp',   group: '发药管理', icon: 'rx'        },
+    { key: 'his',    group: 'HIS单据',  icon: 'search'    },
     { key: 'inv',    group: '盘点管理', icon: 'clipboard' },
     { key: 'ledger', group: '台账管理', icon: 'chart'     },
     { key: 'mi',     group: '医保管理', icon: 'shield'    },
@@ -61,13 +62,15 @@ window.GUIDE_DATA = {
         pdone:   { desc: '已审单·可反审核',      cat: 'qry' },
         badcode: { desc: '扫码失败人工补录',     cat: 'fix' },
         pquery:  { desc: '采购明细导出',         cat: 'qry' },
+        pOutQ:   { desc: '退货明细追踪',         cat: 'qry' },
         whstock: { desc: '效期/冻结一目了然',    cat: 'qry' },
         pick:    { desc: '按申请单拣货出库',     cat: 'fwd', note: '仅扫码 · 人工通道规划中' },
         retIn:   { desc: '药房退回接收',         cat: 'rev' },
         othIn:   { desc: '无单入库（捐赠等）',   cat: 'fix' },
         othOut:  { desc: '无单出库（救急）',     cat: 'fix' },
         lossOut: { desc: '过期/破损出口',        cat: 'fix' },
-        lossQ:   { desc: '损耗明细追踪',         cat: 'qry' }
+        lossQ:   { desc: '损耗明细追踪',         cat: 'qry' },
+        whOutQ:  { desc: '领用/其他出库明细',    cat: 'qry' }
       }
     },
     ph: {
@@ -82,6 +85,7 @@ window.GUIDE_DATA = {
         phstock: { desc: '药房在架库存',   cat: 'qry' },
         req:     { desc: '向库房申领',     cat: 'fwd' },
         reqIn:   { desc: '领用到货入库',   cat: 'fwd' },
+        phInQ:   { desc: '入库明细对账',   cat: 'qry' },
         retOut:  { desc: '余药退回库房',   cat: 'rev' },
         shelfQ:  { desc: '上架异常排查',   cat: 'fix' },
         shelf:   { desc: '扫码上架/下架',  cat: 'fwd' },
@@ -100,14 +104,31 @@ window.GUIDE_DATA = {
         disp:        { desc: '扫码发药·拆零',     cat: 'fwd', note: '仅扫码 · 人工通道规划中' },
         assign:      { desc: '处方逐条赋码',      cat: 'fwd' },
         assignBatch: { desc: '扫码枪故障兜底',    cat: 'fix' },
+        assignQ:     { desc: '已赋码处方追踪',    cat: 'qry' },
+        rxItemQ:     { desc: '发药明细对账',      cat: 'qry' },
+        rxAggQ:      { desc: '发药汇总统计',      cat: 'qry' },
         rxret:       { desc: '退药扫码回收',      cat: 'rev' },
+        rxRetQ:      { desc: '退药记录追踪',      cat: 'qry' },
         tray:        { desc: '摆药单拣药',        cat: 'fwd' },
-        trayQ:       { desc: 'HIS异常时对账',     cat: 'fix' },
+        trayRet:     { desc: '摆药退回药房',      cat: 'rev' },
+        trayRetQ:    { desc: '摆药退药记录',      cat: 'qry' },
         wardSign:    { desc: '病区扫码签收',      cat: 'fwd', note: '拒收/退回规划中' }
       },
       xlinks: [
         { key: 'badcode', note: '发药扫码异常也在这里补录（库房管理）' }
       ]
+    },
+    his: {
+      tagline: 'HIS 侧单据对账：处方、摆药的只读视图',
+      roles: '药房药师 · 院区管理员',
+      case: '医保对账日：按处方单号查张伟的处方 → 药品汇总核对发药总量，与 HIS 逐张对齐',
+      diagrams: [],
+      menus: {
+        rxQ:     { desc: '处方单明细查询',   cat: 'qry' },
+        rxSum:   { desc: '处方药品汇总',     cat: 'qry' },
+        trayQ:   { desc: 'HIS异常时对账',    cat: 'qry' },
+        traySum: { desc: '摆药单汇总对账',   cat: 'qry' }
+      }
     },
     inv: {
       tagline: '账实核对：期初、盘点、盈亏出口',
@@ -136,9 +157,11 @@ window.GUIDE_DATA = {
         { f: '01-lifecycle.svg', t: '药品全生命周期总览', note: '一盒药的 6 站旅程' }
       ],
       menus: {
-        ledger: { desc: '进销存台账导出', cat: 'qry' },
-        traceQ: { desc: '单码全程追踪',   cat: 'fix' },
-        flowQ:  { desc: '药品流向汇总',   cat: 'qry' }
+        ledger:  { desc: '进销存台账导出', cat: 'qry' },
+        ledgerM: { desc: '月度结转汇总',   cat: 'qry' },
+        ledgerQ: { desc: '季度账汇总',     cat: 'qry' },
+        traceQ:  { desc: '单码全程追踪',   cat: 'fix' },
+        flowQ:   { desc: '药品流向汇总',   cat: 'qry' }
       }
     },
     mi: {
@@ -147,7 +170,8 @@ window.GUIDE_DATA = {
       case: '政策要求：发药追溯码须上传医保平台，接口预留中，待政策细则落地后开通',
       diagrams: [],
       menus: {
-        miUpload: { desc: '上传医保平台', cat: 'fwd' }
+        miUpload:  { desc: '上传医保平台',   cat: 'fwd' },
+        miUploadQ: { desc: '上传结果对账',   cat: 'qry' }
       }
     },
     sys: {

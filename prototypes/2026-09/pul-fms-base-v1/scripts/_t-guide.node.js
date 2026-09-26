@@ -44,9 +44,9 @@ GD.order.forEach(function (m) {
   ok(m.group + ' menus 键与 NAV 对齐', JSON.stringify(want) === JSON.stringify(got));
 });
 
-// 3) 除医保/组织/系统（纯维护类）外每模块至少一个 fix 兜底入口
+// 3) 除医保/组织/系统/HIS（纯维护/纯查询类）外每模块至少一个 fix 兜底入口
 GD.order.forEach(function (m) {
-  if (m.key === 'mi' || m.key === 'sys' || m.key === 'org') return;
+  if (m.key === 'mi' || m.key === 'sys' || m.key === 'org' || m.key === 'his') return;
   var mod = GD.modules[m.key] || {};
   var menus = mod.menus || {};
   ok(m.group + ' 有兜底入口', Object.keys(menus).some(function (k) { return menus[k].cat === 'fix'; }));

@@ -71,7 +71,8 @@
         { key: 'pout', name: '采购退货', icon: 'swap', href: 'purchase-out.html' },
         { key: 'pdone', name: '已完成单', icon: 'clipboard', href: 'purchase-done.html' },
         { key: 'badcode', name: '异常标识码', icon: 'scan', href: 'bad-codes.html' },
-        { key: 'pquery', name: '采购明细查询', icon: 'search', href: 'purchase-detail.html' }
+        { key: 'pquery', name: '采购明细查询', icon: 'search', href: 'purchase-detail.html' },
+        { key: 'pOutQ', name: '退货明细查询', icon: 'search', href: null, badge: '待补' }
       ]},
       { name: '库房业务', items: [
         { key: 'whstock', name: '库房库存', icon: 'chart', href: 'wh-stock.html' },
@@ -80,13 +81,15 @@
         { key: 'othIn', name: '其他入库', icon: 'box', href: 'wh-other-in.html' },
         { key: 'othOut', name: '其他出库', icon: 'box', href: 'wh-other-out.html' },
         { key: 'lossOut', name: '损耗出库单', icon: 'clipboard', href: 'wh-loss-out.html' },
-        { key: 'lossQ', name: '损耗明细查询', icon: 'search', href: 'wh-loss-query.html' }
+        { key: 'lossQ', name: '损耗明细查询', icon: 'search', href: 'wh-loss-query.html' },
+        { key: 'whOutQ', name: '出库明细查询', icon: 'search', href: null, badge: '待补' }
       ]}
     ]},
     { type: 'group', name: '药房管理', items: [
       { key: 'phstock', name: '药房库存', icon: 'chart', href: 'ph-stock.html' },
       { key: 'req', name: '领用申请', icon: 'box', href: 'ph-req.html' },
       { key: 'reqIn', name: '领用入库', icon: 'box', href: 'ph-req-in.html' },
+      { key: 'phInQ', name: '入库明细查询', icon: 'search', href: null, badge: '待补' },
       { key: 'retOut', name: '退回出库', icon: 'swap', href: 'ph-ret-out.html' },
       { key: 'shelfQ', name: '待上架查询', icon: 'search', href: 'ph-shelf-q.html' },
       { key: 'shelf', name: '扫码上下架', icon: 'scan', href: 'ph-shelf.html' },
@@ -97,10 +100,21 @@
       { key: 'disp', name: '处方发药扫码', icon: 'scan', href: 'disp.html' },
       { key: 'assign', name: '处方赋码', icon: 'rx', href: null },
       { key: 'assignBatch', name: '批量赋码', icon: 'rx', href: null },
+      { key: 'assignQ', name: '赋码查询', icon: 'search', href: null, badge: '待补' },
+      { key: 'rxItemQ', name: '药品明细查询', icon: 'search', href: null, badge: '待补' },
+      { key: 'rxAggQ', name: '汇总查询', icon: 'chart', href: null, badge: '待补' },
       { key: 'rxret', name: '处方退药', icon: 'swap', href: 'rx-ret.html' },
+      { key: 'rxRetQ', name: '处方退药查询', icon: 'search', href: null, badge: '待补' },
       { key: 'tray', name: '摆药单业务', icon: 'clipboard', href: 'tray.html' },
-      { key: 'trayQ', name: 'HIS摆药单查询', icon: 'search', href: 'tray-q.html' },
+      { key: 'trayRet', name: '摆药退药', icon: 'swap', href: null, badge: '待补' },
+      { key: 'trayRetQ', name: '摆药退药查询', icon: 'search', href: null, badge: '待补' },
       { key: 'wardSign', name: '病区签收', icon: 'scan', href: 'ward-sign.html' }
+    ]},
+    { type: 'group', name: 'HIS单据', items: [
+      { key: 'rxQ', name: '处方单查询', icon: 'search', href: null, badge: '待补' },
+      { key: 'rxSum', name: '处方药品汇总', icon: 'chart', href: null, badge: '待补' },
+      { key: 'trayQ', name: '摆药单查询', icon: 'search', href: 'tray-q.html' },
+      { key: 'traySum', name: '摆药单汇总', icon: 'chart', href: null, badge: '待补' }
     ]},
     { type: 'group', name: '盘点管理', items: [
       { key: 'invInit', name: '期初盘点', icon: 'clipboard', href: 'inv-init.html' },
@@ -112,11 +126,14 @@
     ]},
     { type: 'group', name: '台账管理', items: [
       { key: 'ledger', name: '药品台账', icon: 'book', href: 'ledger.html' },
+      { key: 'ledgerM', name: '月记账', icon: 'book', href: null, badge: '待补' },
+      { key: 'ledgerQ', name: '季度账查询', icon: 'search', href: null, badge: '待补' },
       { key: 'traceQ', name: '追溯码查询', icon: 'search', href: 'trace-q.html' },
       { key: 'flowQ', name: '药品流向查询', icon: 'chart', href: 'flow-q.html' }
     ]},
     { type: 'group', name: '医保管理', items: [
-      { key: 'miUpload', name: '追溯码上传', icon: 'shield', href: null, badge: '预留' }
+      { key: 'miUpload', name: '追溯码上传', icon: 'shield', href: null, badge: '预留' },
+      { key: 'miUploadQ', name: '上传情况查询', icon: 'search', href: null, badge: '待补' }
     ]},
     { type: 'group', name: '系统管理', items: [
       { key: 'users', name: '用户管理', icon: 'users', href: 'users.html' },

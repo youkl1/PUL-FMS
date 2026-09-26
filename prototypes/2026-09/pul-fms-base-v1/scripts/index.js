@@ -53,7 +53,7 @@
   });
   html += '</div>';
 
-  // 模块导览（9 大模块入口卡：定位语 + 页数，点击进 guide.html?m=xx）
+  // 模块导览（10 大模块入口卡：定位语 + 页数，点击进 guide.html?m=xx）
   html += '<div class="card mb-3"><div class="card-header"><div class="card-title">模块导览</div>' +
     '<span class="badge bg-blue-lt ms-auto">先看懂业务，再点功能</span></div>' +
     '<div class="card-body"><div class="row row-cards" id="guideCards"></div></div></div>';

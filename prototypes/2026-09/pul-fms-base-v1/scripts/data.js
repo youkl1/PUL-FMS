@@ -90,7 +90,8 @@ var MENU_TREE = [
       { code: 'pout',    name: '采购退货',     ops: ['查看', '新增', '审核'] },
       { code: 'pdone',   name: '已完成单',     ops: ['查看', '反审核', '打印'] },
       { code: 'badcode', name: '异常标识码',   ops: ['查看', '维护'] },
-      { code: 'pquery',  name: '采购明细查询', ops: ['查看', '导出'] }
+      { code: 'pquery',  name: '采购明细查询', ops: ['查看', '导出'] },
+      { code: 'pOutQ',   name: '退货明细查询（待补）', ops: ['查看'] }
     ]},
     { sub: '库房业务', items: [
       { code: 'whstock', name: '库房库存',     ops: ['查看'] },
@@ -99,13 +100,15 @@ var MENU_TREE = [
       { code: 'othIn',   name: '其他入库',     ops: ['查看', '创建'] },
       { code: 'othOut',  name: '其他出库',     ops: ['查看', '创建'] },
       { code: 'lossOut', name: '损耗出库单',   ops: ['查看', '创建', '审核'] },
-      { code: 'lossQ',   name: '损耗明细查询', ops: ['查看'] }
+      { code: 'lossQ',   name: '损耗明细查询', ops: ['查看'] },
+      { code: 'whOutQ',  name: '出库明细查询（待补）', ops: ['查看'] }
     ]}
   ]},
   { group: '药房管理', items: [
     { code: 'phstock', name: '药房库存', ops: ['查看'] },
     { code: 'req',     name: '领用申请', ops: ['查看', '申请'] },
     { code: 'reqIn',   name: '领用入库', ops: ['查看', '入库'] },
+    { code: 'phInQ',   name: '入库明细查询（待补）', ops: ['查看'] },
     { code: 'retOut',  name: '退回出库', ops: ['查看', '出库'] },
     { code: 'shelfQ',  name: '待上架查询',   ops: ['查看'] },
     { code: 'shelf',   name: '扫码上下架',   ops: ['查看', '上架', '下架'] },
@@ -116,10 +119,21 @@ var MENU_TREE = [
     { code: 'disp',        name: '处方发药扫码',   ops: ['查看', '发药'] },
     { code: 'assign',      name: '处方赋码',       ops: ['查看', '赋码'] },
     { code: 'assignBatch', name: '批量赋码',       ops: ['查看', '赋码'] },
+    { code: 'assignQ',     name: '赋码查询（待补）',   ops: ['查看'] },
+    { code: 'rxItemQ',     name: '药品明细查询（待补）', ops: ['查看'] },
+    { code: 'rxAggQ',      name: '汇总查询（待补）',   ops: ['查看'] },
     { code: 'rxret',       name: '处方退药',       ops: ['查看', '退药'] },
+    { code: 'rxRetQ',      name: '处方退药查询（待补）', ops: ['查看'] },
     { code: 'tray',        name: '摆药单业务',     ops: ['查看', '摆药'] },
-    { code: 'trayQ',       name: 'HIS摆药单查询',  ops: ['查看'] },
+    { code: 'trayRet',     name: '摆药退药（待补）',   ops: ['查看', '退药'] },
+    { code: 'trayRetQ',    name: '摆药退药查询（待补）', ops: ['查看'] },
     { code: 'wardSign',    name: '病区签收',       ops: ['查看', '签收'] }
+  ]},
+  { group: 'HIS单据', items: [
+    { code: 'rxQ',    name: '处方单查询（待补）',   ops: ['查看'] },
+    { code: 'rxSum',  name: '处方药品汇总（待补）', ops: ['查看'] },
+    { code: 'trayQ',  name: '摆药单查询',       ops: ['查看'] },
+    { code: 'traySum', name: '摆药单汇总（待补）',  ops: ['查看'] }
   ]},
   { group: '盘点管理', items: [
     { code: 'invInit',   name: '期初盘点',     ops: ['查看', '创建'] },
@@ -130,12 +144,15 @@ var MENU_TREE = [
     { code: 'invNocode', name: '无码药品记录', ops: ['查看', '登记'] }
   ]},
   { group: '台账管理', items: [
-    { code: 'ledger', name: '药品台账',     ops: ['查看', '导出'] },
-    { code: 'traceQ', name: '追溯码查询',   ops: ['查看'] },
+    { code: 'ledger',  name: '药品台账',     ops: ['查看', '导出'] },
+    { code: 'ledgerM', name: '月记账（待补）',   ops: ['查看'] },
+    { code: 'ledgerQ', name: '季度账查询（待补）', ops: ['查看'] },
+    { code: 'traceQ',  name: '追溯码查询',   ops: ['查看'] },
     { code: 'flowQ',  name: '药品流向查询', ops: ['查看'] }
   ]},
   { group: '医保管理', items: [
-    { code: 'miUpload', name: '追溯码上传（预留）', ops: ['查看', '上传'] }
+    { code: 'miUpload',  name: '追溯码上传（预留）', ops: ['查看', '上传'] },
+    { code: 'miUploadQ', name: '上传情况查询（待补）', ops: ['查看'] }
   ]},
   { group: '系统管理', items: [
     { code: 'users', name: '用户管理', ops: ['查看', '新增', '编辑', '禁用'] },
@@ -148,15 +165,19 @@ var MENU_TREE = [
 var PERM_MAP = {
   SYS_ADMIN: { users: ['查看','新增','编辑','禁用'], roles: ['查看','新增','编辑','配置权限'], perm: ['查看','新增','编辑','启停'], orgs: ['查看','新增','编辑','启停'],
     dict: ['查看','新增','编辑','启停'], drug: ['查看','新增','编辑','审核'], idcode: ['查看','维护'], wh: ['查看','维护'], phloc: ['查看','维护'],
-    ledger: ['查看','导出'], traceQ: ['查看'], flowQ: ['查看'] },
+    ledger: ['查看','导出'], traceQ: ['查看'], flowQ: ['查看'],
+    pOutQ: ['查看'], whOutQ: ['查看'], phInQ: ['查看'], assignQ: ['查看'], rxItemQ: ['查看'], rxAggQ: ['查看'], rxRetQ: ['查看'], trayRetQ: ['查看'],
+    rxQ: ['查看'], rxSum: ['查看'], traySum: ['查看'], ledgerM: ['查看'], ledgerQ: ['查看'], miUploadQ: ['查看'] },
   YQ_ADMIN:  { whstock: ['查看'], phstock: ['查看'], pquery: ['查看'], lossOut: ['查看','审核'], inv: ['查看','审核'], invQ: ['查看'],
-    ledger: ['查看'], traceQ: ['查看'], flowQ: ['查看'], users: ['查看','新增','编辑'] },
+    ledger: ['查看'], traceQ: ['查看'], flowQ: ['查看'], users: ['查看','新增','编辑'],
+    pOutQ: ['查看'], whOutQ: ['查看'], phInQ: ['查看'], rxQ: ['查看'], rxSum: ['查看'], traySum: ['查看'], ledgerM: ['查看'], ledgerQ: ['查看'] },
   KEEPER:    { arrive: ['查看','新增','入库'], pin: ['查看','新增','编辑','扫码','审核','打印'], pout: ['查看','新增','审核'], pdone: ['查看','反审核','打印'],
-    badcode: ['查看'], pquery: ['查看','导出'], whstock: ['查看'], pick: ['查看','备货','出库'], retIn: ['查看','入库'],
-    othIn: ['查看','创建'], othOut: ['查看','创建'], lossOut: ['查看','创建'], lossQ: ['查看'],
+    badcode: ['查看'], pquery: ['查看','导出'], pOutQ: ['查看'], whstock: ['查看'], pick: ['查看','备货','出库'], retIn: ['查看','入库'],
+    othIn: ['查看','创建'], othOut: ['查看','创建'], lossOut: ['查看','创建'], lossQ: ['查看'], whOutQ: ['查看'],
     invInit: ['查看','创建'], inv: ['查看','创建','录入'], invGain: ['查看','入库'], invLoss: ['查看','出库'], invQ: ['查看'], invNocode: ['查看','登记'] },
-  PHARM:     { phstock: ['查看'], req: ['查看','申请'], reqIn: ['查看','入库'], retOut: ['查看','出库'], shelfQ: ['查看'], shelf: ['查看','上架','下架'],
-    disp: ['查看','发药'], assign: ['查看','赋码'], rxret: ['查看','退药'], tray: ['查看','摆药'], trayQ: ['查看'], wardSign: ['查看','签收'],
+  PHARM:     { phstock: ['查看'], req: ['查看','申请'], reqIn: ['查看','入库'], phInQ: ['查看'], retOut: ['查看','出库'], shelfQ: ['查看'], shelf: ['查看','上架','下架'],
+    disp: ['查看','发药'], assign: ['查看','赋码'], assignQ: ['查看'], rxItemQ: ['查看'], rxAggQ: ['查看'], rxret: ['查看','退药'], rxRetQ: ['查看'],
+    tray: ['查看','摆药'], trayRet: ['查看','退药'], trayRetQ: ['查看'], trayQ: ['查看'], traySum: ['查看'], rxQ: ['查看'], rxSum: ['查看'], wardSign: ['查看','签收'],
     inv: ['查看','创建','录入'], invQ: ['查看'], invNocode: ['查看','登记'] },
   CHECKER:   { arrive: ['查看','新增'], pin: ['查看','扫码'], badcode: ['查看','维护'] },
   MJ_PHARM:  { disp: ['查看','发药'], rxret: ['查看','退药'], phstock: ['查看'], traceQ: ['查看'] }
