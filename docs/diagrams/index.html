@@ -36,7 +36,7 @@
 </head>
 <body>
   <div id="side">
-    <h1>PUL-FMS 图纸<small>业务流程图 × UML · 共 13 张 + 1 份实例 · 按业务模块分组</small></h1>
+    <h1>PUL-FMS 图纸<small>业务流程图 × UML · 共 14 张 + 1 份实例 · 按业务模块分组</small></h1>
     <div id="list"></div>
   </div>
   <div id="main">
@@ -109,6 +109,7 @@ async function show(idx) {
     view.style.cursor = 'default';
     canvas.style.transform = 'none';
     canvas.style.padding = '0';
+    canvas.style.width = '100%';
     canvas.innerHTML = '<iframe src="' + d.page + '" style="width:100%;height:' + view.clientHeight + 'px;border:0;display:block;"></iframe>';
     document.getElementById('hint').style.display = 'none';
     return;
@@ -118,6 +119,7 @@ async function show(idx) {
   view.style.overflow = 'hidden';
   view.style.cursor = 'grab';
   canvas.style.padding = '24px';
+  canvas.style.width = '';
   try {
     var txt = await (await fetch('fireworks/' + d.f + '.svg')).text();
     canvas.innerHTML = txt;
