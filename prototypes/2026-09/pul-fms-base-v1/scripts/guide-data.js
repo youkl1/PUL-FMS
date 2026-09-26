@@ -99,7 +99,7 @@ window.GUIDE_DATA = {
       menus: {
         disp:        { desc: '扫码发药·拆零',     cat: 'fwd', note: '仅扫码 · 人工通道规划中' },
         assign:      { desc: '处方逐条赋码',      cat: 'fwd' },
-        assignBatch: { desc: '扫码枪故障批量兜',  cat: 'fix' },
+        assignBatch: { desc: '扫码枪故障兜底',    cat: 'fix' },
         rxret:       { desc: '退药扫码回收',      cat: 'rev' },
         tray:        { desc: '摆药单拣药',        cat: 'fwd' },
         trayQ:       { desc: 'HIS异常时对账',     cat: 'fix' },
