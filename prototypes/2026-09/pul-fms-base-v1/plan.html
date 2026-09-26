@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="prototype-category" content="web-admin">
+  <meta name="business-category" content="{{BUSINESS_CATEGORY}}">
+  <title>PUL-FMS 药品精细化管理系统 · 方案总览</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css">
+  <link rel="stylesheet" href="styles/plan.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    body { background: var(--pi-bg); margin: 0; padding: 0; }
+  </style>
+</head>
+<body>
+
+<!-- 顶部导航栏 -->
+<div class="plan-topbar">
+  <div class="plan-topbar-title">PUL-FMS 药品精细化管理系统</div>
+  <div class="plan-topbar-sub">Web 管理后台 · 方案总览</div>
+  <div class="plan-topbar-spacer"></div>
+  <a class="plan-topbar-link" href="index.html">→ 入口页</a>
+</div>
+
+<div class="plan-content">
+
+  <!-- Hero -->
+  <div class="plan-hero">
+    <div>
+      <h1 class="plan-hero-title">PUL-FMS 药品精细化管理系统</h1>
+      <p class="plan-hero-sub">登录到发药、台账、盘点可点通的后台原型。占位：补药指示灯 / 赋码；预留：医保上传。</p>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+        <span class="plan-tag plan-tag-primary">组织</span>
+        <span class="plan-tag plan-tag-primary">基础字典</span>
+        <span class="plan-tag plan-tag-primary">采购</span>
+        <span class="plan-tag plan-tag-primary">库房</span>
+        <span class="plan-tag plan-tag-primary">药房</span>
+        <span class="plan-tag plan-tag-primary">发药</span>
+        <span class="plan-tag plan-tag-primary">台账</span>
+        <span class="plan-tag plan-tag-primary">盘点</span>
+      </div>
+    </div>
+    <div class="plan-desktop-thumbs">
+      <div class="plan-desktop-thumb">48 页已交付<br>占位 3 · 预留 1</div>
+    </div>
+  </div>
+
+  <!-- ① 架构概览 -->
+  <div class="plan-section">
+    <div class="plan-section-title">架构概览</div>
+    <div class="plan-positioning">
+      <strong>定位</strong>：PUL-FMS 后台原型——登录上下文 + 组织/字典底座，采购→库房→药房→发药（方案 b）→病区签收可点通；台账只读派生，盘点账实对照后过账。
+    </div>
+    <div class="plan-positioning" style="margin-top:8px;">
+      <strong>架构</strong>：多页 <code>location.href</code> 跳转、无构建步骤；UI 分层 = pi 原型壳（prototype-intro.css）+ Tabler 1.5.1 本地化（<code>../../shared/tabler/</code>，方案 B）+ 自有后台壳（<code>app-shell.js</code> 侧边栏/顶栏）+ 页面 CSS/JS；登录态经 <code>store.js</code>（sessionStorage）跨页共享。
+    </div>
+    <div class="plan-positioning" style="margin-top:8px;">
+      <strong>权限模型</strong>：沿用若依（RuoYi）成熟方案 —— RBAC 角色-菜单树 + 数据权限 5 档 DataScope（全部 / 自定义 / 本院区 / 本院区及以下 / 仅本人），<strong>数据范围挂在角色上</strong>，用户通过多选角色继承；与研发框架 yudao 的 <code>system_role.data_scope</code> 原生能力一致。登录：先验账号，<strong>单一节点角色直接进工作台，多节点角色才选院区 / 模式 / 库房</strong>（候选集由角色数据范围算出），顶栏常驻上下文并可「部门切换」。
+    </div>
+    <div class="plan-formula" style="margin-top:16px;">
+      <span class="plan-formula-token">采购入库</span><span class="plan-formula-op">→</span>
+      <span class="plan-formula-token">库房在架</span><span class="plan-formula-op">→</span>
+      <span class="plan-formula-token">领用出库</span><span class="plan-formula-op">→</span>
+      <span class="plan-formula-token">药房在架</span><span class="plan-formula-op">→</span>
+      <span class="plan-formula-token is-out">发药绑码 · 方案 b</span>
+    </div>
+  </div>
+
+  <!-- ② 页面流程 -->
+  <div class="plan-section">
+    <div class="plan-section-title">页面流程</div>
+    <div class="plan-mermaid-legend">
+      <div class="plan-mermaid-legend-item">
+        <div class="plan-mermaid-legend-swatch swatch-photo"></div> 列表页
+      </div>
+      <div class="plan-mermaid-legend-item">
+        <div class="plan-mermaid-legend-swatch swatch-system"></div> 入口页
+      </div>
+      <div class="plan-mermaid-legend-item">
+        <div class="plan-mermaid-legend-swatch swatch-warning"></div> 弹窗 / 浮层
+      </div>
+    </div>
+    <div class="plan-mermaid">
+<pre class="mermaid">
+flowchart LR
+    login["登录页<br>login.html"] -->|"账号校验后按角色分流<br>单库房直达 / 多库房再选"| index["工作台<br>index.html"]
+    index --> roles["角色管理<br>roles.html"]
+    index --> users["用户管理<br>users.html"]
+    index --> orgs["院区管理<br>orgs.html"]
+    index --> types["字典分类列表<br>dict-types.html"]
+    roles -.->|"角色=菜单树+数据范围<br>用户多选角色继承"| users
+    orgs -.->|"院区启停<br>影响登录页下拉"| login
+    types -->|"?type=分类编码"| items["字典项维护<br>dict-items.html"]
+    index -->|"退出登录"| login
+</pre>
+    </div>
+    <div class="plan-positioning" style="margin-top:8px;">
+      <strong>链路（文字版）</strong>：登录分流进工作台 → 组织/字典底座；业务：采购入库 → 库房在架 → 领用出库 → 药房在架 → 发药/摆药扫码绑码（方案 b）→ 病区签收。台账只读派生；盘点对照在架后盈亏过账。
+    </div>
+  </div>
+
+  <!-- ③ 页面清单 -->
+  <div class="plan-section">
+    <div class="plan-section-title">页面清单</div>
+    <div class="plan-pages-grid">
+<div class="plan-pages-group">底座</div>
+<a class="plan-page-card" href="index.html">
+          <div class="plan-page-card-name">工作台</div>
+          <div class="plan-page-card-desc">index.html · 全模块导航 + 权限看板</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="guide.html">
+          <div class="plan-page-card-name">模块导览</div>
+          <div class="plan-page-card-desc">guide.html · 9 大模块：流程图 + 案例 + 入口</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="login.html">
+          <div class="plan-page-card-name">登录页</div>
+          <div class="plan-page-card-desc">login.html · 四段式：账号 → 院区 → 模式 → 节点</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="roles.html">
+          <div class="plan-page-card-name">角色管理</div>
+          <div class="plan-page-card-desc">roles.html · 6 角色 + 菜单树 + DataScope</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="users.html">
+          <div class="plan-page-card-name">用户管理</div>
+          <div class="plan-page-card-desc">users.html · 多选角色，范围随角色继承</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="perm.html">
+          <div class="plan-page-card-name">菜单管理</div>
+          <div class="plan-page-card-desc">perm.html · 资源树 + 子节点表</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<div class="plan-pages-group">组织管理</div>
+<a class="plan-page-card" href="orgs.html">
+          <div class="plan-page-card-name">院区管理</div>
+          <div class="plan-page-card-desc">orgs.html · L2 院区 + 下属库房列</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="warehouse.html">
+          <div class="plan-page-card-name">库房库位</div>
+          <div class="plan-page-card-desc">warehouse.html · 库房挂院区 + 库位子表</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="pharmacy.html">
+          <div class="plan-page-card-name">药房货位</div>
+          <div class="plan-page-card-desc">pharmacy.html · 药房挂院区 + 货位子表</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<div class="plan-pages-group">基础管理</div>
+<a class="plan-page-card" href="dict-types.html">
+          <div class="plan-page-card-name">字典分类</div>
+          <div class="plan-page-card-desc">dict-types.html · 10 类核心字典</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="dict-items.html">
+          <div class="plan-page-card-name">字典项维护</div>
+          <div class="plan-page-card-desc">dict-items.html · 增改启停，被引用不可删</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="drug.html">
+          <div class="plan-page-card-name">药品字典</div>
+          <div class="plan-page-card-desc">drug.html · 主表 + 标识码子表 + HIS 导入</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="idcode.html">
+          <div class="plan-page-card-name">标识码字典</div>
+          <div class="plan-page-card-desc">idcode.html · 7 位码台账，停用即扫码拦截</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="cabinet.html">
+          <div class="plan-page-card-name">取药柜</div>
+          <div class="plan-page-card-desc">cabinet.html · 柜→层→槽 三级字典</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="light.html">
+          <div class="plan-page-card-name">基站灯组</div>
+          <div class="plan-page-card-desc">light.html · 灯组扫码新增（字典）</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<div class="plan-pages-group">采购管理</div>
+<a class="plan-page-card" href="purchase-arrive.html">
+          <div class="plan-page-card-name">采购到货</div>
+          <div class="plan-page-card-desc">purchase-arrive.html · 码单池，到货入库</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="purchase-in.html">
+          <div class="plan-page-card-name">采购入库</div>
+          <div class="plan-page-card-desc">purchase-in.html · 选到货单建单，扫码验收</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="purchase-out.html">
+          <div class="plan-page-card-name">采购退货</div>
+          <div class="plan-page-card-desc">purchase-out.html · 库房退 / 到货退</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="purchase-done.html">
+          <div class="plan-page-card-name">已完成单</div>
+          <div class="plan-page-card-desc">purchase-done.html · 只读档案 + 反审核</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="bad-codes.html">
+          <div class="plan-page-card-name">异常标识码</div>
+          <div class="plan-page-card-desc">bad-codes.html · 维护后入库单可再审</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="purchase-detail.html">
+          <div class="plan-page-card-name">采购明细查询</div>
+          <div class="plan-page-card-desc">purchase-detail.html · 药品汇总 → 单据下钻</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<div class="plan-pages-group">库房业务</div>
+<a class="plan-page-card" href="wh-stock.html">
+          <div class="plan-page-card-name">库房库存</div>
+          <div class="plan-page-card-desc">wh-stock.html · 在架=集合加减，FEFO</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="wh-pick.html">
+          <div class="plan-page-card-name">领用备货出库</div>
+          <div class="plan-page-card-desc">wh-pick.html · 申请池 + 扫码备货换算</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="wh-return-in.html">
+          <div class="plan-page-card-name">退回入库</div>
+          <div class="plan-page-card-desc">wh-return-in.html · 点选/扫码核对</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="wh-other-in.html">
+          <div class="plan-page-card-name">其他入库</div>
+          <div class="plan-page-card-desc">wh-other-in.html · 流水造码</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="wh-other-out.html">
+          <div class="plan-page-card-name">其他出库</div>
+          <div class="plan-page-card-desc">wh-other-out.html · 扫在架码，审核终态</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="wh-loss-out.html">
+          <div class="plan-page-card-name">损耗出库单</div>
+          <div class="plan-page-card-desc">wh-loss-out.html · 销毁终态不可恢复</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="wh-loss-query.html">
+          <div class="plan-page-card-name">损耗明细查询</div>
+          <div class="plan-page-card-desc">wh-loss-query.html · 药品×批次下钻</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<div class="plan-pages-group">药房管理</div>
+<a class="plan-page-card" href="ph-stock.html">
+          <div class="plan-page-card-name">药房库存</div>
+          <div class="plan-page-card-desc">ph-stock.html · 在架/待上架/待收</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="ph-req.html">
+          <div class="plan-page-card-name">领用申请</div>
+          <div class="plan-page-card-desc">ph-req.html · 品规+数量，不扫码</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="ph-req-in.html">
+          <div class="plan-page-card-name">领用入库</div>
+          <div class="plan-page-card-desc">ph-req-in.html · 在途核对闭环</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="ph-ret-out.html">
+          <div class="plan-page-card-name">退回出库</div>
+          <div class="plan-page-card-desc">ph-ret-out.html · 只许本房在架码</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="ph-shelf-q.html">
+          <div class="plan-page-card-name">待上架查询</div>
+          <div class="plan-page-card-desc">ph-shelf-q.html · phLoc 空的在架码</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="ph-shelf.html">
+          <div class="plan-page-card-name">扫码上下架</div>
+          <div class="plan-page-card-desc">ph-shelf.html · 货位来自药房货位字典</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="ph-loss.html">
+          <div class="plan-page-card-name">药房损耗</div>
+          <div class="plan-page-card-desc">ph-loss.html · 只扣本房在架</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<div class="plan-pages-group">发药管理 · 方案 b</div>
+<a class="plan-page-card" href="disp.html">
+          <div class="plan-page-card-name">处方发药扫码</div>
+          <div class="plan-page-card-desc">disp.html · HIS 拉取锁数量 → 扫码绑码</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="rx-ret.html">
+          <div class="plan-page-card-name">处方退药</div>
+          <div class="plan-page-card-desc">rx-ret.html · 已发还码还锁</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="tray.html">
+          <div class="plan-page-card-name">摆药单业务</div>
+          <div class="plan-page-card-desc">tray.html · 住院通道同一套 b</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="tray-q.html">
+          <div class="plan-page-card-name">HIS摆药单查询</div>
+          <div class="plan-page-card-desc">tray-q.html · 只读对账</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="ward-sign.html">
+          <div class="plan-page-card-name">病区签收</div>
+          <div class="plan-page-card-desc">ward-sign.html · 按单扫码确认，患者已绑</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<div class="plan-pages-group">台账管理</div>
+<a class="plan-page-card" href="ledger.html">
+          <div class="plan-page-card-name">药品台账</div>
+          <div class="plan-page-card-desc">ledger.html · 库房+药房在架码 count</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="trace-q.html">
+          <div class="plan-page-card-name">追溯码查询</div>
+          <div class="plan-page-card-desc">trace-q.html · 一码看位置与流水</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="flow-q.html">
+          <div class="plan-page-card-name">药品流向查询</div>
+          <div class="plan-page-card-desc">flow-q.html · 按药看单据链</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<div class="plan-pages-group">盘点管理</div>
+<a class="plan-page-card" href="inv-init.html">
+          <div class="plan-page-card-name">期初盘点</div>
+          <div class="plan-page-card-desc">inv-init.html · 扫到即盘盈（已在架跳过）</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="inv.html">
+          <div class="plan-page-card-name">盘点单</div>
+          <div class="plan-page-card-desc">inv.html · 对照在架快照</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="inv-gain.html">
+          <div class="plan-page-card-name">盘盈入库</div>
+          <div class="plan-page-card-desc">inv-gain.html · 盘盈码过账入在架</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="inv-loss.html">
+          <div class="plan-page-card-name">盘亏出库</div>
+          <div class="plan-page-card-desc">inv-loss.html · 盘亏码过账为损耗</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="inv-q.html">
+          <div class="plan-page-card-name">盈亏查询</div>
+          <div class="plan-page-card-desc">inv-q.html · 已审核单盈亏与过账</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+<a class="plan-page-card" href="inv-nocode.html">
+          <div class="plan-page-card-name">无码药品记录</div>
+          <div class="plan-page-card-desc">inv-nocode.html · 无 20 位码的数量登记</div>
+          <div class="plan-page-card-cta">进入 →</div>
+        </a>
+    </div>
+  </div>
+
+  <!-- ④ 功能矩阵 -->
+  <div class="plan-section">
+    <div class="plan-section-title">功能矩阵</div>
+    <div style="overflow-x:auto;">
+      <table class="plan-func-table">
+        <thead>
+          <tr>
+            <th>模块</th>
+            <th>页数</th>
+            <th>状态</th>
+            <th>口径</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="key-col">底座 / 组织 / 系统</td><td>8</td><td><span class="plan-tag plan-tag-success">✓</span></td><td>登录四段式 + 角色 DataScope + 菜单管理</td></tr>
+          <tr><td class="key-col">基础字典</td><td>6</td><td><span class="plan-tag plan-tag-success">✓</span></td><td>药品主子表、标识码、柜/灯本期只做字典</td></tr>
+          <tr><td class="key-col">采购管理</td><td>6</td><td><span class="plan-tag plan-tag-success">✓</span></td><td>到货源头 → 入库扫码验收 → 退货双类型</td></tr>
+          <tr><td class="key-col">库房业务</td><td>7</td><td><span class="plan-tag plan-tag-success">✓</span></td><td>在架=集合加减；领用出库即扣账</td></tr>
+          <tr><td class="key-col">药房管理</td><td>7</td><td><span class="plan-tag plan-tag-success">✓</span></td><td>申请/入库/退回 + 库存上下架损耗；补药灯占位</td></tr>
+          <tr><td class="key-col">发药管理</td><td>5</td><td><span class="plan-tag plan-tag-success">✓</span></td><td>方案 b：锁数量、调剂绑码；赋码菜单占位</td></tr>
+          <tr><td class="key-col">台账管理</td><td>3</td><td><span class="plan-tag plan-tag-success">✓</span></td><td>只读，流水从单据派生</td></tr>
+          <tr><td class="key-col">盘点管理</td><td>6</td><td><span class="plan-tag plan-tag-success">✓</span></td><td>账实对照后盘盈/盘亏过账</td></tr>
+          <tr><td class="key-col">医保管理</td><td>1</td><td><span class="plan-tag plan-tag-warning">预留</span></td><td>追溯码上传不做页</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ⑤ 架构约束 -->
+  <div class="plan-section">
+    <div class="plan-section-title">架构约束</div>
+    <ul class="plan-bullets">
+      <li><strong>路由方式</strong>：多页 <code>location.href</code> 跳转 + URL 参数（dict-types → dict-items?type=CODE），不用 hash 路由、无前端框架</li>
+      <li><strong>UI 分层</strong>：Tabler 1.5.1 本地化（<code>prototypes/shared/tabler/</code>）负责业务组件（卡片/表格/按钮/表单/徽标）；<code>app-shell.js</code> 自有壳负责侧边栏+顶栏（Tabler 的 fixed 侧边栏无法嵌入预览容器，故壳自研、视觉对齐 Tabler）</li>
+      <li><strong>权限模型（2026-09-22 定稿，对齐研发框架 yudao）</strong>：功能权限与数据权限<strong>都挂角色</strong> —— 菜单/按钮树 + 若依 DataScope 五档（<code>system_role.data_scope</code>），用户多选角色继承，登录候选上下文由角色范围并集算出；行数据 = 登录所选库房/药房自动隔离 → 再按本人隔离。超级用户不指定院区、不可删、不参与业务</li>
+      <li><strong>多院区单实例（2026-09-21 拍板，推翻旧决策#4 独立部署）</strong>：一套实例多院区，超级用户登录时选院区，非超管自动进入唯一所属院区</li>
+      <li><strong>登录上下文</strong>：先验账号密码 → 超管选院区/非超管自动进入 → 既属库房又属药房的用户先选「库房管理/药房管理」→ 选具体库房/药房；顶栏常驻上下文并支持「部门切换」</li>
+      <li><strong>状态共享</strong>：登录态存 <code>store.js</code>（sessionStorage）；未登录直达任何页自动注入演示账号并标「演示模式」</li>
+      <li><strong>数据约定</strong>：组织/角色/用户在 <code>data.js</code>；药品字典 <code>drug-data.js</code>；采购 <code>purchase-data.js</code>；库房/药房单据 <code>wh-data.js</code>；发药 <code>rx-data.js</code>；盘点 <code>inv-data.js</code>。库存数量 = 码 count 派生。页内编辑为内存态</li>
+      <li><strong>无构建步骤</strong>：从 prototypes 根目录起任意静态服务即可运行，无 npm 依赖</li>
+    </ul>
+  </div>
+
+  <!-- ⑥ 已知限制 -->
+  <div class="plan-section">
+    <div class="plan-section-title">已知限制（3 项）</div>
+    <ul class="plan-bullets">
+      <li><strong>编辑不持久</strong>：用户/角色/院区/字典页内的新增、编辑、启停、禁用为内存态，刷新页面即还原（演示用途，不接后端）</li>
+      <li><strong>菜单未按角色过滤</strong>：目前所有角色看到的左侧菜单相同，仅工作台「数据范围卡」与角色页体现差异；「换账号菜单真实变化」待下一阶段连同业务模块一起做</li>
+      <li><strong>权限勾选不落库</strong>：角色弹窗里的菜单树/数据范围勾选，保存仅更新本页预览 + toast，不会真正改变其他账号的可见菜单与数据</li>
+    </ul>
+  </div>
+
+  <!-- ⑦ 待确认问题 -->
+  <div class="plan-section">
+    <div class="plan-section-title">待确认问题（3 项）</div>
+    <ul class="plan-bullets">
+      <li><strong>补药指示灯 / 药↔槽绑定</strong>：灯挂槽、药 N:N 槽已拍板，本期灯字典有了、补药指示灯仍占位。是否下一期做补药亮灯？</li>
+      <li><strong>赋码菜单</strong>：方案 b 已把绑码并进发药页，侧栏「处方赋码 / 批量赋码」仍留着。删掉还是继续占位？</li>
+      <li><strong>图纸上线</strong>：<code>docs/diagrams</code> 12 张图只在本地 9991，要不要纳入 pul-fms 部署？</li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' }
+  });
+</script>
+</body>
+</html>

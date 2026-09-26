@@ -16,6 +16,8 @@
   .item.active { background:#206bc4; color:#fff; }
   .item .no { display:inline-block; min-width:26px; color:#8a97a8; font-family:Consolas,monospace; }
   .item.active .no { color:#bcd6f5; }
+  .item .case { display:block; font-size:11px; color:#7c8b9d; padding-left:26px; line-height:1.4; }
+  .item.active .case { color:#bcd6f5; }
   .grp { font-size:11px; color:#6b7a8d; padding:12px 12px 4px; letter-spacing:1px; }
   #main { flex:1; display:flex; flex-direction:column; }
   #bar { height:48px; background:#fff; border-bottom:1px solid #e3e8ee; display:flex; align-items:center; gap:8px; padding:0 16px; }
@@ -34,7 +36,7 @@
 </head>
 <body>
   <div id="side">
-    <h1>PUL-FMS 图纸<small>业务流程图 × UML · 共 11 张 · fireworks 渲染（几何校验防交叉）</small></h1>
+    <h1>PUL-FMS 图纸<small>业务流程图 × UML · 共 13 张 + 1 份实例 · 按业务模块分组</small></h1>
     <div id="list"></div>
   </div>
   <div id="main">
@@ -53,21 +55,31 @@
   </div>
 <script>
 var DIAGRAMS = [
-  { grp: 'A 线 · 业务流程图（泳道）' },
-  { f: '01-lifecycle',   t: '药品全生命周期总览' },
-  { f: '02-purchase-in', t: '采购入库（异常码人工兜底）' },
-  { f: '03-pick-loop',   t: '领用出库 → 药房入库闭环' },
-  { f: '04-dispensing',  t: '药房发药（后期设计 · 3 待决方案）' },
-  { f: '05-manual-ops',  t: '人工后台维护入口总览' },
-  { grp: 'B 线 · 机制与数据图' },
-  { f: '06-data-model',  t: '数据模型 ER（字段级）' },
-  { f: '07-conversion',  t: '码⇄药⇄单位 全链路转换' },
-  { f: '08-stock-derivation', t: '库存推导（集合加减法）' },
-  { f: '09-state-machine', t: '状态机（码实例 × 单据 双轨）' },
-  { f: '10-permission',  t: '权限模型 + 登录上下文' },
-  { f: '11-usecase',     t: '用例图（按角色）' }
+  { grp: '总览' },
+  { f: '01-lifecycle',   t: '药品全生命周期总览', c: '一盒药从供应商到患者的 6 站旅程（台账管理同用）' },
+  { grp: '组织 / 系统管理' },
+  { f: '10-permission',  t: '权限模型 + 登录上下文', c: 'admin 看全部院区，院区管理员只看本院区' },
+  { grp: '基础管理' },
+  { f: '07-conversion',  t: '码⇄药⇄单位 全链路转换', c: '1箱=60盒、1盒=7片；基本单位在药品字典不在码上' },
+  { f: '13-code-flow',   t: '箱码全链路 · 码怎么转', c: '60个一级盒码：到货→入库→领用2盒→拆零发2片' },
+  { f: '13-box-instance', t: '箱码实例 · 表存储模拟数据', page: '13-box-instance.html', c: '阿莫西林60盒：五张表在五时刻长什么样' },
+  { grp: '库房管理' },
+  { f: '02-purchase-in', t: '采购入库（异常码人工兜底）', c: '扫码失败不卡单：异常码补录后继续入库' },
+  { f: '03-pick-loop',   t: '领用出库 → 药房入库闭环', c: '中心库发2盒 → 门诊药房收2盒，库存同时动（药房管理同用）' },
+  { f: '08-stock-derivation', t: '库存推导（集合加减法）', c: '在架库存=入库集合−出库集合，不靠快照（药房管理同用）' },
+  { grp: '发药管理' },
+  { f: '04-dispensing',  t: '药房发药（方案已定 b · a/c 备选）', c: '处方2片拆零发药；退改需解锁' },
+  { grp: '盘点管理' },
+  { f: '14-stocktake',   t: '盘点流程（期初→盘点→盈亏）', c: '账面5片实数4片：盘亏1片出库；码损走无码记录' },
+  { grp: '人工兜底总览' },
+  { f: '05-manual-ops',  t: '人工后台维护入口总览', c: '6 类人工入口：设备/扫码挂了业务照样跑' },
+  { grp: '机制与数据（技术）' },
+  { f: '06-data-model',  t: '数据模型 ER（概念总览）', c: '' },
+  { f: '12-er-fields',   t: '表结构 ER（字段级 · 核心七表）', c: '' },
+  { f: '09-state-machine', t: '状态机（码实例 × 单据 双轨）', c: '一个码的一生：在架→出库→在架→发药' },
+  { f: '11-usecase',     t: '用例图（按角色）', c: '' }
 ];
-var zoom = 1, panX = 0, panY = 0;
+var zoom = 1, panX = 0, panY = 0, isPage = false;
 var canvas = document.getElementById('canvas'), view = document.getElementById('view');
 
 function apply() {
@@ -89,6 +101,23 @@ async function show(idx) {
   Object.keys(itemEls).forEach(function (k) { itemEls[k].classList.toggle('active', Number(k) === idx); });
   document.getElementById('title').textContent = d.f + ' · ' + d.t;
   history.replaceState(null, '', '#' + d.f.slice(0, 2));
+  var zoomEls = document.querySelectorAll('#zoomOut, #zoomIn, #zoomFit, #zoomPct');
+  if (d.page) {
+    isPage = true;
+    zoomEls.forEach(function (el) { el.style.display = 'none'; });
+    view.style.overflow = 'hidden';
+    view.style.cursor = 'default';
+    canvas.style.transform = 'none';
+    canvas.style.padding = '0';
+    canvas.innerHTML = '<iframe src="' + d.page + '" style="width:100%;height:' + view.clientHeight + 'px;border:0;display:block;"></iframe>';
+    document.getElementById('hint').style.display = 'none';
+    return;
+  }
+  isPage = false;
+  zoomEls.forEach(function (el) { el.style.display = ''; });
+  view.style.overflow = 'hidden';
+  view.style.cursor = 'grab';
+  canvas.style.padding = '24px';
   try {
     var txt = await (await fetch('fireworks/' + d.f + '.svg')).text();
     canvas.innerHTML = txt;
@@ -107,7 +136,8 @@ DIAGRAMS.forEach(function (d, i) {
   if (d.grp) { var g = document.createElement('div'); g.className = 'grp'; g.textContent = d.grp; list.appendChild(g); return; }
   var el = document.createElement('div');
   el.className = 'item';
-  el.innerHTML = '<span class="no">' + d.f.slice(0, 2) + '</span>' + d.t;
+  el.innerHTML = '<span class="no">' + d.f.slice(0, 2) + '</span>' + d.t +
+    (d.c ? '<span class="case">' + d.c + '</span>' : '');
   el.onclick = function () { show(i); };
   list.appendChild(el);
   itemEls[i] = el;
@@ -116,9 +146,15 @@ DIAGRAMS.forEach(function (d, i) {
 document.getElementById('zoomIn').onclick = function () { zoom = Math.min(zoom * 1.25, 4); apply(); };
 document.getElementById('zoomOut').onclick = function () { zoom = Math.max(zoom / 1.25, 0.2); apply(); };
 document.getElementById('zoomFit').onclick = fit;
-view.addEventListener('wheel', function (e) { e.preventDefault(); zoom = Math.min(Math.max(zoom * (e.deltaY < 0 ? 1.1 : 0.9), 0.2), 4); apply(); }, { passive: false });
+view.addEventListener('wheel', function (e) {
+  if (isPage) return;
+  e.preventDefault(); zoom = Math.min(Math.max(zoom * (e.deltaY < 0 ? 1.1 : 0.9), 0.2), 4); apply();
+}, { passive: false });
 var drag = null;
-view.addEventListener('mousedown', function (e) { drag = { x: e.clientX - panX, y: e.clientY - panY }; view.classList.add('drag'); });
+view.addEventListener('mousedown', function (e) {
+  if (isPage) return;
+  drag = { x: e.clientX - panX, y: e.clientY - panY }; view.classList.add('drag');
+});
 window.addEventListener('mousemove', function (e) { if (drag) { panX = e.clientX - drag.x; panY = e.clientY - drag.y; apply(); } });
 window.addEventListener('mouseup', function () { drag = null; view.classList.remove('drag'); });
 // 初始打开：支持 #01 深链
