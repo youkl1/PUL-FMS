@@ -185,7 +185,9 @@
     var exc;
     if (opts.excNo) {
       exc = excOf(state, opts.excNo);
-      if (exc && exc.status !== '待补绑') return { ok: false, msg: '该记录当前状态不可补绑' };
+      // 非待补绑（如已被首码转待复核/已确认）不报错、不重置原记录：
+      // 置空后落到 makeExc 新建一条待复核记录——同单多码补绑每码各一条台账
+      if (exc && exc.status !== '待补绑') exc = null;
     }
     it.codes = it.codes || [];
     it.codes.push(Object.assign({}, onh, { bindType: 'manual', verified: '待复核' }));
