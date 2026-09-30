@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>T3-SMOKE-RUNNING</title>
+</head>
+<body>
+  <h1>T3 冒烟测试：window.RxBind / window.PUL_RX 挂载检查</h1>
+  <pre id="out">running...</pre>
+  <!-- 依赖引入顺序与 disp.html 保持一致（去掉 app-shell / disp 页面脚本） -->
+  <script src="scripts/store.js"></script>
+  <script src="scripts/data.js"></script>
+  <script src="scripts/drug-data.js"></script>
+  <script src="scripts/purchase-data.js"></script>
+  <script src="scripts/purchase-shared.js"></script>
+  <script src="scripts/wh-data.js"></script>
+  <script src="scripts/rx-data.js"></script>
+  <script src="scripts/rx-bind.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    var miss = [];
+    function need(ok, name) { if (!ok) miss.push(name); }
+
+    need(typeof window.RxBind === 'object' && window.RxBind !== null, 'window.RxBind');
+    if (typeof window.RxBind === 'object' && window.RxBind !== null) {
+      need(typeof window.RxBind.open === 'function', 'RxBind.open');
+      need(typeof window.RxBind.rebind === 'function', 'RxBind.rebind');
+    }
+
+    var R = window.PUL_RX;
+    need(typeof R === 'object' && R !== null, 'window.PUL_RX');
+    if (R) {
+      var fns = ['bindSuggest', 'bindManual', 'confirmExc', 'rebindExc', 'closeExc',
+        'excOf', 'excPendingFor', 'makeExc', 'docOf', 'overdue', 'ruleOf', 'srcDateMap'];
+      for (var i = 0; i < fns.length; i++) {
+        need(typeof R[fns[i]] === 'function', 'PUL_RX.' + fns[i]);
+      }
+      need(typeof R.OVERDUE_MS === 'number', 'PUL_RX.OVERDUE_MS (number)');
+    }
+
+    var out = document.getElementById('out');
+    if (miss.length === 0) {
+      document.title = 'T3-SMOKE-PASS';
+      out.textContent = 'PASS: RxBind(open/rebind) 与 PUL_RX 全部 API 已挂载。\n' +
+        'OVERDUE_MS = ' + window.PUL_RX.OVERDUE_MS;
+    } else {
+      document.title = 'T3-SMOKE-FAIL';
+      out.textContent = 'FAIL，缺失项：\n - ' + miss.join('\n - ');
+    }
+  })();
+  </script>
+</body>
+</html>

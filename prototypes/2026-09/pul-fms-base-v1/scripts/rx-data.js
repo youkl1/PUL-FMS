@@ -253,6 +253,7 @@
     availableQty: availableQty, suggestCodes: suggestCodes, itemDone: itemDone, rxDone: rxDone,
     bindSuggest: bindSuggest, makeExc: makeExc, excOf: excOf, excPendingFor: excPendingFor,
     docOf: docOf, bindManual: bindManual, confirmExc: confirmExc, closeExc: closeExc,
-    rebindExc: rebindExc, overdue: overdue
+    rebindExc: rebindExc, overdue: overdue,
+    ruleOf: ruleOf, srcDateMap: srcDateMap, OVERDUE_MS: OVERDUE_MS
   };
 })();
