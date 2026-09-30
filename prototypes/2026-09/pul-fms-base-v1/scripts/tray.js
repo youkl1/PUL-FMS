@@ -102,7 +102,7 @@
       if (d.status === '待摆药' && !it.shortage) onh += it.qty - scanned;
       var done = R.itemDone(it);
       var pend = R.excPendingFor(S, d.trayNo, it.drugCode);
-      var canBind = !done && (d.status === '摆药中' || (d.status === '已完成' && pend));
+      var canBind = !done && (d.status === '摆药中' || d.status === '已完成');
       return '<tr><td>' + (i + 1) + '</td><td><b>' + esc(drugName(it.drugCode)) + '</b></td>' +
         '<td class="text-secondary">' + esc(formSpec(it.drugCode)) + '</td>' +
         '<td>' + it.qty + esc(it.unit) + '</td><td>' + scanned + ' / ' + it.qty + '</td>' +
