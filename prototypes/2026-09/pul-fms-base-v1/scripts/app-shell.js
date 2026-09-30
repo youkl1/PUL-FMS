@@ -87,7 +87,7 @@
       { key: 'whstock', name: '库房库存查询', icon: 'chart', href: 'wh-stock.html' },
       { key: 'quickScan', name: '领用快捷扫码', icon: 'scan', href: 'quick-scan.html' },
       { key: 'pick', name: '领用备货单', icon: 'box', href: 'wh-pick.html' },
-      { key: 'pickOut', name: '领用出库单', icon: 'box', href: null, badge: '待补' },
+      { key: 'pickOut', name: '领用出库单', icon: 'box', href: 'wh-pick-out.html' },
       { key: 'whOutQ', name: '出库明细查询', icon: 'search', href: 'wh-out-query.html' },
       { key: 'retIn', name: '领用退回', icon: 'swap', href: 'wh-return-in.html' },
       { key: 'othIn', name: '其他入库单', icon: 'box', href: 'wh-other-in.html' },

@@ -69,7 +69,7 @@ window.GUIDE_DATA = {
         whstock:   { desc: '效期/冻结一目了然',  cat: 'qry' },
         quickScan: { desc: '高拍仪连续扫码直出', cat: 'fwd' },
         pick:      { desc: '按申请单拣货出库',   cat: 'fwd', note: '仅扫码 · 人工通道规划中' },
-        pickOut:   { desc: '领用出库单台账',     cat: 'qry' },
+        pickOut:   { desc: '出库单台账·审核跳转', cat: 'qry' },
         whOutQ:    { desc: '领用/其他出库明细',  cat: 'qry' },
         retIn:     { desc: '药房退回接收+库房直收', cat: 'rev' },
         othIn:     { desc: '无单入库（捐赠等）', cat: 'fix' },

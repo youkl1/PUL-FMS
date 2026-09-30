@@ -90,7 +90,7 @@ updated: 2026-09-28
 | 库房管理 | 库房库存查询 | whstock | wh-stock.html | （待建） | ⬜ |
 | 库房管理 | 领用快捷扫码 | quickScan | —（待补） | （待建） | 🚧 |
 | 库房管理 | 领用备货单 | pick | wh-pick.html | （待建） | ⬜ |
-| 库房管理 | 领用出库单 | pickOut | —（待补） | 03-wh/03b-ops/pickOut.md | 🚧 |
+| 库房管理 | 领用出库单 | pickOut | wh-pick-out.html | 03-wh/03b-ops/pickOut.md | 🚧 |
 | 库房管理 | 出库明细查询 | whOutQ | wh-out-query.html | （待建） | ⬜ |
 | 库房管理 | 退回入库单 | retIn | wh-return-in.html | （待建） | ⬜ |
 | 库房管理 | 其他入库单 | othIn | wh-other-in.html | （待建） | ⬜ |
