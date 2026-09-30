@@ -1,9 +1,9 @@
 /**
- * tray.js — 摆药单业务：HIS 拉取锁数量 → 摆药中扫码绑码（方案 b，住院通道）
+ * tray.js — 摆药单批量赋码：HIS 拉取锁数量 → 摆药中扫码绑码（方案 b，住院通道）
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'tray', crumb: ['发药管理', '摆药单业务'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'tray', crumb: ['出库管理', '摆药单批量赋码'] });
   if (!content) return;
 
   var W = window.PUL_WH, R = window.PUL_RX, UI = window.PchUI, esc = UI.esc;
@@ -85,7 +85,8 @@
       return '<button class="btn btn-sm btn-primary" data-start="' + esc(d.trayNo) + '"' + (can ? '' : ' disabled') + '>开始摆药</button> ' +
         '<button class="btn btn-sm btn-outline-danger" data-void="' + esc(d.trayNo) + '">处理无库存</button>';
     }
-    if (d.status === '摆药中') return '<button class="btn btn-sm btn-primary" data-scan="' + esc(d.trayNo) + '">▸ 扫码绑码</button>';
+    if (d.status === '摆药中') return '<button class="btn btn-sm btn-primary" data-scan="' + esc(d.trayNo) + '">▸ 扫码绑码</button> ' +
+      '<button class="btn btn-sm btn-outline-warning" data-finish="' + esc(d.trayNo) + '">完成摆药·事后补绑</button>';
     return '<span class="text-secondary" style="font-size:12.5px;">患者已绑</span>';
   }
 
@@ -99,18 +100,23 @@
       var sugCode = sug ? sug.code : '—';
       var onh = R.availableQty(WH, S, ph(), it.drugCode);
       if (d.status === '待摆药' && !it.shortage) onh += it.qty - scanned;
+      var done = R.itemDone(it);
+      var pend = R.excPendingFor(S, d.trayNo, it.drugCode);
+      var canBind = !done && (d.status === '摆药中' || (d.status === '已完成' && pend));
       return '<tr><td>' + (i + 1) + '</td><td><b>' + esc(drugName(it.drugCode)) + '</b></td>' +
         '<td class="text-secondary">' + esc(formSpec(it.drugCode)) + '</td>' +
         '<td>' + it.qty + esc(it.unit) + '</td><td>' + scanned + ' / ' + it.qty + '</td>' +
         '<td>' + (it.shortage ? '<span class="badge bg-red-lt">无库存</span>' : ('锁 ' + it.qty + ' · 在架 ' + onh)) + '</td>' +
         '<td>' + esc(loc) + '</td>' +
-        '<td style="font-family:Consolas,monospace;font-size:12px;">' + esc(sugCode) + '</td></tr>';
+        '<td style="font-family:Consolas,monospace;font-size:12px;">' + esc(sugCode) + '</td>' +
+        '<td>' + (canBind ? '<button class="btn btn-sm btn-outline-primary" data-mbind="' + i + '">手动补绑</button>' : '') +
+        (done || d.status !== '已完成' ? '' : '<span class="badge bg-orange-lt">待补绑</span>') + '</td></tr>';
     }).join('');
     return '<div class="card"><div class="card-header"><b>药品清单</b>' +
       '<span class="text-secondary ms-2" style="font-size:12.5px;">' + esc(d.trayNo) + ' · ' + esc(d.patient) +
       ' · ' + esc(d.ward) + esc(d.bed) + ' · 码随单绑患者</span></div>' +
       '<div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>#</th><th>药品</th><th>规格</th><th>应摆</th><th>已扫/应扫</th><th>锁 / 在架</th><th>建议货位</th><th>建议码</th></tr></thead>' +
+      '<thead><tr><th>#</th><th>药品</th><th>规格</th><th>应摆</th><th>已扫/应扫</th><th>锁 / 在架</th><th>建议货位</th><th>建议码</th><th>操作</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div></div>';
   }
 
@@ -185,10 +191,43 @@
     }, '确认作废');
   }
 
+  function finishTray(d) {
+    var unbound = d.items.filter(function (it) { return !R.itemDone(it); });
+    if (!unbound.length) { window.showToast('全部明细已绑码，直接扫码收尾即可'); return; }
+    UI.confirm('确认 <b>' + esc(d.trayNo) + '</b> 摆药完成？<div style="margin-top:8px;">' + unbound.length +
+      ' 行未绑码，药先发往病区，将生成「待补绑」异常记录，事后在赋码异常台账补绑复核。</div>', function () {
+      var me = curUser().name || '陈静';
+      unbound.forEach(function (it) {
+        if (!R.excPendingFor(S, d.trayNo, it.drugCode)) {
+          R.makeExc(S, { type: '住院后置', refKind: 'tray', refNo: d.trayNo, pharmacy: d.pharmacy,
+            drugCode: it.drugCode, status: '待补绑', operator: me });
+        }
+      });
+      d.status = '已完成'; d.doneTime = R.now(); d.dispenser = me;
+      tab = '已完成'; sel = d.trayNo;
+      save(); renderAll();
+      window.showToast('已完成摆药，' + unbound.length + ' 行待补绑，请到赋码异常台账处理');
+    }, '确认完成');
+  }
+
+  function openBind(d, idx) {
+    var it = d.items[idx];
+    if (R.itemDone(it)) return;
+    var pend = R.excPendingFor(S, d.trayNo, it.drugCode);
+    window.RxBind.open({
+      wh: WH, state: S, pharmacy: ph(), refKind: 'tray', refNo: d.trayNo, item: it,
+      excNo: pend ? pend.excNo : undefined,
+      onDone: function () {
+        save(); renderAll();
+        window.showToast('已补绑，异常台账转待复核');
+      }
+    });
+  }
+
   function openScan(d) {
     UI.openScan({
       title: '扫码绑码 · ' + d.trayNo,
-      hint: '扫建议码。齐了自动完成。患者/病区已在单上。',
+      hint: '扫建议码。齐了自动完成。病区无扫码条件可走「完成摆药·事后补绑」。',
       gate: 'out', node: ph(),
       onScan: function (code) {
         var p = R.parse(code);
@@ -242,6 +281,18 @@
       b.addEventListener('click', function () {
         var d = null; S.trayDocs.forEach(function (x) { if (x.trayNo === b.getAttribute('data-scan')) d = x; });
         if (d) { sel = d.trayNo; openScan(d); }
+      });
+    });
+    content.querySelectorAll('[data-finish]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var d = null; S.trayDocs.forEach(function (x) { if (x.trayNo === b.getAttribute('data-finish')) d = x; });
+        if (d) finishTray(d);
+      });
+    });
+    content.querySelectorAll('[data-mbind]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var d = selDoc();
+        if (d) openBind(d, +b.getAttribute('data-mbind'));
       });
     });
   }

@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
-  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 发药管理">
-  <title>摆药单业务 · PUL-FMS</title>
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 出库管理">
+  <title>摆药单批量赋码 · PUL-FMS</title>
   <link rel="stylesheet" href="styles/prototype-intro.css">
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
@@ -32,7 +32,7 @@
     <header class="pi-header">
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">摆药单业务</h1>
+        <h1 class="pi-title">摆药单批量赋码</h1>
         <span class="pi-subtitle">原型页 · 住院摆药同一套方案 b：HIS 拉取锁数量 → 扫码绑码 → 患者已随单</span>
       </div>
       <div class="pi-header-right">
@@ -48,8 +48,8 @@
       <div class="detail-modal-header">
         <div class="detail-modal-icon">💊</div>
         <div class="detail-modal-title-wrap">
-          <h2>摆药单业务</h2>
-          <p class="subtitle">发药管理 · 住院通道，方案 b 与门诊发药同一套</p>
+          <h2>摆药单批量赋码</h2>
+          <p class="subtitle">出库管理 · 住院通道，方案 b 与门诊发药同一套</p>
         </div>
       </div>
       <p class="lead"><strong>一句话概括：</strong>HIS 摆药单拉取只锁数量；扫码绑码时患者/病区已在单上，病区签收下轮再做。</p>
@@ -60,7 +60,7 @@
             <div class="info-card-desc">拉取摆药单 → 开始摆药 → 扫建议码</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
-            <div class="info-card-desc">上游本房在架；旁路 HIS 摆药单查询；下游病区签收（未建）</div></div></div>
+            <div class="info-card-desc">上游本房在架；旁路 HIS HIS摆药单查询；下游病区签收（未建）</div></div></div>
         </div></div>
       <div class="section"><div class="section-title">如何使用</div>
         <div class="steps">
@@ -75,12 +75,12 @@
       <div class="section"><div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
           <div class="example-item-title">孙丽依姆多无库存；病区签收下轮</div>
-          <div class="example-item-desc">演示库存用门诊药房在架（住院药房库存未单列）。与门诊发药抢同一盒时后拉的会报无库存。</div>
+          <div class="example-item-desc">演示库存用门诊药房在架（住院药房库存查询未单列）。与门诊发药抢同一盒时后拉的会报无库存。</div>
         </div></div></div>
     </div>
   </div>
   <div class="plan-badge" id="planBadge" style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
-    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 发药管理</span>
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 出库管理</span>
   </div>
   <div class="toast" id="toast"></div>
   <script src="scripts/store.js"></script>
@@ -90,6 +90,7 @@
   <script src="scripts/purchase-shared.js"></script>
   <script src="scripts/wh-data.js"></script>
   <script src="scripts/rx-data.js"></script>
+  <script src="scripts/rx-bind.js"></script>
   <script src="scripts/app-shell.js"></script>
   <script src="scripts/tray.js"></script>
   <script>
