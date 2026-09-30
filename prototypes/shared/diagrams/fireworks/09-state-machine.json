@@ -8,7 +8,7 @@
   "width": 1360,
   "height": 990,
   "title": "状态机（双轨）",
-  "subtitle": "追溯码实例状态 × 单据状态 · 「入槽」为可选状态而非必经",
+  "subtitle": "追溯码实例状态 × 单据状态 · 「入槽」为可选状态而非必经 · 手动补绑核验维度见左下注",
   "containers": [
     { "id": "code", "x": 40, "y": 100, "width": 1280, "height": 520, "label": "追溯码实例状态轨", "stroke": "#b7cdf0", "fill": "#eef4fb" },
     { "id": "doc", "x": 40, "y": 660, "width": 1280, "height": 290, "label": "单据状态轨（7 类单据同构）", "stroke": "#b7e0c4", "fill": "#eef8f0" }
@@ -26,7 +26,8 @@
     { "id": "D1", "kind": "rect", "x": 120, "y": 700, "width": 190, "height": 76, "type_label": "DRAFT", "label": "建单 · 草稿", "fill": "#ffffff", "stroke": "#206bc4" },
     { "id": "D2", "kind": "rect", "x": 480, "y": 700, "width": 190, "height": 76, "type_label": "EFFECTIVE", "label": "已审核 · 生效", "sublabel": "进入库存集合推导", "fill": "#ffffff", "stroke": "#206bc4" },
     { "id": "D3", "kind": "rect", "x": 120, "y": 840, "width": 190, "height": 76, "type_label": "TERMINAL", "label": "终态 · 不可改", "fill": "#f6f8fb", "stroke": "#2fb344" },
-    { "id": "DNOTE", "kind": "rect", "x": 900, "y": 740, "width": 360, "height": 76, "type_label": "NOTE", "label": "7 类单据同构", "sublabel": "采购入/采购退/领用/退回入/其他入/其他出/损耗", "fill": "#ffffff", "stroke": "#626976", "flat": true }
+    { "id": "DNOTE", "kind": "rect", "x": 900, "y": 740, "width": 360, "height": 76, "type_label": "NOTE", "label": "7 类单据同构", "sublabel": "采购入/采购退/领用/退回入/其他入/其他出/损耗", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "CNOTE", "kind": "rect", "x": 60, "y": 526, "width": 640, "height": 64, "type_label": "NOTE · T3", "label": "绑定带核验维度：扫码核验 / 手动补绑（待复核）/ 已复核", "sublabel": "状态机不变 · bindType=scan / manual", "fill": "#ffffff", "stroke": "#626976", "flat": true }
   ],
   "arrows": [
     { "id": "t1", "source": "C1", "target": "C2", "source_port": "right", "target_port": "left", "flow": "control", "label": "领用出库" },

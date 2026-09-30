@@ -5,16 +5,16 @@
   "style": 1,
   "quality_profile": "showcase",
   "text_policy": "strict",
-  "width": 1360,
-  "height": 1095,
+  "width": 1560,
+  "height": 1340,
   "title": "药房发药流程（方案已定 b）",
-  "subtitle": "处方驱动 · 入槽/不入槽双路径并列 · 处方→码映射 2026-09-23 拍板定为方案 b · 蓝=已定 橙=备选分支",
+  "subtitle": "处方驱动 · 入槽/不入槽双路径并列 · 处方→码映射 2026-09-23 拍板定为方案 b · 蓝=已定 橙=备选分支 · T3 手动补绑降级",
   "containers": [
     {
       "id": "lane-doc",
       "x": 40,
       "y": 100,
-      "width": 1280,
+      "width": 1480,
       "height": 110,
       "label": "医生",
       "stroke": "#b7cdf0",
@@ -24,7 +24,7 @@
       "id": "lane-sys",
       "x": 40,
       "y": 220,
-      "width": 1280,
+      "width": 1480,
       "height": 340,
       "label": "系统 · 处方→码映射【已定 b】",
       "stroke": "#d0d5dd",
@@ -34,8 +34,8 @@
       "id": "lane-pha",
       "x": 40,
       "y": 590,
-      "width": 1280,
-      "height": 346,
+      "width": 1480,
+      "height": 580,
       "label": "药房 · 药师",
       "stroke": "#b7cdf0",
       "fill": "#eef4fb"
@@ -43,9 +43,9 @@
     {
       "id": "lane-ward",
       "x": 40,
-      "y": 961,
-      "width": 1280,
-      "height": 100,
+      "y": 1195,
+      "width": 1480,
+      "height": 110,
       "label": "病房",
       "stroke": "#b7e0c4",
       "fill": "#eef8f0"
@@ -168,10 +168,48 @@
       "stroke": "#d48806"
     },
     {
+      "id": "DEC",
+      "kind": "hexagon",
+      "x": 893,
+      "y": 962,
+      "width": 200,
+      "height": 70,
+      "type_label": "DECISION · T3",
+      "label": "扫码成功？",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "MB",
+      "kind": "rect",
+      "x": 1200,
+      "y": 962,
+      "width": 300,
+      "height": 70,
+      "type_label": "MANUAL BIND · T3",
+      "label": "手动补绑 · 系统推荐+人工选定",
+      "sublabel": "货位FEFO/非货位FIFO · bindType=manual",
+      "fill": "#e6f4ff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "LEDGER",
+      "kind": "rect",
+      "x": 1200,
+      "y": 1072,
+      "width": 300,
+      "height": 64,
+      "type_label": "LEDGER · 日结",
+      "label": "赋码异常台账 · 日结复核",
+      "sublabel": "确认/改绑/关闭 · 超24h升级",
+      "fill": "#e6f4ff",
+      "stroke": "#206bc4"
+    },
+    {
       "id": "W1",
       "kind": "rect",
       "x": 843,
-      "y": 981,
+      "y": 1215,
       "width": 300,
       "height": 60,
       "type_label": "WARD",
@@ -272,15 +310,51 @@
     {
       "id": "a12",
       "source": "P4",
-      "target": "W1",
+      "target": "DEC",
       "source_port": "bottom",
       "target_port": "top",
       "flow": "control"
+    },
+    {
+      "id": "a13",
+      "source": "DEC",
+      "target": "W1",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control",
+      "label": "成功"
+    },
+    {
+      "id": "a14",
+      "source": "DEC",
+      "target": "MB",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "data",
+      "label": "失败"
+    },
+    {
+      "id": "a15",
+      "source": "MB",
+      "target": "LEDGER",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "data"
+    },
+    {
+      "id": "a16",
+      "source": "LEDGER",
+      "target": "W1",
+      "source_port": "bottom",
+      "target_port": "right",
+      "flow": "data",
+      "label": "复核闭环",
+      "route_points": [[1350, 1245]]
     }
   ],
   "legend_orientation": "horizontal",
   "legend_x": 90,
-  "legend_y": 1006,
+  "legend_y": 1240,
   "legend": [
     {
       "flow": "control",
@@ -288,10 +362,10 @@
     },
     {
       "flow": "data",
-      "label": "映射分支（a / c 备选）"
+      "label": "映射分支（a/c 备选）· T3 补绑降级"
     }
   ],
-  "footer": "PUL-FMS · 04 药房发药流程 · 蓝=已定方案 b · 橙=备选分支 · fireworks-tech-graph Style 1",
+  "footer": "PUL-FMS · 04 药房发药流程 · 蓝=已定方案 b · 橙=备选分支 · T3 手动补绑降级 · fireworks-tech-graph Style 1",
   "footer_x": 48,
-  "footer_y": 1078
+  "footer_y": 1318
 }

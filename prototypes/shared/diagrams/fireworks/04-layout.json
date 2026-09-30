@@ -1,7 +1,7 @@
 {
   "canvas": {
-    "height": 1095.0,
-    "width": 1360.0
+    "height": 1340.0,
+    "width": 1560.0
   },
   "composition": {
     "limits": {
@@ -19,9 +19,9 @@
       "bridged_crossings": 0,
       "max_route_stretch": 1.0,
       "minimum_container_gutter": 20.0,
-      "minimum_node_gap": 47.89,
-      "shortest_segment": 49.0,
-      "total_bends": 6
+      "minimum_node_gap": 40.0,
+      "shortest_segment": 40.0,
+      "total_bends": 7
     },
     "ok": true,
     "profile": "showcase",
@@ -63,10 +63,10 @@
       "bridges": [],
       "crossings": [],
       "id": "a02",
-      "length": 437.0,
+      "length": 422.0,
       "route": [
         [
-          595.0,
+          580.0,
           298.0
         ],
         [
@@ -81,7 +81,7 @@
       "route_stretch": 1.0,
       "source": "Y0",
       "source_port": [
-        595.0,
+        580.0,
         298.0
       ],
       "target": "YA",
@@ -125,10 +125,10 @@
       "bridges": [],
       "crossings": [],
       "id": "a04",
-      "length": 507.0,
+      "length": 492.0,
       "route": [
         [
-          765.0,
+          780.0,
           298.0
         ],
         [
@@ -143,7 +143,7 @@
       "route_stretch": 1.0,
       "source": "Y0",
       "source_port": [
-        765.0,
+        780.0,
         298.0
       ],
       "target": "YC",
@@ -377,7 +377,7 @@
       "bridges": [],
       "crossings": [],
       "id": "a12",
-      "length": 69.0,
+      "length": 46.0,
       "route": [
         [
           993.0,
@@ -385,7 +385,7 @@
         ],
         [
           993.0,
-          985.0
+          962.0
         ]
       ],
       "route_stretch": 1.0,
@@ -394,12 +394,137 @@
         993.0,
         916.0
       ],
+      "target": "DEC",
+      "target_port": [
+        993.0,
+        962.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "a13",
+      "length": 183.0,
+      "route": [
+        [
+          993.0,
+          1032.0
+        ],
+        [
+          993.0,
+          1215.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "DEC",
+      "source_port": [
+        993.0,
+        1032.0
+      ],
       "target": "W1",
       "target_port": [
         993.0,
-        985.0
+        1215.0
       ],
       "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "a14",
+      "length": 107.0,
+      "route": [
+        [
+          1093.0,
+          997.0
+        ],
+        [
+          1200.0,
+          997.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "DEC",
+      "source_port": [
+        1093.0,
+        997.0
+      ],
+      "target": "MB",
+      "target_port": [
+        1200.0,
+        997.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "a15",
+      "length": 40.0,
+      "route": [
+        [
+          1350.0,
+          1032.0
+        ],
+        [
+          1350.0,
+          1072.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "MB",
+      "source_port": [
+        1350.0,
+        1032.0
+      ],
+      "target": "LEDGER",
+      "target_port": [
+        1350.0,
+        1072.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 1,
+      "bridges": [],
+      "crossings": [],
+      "id": "a16",
+      "length": 316.0,
+      "route": [
+        [
+          1350.0,
+          1136.0
+        ],
+        [
+          1350.0,
+          1245.0
+        ],
+        [
+          1143.0,
+          1245.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "LEDGER",
+      "source_port": [
+        1350.0,
+        1136.0
+      ],
+      "target": "W1",
+      "target_port": [
+        1143.0,
+        1245.0
+      ],
+      "waypoints": [
+        [
+          1350.0,
+          1245.0
+        ]
+      ]
     }
   ],
   "input_schema": "v1",
@@ -422,18 +547,18 @@
     "legend": {
       "actual": [
         90.0,
-        1018.0
+        1258.0
       ],
       "bounds": [
         80.0,
-        1004.0,
-        401.6,
-        1050.0
+        1244.0,
+        512.72,
+        1290.0
       ],
       "moved": true,
       "requested": [
         90.0,
-        1006.0
+        1240.0
       ]
     }
   },
@@ -451,8 +576,8 @@
   },
   "summary": {
     "bridged_crossings": 0,
-    "edges": 12,
-    "nodes": 10
+    "edges": 16,
+    "nodes": 13
   },
   "text_metrics": "heuristic-v1",
   "typography": {

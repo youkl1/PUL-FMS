@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 850" width="1360" height="850" data-generator="fireworks-tech-graph" data-schema-version="1" data-text-metrics="heuristic-v1" data-style-id="1" data-visual-theme="Flat Icon" data-diagram-type="architecture" data-motion-scene="" data-semantic-profile="generic" data-semantic-valid="true" data-quality-profile="showcase" data-max-bends-per-edge="2" data-max-total-bends="16" data-max-route-stretch="1.35" data-max-bridged-crossings="4" data-min-node-gap="40.0" data-min-container-gutter="20.0" data-min-label-clearance="4.0" data-min-segment-length="8.0">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 950" width="1360" height="950" data-generator="fireworks-tech-graph" data-schema-version="1" data-text-metrics="heuristic-v1" data-style-id="1" data-visual-theme="Flat Icon" data-diagram-type="architecture" data-motion-scene="" data-semantic-profile="generic" data-semantic-valid="true" data-quality-profile="showcase" data-max-bends-per-edge="2" data-max-total-bends="16" data-max-route-stretch="1.35" data-max-bridged-crossings="4" data-min-node-gap="40.0" data-min-container-gutter="20.0" data-min-label-clearance="4.0" data-min-segment-length="8.0">
   <defs>
     <marker id="arrowA" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
       <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
@@ -43,16 +43,16 @@
     .metric-value { font-size: 9.5px; font-weight: 700; fill: #111827; }
     </style>
   </defs>
-  <rect data-graph-role="background" width="1360.0" height="850.0" fill="#ffffff"/>
+  <rect data-graph-role="background" width="1360.0" height="950.0" fill="#ffffff"/>
   <text x="680.0" y="56" text-anchor="middle" class="title">人工后台维护入口 → 补哪张表</text>
-  <text x="680.0" y="82" text-anchor="middle" class="subtitle">6 类人工入口 · 3 张表 · 系统的兜底能力</text>
-  <g id="lane-entry" data-graph-role="container" data-container-id="lane-entry" data-semantic-role="boundary" data-graph-bounds="40,110,500,770">
-  <rect data-graph-role="container" x="40.0" y="110.0" width="460.0" height="660.0" rx="16.0" fill="#eef4fb" stroke="#b7cdf0" stroke-width="1.4" stroke-dasharray="6 5"/>
+  <text x="680.0" y="82" text-anchor="middle" class="subtitle">7 类人工入口 · 3 张表 · 系统的兜底能力</text>
+  <g id="lane-entry" data-graph-role="container" data-container-id="lane-entry" data-semantic-role="boundary" data-graph-bounds="40,110,500,870">
+  <rect data-graph-role="container" x="40.0" y="110.0" width="460.0" height="760.0" rx="16.0" fill="#eef4fb" stroke="#b7cdf0" stroke-width="1.4" stroke-dasharray="6 5"/>
   <text x="58.0" y="134.0" class="section">人工维护入口</text>
     <rect id="lane-entry-header" data-graph-role="reserved" data-reserved-kind="container-header" x="48" y="116" width="108" height="30" fill="none" stroke="none"/>
   </g>
-  <g id="lane-table" data-graph-role="container" data-container-id="lane-table" data-semantic-role="boundary" data-graph-bounds="840,110,1320,770">
-  <rect data-graph-role="container" x="840.0" y="110.0" width="480.0" height="660.0" rx="16.0" fill="#f6f8fb" stroke="#d0d5dd" stroke-width="1.4" stroke-dasharray="6 5"/>
+  <g id="lane-table" data-graph-role="container" data-container-id="lane-table" data-semantic-role="boundary" data-graph-bounds="840,110,1320,870">
+  <rect data-graph-role="container" x="840.0" y="110.0" width="480.0" height="760.0" rx="16.0" fill="#f6f8fb" stroke="#d0d5dd" stroke-width="1.4" stroke-dasharray="6 5"/>
   <text x="858.0" y="134.0" class="section">补写的表</text>
     <rect id="lane-table-header" data-graph-role="reserved" data-reserved-kind="container-header" x="848" y="116" width="82" height="30" fill="none" stroke="none"/>
   </g>
@@ -65,6 +65,7 @@
   <path id="e5" data-graph-role="edge" data-edge-id="e5" data-source="E3" data-target="T1" data-edge-kind="flow" data-topic-id="" data-flow="write" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="2" data-route-stretch="1.0" data-bridges="820,233;700,370" d="M 470,388 L 700,388 L 700,375 A 5 5 0 0 0 700,365 L 700,233 L 815,233 A 5 5 0 0 0 825,233 L 900,233" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowB)"/>
   <path id="e6" data-graph-role="edge" data-edge-id="e6" data-source="E4" data-target="T2" data-edge-kind="flow" data-topic-id="" data-flow="write" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="2" data-route-stretch="1.0" data-bridges="" d="M 470,479 L 580,479 L 580,463 L 900,463" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowB)"/>
   <path id="e7" data-graph-role="edge" data-edge-id="e7" data-source="E5" data-target="T3" data-edge-kind="flow" data-topic-id="" data-flow="write" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="2" data-route-stretch="1.0" data-bridges="" d="M 470,579 L 600,579 L 600,670 L 900,670" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowB)"/>
+  <path id="e9" data-graph-role="edge" data-edge-id="e9" data-source="E7" data-target="T3" data-edge-kind="flow" data-topic-id="" data-flow="write" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="1" data-route-stretch="1.0" data-bridges="" d="M 470,789 L 1080,789 L 1080,734" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowB)"/>
   <path id="e8" data-graph-role="edge" data-edge-id="e8" data-source="E6" data-target="T3" data-edge-kind="flow" data-topic-id="" data-flow="write" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 470,688 L 900,688" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowB)"/>
   <g id="node-E1" data-graph-role="node" data-node-id="E1" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="70,150,470,208">
   <rect x="70.0" y="150.0" width="400.0" height="58.0" rx="10.0" fill="#ffffff" stroke="#206bc4" stroke-width="1.8" filter="url(#shadowSoft)"/>
@@ -96,6 +97,11 @@
   <text x="270.0" y="677.0" text-anchor="middle" class="node-type">LOSS</text>
   <text data-text-role="title" data-full-text="损耗报损（损耗出库单）" data-text-max-width="376.0" x="270.0" y="694.0" text-anchor="middle" class="node-title" font-size="18">损耗报损（损耗出库单）</text>
   </g>
+  <g id="node-E7" data-graph-role="node" data-node-id="E7" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="70,760,470,818">
+  <rect x="70.0" y="760.0" width="400.0" height="58.0" rx="10.0" fill="#ffffff" stroke="#206bc4" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text x="270.0" y="778.0" text-anchor="middle" class="node-type">BIND</text>
+  <text data-text-role="title" data-full-text="发药补绑 / 赋码异常台账（rx-exc 页）" data-text-max-width="376.0" x="270.0" y="795.0" text-anchor="middle" class="node-title" font-size="18">发药补绑 / 赋码异常台账（rx-exc 页）</text>
+  </g>
   <g id="node-T1" data-graph-role="node" data-node-id="T1" data-semantic-role="cylinder" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="900,160,1260,270">
   <ellipse cx="1080.0" cy="173.75" rx="180.0" ry="13.75" fill="#ffffff" stroke="#626976" stroke-width="2.2"/>
   <rect x="900.0" y="173.75" width="360.0" height="82.5" fill="#ffffff" stroke="#626976" stroke-width="2.2"/>
@@ -120,7 +126,7 @@
   <ellipse cx="1080.0" cy="720.25" rx="180.0" ry="13.75" fill="#ffffff" stroke="#626976" stroke-width="2.2"/>
   <ellipse cx="1080.0" cy="665.8" rx="180.0" ry="13.75" fill="none" stroke="#626976" stroke-opacity="0.45" stroke-width="1.2"/>
   <ellipse cx="1080.0" cy="690.0" rx="180.0" ry="13.75" fill="none" stroke="#626976" stroke-opacity="0.25" stroke-width="1.2"/>
-  <text data-text-role="title" data-full-text="单据 + 码清单" data-text-max-width="336.0" x="1080.0" y="673.0" text-anchor="middle" class="node-title" font-size="18">单据 + 码清单</text>
+  <text data-text-role="title" data-full-text="单据 + 码清单（DOC_CODE）" data-text-max-width="336.0" x="1080.0" y="673.0" text-anchor="middle" class="node-title" font-size="18">单据 + 码清单（DOC_CODE）</text>
   <text data-text-role="subtitle" data-full-text="库存集合推导的事实源" data-text-max-width="336.0" x="1080.0" y="697.0" text-anchor="middle" class="node-sub" font-size="12">库存集合推导的事实源</text>
   </g>
   <g id="e1-label" data-graph-role="label" data-owner="e1" data-graph-bounds="600.52,139,729.48,159">
@@ -147,12 +153,16 @@
   <rect x="654.0" y="675.0" width="62.0" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
   <text x="685.0" y="689.0" text-anchor="middle" class="arrow-label">终态报损</text>
   </g>
-  <g id="legend" data-graph-role="legend">
-    <rect id="legend-zone" data-graph-role="reserved" data-reserved-kind="legend" x="550" y="786" width="157.6" height="46" rx="10" fill="none" stroke="none"/>
-    <line data-graph-role="decoration" x1="560.0" y1="800.0" x2="590.0" y2="800.0" stroke="#10b981" stroke-width="2.4" marker-end="url(#arrowB)"/>
-    <text data-graph-role="decoration" x="600.0" y="804.0" class="legend">人工补写 / 维护</text>
+  <g id="e9-label" data-graph-role="label" data-owner="e9" data-graph-bounds="716.4,758,833.6,778">
+  <rect x="716.4" y="758.0" width="117.20000000000002" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
+  <text x="775.0" y="772.0" text-anchor="middle" class="arrow-label">补绑 · 复核 · 改绑</text>
   </g>
-  <g id="footer" data-graph-role="reserved" data-graph-bounds="48,812,461,828">
-  <text x="48.0" y="824.0" class="footnote">PUL-FMS · 05 人工后台维护入口 → 补哪张表 · fireworks-tech-graph Style 1</text>
+  <g id="legend" data-graph-role="legend">
+    <rect id="legend-zone" data-graph-role="reserved" data-reserved-kind="legend" x="550" y="881" width="157.6" height="46" rx="10" fill="none" stroke="none"/>
+    <line data-graph-role="decoration" x1="560.0" y1="895.0" x2="590.0" y2="895.0" stroke="#10b981" stroke-width="2.4" marker-end="url(#arrowB)"/>
+    <text data-graph-role="decoration" x="600.0" y="899.0" class="legend">人工补写 / 维护</text>
+  </g>
+  <g id="footer" data-graph-role="reserved" data-graph-bounds="48,914,461,930">
+  <text x="48.0" y="926.0" class="footnote">PUL-FMS · 05 人工后台维护入口 → 补哪张表 · fireworks-tech-graph Style 1</text>
   </g>
 </svg>

@@ -1,6 +1,6 @@
 {
   "canvas": {
-    "height": 850.0,
+    "height": 950.0,
     "width": 1360.0
   },
   "composition": {
@@ -21,7 +21,7 @@
       "minimum_container_gutter": 30.0,
       "minimum_node_gap": 42.0,
       "shortest_segment": 16.0,
-      "total_bends": 14
+      "total_bends": 15
     },
     "ok": true,
     "profile": "showcase",
@@ -407,6 +407,44 @@
         688.0
       ],
       "waypoints": []
+    },
+    {
+      "bends": 1,
+      "bridges": [],
+      "crossings": [],
+      "id": "e9",
+      "length": 665.0,
+      "route": [
+        [
+          470.0,
+          789.0
+        ],
+        [
+          1080.0,
+          789.0
+        ],
+        [
+          1080.0,
+          734.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "E7",
+      "source_port": [
+        470.0,
+        789.0
+      ],
+      "target": "T3",
+      "target_port": [
+        1080.0,
+        734.0
+      ],
+      "waypoints": [
+        [
+          1080.0,
+          789.0
+        ]
+      ]
     }
   ],
   "input_schema": "v1",
@@ -456,18 +494,18 @@
     "legend": {
       "actual": [
         560.0,
-        800.0
+        895.0
       ],
       "bounds": [
         550.0,
-        786.0,
+        881.0,
         707.6,
-        832.0
+        927.0
       ],
       "moved": false,
       "requested": [
         560.0,
-        800.0
+        895.0
       ]
     }
   },
@@ -485,8 +523,8 @@
   },
   "summary": {
     "bridged_crossings": 3,
-    "edges": 8,
-    "nodes": 9
+    "edges": 9,
+    "nodes": 10
   },
   "text_metrics": "heuristic-v1",
   "typography": {
