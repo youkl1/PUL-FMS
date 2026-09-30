@@ -1,5 +1,5 @@
 /**
- * rx-data.js — 发药管理 Mock（store 命名空间 rx）
+ * rx-data.js — 出库管理 Mock（store 命名空间 rx）
  * 方案 b：HIS 拉取只锁药品级数量；调剂扫码才绑码；已完成码从药房在架扣除
  */
 (function () {
@@ -33,6 +33,8 @@
     if (!s.rxDocs) s.rxDocs = [];
     if (!s.trayDocs) s.trayDocs = [];
     if (!s.retDocs) s.retDocs = [];
+    if (!s.trayRetDocs) s.trayRetDocs = [];
+    if (!s.excDocs) s.excDocs = [];
     return s;
   }
   function load() {
@@ -106,8 +108,143 @@
   }
   function rxDone(d) { return (d.items || []).every(itemDone); }
 
+  // —— T3 手动补绑 + 赋码异常台账 ——
+  function ruleOf(rec) { return rec && rec.phLoc ? '货位FEFO' : 'FIFO'; }
+  function srcDateMap(wh) {
+    var m = {};
+    (wh.pickDocs || []).forEach(function (d) { m[d.billNo] = d.auditTime || d.date || ''; });
+    return m;
+  }
+  // 补绑推荐：有货位（药柜）按 货位序→FEFO→入库先后；无货位按入库先后 FIFO
+  function bindSuggest(wh, pharmacy, drugCode) {
+    var dates = srcDateMap(wh);
+    var list = window.PUL_WH.pharmacyStock(wh, pharmacy).filter(function (c) {
+      if (c.split === '是') return false;
+      var p = parse(c.code);
+      return p.dict && p.dict.drugCode === drugCode;
+    });
+    var withLoc = [], noLoc = [];
+    list.forEach(function (c) { (c.phLoc ? withLoc : noLoc).push(c); });
+    withLoc.sort(function (a, b) {
+      var t = String(a.phLoc).localeCompare(String(b.phLoc));
+      if (t) return t;
+      t = String(a.expDate || '').localeCompare(String(b.expDate || ''));
+      if (t) return t;
+      return String(dates[a._src] || '').localeCompare(String(dates[b._src] || ''));
+    });
+    noLoc.sort(function (a, b) {
+      var t = String(dates[a._src] || '').localeCompare(String(dates[b._src] || ''));
+      if (t) return t;
+      return String(a.expDate || '').localeCompare(String(b.expDate || ''));
+    });
+    return withLoc.concat(noLoc);
+  }
+  function makeExc(state, f) {
+    var e = {
+      excNo: nextNo('EXC', state.excDocs, 'excNo'),
+      type: f.type, refKind: f.refKind, refNo: f.refNo, pharmacy: f.pharmacy,
+      drugCode: f.drugCode, code: f.code || '', rule: f.rule || '',
+      operator: f.operator || '', time: now(),
+      status: f.status || '待复核', confirmBy: '', confirmTime: '', oldCode: ''
+    };
+    state.excDocs.unshift(e);
+    return e;
+  }
+  function excOf(state, excNo) {
+    for (var i = 0; i < state.excDocs.length; i++) if (state.excDocs[i].excNo === excNo) return state.excDocs[i];
+    return null;
+  }
+  function excPendingFor(state, refNo, drugCode) {
+    for (var i = 0; i < state.excDocs.length; i++) {
+      var e = state.excDocs[i];
+      if (e.refNo === refNo && e.drugCode === drugCode && e.status === '待补绑') return e;
+    }
+    return null;
+  }
+  function docOf(state, refKind, refNo) {
+    var docs = refKind === 'tray' ? state.trayDocs : state.rxDocs;
+    for (var i = 0; i < docs.length; i++) if ((docs[i].rxNo || docs[i].trayNo) === refNo) return docs[i];
+    return null;
+  }
+  // 手动补绑：码必须在本药房在架；绑定打 bindType/verified 标记；写或更新台账
+  function bindManual(wh, state, pharmacy, refKind, refNo, drugCode, codeStr, opts) {
+    opts = opts || {};
+    var doc = docOf(state, refKind, refNo);
+    if (!doc) return { ok: false, msg: '单据不存在' };
+    var it = null;
+    (doc.items || []).forEach(function (x) { if (x.drugCode === drugCode) it = x; });
+    if (!it) return { ok: false, msg: '单据不含此药' };
+    if ((it.codes || []).some(function (c) { return c.code === codeStr; })) return { ok: false, msg: '该码已绑定' };
+    var onh = null;
+    window.PUL_WH.pharmacyStock(wh, pharmacy).forEach(function (c) { if (c.code === codeStr) onh = c; });
+    if (!onh) return { ok: false, msg: '不在本药房在架（或已被占用）' };
+    it.codes.push(Object.assign({}, onh, { bindType: 'manual', verified: '待复核' }));
+    var exc;
+    if (opts.excNo) {
+      exc = excOf(state, opts.excNo);
+      if (exc) {
+        exc.code = codeStr; exc.rule = ruleOf(onh); exc.operator = opts.operator || '';
+        exc.time = now(); exc.status = '待复核';
+      }
+    }
+    if (!exc) {
+      exc = makeExc(state, { type: opts.type || '扫码失败', refKind: refKind, refNo: refNo,
+        pharmacy: pharmacy, drugCode: drugCode, code: codeStr, rule: ruleOf(onh),
+        operator: opts.operator || '', status: '待复核' });
+    }
+    return { ok: true, msg: '已补绑，待日结复核', excNo: exc.excNo };
+  }
+  // 日结复核确认：台账转已确认 + 码核验标记转已复核
+  function confirmExc(state, excNo, operator) {
+    var e = excOf(state, excNo);
+    if (!e || e.status !== '待复核') return { ok: false, msg: '记录不存在或状态不可确认' };
+    e.status = '已确认'; e.confirmBy = operator || ''; e.confirmTime = now();
+    var doc = docOf(state, e.refKind, e.refNo);
+    if (doc) (doc.items || []).forEach(function (it) {
+      (it.codes || []).forEach(function (c) { if (c.code === e.code) c.verified = '已复核'; });
+    });
+    return { ok: true, msg: '已确认' };
+  }
+  // 关闭：药已退等无需补绑情形，码池不动
+  function closeExc(state, excNo, operator) {
+    var e = excOf(state, excNo);
+    if (!e || e.status === '已确认' || e.status === '已关闭') return { ok: false, msg: '当前状态不可关闭' };
+    e.status = '已关闭'; e.confirmBy = operator || ''; e.confirmTime = now();
+    return { ok: true, msg: '已关闭' };
+  }
+  // 改绑：摘除旧码即回架（占用由 it.codes 派生），绑新码；改绑=人工校正，新码直接已复核
+  function rebindExc(wh, state, pharmacy, excNo, newCode, operator) {
+    var e = excOf(state, excNo);
+    if (!e || (e.status !== '待复核' && e.status !== '已确认')) return { ok: false, msg: '当前状态不可改绑' };
+    var doc = docOf(state, e.refKind, e.refNo);
+    if (!doc) return { ok: false, msg: '单据不存在' };
+    var it = null;
+    (doc.items || []).forEach(function (x) { if (x.drugCode === e.drugCode) it = x; });
+    if (!it) return { ok: false, msg: '单据不含此药' };
+    var idx = -1;
+    (it.codes || []).forEach(function (c, i) { if (c.code === e.code) idx = i; });
+    if (idx < 0) return { ok: false, msg: '原码已不在单据上（可能已退药）' };
+    var onh = null;
+    window.PUL_WH.pharmacyStock(wh, pharmacy).forEach(function (c) { if (c.code === newCode) onh = c; });
+    if (!onh) return { ok: false, msg: '新码不在本药房在架' };
+    it.codes.splice(idx, 1);
+    it.codes.push(Object.assign({}, onh, { bindType: 'manual', verified: '已复核' }));
+    e.oldCode = e.code; e.code = newCode; e.rule = ruleOf(onh);
+    e.status = '已改绑'; e.confirmBy = operator || ''; e.confirmTime = now();
+    return { ok: true, msg: '已改绑：原码回架，新码已复核' };
+  }
+  // 超 24h 未处理（待补绑/待复核）
+  function overdue(e) {
+    if (e.status !== '待补绑' && e.status !== '待复核') return false;
+    var t = new Date(String(e.time).replace(' ', 'T')).getTime();
+    return !!t && (Date.now() - t) > 24 * 3600 * 1000;
+  }
+
   window.PUL_RX = {
     load: load, save: save, now: now, nextNo: nextNo, drugOf: drugOf, parse: parse,
-    availableQty: availableQty, suggestCodes: suggestCodes, itemDone: itemDone, rxDone: rxDone
+    availableQty: availableQty, suggestCodes: suggestCodes, itemDone: itemDone, rxDone: rxDone,
+    bindSuggest: bindSuggest, makeExc: makeExc, excOf: excOf, excPendingFor: excPendingFor,
+    docOf: docOf, bindManual: bindManual, confirmExc: confirmExc, closeExc: closeExc,
+    rebindExc: rebindExc, overdue: overdue
   };
 })();
