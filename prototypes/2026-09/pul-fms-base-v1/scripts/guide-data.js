@@ -2,75 +2,78 @@
  * guide-data.js — 模块导览叙述数据：定位语 / 贯穿案例 / 流程图 / 菜单解说 / 正逆兜底分类
  * 单一职责：只放叙述数据；菜单清单、href、交付状态从 AppShell.NAV 派生，不在此重复
  * cat：fwd=正向 rev=逆向 fix=兜底 qry=查询；note：缺口标注（橙色⚠）
+ * 2026-09-30 Round Z：模块与 NAV 组 1:1 对齐客户原文（org 并入 base；采购自 wh 拆出为 purchase；
+ * 发药管理→出库管理并吸收损耗 2 项；新增拆分待补项 pickOut/shelfOff/invSumQ/trayAssignQ/trayItemQ/traySumQ）
  */
 window.GUIDE_DATA = {
   order: [
-    { key: 'org',    group: '组织管理', icon: 'building'  },
-    { key: 'base',   group: '基础管理', icon: 'book'      },
-    { key: 'wh',     group: '库房管理', icon: 'warehouse' },
-    { key: 'ph',     group: '药房管理', icon: 'box'       },
-    { key: 'disp',   group: '发药管理', icon: 'rx'        },
-    { key: 'his',    group: 'HIS单据',  icon: 'search'    },
-    { key: 'inv',    group: '盘点管理', icon: 'clipboard' },
-    { key: 'ledger', group: '台账管理', icon: 'chart'     },
-    { key: 'mi',     group: '医保管理', icon: 'shield'    },
-    { key: 'sys',    group: '系统管理', icon: 'key'       }
+    { key: 'base',     group: '基础管理', icon: 'book'      },
+    { key: 'purchase', group: '采购管理', icon: 'truck'     },
+    { key: 'wh',       group: '库房管理', icon: 'warehouse' },
+    { key: 'ph',       group: '药房管理', icon: 'box'       },
+    { key: 'disp',     group: '出库管理', icon: 'rx'        },
+    { key: 'his',      group: 'HIS单据',  icon: 'search'    },
+    { key: 'inv',      group: '盘点管理', icon: 'clipboard' },
+    { key: 'ledger',   group: '台账管理', icon: 'chart'     },
+    { key: 'mi',       group: '医保管理', icon: 'shield'    },
+    { key: 'sys',      group: '系统管理', icon: 'key'       }
   ],
   modules: {
-    org: {
-      tagline: '三级架子：总院 → 院区 → 库房/药房',
-      roles: '系统管理员 · 院区管理员',
-      case: '滨海院区新开急诊药房：院区管理加节点 → 货位上架 → 当天即可开单',
-      diagrams: [
-        { f: '10-permission.svg', t: '权限模型 + 登录上下文', note: '组织树决定你能看哪些数据' }
-      ],
-      menus: {
-        orgs:  { desc: '院区与节点维护', cat: 'fwd' },
-        wh:    { desc: '库房与货架库位', cat: 'fwd' },
-        phloc: { desc: '药房与货位',     cat: 'fwd' }
-      }
-    },
     base: {
-      tagline: '药品、码规则、设备——业务的弹药库',
-      roles: '系统管理员 · 库管员',
-      case: '新增阿莫西林：药品字典建「1盒=7片」→ 标识码字典定码规则 → 到货扫码才有校验依据',
+      tagline: '组织架子 + 药品、码规则、设备——业务的弹药库',
+      roles: '系统管理员 · 院区管理员 · 库管员',
+      case: '滨海院区新开急诊药房：院区管理加节点 → 药品字典建「1盒=7片」→ 标识码定码规则 → 货位上架，当天即可开单',
       diagrams: [
+        { f: '10-permission.svg', t: '权限模型 + 登录上下文', note: '组织树决定你能看哪些数据' },
         { f: '07-conversion.svg', t: '码⇄药⇄单位 全链路转换', note: '基本单位在药品字典，不在码上' },
         { f: '13-code-flow.svg',  t: '箱码全链路 · 码怎么转', note: '1箱=60盒、1盒=7片的码形态变化' }
       ],
       menus: {
-        dict:    { desc: '字典类型与项',     cat: 'fwd' },
+        orgs:    { desc: '院区与节点维护',   cat: 'fwd' },
+        wh:      { desc: '库房与货架库位',   cat: 'fwd' },
+        phloc:   { desc: '药房与货位',       cat: 'fwd' },
         drug:    { desc: '药品档案+审核',    cat: 'fwd' },
-        idcode:  { desc: '追溯码规则维护',   cat: 'fwd' },
         cabinet: { desc: '取药柜设备维护',   cat: 'fix' },
-        lamp:    { desc: '基站灯组维护',     cat: 'fix' }
+        lamp:    { desc: '基站灯组维护',     cat: 'fix' },
+        idcode:  { desc: '追溯码规则维护',   cat: 'fwd' },
+        slotQ:   { desc: '取药槽信息查询',   cat: 'qry' },
+        dict:    { desc: '字典类型与项',     cat: 'fwd' }
+      }
+    },
+    purchase: {
+      tagline: '药从供应商到库房：订、收、退',
+      roles: '库管员',
+      case: '阿莫西林60盒到货 → 扫码/人工验收入库；不合格品扫码退供应商，异常码人工补录不卡单',
+      diagrams: [
+        { f: '02-purchase-in.svg', t: '采购入库（异常码人工兜底）', note: '扫码失败不卡单' }
+      ],
+      menus: {
+        arrive:  { desc: '供应商到货确认',   cat: 'fwd' },
+        pin:     { desc: '扫码/人工双通道验收', cat: 'fwd' },
+        badcode: { desc: '扫码失败人工补录', cat: 'fix' },
+        pquery:  { desc: '入库明细导出',     cat: 'qry' },
+        pout:    { desc: '不合格退供应商',   cat: 'rev' },
+        pOutQ:   { desc: '退货明细追踪',     cat: 'qry' },
+        pdone:   { desc: '已审单·可反审核',  cat: 'qry' }
       }
     },
     wh: {
-      tagline: '药从供应商到库房货架：收、存、发、退',
+      tagline: '库房货架上的收、存、发、退',
       roles: '库管员',
-      case: '阿莫西林60盒到货 → 扫码/人工验收入库 → 门诊领用2盒 → 库存58盒；效期≤180天预警、过期自动冻结 → 损耗出库',
+      case: '门诊领用2盒 → 按申请单拣货出库 → 库存58盒；效期≤180天预警、过期自动冻结',
       diagrams: [
-        { f: '02-purchase-in.svg',      t: '采购入库（异常码人工兜底）', note: '扫码失败不卡单' },
-        { f: '03-pick-loop.svg',        t: '领用出库 → 药房入库闭环',   note: '库房发、药房收，库存同时动' },
-        { f: '08-stock-derivation.svg', t: '库存推导（集合加减法）',     note: '库存=入库集合−出库集合' }
+        { f: '03-pick-loop.svg',        t: '领用出库 → 药房入库闭环', note: '库房发、药房收，库存同时动' },
+        { f: '08-stock-derivation.svg', t: '库存推导（集合加减法）',   note: '库存=入库集合−出库集合' }
       ],
       menus: {
-        arrive:  { desc: '供应商到货确认',       cat: 'fwd' },
-        pin:     { desc: '扫码/人工双通道验收',  cat: 'fwd' },
-        pout:    { desc: '不合格退供应商',       cat: 'rev' },
-        pdone:   { desc: '已审单·可反审核',      cat: 'qry' },
-        badcode: { desc: '扫码失败人工补录',     cat: 'fix' },
-        pquery:  { desc: '采购明细导出',         cat: 'qry' },
-        pOutQ:   { desc: '退货明细追踪',         cat: 'qry' },
-        whstock: { desc: '效期/冻结一目了然',    cat: 'qry' },
-        pick:    { desc: '按申请单拣货出库',     cat: 'fwd', note: '仅扫码 · 人工通道规划中' },
-        retIn:   { desc: '药房退回接收',         cat: 'rev' },
-        othIn:   { desc: '无单入库（捐赠等）',   cat: 'fix' },
-        othOut:  { desc: '无单出库（救急）',     cat: 'fix' },
-        lossOut: { desc: '过期/破损出口',        cat: 'fix' },
-        lossQ:   { desc: '损耗明细追踪',         cat: 'qry' },
-        whOutQ:  { desc: '领用/其他出库明细',    cat: 'qry' }
+        whstock:   { desc: '效期/冻结一目了然',  cat: 'qry' },
+        quickScan: { desc: '高拍仪连续扫码直出', cat: 'fwd' },
+        pick:      { desc: '按申请单拣货出库',   cat: 'fwd', note: '仅扫码 · 人工通道规划中' },
+        pickOut:   { desc: '领用出库单台账',     cat: 'qry' },
+        whOutQ:    { desc: '领用/其他出库明细',  cat: 'qry' },
+        retIn:     { desc: '药房退回接收+库房直收', cat: 'rev' },
+        othIn:     { desc: '无单入库（捐赠等）', cat: 'fix' },
+        othOut:    { desc: '无单出库（救急）',   cat: 'fix' }
       }
     },
     ph: {
@@ -82,15 +85,16 @@ window.GUIDE_DATA = {
         { f: '08-stock-derivation.svg', t: '库存推导（集合加减法）',   note: '药房库存同样按集合算' }
       ],
       menus: {
-        phstock: { desc: '药房在架库存',   cat: 'qry' },
-        req:     { desc: '向库房申领',     cat: 'fwd' },
-        reqIn:   { desc: '领用到货入库',   cat: 'fwd' },
-        phInQ:   { desc: '入库明细对账',   cat: 'qry' },
-        retOut:  { desc: '余药退回库房',   cat: 'rev' },
-        shelfQ:  { desc: '上架异常排查',   cat: 'fix' },
-        shelf:   { desc: '扫码上架/下架',  cat: 'fwd' },
-        light:   { desc: '补药指示灯',     cat: 'fwd' },
-        phloss:  { desc: '破损损耗登记',   cat: 'fix' }
+        phstock:  { desc: '药房在架库存',   cat: 'qry' },
+        req:      { desc: '向库房申领',     cat: 'fwd' },
+        reqIn:    { desc: '领用到货入库',   cat: 'fwd' },
+        phInQ:    { desc: '入库明细对账',   cat: 'qry' },
+        retOut:   { desc: '余药退回库房',   cat: 'rev' },
+        shelfQ:   { desc: '上架异常排查',   cat: 'fix' },
+        shelf:    { desc: '扫码上架',       cat: 'fwd' },
+        light:    { desc: '补药指示灯亮',   cat: 'fwd' },
+        shelfOff: { desc: '扫码下架',       cat: 'rev' },
+        phloss:   { desc: '破损损耗登记',   cat: 'fix' }
       }
     },
     disp: {
@@ -101,21 +105,27 @@ window.GUIDE_DATA = {
         { f: '04-dispensing.svg', t: '药房发药全流程', note: '开方与实物时序分离 · 退改需解锁' }
       ],
       menus: {
-        disp:        { desc: '扫码发药·拆零',     cat: 'fwd', note: '仅扫码 · 人工通道规划中' },
+        disp:        { desc: '扫码发药·拆零',     cat: 'fwd', note: '扫码为主 · 手动补绑兜底' },
         assign:      { desc: '处方逐条赋码',      cat: 'fwd' },
         assignBatch: { desc: '扫码枪故障兜底',    cat: 'fix' },
         assignQ:     { desc: '已赋码处方追踪',    cat: 'qry' },
+        rxExc:       { desc: '补绑日结·改绑纠错', cat: 'fix' },
         rxItemQ:     { desc: '发药明细对账',      cat: 'qry' },
         rxAggQ:      { desc: '发药汇总统计',      cat: 'qry' },
         rxret:       { desc: '退药扫码回收',      cat: 'rev' },
         rxRetQ:      { desc: '退药记录追踪',      cat: 'qry' },
         tray:        { desc: '摆药单拣药',        cat: 'fwd' },
+        trayAssignQ: { desc: '摆药赋码追踪',      cat: 'qry' },
+        trayItemQ:   { desc: '摆药明细对账',      cat: 'qry' },
+        traySumQ:    { desc: '摆药汇总统计',      cat: 'qry' },
         trayRet:     { desc: '摆药退回药房',      cat: 'rev' },
         trayRetQ:    { desc: '摆药退药记录',      cat: 'qry' },
+        lossOut:     { desc: '过期/破损出口',     cat: 'fix' },
+        lossQ:       { desc: '损耗明细追踪',      cat: 'qry' },
         wardSign:    { desc: '病区扫码签收',      cat: 'fwd', note: '拒收/退回规划中' }
       },
       xlinks: [
-        { key: 'badcode', note: '发药扫码异常也在这里补录（库房管理）' }
+        { key: 'badcode', note: '发药扫码异常也在这里补录（采购管理）' }
       ]
     },
     his: {
@@ -143,10 +153,11 @@ window.GUIDE_DATA = {
         invGain:   { desc: '盘盈入库（+）',      cat: 'fwd' },
         invLoss:   { desc: '盘亏出库（−）',      cat: 'rev' },
         invQ:      { desc: '盈亏明细导出',       cat: 'qry' },
+        invSumQ:   { desc: '盈亏汇总统计',       cat: 'qry' },
         invNocode: { desc: '无码/码损人工登记',  cat: 'fix' }
       },
       xlinks: [
-        { key: 'badcode', note: '盘点发现的坏码在这里补录（库房管理）' }
+        { key: 'badcode', note: '盘点发现的坏码在这里补录（采购管理）' }
       ]
     },
     ledger: {
@@ -182,9 +193,14 @@ window.GUIDE_DATA = {
         { f: '10-permission.svg', t: '权限模型 + 登录上下文', note: '功能权限与数据范围随角色生效' }
       ],
       menus: {
-        users: { desc: '账号与角色分配',     cat: 'fwd' },
-        roles: { desc: '功能权限+数据范围',  cat: 'fwd' },
-        perm:  { desc: '菜单启停与资源',     cat: 'fwd' }
+        perm:        { desc: '菜单启停与资源',   cat: 'fwd' },
+        users:       { desc: '账号与角色分配',   cat: 'fwd' },
+        roles:       { desc: '功能权限+数据范围', cat: 'fwd' },
+        cabSet:      { desc: '取药柜参数设置',   cat: 'fix' },
+        pickLamp:    { desc: '取药指示灯配置',   cat: 'fix' },
+        fillLampSet: { desc: '补药灯组设置',     cat: 'fix' },
+        slotLampMap: { desc: '取药槽⇄灯组对照',  cat: 'fix' },
+        slotDrugMap: { desc: '取药槽⇄药品对照',  cat: 'fix' }
       }
     }
   }

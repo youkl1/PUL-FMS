@@ -47,109 +47,124 @@
   }
 
   // 导航定义：href 为空 = 待实现；badge 可覆盖默认徽标文案（占位/预留）
-  // 结构口径：2026-09 功能清单（10 模块）；2026-09-21 客户新版字典补齐：库房库位/药房货位/取药柜/基站灯组已落地
-  // 2026-09-22 收拢：新增「组织管理」组承载 L2 院区 + L3 库房/药房（对齐 ER 图组织架构板块）；
-  // 取药柜/基站灯组为设备字典，仍留基础管理；院区管理自系统管理迁入。
+  // origin: 'n' = 自主新增（非客户原菜单，导航名称后带「新」chip）；缺省 = 客户原有
+  // 2026-09-30 Round Z：组名/项名/顺序全面对齐客户原菜单（组织管理组撤销并入基础管理、
+  // 采购管理升一级组、损耗 2 项移入出库管理、发药管理更名出库管理；key 全部不变，
+  // 合并页拆出客户原名待补项：pickOut/shelfOff/invSumQ/trayAssignQ/trayItemQ/traySumQ）
   var NAV = [
     { type: 'item', key: 'index', name: '工作台', icon: 'dashboard', href: 'index.html' },
-    { type: 'group', name: '组织管理', items: [
-      { key: 'orgs', name: '院区管理', icon: 'building', href: 'orgs.html' },
-      { key: 'wh', name: '库房库位', icon: 'warehouse', href: 'warehouse.html' },
-      { key: 'phloc', name: '药房货位', icon: 'box', href: 'pharmacy.html' }
+    { type: 'group', name: '系统管理', items: [
+      { key: 'perm', name: '权限管理', icon: 'key', href: 'perm.html' },
+      { key: 'users', name: '用户管理', icon: 'users', href: 'users.html' },
+      { key: 'roles', name: '角色管理', icon: 'key', href: 'roles.html' },
+      { key: 'cabSet', name: '取药柜设置', icon: 'box', href: null, badge: '待补' },
+      { key: 'pickLamp', name: '取药指示灯', icon: 'bulb', href: null, badge: '待补' },
+      { key: 'fillLampSet', name: '补药灯组设置', icon: 'bulb', href: null, badge: '待补' },
+      { key: 'slotLampMap', name: '取药槽灯组对照', icon: 'swap', href: null, badge: '待补' },
+      { key: 'slotDrugMap', name: '取药槽药品对照', icon: 'pills', href: null, badge: '待补' }
     ]},
     { type: 'group', name: '基础管理', items: [
-      { key: 'dict', name: '基础字典', icon: 'book', href: 'dict-types.html' },
-      { key: 'drug', name: '药品字典', icon: 'pills', href: 'drug.html' },
-      { key: 'idcode', name: '标识码字典', icon: 'scan', href: 'idcode.html' },
-      { key: 'cabinet', name: '取药柜', icon: 'box', href: 'cabinet.html' },
-      { key: 'lamp', name: '基站灯组', icon: 'bulb', href: 'light.html' }
+      { key: 'orgs', name: '院区字典维护', icon: 'building', href: 'orgs.html' },
+      { key: 'wh', name: '库房库位维护', icon: 'warehouse', href: 'warehouse.html' },
+      { key: 'phloc', name: '药房货位维护', icon: 'box', href: 'pharmacy.html' },
+      { key: 'drug', name: '药品字典维护', icon: 'pills', href: 'drug.html' },
+      { key: 'cabinet', name: '取药柜维护', icon: 'box', href: 'cabinet.html' },
+      { key: 'lamp', name: '基站灯组维护', icon: 'bulb', href: 'light.html' },
+      { key: 'idcode', name: '药品标识码查询', icon: 'scan', href: 'idcode.html' },
+      { key: 'slotQ', name: '取药槽信息查询', icon: 'search', href: null, badge: '待补' },
+      { key: 'dict', name: '基础字典', icon: 'book', href: 'dict-types.html', origin: 'n' }
     ]},
-    { type: 'group', name: '库房管理', subs: [
-      { name: '采购管理', items: [
-        { key: 'arrive', name: '采购到货', icon: 'truck', href: 'purchase-arrive.html' },
-        { key: 'pin', name: '采购入库', icon: 'box', href: 'purchase-in.html' },
-        { key: 'pout', name: '采购退货', icon: 'swap', href: 'purchase-out.html' },
-        { key: 'pdone', name: '已完成单', icon: 'clipboard', href: 'purchase-done.html' },
-        { key: 'badcode', name: '异常标识码', icon: 'scan', href: 'bad-codes.html' },
-        { key: 'pquery', name: '采购明细查询', icon: 'search', href: 'purchase-detail.html' },
-        { key: 'pOutQ', name: '退货明细查询', icon: 'search', href: null, badge: '待补' }
-      ]},
-      { name: '库房业务', items: [
-        { key: 'whstock', name: '库房库存', icon: 'chart', href: 'wh-stock.html' },
-        { key: 'pick', name: '领用备货出库', icon: 'box', href: 'wh-pick.html' },
-        { key: 'retIn', name: '退回入库', icon: 'swap', href: 'wh-return-in.html' },
-        { key: 'othIn', name: '其他入库', icon: 'box', href: 'wh-other-in.html' },
-        { key: 'othOut', name: '其他出库', icon: 'box', href: 'wh-other-out.html' },
-        { key: 'lossOut', name: '损耗出库单', icon: 'clipboard', href: 'wh-loss-out.html' },
-        { key: 'lossQ', name: '损耗明细查询', icon: 'search', href: 'wh-loss-query.html' },
-        { key: 'whOutQ', name: '出库明细查询', icon: 'search', href: null, badge: '待补' }
-      ]}
+    { type: 'group', name: '采购管理', items: [
+      { key: 'arrive', name: '采购到货单', icon: 'truck', href: 'purchase-arrive.html' },
+      { key: 'pin', name: '采购入库单', icon: 'box', href: 'purchase-in.html' },
+      { key: 'badcode', name: '异常标识码', icon: 'scan', href: 'bad-codes.html' },
+      { key: 'pquery', name: '入库明细查询', icon: 'search', href: 'purchase-detail.html' },
+      { key: 'pout', name: '采购退货单', icon: 'swap', href: 'purchase-out.html' },
+      { key: 'pOutQ', name: '退货明细查询', icon: 'search', href: 'purchase-out-query.html' },
+      { key: 'pdone', name: '已完成单', icon: 'clipboard', href: 'purchase-done.html', origin: 'n' }
+    ]},
+    { type: 'group', name: '库房管理', items: [
+      { key: 'whstock', name: '库房库存查询', icon: 'chart', href: 'wh-stock.html' },
+      { key: 'quickScan', name: '领用快捷扫码', icon: 'scan', href: 'quick-scan.html' },
+      { key: 'pick', name: '领用备货单', icon: 'box', href: 'wh-pick.html' },
+      { key: 'pickOut', name: '领用出库单', icon: 'box', href: null, badge: '待补' },
+      { key: 'whOutQ', name: '出库明细查询', icon: 'search', href: 'wh-out-query.html' },
+      { key: 'retIn', name: '领用退回', icon: 'swap', href: 'wh-return-in.html' },
+      { key: 'othIn', name: '其他入库单', icon: 'box', href: 'wh-other-in.html' },
+      { key: 'othOut', name: '其他出库单', icon: 'box', href: 'wh-other-out.html' }
     ]},
     { type: 'group', name: '药房管理', items: [
-      { key: 'phstock', name: '药房库存', icon: 'chart', href: 'ph-stock.html' },
-      { key: 'req', name: '领用申请', icon: 'box', href: 'ph-req.html' },
-      { key: 'reqIn', name: '领用入库', icon: 'box', href: 'ph-req-in.html' },
-      { key: 'phInQ', name: '入库明细查询', icon: 'search', href: null, badge: '待补' },
-      { key: 'retOut', name: '退回出库', icon: 'swap', href: 'ph-ret-out.html' },
-      { key: 'shelfQ', name: '待上架查询', icon: 'search', href: 'ph-shelf-q.html' },
-      { key: 'shelf', name: '扫码上下架', icon: 'scan', href: 'ph-shelf.html' },
-      { key: 'light', name: '补药指示灯', icon: 'bulb', href: null, badge: '占位' },
-      { key: 'phloss', name: '药房损耗', icon: 'clipboard', href: 'ph-loss.html' }
+      { key: 'phstock', name: '药房库存查询', icon: 'chart', href: 'ph-stock.html' },
+      { key: 'req', name: '领用申请单', icon: 'box', href: 'ph-req.html' },
+      { key: 'reqIn', name: '领用入库单', icon: 'box', href: 'ph-req-in.html' },
+      { key: 'phInQ', name: '入库明细查询', icon: 'search', href: 'ph-in-query.html' },
+      { key: 'retOut', name: '退回出库单', icon: 'swap', href: 'ph-ret-out.html' },
+      { key: 'shelfQ', name: '待上架药品查询', icon: 'search', href: 'ph-shelf-q.html' },
+      { key: 'shelf', name: '药品扫码上架', icon: 'scan', href: 'ph-shelf.html' },
+      { key: 'light', name: '补药指示灯亮', icon: 'bulb', href: null, badge: '占位' },
+      { key: 'shelfOff', name: '药品扫码下架', icon: 'scan', href: null, badge: '待补' },
+      { key: 'phloss', name: '药房损耗', icon: 'clipboard', href: 'ph-loss.html', origin: 'n' }
     ]},
-    { type: 'group', name: '发药管理', items: [
+    { type: 'group', name: '出库管理', items: [
       { key: 'disp', name: '处方发药扫码', icon: 'scan', href: 'disp.html' },
-      { key: 'assign', name: '处方赋码', icon: 'rx', href: null },
-      { key: 'assignBatch', name: '批量赋码', icon: 'rx', href: null },
-      { key: 'assignQ', name: '赋码查询', icon: 'search', href: null, badge: '待补' },
-      { key: 'rxItemQ', name: '药品明细查询', icon: 'search', href: null, badge: '待补' },
-      { key: 'rxAggQ', name: '汇总查询', icon: 'chart', href: null, badge: '待补' },
-      { key: 'rxret', name: '处方退药', icon: 'swap', href: 'rx-ret.html' },
-      { key: 'rxRetQ', name: '处方退药查询', icon: 'search', href: null, badge: '待补' },
-      { key: 'tray', name: '摆药单业务', icon: 'clipboard', href: 'tray.html' },
-      { key: 'trayRet', name: '摆药退药', icon: 'swap', href: null, badge: '待补' },
-      { key: 'trayRetQ', name: '摆药退药查询', icon: 'search', href: null, badge: '待补' },
-      { key: 'wardSign', name: '病区签收', icon: 'scan', href: 'ward-sign.html' }
+      { key: 'assign', name: '处方取药赋码', icon: 'rx', href: null, badge: '占位' },
+      { key: 'assignBatch', name: '处方单批量赋码', icon: 'rx', href: null, badge: '占位' },
+      { key: 'assignQ', name: '处方单赋码查询', icon: 'search', href: null, badge: '待补' },
+      { key: 'rxExc', name: '赋码异常台账', icon: 'clipboard', href: 'rx-exc.html', origin: 'n' },
+      { key: 'rxItemQ', name: '处方药品明细查询', icon: 'search', href: 'rx-item-q.html' },
+      { key: 'rxAggQ', name: '处方药品汇总查询', icon: 'chart', href: 'rx-agg-q.html' },
+      { key: 'rxret', name: '处方单退药', icon: 'swap', href: 'rx-ret.html' },
+      { key: 'rxRetQ', name: '处方单退药查询', icon: 'search', href: 'rx-ret-q.html' },
+      { key: 'tray', name: '摆药单批量赋码', icon: 'clipboard', href: 'tray.html' },
+      { key: 'trayAssignQ', name: '摆药单赋码查询', icon: 'search', href: null, badge: '待补' },
+      { key: 'trayItemQ', name: '摆药单明细查询', icon: 'search', href: null, badge: '待补' },
+      { key: 'traySumQ', name: '摆药单汇总查询', icon: 'chart', href: null, badge: '待补' },
+      { key: 'trayRet', name: '摆药单退药', icon: 'swap', href: 'tray-ret.html' },
+      { key: 'trayRetQ', name: '摆药单退药查询', icon: 'search', href: 'tray-ret-q.html' },
+      { key: 'lossOut', name: '损耗出库单', icon: 'clipboard', href: 'wh-loss-out.html' },
+      { key: 'lossQ', name: '损耗明细查询', icon: 'search', href: 'wh-loss-query.html' },
+      { key: 'wardSign', name: '病区签收', icon: 'scan', href: 'ward-sign.html', origin: 'n' }
     ]},
     { type: 'group', name: 'HIS单据', items: [
-      { key: 'rxQ', name: '处方单查询', icon: 'search', href: null, badge: '待补' },
-      { key: 'rxSum', name: '处方药品汇总', icon: 'chart', href: null, badge: '待补' },
-      { key: 'trayQ', name: '摆药单查询', icon: 'search', href: 'tray-q.html' },
-      { key: 'traySum', name: '摆药单汇总', icon: 'chart', href: null, badge: '待补' }
+      { key: 'rxQ', name: 'HIS处方单查询', icon: 'search', href: null, badge: '待补' },
+      { key: 'rxSum', name: 'HIS处方单药品汇总', icon: 'chart', href: null, badge: '待补' },
+      { key: 'trayQ', name: 'HIS摆药单查询', icon: 'search', href: 'tray-q.html' },
+      { key: 'traySum', name: 'HIS摆药单药品汇总', icon: 'chart', href: null, badge: '待补' }
     ]},
     { type: 'group', name: '盘点管理', items: [
-      { key: 'invInit', name: '期初盘点', icon: 'clipboard', href: 'inv-init.html' },
-      { key: 'inv', name: '盘点单', icon: 'clipboard', href: 'inv.html' },
-      { key: 'invGain', name: '盘盈入库', icon: 'box', href: 'inv-gain.html' },
-      { key: 'invLoss', name: '盘亏出库', icon: 'box', href: 'inv-loss.html' },
-      { key: 'invQ', name: '盈亏查询', icon: 'search', href: 'inv-q.html' },
+      { key: 'invInit', name: '期初存量（期初盘点）', icon: 'clipboard', href: 'inv-init.html' },
+      { key: 'inv', name: '药品盘点单', icon: 'clipboard', href: 'inv.html' },
+      { key: 'invGain', name: '盘盈入库单', icon: 'box', href: 'inv-gain.html' },
+      { key: 'invLoss', name: '盘亏出库单', icon: 'box', href: 'inv-loss.html' },
+      { key: 'invQ', name: '盈亏明细查询', icon: 'search', href: 'inv-q.html' },
+      { key: 'invSumQ', name: '盈亏汇总查询', icon: 'chart', href: null, badge: '待补' },
       { key: 'invNocode', name: '无码药品记录', icon: 'book', href: 'inv-nocode.html' }
     ]},
     { type: 'group', name: '台账管理', items: [
-      { key: 'ledger', name: '药品台账', icon: 'book', href: 'ledger.html' },
-      { key: 'ledgerM', name: '月记账', icon: 'book', href: null, badge: '待补' },
+      { key: 'ledger', name: '日记账查询', icon: 'book', href: 'ledger.html' },
+      { key: 'ledgerM', name: '月记账查询', icon: 'book', href: null, badge: '待补' },
       { key: 'ledgerQ', name: '季度账查询', icon: 'search', href: null, badge: '待补' },
-      { key: 'traceQ', name: '追溯码查询', icon: 'search', href: 'trace-q.html' },
-      { key: 'flowQ', name: '药品流向查询', icon: 'chart', href: 'flow-q.html' }
+      { key: 'traceQ', name: '追溯码查询', icon: 'search', href: 'trace-q.html', origin: 'n' },
+      { key: 'flowQ', name: '药品流向查询', icon: 'chart', href: 'flow-q.html', origin: 'n' }
     ]},
     { type: 'group', name: '医保管理', items: [
-      { key: 'miUpload', name: '追溯码上传', icon: 'shield', href: null, badge: '预留' },
+      { key: 'miUpload', name: '医保上传接口', icon: 'shield', href: null, badge: '预留' },
       { key: 'miUploadQ', name: '上传情况查询', icon: 'search', href: null, badge: '待补' }
-    ]},
-    { type: 'group', name: '系统管理', items: [
-      { key: 'users', name: '用户管理', icon: 'users', href: 'users.html' },
-      { key: 'roles', name: '角色管理', icon: 'key', href: 'roles.html' },
-      { key: 'perm', name: '菜单管理', icon: 'key', href: 'perm.html' }
     ]}
   ];
 
   function navItem(it, active) {
+    // origin='n' → 名称后挂「新」chip（需求来源维度；pending-badge 是实现状态维度，可并存）
+    var originChip = it.origin === 'n'
+      ? '<span class="origin-badge" title="自主新增，非客户原菜单">新</span>' : '';
     if (!it.href) {
       return '<div class="app-nav-item is-pending" data-pending="' + it.name + '" title="' + it.name + '">' +
-        icon(it.icon, 16) + '<span>' + it.name + '</span>' +
+        icon(it.icon, 16) + '<span>' + it.name + '</span>' + originChip +
         '<span class="pending-badge">' + (it.badge || '待实现') + '</span></div>';
     }
     var cls = it.key === active ? 'app-nav-item active' : 'app-nav-item';
-    return '<a class="' + cls + '" href="' + it.href + '" title="' + it.name + '">' + icon(it.icon, 16) + '<span>' + it.name + '</span></a>';
+    return '<a class="' + cls + '" href="' + it.href + '" title="' + it.name + '">' +
+      icon(it.icon, 16) + '<span>' + it.name + '</span>' + originChip + '</a>';
   }
 
   // 定位当前页在 NAV 中的位置（组 / 子组），供默认展开用
@@ -323,6 +338,7 @@
             '<span class="app-brand-icon">' + icon('pills', 17) + '</span>' +
             '<span class="app-brand-name">PUL-FMS</span></a>' +
           '<nav class="app-nav">' + renderNav(opts.active, navState.navGroups) + '</nav>' +
+          '<div class="app-nav-legend"><span class="origin-badge">新</span>= 自主新增，非客户原菜单</div>' +
         '</aside>' +
         '<div class="app-main">' + renderTopbar(opts, user) + renderTabs(tabs, opts.active) +
           '<div class="app-content" id="appContent"></div>' +

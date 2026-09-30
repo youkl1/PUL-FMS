@@ -69,8 +69,8 @@ GD.order.forEach(function (m) {
   });
 });
 
-// 6) 「仅扫码·人工通道规划中」标注落在约定三处（pick/disp/wardSign）
-['pick', 'disp', 'wardSign'].forEach(function (k) {
+// 6) 「仅扫码·人工通道规划中」标注落在约定两处（pick/wardSign；disp 已于 T3 补手动补绑）
+['pick', 'wardSign'].forEach(function (k) {
   var found = GD.order.some(function (m) {
     var mod = GD.modules[m.key] || {};
     var meta = (mod.menus || {})[k];
