@@ -1,12 +1,12 @@
 /**
- * inv.js — 盘点单 / 期初盘点（pathname 含 inv-init 则为期初）
+ * inv.js — 药品盘点单 / 期初存量（期初盘点）（pathname 含 inv-init 则为期初）
  */
 (function () {
   'use strict';
   var isInit = /inv-init/.test(location.pathname);
   var active = isInit ? 'invInit' : 'inv';
   var content = window.AppShell.render('desktopPreview', {
-    active: active, crumb: ['盘点管理', isInit ? '期初盘点' : '盘点单']
+    active: active, crumb: ['盘点管理', isInit ? '期初存量（期初盘点）' : '药品盘点单']
   });
   if (!content) return;
 
@@ -40,12 +40,12 @@
   function filterBar() {
     return '<div class="card mb-3"><div class="card-body" style="padding:12px 16px;">' +
       '<div class="d-flex flex-wrap align-items-center" style="gap:10px;">' +
-      '<input class="form-control" id="fKw" style="width:160px;" placeholder="盘点单号" value="' + esc(kw) + '">' +
+      '<input class="form-control" id="fKw" style="width:160px;" placeholder="药品盘点单号" value="' + esc(kw) + '">' +
       '<button class="btn btn-outline-primary" id="btnQuery">查询</button>' +
       '<button class="btn btn-outline-secondary" id="btnReset">重置</button>' +
       '<span class="text-secondary" style="font-size:12.5px;">节点：' + esc(node().kind) + ' / ' + esc(node().name) +
       (isInit ? ' · 期初=扫到即盘盈（已在架跳过）' : ' · 对照在架快照') + '</span>' +
-      '<div class="ms-auto"><button class="btn btn-primary" id="btnAdd">+ 新增' + (isInit ? '期初盘点' : '盘点单') + '</button></div>' +
+      '<div class="ms-auto"><button class="btn btn-primary" id="btnAdd">+ 新增' + (isInit ? '期初存量（期初盘点）' : '药品盘点单') + '</button></div>' +
       '</div></div></div>';
   }
 
@@ -125,12 +125,20 @@
 
   function audit(d) {
     var df = I.diff(d);
+    // 疑似错绑：盘亏码在异常台账里有「待复核/已确认」的手动补绑记录 → 提示先去改绑再过账
+    var excs = (window.PUL_RX.load().excDocs || []);
+    var suspect = df.loss.filter(function (c) {
+      return excs.some(function (e) { return e.code === c.code && (e.status === '待复核' || e.status === '已确认'); });
+    });
     UI.confirm('审核 <b>' + esc(d.billNo) + '</b>？<div style="margin-top:8px;">相符 ' + df.match +
-      ' · 盘盈 ' + df.gain.length + ' · 盘亏 ' + df.loss.length + '<br>过账请到「盘盈入库 / 盘亏出库」。</div>', function () {
+      ' · 盘盈 ' + df.gain.length + ' · 盘亏 ' + df.loss.length +
+      (suspect.length ? '<br><span style="color:#d63939;">盘亏中 ' + suspect.length +
+        ' 个码有手动补绑记录，疑似错绑 → 请先到「赋码异常台账」改绑后再过账。</span>' : '') +
+      '<br>过账请到「盘盈入库单 / 盘亏出库单」。</div>', function () {
       d.status = '已审核'; d.auditTime = W.now();
       d.auditor = (window.store.load().currentUser || {}).name || '演示员';
       save(); renderAll();
-      window.showToast('已审核，去盘盈入库 / 盘亏出库过账');
+      window.showToast('已审核，去盘盈入库单 / 盘亏出库单过账');
     }, '确认审核');
   }
 

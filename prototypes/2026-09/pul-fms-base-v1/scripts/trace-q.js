@@ -38,7 +38,11 @@
     var loc = result.loc ? ' · 货位/库位 ' + esc(result.loc) : '';
     var hist = (result.hist || []).slice().reverse();
     var rows = hist.map(function (e) {
-      return '<tr><td class="text-secondary">' + esc(e.time) + '</td><td>' + esc(e.type) + '</td>' +
+      // 手动补绑的码在类型列后加橙色徽标（含核验状态）
+      var bindBadge = (e.bindType === 'manual')
+        ? ' <span class="badge bg-orange-lt">手动补绑' + (e.verified === '已复核' ? '·已复核' : '·待复核') + '</span>'
+        : '';
+      return '<tr><td class="text-secondary">' + esc(e.time) + '</td><td>' + esc(e.type) + bindBadge + '</td>' +
         '<td>' + (e.href ? '<a href="' + esc(e.href) + '">' + esc(e.billNo) + '</a>' : esc(e.billNo)) + '</td>' +
         '<td>' + esc(e.node) + '</td><td>' + esc(e.patient || '—') + '</td></tr>';
     }).join('');

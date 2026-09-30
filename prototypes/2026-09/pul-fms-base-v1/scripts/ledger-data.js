@@ -29,20 +29,20 @@
 
     (pch.inDocs || []).forEach(function (d) {
       if (d.audit !== '已审核') return;
-      out.push(ev(d.auditDate || d.date, '采购入库', d.billNo, 'purchase-in.html?billNo=' + encodeURIComponent(d.billNo),
+      out.push(ev(d.auditDate || d.date, '采购入库单', d.billNo, 'purchase-in.html?billNo=' + encodeURIComponent(d.billNo),
         d.warehouse, codesOf(d)));
     });
     (pch.outDocs || []).forEach(function (d) {
       if (d.status !== '已审核') return;
-      out.push(ev(d.auditTime || d.date, '采购退货', d.billNo, 'purchase-out.html', d.warehouse, codesOf(d)));
+      out.push(ev(d.auditTime || d.date, '采购退货单', d.billNo, 'purchase-out.html', d.warehouse, codesOf(d)));
     });
     (wh.othInDocs || []).forEach(function (d) {
       if (d.status !== '已审核') return;
-      out.push(ev(d.auditTime || d.date, '其他入库', d.billNo, 'wh-other-in.html', d.warehouse, codesOf(d)));
+      out.push(ev(d.auditTime || d.date, '其他入库单', d.billNo, 'wh-other-in.html', d.warehouse, codesOf(d)));
     });
     (wh.othOutDocs || []).forEach(function (d) {
       if (d.status !== '已审核') return;
-      out.push(ev(d.auditTime || d.date, '其他出库', d.billNo, 'wh-other-out.html', d.warehouse, codesOf(d)));
+      out.push(ev(d.auditTime || d.date, '其他出库单', d.billNo, 'wh-other-out.html', d.warehouse, codesOf(d)));
     });
     (wh.lossDocs || []).forEach(function (d) {
       if (d.status !== '已审核') return;
@@ -69,7 +69,7 @@
         { patient: d.patient }));
     });
     (rx.retDocs || []).forEach(function (d) {
-      out.push(ev(d.date, '处方退药', d.retNo, 'rx-ret.html', d.pharmacy, codesOf(d), { patient: d.patient }));
+      out.push(ev(d.date, '处方单退药', d.retNo, 'rx-ret.html', d.pharmacy, codesOf(d), { patient: d.patient }));
     });
     (rx.trayDocs || []).forEach(function (d) {
       if (d.status !== '摆药中' && d.status !== '已完成') return;
@@ -90,6 +90,12 @@
   function locate(code20) {
     var hist = collect().filter(function (e) {
       return (e.codes || []).some(function (c) { return c.code === code20; });
+    });
+    // 附加绑定来源：把单条流水里该码的 bindType/verified 提到事件级（供 trace-q 徽标展示）
+    hist.forEach(function (e) {
+      (e.codes || []).forEach(function (c) {
+        if (c.code === code20) { e.bindType = c.bindType || 'scan'; e.verified = c.verified || ''; }
+      });
     });
     var pch = window.PUL_PCH.load();
     var wh = window.PUL_WH.load();
