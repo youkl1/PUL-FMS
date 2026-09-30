@@ -3,7 +3,7 @@
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'disp', crumb: ['发药管理', '处方发药扫码'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'disp', crumb: ['出库管理', '处方发药扫码'] });
   if (!content) return;
 
   var W = window.PUL_WH, R = window.PUL_RX, UI = window.PchUI, esc = UI.esc;
@@ -97,13 +97,15 @@
       var sugCode = sug ? sug.code : '—';
       var onh = R.availableQty(WH, S, ph(), it.drugCode) + (d.status === '待发药' ? it.qty - scanned : 0);
       if (d.status !== '待发药') onh = R.availableQty(WH, S, ph(), it.drugCode);
+      var canBind = d.status === '发药中' && !R.itemDone(it);
       return '<tr><td>' + (i + 1) + '</td><td><b>' + esc(drugName(it.drugCode)) + '</b></td>' +
         '<td class="text-secondary">' + esc(formSpec(it.drugCode)) + '</td>' +
         '<td>' + it.qty + esc(it.unit) + '</td>' +
         '<td>' + scanned + ' / ' + it.qty + '</td>' +
         '<td>' + (it.shortage ? '<span class="badge bg-red-lt">无库存</span>' : ('锁 ' + it.qty + ' · 在架 ' + onh)) + '</td>' +
         '<td>' + esc(loc) + '</td>' +
-        '<td style="font-family:Consolas,monospace;font-size:12px;">' + esc(sugCode) + '</td></tr>';
+        '<td style="font-family:Consolas,monospace;font-size:12px;">' + esc(sugCode) + '</td>' +
+        '<td>' + (canBind ? '<button class="btn btn-sm btn-outline-primary" data-mbind="' + i + '">手动补绑</button>' : '') + '</td></tr>';
     }).join('');
     var extra = '';
     if (d.status === '发药中' || d.status === '已完成') {
@@ -113,7 +115,8 @@
         '<div class="table-responsive"><table class="table table-vcenter card-table"><thead><tr><th>追溯码</th><th>药品</th><th>批次</th><th>效期</th><th>货位</th></tr></thead><tbody>' +
         (codes.length ? codes.map(function (c) {
           var p = R.parse(c.code);
-          return '<tr><td style="font-family:Consolas,monospace;font-size:12.5px;">' + esc(c.code) + '</td>' +
+          return '<tr><td style="font-family:Consolas,monospace;font-size:12.5px;">' + esc(c.code) +
+            (c.bindType === 'manual' ? ' <span class="badge bg-orange-lt">手动补绑·' + esc(c.verified || '待复核') + '</span>' : '') + '</td>' +
             '<td>' + esc(p.dict ? p.dict.drugName : '—') + '</td><td>' + esc(c.batch) + '</td><td>' + esc(c.expDate) + '</td>' +
             '<td>' + esc(c.phLoc || '—') + '</td></tr>';
         }).join('') : '<tr><td colspan="5" class="text-center text-secondary">尚未绑码</td></tr>') +
@@ -122,7 +125,7 @@
     return '<div class="card"><div class="card-header"><b>药品清单</b>' +
       '<span class="text-secondary ms-2" style="font-size:12.5px;">' + esc(d.rxNo) + ' · ' + esc(d.patient) + '</span></div>' +
       '<div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>#</th><th>药品</th><th>规格</th><th>应发</th><th>已扫/应扫</th><th>锁 / 在架</th><th>建议货位</th><th>建议码</th></tr></thead>' +
+      '<thead><tr><th>#</th><th>药品</th><th>规格</th><th>应发</th><th>已扫/应扫</th><th>锁 / 在架</th><th>建议货位</th><th>建议码</th><th>操作</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div>' + extra + '</div>';
   }
 
@@ -199,7 +202,7 @@
   function openScan(d) {
     UI.openScan({
       title: '扫码绑码 · ' + d.rxNo,
-      hint: '扫建议码（FEFO+货位）。齐了自动完成。货位空=不入槽也能出。拆零不扣整码。',
+      hint: '扫建议码（FEFO+货位）。齐了自动完成。扫不出可回明细行点「手动补绑」。拆零不扣整码。',
       gate: 'out', node: ph(),
       flags: [{ key: 'split', label: '拆零' }],
       onScan: function (code, flags) {
@@ -235,6 +238,21 @@
     });
   }
 
+  function openBind(d, idx) {
+    if (R.itemDone(d.items[idx])) return; // 双保险：行已齐不应出现按钮
+    window.RxBind.open({
+      wh: WH, state: S, pharmacy: ph(), refKind: 'rx', refNo: d.rxNo, item: d.items[idx],
+      onDone: function () {
+        if (R.rxDone(d)) {
+          d.status = '已完成'; d.doneTime = R.now(); d.dispenser = curUser().name || '陈静';
+          tab = '已完成';
+        }
+        save(); renderAll();
+        window.showToast(d.status === '已完成' ? '已补绑并进入已完成，异常台账待日结复核' : '已补绑，异常台账待日结复核');
+      }
+    });
+  }
+
   function renderAll() { content.innerHTML = filterBar() + docsCard() + itemsCard(); bind(); }
   function bind() {
     document.getElementById('btnQuery').addEventListener('click', function () { kw = v('fKw'); renderAll(); });
@@ -262,6 +280,12 @@
       b.addEventListener('click', function () {
         var d = null; S.rxDocs.forEach(function (x) { if (x.rxNo === b.getAttribute('data-scan')) d = x; });
         if (d) { sel = d.rxNo; openScan(d); }
+      });
+    });
+    content.querySelectorAll('[data-mbind]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var d = selDoc();
+        if (d) openBind(d, +b.getAttribute('data-mbind'));
       });
     });
   }
