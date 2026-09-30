@@ -106,7 +106,7 @@ updated: 2026-09-28
 | 药房管理 | 药品扫码下架 | shelfOff | —（待补） | 04-ph/shelfOff.md | 🚧 |
 | 药房管理 | 药房损耗 | phloss | ph-loss.html | （待建） | ⬜ |
 | 出库管理 | 处方发药扫码 | disp | disp.html | （待建） | ⬜ |
-| 出库管理 | 处方取药赋码 | assign | —（占位） | （待建） | ⏸️ |
+| 出库管理 | 处方取药赋码 | assign | disp.html / tray.html / rx-exc.html | 05-rx/assign.md | ✅ |
 | 出库管理 | 处方单批量赋码 | assignBatch | —（占位） | （待建） | ⏸️ |
 | 出库管理 | 处方单赋码查询 | assignQ | —（待补） | （待建） | 🚧 |
 | 出库管理 | 赋码异常台账 | rxExc | rx-exc.html | （待写） | 🚧 |
