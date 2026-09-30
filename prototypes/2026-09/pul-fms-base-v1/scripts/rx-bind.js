@@ -2,6 +2,7 @@
  * rx-bind.js — 手动补绑/改绑共用弹窗：系统按规则推荐码清单，人工勾选确认（T3 首版手动）
  * 复用方：disp.js / tray.js（补绑）、rx-exc.js（改绑）
  * 约定：弹窗只改 state 内存并调 onDone；save 由调用页在 onDone 里完成（占用派生须先 save 再查架）
+ * 注意：任一码失败也会关弹窗并 onDone——成功部分须落库保持内存/store 一致
  */
 (function () {
   'use strict';
@@ -59,9 +60,9 @@
           it.drugCode, code, { type: reason, operator: me(), excNo: opts.excNo });
         if (!r.ok) fail = r.msg;
       });
-      if (fail) { window.showToast(fail); return; }
       UI.close('rxBind');
       if (opts.onDone) opts.onDone();
+      window.showToast(fail || '已补绑，待日结复核');
     });
   }
 
