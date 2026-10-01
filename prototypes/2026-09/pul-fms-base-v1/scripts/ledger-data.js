@@ -50,6 +50,7 @@
         d.warehouse, codesOf(d)));
     });
     (wh.pickDocs || []).forEach(function (d) {
+      if (d.status !== '已出库' && d.status !== '药房已入库') return;   // 备货中草稿未过账，不是出库事实
       var t = d.status === '药房已入库' ? '药房入库' : '领用出库';
       out.push(ev(d.auditTime || d.date, t, d.billNo, 'wh-pick.html', d.pharmacy || d.warehouse, codesOf(d)));
     });

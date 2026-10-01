@@ -30,6 +30,7 @@ load('purchase-data.js');
 load('wh-data.js');
 load('rx-data.js');
 load('inv-data.js');
+load('ledger-data.js');
 
 var W = window.PUL_WH;
 var R = window.PUL_RX;
@@ -127,6 +128,23 @@ if (typeof W.blockMove === 'function') {
   eq('盘点页自己不拦', W.blockMove(CODE_A, '中心库', 'count', { expDate: '2028-06-14' }), '');
   window.store.update({ inv: { countDocs: [] } });
 }
+
+console.log('# ledger 不含备货中草稿（2026-10-01 备货草稿态统一）');
+window.store.update({ wh: {
+  pickDocs: [
+    { billNo: 'LYCK-DRAFT1', status: '备货中', warehouse: '中心库', pharmacy: '门诊药房', date: '2026-10-01 09:00', codes: [c(CODE_A)] },
+    { billNo: 'LYCK-POST1', status: '已出库', warehouse: '中心库', pharmacy: '门诊药房', date: '2026-10-01 10:00', auditTime: '2026-10-01 10:05', codes: [c(CODE_B)] }
+  ],
+  retInDocs: [], othInDocs: [], othOutDocs: [], lossDocs: [], retPool: [], phLossDocs: [],
+  reqPool: [{ reqNo: 'LY-T1', date: '2026-10-01 08:00', pharmacy: '门诊药房', warehouse: '中心库', items: [], status: '待备货' }]
+} });
+var evs = window.PUL_LEDGER.collect();
+ok('备货中草稿不进流水', !evs.some(function (e) { return e.billNo === 'LYCK-DRAFT1'; }));
+ok('已出库进流水', evs.some(function (e) { return e.billNo === 'LYCK-POST1'; }));
+
+console.log('# reqPool migrate 补 source');
+var whMig = W.load();
+eq('无 source 老数据兜底药房申请', whMig.reqPool[0] && whMig.reqPool[0].source, '药房申请');
 
 if (failed) {
   console.log('\n' + failed + ' failed');
