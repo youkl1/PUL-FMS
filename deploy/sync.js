@@ -1396,8 +1396,9 @@ async function sync() {
       }
 
       // 上传原型依赖（styles / scripts / assets 等子目录）
+      // 注意：shared/ 下的 HTML（图纸库页面）不在门户索引 items 里，必须走依赖通道上传，否则图纸页永远不更新
       console.log('\n== 4.5 上传原型依赖 ==');
-      const depFiles = collectFiles(PROTOTYPES_DIR).filter(f => !f.remote.endsWith('.html'));
+      const depFiles = collectFiles(PROTOTYPES_DIR).filter(f => !f.remote.endsWith('.html') || f.remote.startsWith('shared/'));
       const depDirs = [...new Set(depFiles.map(f => path.posix.dirname(f.remote)).filter(d => d && d !== '.'))];
       if (depDirs.length > 0) {
         await exec(`mkdir -p ${depDirs.map(d => `"${config.remoteDir}/prototypes/${d}"`).join(' ')}`);
