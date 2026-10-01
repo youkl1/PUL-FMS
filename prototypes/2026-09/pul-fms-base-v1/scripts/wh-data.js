@@ -40,6 +40,10 @@
   // 领用出库单：①已出库=在途（出库审核即扣账）②药房已入库=闭环演示
   // expectLoc = 申请单「上架货位」随单传递到码（预期上架位置；领用入库单核对可见，上下架优先提示）
   var PICK_DOCS = [
+    { billNo: 'LYCK20261001001', reqNo: '', date: '2026-10-01 09:40', pharmacy: '门诊药房', warehouse: '中心库',
+      status: '备货中', operator: '王铁军', remark: '直接扫码出库演示（草稿）',
+      codes: [{ code: '84147840007702017701', level: 1, split: '否', splitQty: '', batch: '250702',
+        prodDate: '2025-07-10', expDate: '2027-07-09', checked: true, code2: '', code3: '', location: 'A-01-02' }] },
     { billNo: 'LYCK20260913001', reqNo: 'LY20260913002', date: '2026-09-13 14:20', pharmacy: '门诊药房', warehouse: '中心库',
       status: '已出库', auditTime: '2026-09-13 14:35', operator: '王铁军',
       codes: OTH_IN_SEED_CODES.slice(0, 3).map(function (c) { return Object.assign({}, c, { expectLoc: 'M-01' }); }) },
@@ -52,14 +56,16 @@
   // 领用申请单池（药房模块上游，种子模拟）：待备货 2 条 + 已完成 2 条（与出库单关联）
   // items[].slot = 上架货位（药房货位维护如 M-01，或取药槽如 CB01-C1-01；可空=入库后再定）
   var REQ_POOL = [
+    { reqNo: 'LY20261001001', date: '2026-10-01 09:58', pharmacy: '门诊药房', warehouse: '中心库', applicant: '王铁军',
+      source: '库房制单', items: [{ drugCode: 'YP010312', qty: 2, slot: '' }], status: '待提交', remark: '缺货驱动制单演示' },
     { reqNo: 'LY20260914001', date: '2026-09-14 08:40', pharmacy: '门诊药房', warehouse: '中心库', applicant: '陈静',
-      items: [{ drugCode: 'YP010245', qty: 5, slot: 'M-01' }, { drugCode: 'YP010529', qty: 2, slot: 'CB01-C1-02' }], status: '待备货', remark: '周末门急诊备货' },
+      source: '药房申请', items: [{ drugCode: 'YP010245', qty: 5, slot: 'M-01' }, { drugCode: 'YP010529', qty: 2, slot: 'CB01-C1-02' }], status: '待备货', remark: '周末门急诊备货' },
     { reqNo: 'LY20260914002', date: '2026-09-14 09:15', pharmacy: '住院药房', warehouse: '中心库', applicant: '陈静',
-      items: [{ drugCode: 'YP010388', qty: 60, slot: 'Z-01' }, { drugCode: 'YP010477', qty: 10, slot: '' }], status: '待备货', remark: '' },
+      source: '药房申请', items: [{ drugCode: 'YP010388', qty: 60, slot: 'Z-01' }, { drugCode: 'YP010477', qty: 10, slot: '' }], status: '待备货', remark: '' },
     { reqNo: 'LY20260913002', date: '2026-09-13 14:02', pharmacy: '门诊药房', warehouse: '中心库', applicant: '陈静',
-      items: [{ drugCode: 'YP010245', qty: 3, slot: 'M-01' }], status: '已完成', remark: '' },
+      source: '药房申请', items: [{ drugCode: 'YP010245', qty: 3, slot: 'M-01' }], status: '已完成', remark: '' },
     { reqNo: 'LY20260912001', date: '2026-09-12 09:50', pharmacy: '门诊药房', warehouse: '中心库', applicant: '陈静',
-      items: [{ drugCode: 'YP010401', qty: 1, slot: 'M-01' }, { drugCode: 'YP010312', qty: 2, slot: 'M-03' }], status: '已完成', remark: '' }
+      source: '药房申请', items: [{ drugCode: 'YP010401', qty: 1, slot: 'M-01' }, { drugCode: 'YP010312', qty: 2, slot: 'M-03' }], status: '已完成', remark: '' }
   ];
   // 退回单池（药房退回出库单，待库房接收入库）：码必须来自已领出（在途/药房在架）的码；splitQty>0 演示拆零退回提示
   var RET_POOL = [
