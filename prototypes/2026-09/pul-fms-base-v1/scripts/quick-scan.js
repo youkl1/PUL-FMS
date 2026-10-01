@@ -4,7 +4,7 @@
  * 模式开关：扫码加入 / 扫码移除（旧版「扫码移除」复选框升级为开关，名称不变）
  * 场景规则：重复扫码自动过滤（加入模式下已在清单=⚠提示不重复加入、不计拦截）；
  *          拆零扫码=码明细行「拆零」标记零头数，折合按 零头/per 计入已扫数
- * 单据来源：新增快捷单（一步式，无申请单不带上架货位）/ 选单（待备货申请单，申请数 vs 已扫数）
+ * 单据来源：新增快捷单（直接出库，无申请单不带上架货位）/ 选单（待备货申请单，申请数 vs 已扫数）
  * 审核出库与 wh-pick 同一数据结构（pickDocs + expectLoc），申请单转已完成
  */
 (function () {
@@ -254,10 +254,10 @@
     var phOpts = (FS.pharmacies || []).filter(function (p) { return p.status === '启用'; }).map(function (p) {
       return '<option value="' + esc(p.name) + '">' + esc(p.name) + '</option>';
     }).join('');
-    UI.modalShell('qsNewM', '新增快捷单（一步式领用）',
+    UI.modalShell('qsNewM', '新增快捷单（直接出库）',
       '<div class="mb-3"><label class="form-label required">领用药房</label><select class="form-select" id="qsNewPh">' + phOpts + '</select></div>' +
       '<div class="mb-2"><label class="form-label">备注</label><input class="form-control" id="qsNewRmk" placeholder="选填"></div>' +
-      '<div class="text-secondary" style="font-size:12.5px;">一步式无申请单、不带上架货位；审核出库后生成 LYCK 出库单</div>',
+      '<div class="text-secondary" style="font-size:12.5px;">直接出库无申请单、不带上架货位；审核出库后生成 LYCK 出库单</div>',
       '<button class="btn btn-outline-secondary" data-mclose>取消</button>' +
       '<button class="btn btn-primary" id="qsNewOk">创建并开始扫码</button>', 440);
     var el = UI.open('qsNewM');

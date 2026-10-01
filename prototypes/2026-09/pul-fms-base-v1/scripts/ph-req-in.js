@@ -1,11 +1,11 @@
 /**
- * ph-req-in.js — 领用入库：库房出库在途 → 药房在架
- * 双通道核对（扫码 / 点行），全部核对完才能确认；与库房退回入库同一哲学
+ * ph-req-in.js — 领用入库单：库房出库在途 → 药房在架
+ * 双通道核对（扫码 / 点行），全部核对完才能确认；与库房退回入库单同一哲学
  * 库房页「确认药房入库」一键闭环仍保留（写同一 pickDocs.status）
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'reqIn', crumb: ['药房管理', '领用入库'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'reqIn', crumb: ['药房管理', '领用入库单'] });
   if (!content) return;
 
   var W = window.PUL_WH, D = window.PUL_DRUG, P = window.PUL_PCH, UI = window.PchUI, esc = UI.esc;
@@ -14,6 +14,15 @@
   var sel = null;
   var checked = {};
   var filters = { status: '待入库', kw: '' };
+  // 入库明细查询深链：按单据状态落到对应页签
+  var qsBill = new URLSearchParams(location.search).get('billNo');
+  if (qsBill) {
+    sel = qsBill;
+    filters.kw = qsBill;
+    S.pickDocs.forEach(function (d) {
+      if (d.billNo === qsBill) filters.status = d.status === '药房已入库' ? '已入库' : '待入库';
+    });
+  }
 
   function save() { W.save(S); }
   function curPharm() { return W.curPharm(); }
@@ -61,11 +70,11 @@
         : '<span class="pch-light ok"><i class="pch-dot"></i>药房已入库</span>';
       return '<tr class="pch-doc-row' + (d.billNo === sel ? ' pch-doc-sel' : '') + '" data-sel="' + esc(d.billNo) + '">' +
         '<td><b>' + esc(d.billNo) + '</b></td>' +
-        '<td>' + (d.reqNo ? esc(d.reqNo) : '<span class="badge bg-orange-lt">一步式</span>') + '</td>' +
+        '<td>' + (d.reqNo ? esc(d.reqNo) : '<span class="badge bg-orange-lt">直接出库</span>') + '</td>' +
         '<td class="text-secondary">' + esc(d.date) + '</td>' +
         '<td>' + esc(d.warehouse) + '</td><td>' + d.codes.length + '</td><td>' + st + '</td></tr>';
     }).join('');
-    if (!list.length) rowsHtml = '<tr><td colspan="6" class="text-center text-secondary" style="padding:28px;">暂无出库单——库房「领用备货出库」审核后会出现在此</td></tr>';
+    if (!list.length) rowsHtml = '<tr><td colspan="6" class="text-center text-secondary" style="padding:28px;">暂无出库单——库房「领用备货单」审核后会出现在此</td></tr>';
     return '<div class="card mb-3"><div class="card-header"><b>库房出库单</b>' +
       '<span class="text-secondary ms-2" style="font-size:12.5px;">待入库=在途 · 本药房 ' + list.length + ' 单</span></div>' +
       '<div class="table-responsive"><table class="table table-vcenter card-table">' +
@@ -84,10 +93,11 @@
           '<td style="font-family:Consolas,monospace;font-size:12.5px;">' + esc(c.code) + '</td>' +
           '<td><b>' + esc(drugNameOf(c.code)) + '</b></td>' +
           '<td>' + esc(c.batch) + '</td><td>' + esc(c.expDate) + '</td>' +
+          '<td>' + (c.expectLoc ? '<span class="badge bg-blue-lt">' + esc(c.expectLoc) + '</span>' : '<span class="text-secondary">—</span>') + '</td>' +
           '<td><span class="text-success">✓ 已入库</span></td></tr>';
       }).join('');
       body = '<div class="table-responsive"><table class="table table-vcenter card-table">' +
-        '<thead><tr><th>序号</th><th>追溯码</th><th>药品</th><th>批次</th><th>效期</th><th>状态</th></tr></thead>' +
+        '<thead><tr><th>序号</th><th>追溯码</th><th>药品</th><th>批次</th><th>效期</th><th>预期货位</th><th>状态</th></tr></thead>' +
         '<tbody>' + rowsDone + '</tbody></table></div>';
     } else {
       var rowsHtml = d.codes.map(function (c, i) {
@@ -97,11 +107,12 @@
           '<td style="font-family:Consolas,monospace;font-size:12.5px;">' + esc(c.code) + '</td>' +
           '<td><b>' + esc(drugNameOf(c.code)) + '</b></td>' +
           '<td>' + esc(c.batch) + '</td><td>' + esc(c.expDate) + '</td>' +
+          '<td>' + (c.expectLoc ? '<span class="badge bg-blue-lt">' + esc(c.expectLoc) + '</span>' : '<span class="text-secondary">—</span>') + '</td>' +
           '<td>' + (ck ? '<span class="text-success">✓ 已核对</span>' : '<span class="text-secondary">未核对</span>') + '</td></tr>';
       }).join('');
       var done = d.codes.filter(function (c) { return checked[c.code]; }).length;
       body = '<div class="table-responsive"><table class="table table-vcenter card-table">' +
-        '<thead><tr><th>序号</th><th>追溯码</th><th>药品</th><th>批次</th><th>效期</th><th>核对</th></tr></thead>' +
+        '<thead><tr><th>序号</th><th>追溯码</th><th>药品</th><th>批次</th><th>效期</th><th>预期货位</th><th>核对</th></tr></thead>' +
         '<tbody>' + rowsHtml + '</tbody></table></div>' +
         '<div class="pch-tabbar">' +
         '<div class="pch-progress"><i style="width:' + (d.codes.length ? Math.round(done / d.codes.length * 100) : 0) + '%;"></i></div>' +
@@ -182,6 +193,6 @@
   }
 
   var first = myDocs()[0];
-  if (first) sel = first.billNo;
+  if (first && !sel) sel = first.billNo;
   renderAll();
 })();

@@ -70,12 +70,12 @@
         </div></div>
       <div class="section"><div class="section-title">示例</div>
         <div class="example-box"><div class="example-title">中心库 → 门诊药房</div>
-          <div class="example-text">点「+ 新增单据」选门诊药房 → 生成 LYCK 开头待出库空单 → 跳领用备货单扫码备货 → 审核出库后本页状态变「已出库」。</div>
+          <div class="example-text">点「+ 新增单据」选门诊药房、挑药填数量（共享药品选择器带双存量）→ 存「待提交」制单草稿 → 提交后进「领用备货单」队列 → 扫码备货审核出库后本页状态变「已出库」。</div>
         </div></div>
       <div class="section"><div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
-          <div class="example-item-title">单据来源：领用申请 / 一步式</div>
-          <div class="example-item-desc">「领用申请」单关联申请池明细（药品清单页签按申请行展示扫码/实物对比）；「一步式」无申请单，药品清单按已扫码聚合。无库存码在备货扫码时已拦截，页签保留对齐老系统。</div>
+          <div class="example-item-title">单据来源：领用申请 / 库房制单 / 直接出库</div>
+          <div class="example-item-desc">「领用申请」单关联申请池明细（药品清单页签按申请行展示扫码/实物对比）；「库房制单」由库房缺货驱动开待提交草稿，提交后照常备货；「直接出库」无申请单，药品清单按已扫码聚合。无库存码在备货扫码时已拦截，页签保留对齐老系统。</div>
         </div></div></div>
     </div>
   </div>
