@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 860,
+  "title": "退回出库单 · 进度状态机",
+  "subtitle": "一维生命周期：未出库（草稿） → 待入库 → 已入库；草稿不扣账，确认出库即扣药房在架（与图23 领用单对偶：领用=库房发药房收，退回=药房退库房收）",
+  "containers": [],
+  "nodes": [
+    {
+      "id": "E1",
+      "kind": "rect",
+      "x": 140,
+      "y": 110,
+      "width": 220,
+      "height": 54,
+      "label": "药房新增退回",
+      "sublabel": "退回出库单 · 建草稿",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "E2",
+      "kind": "rect",
+      "x": 560,
+      "y": 110,
+      "width": 240,
+      "height": 54,
+      "label": "＋ 库房直收",
+      "sublabel": "领用退回页 · 直接建单",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "S1",
+      "kind": "rect",
+      "x": 140,
+      "y": 300,
+      "width": 220,
+      "height": 70,
+      "label": "未出库",
+      "sublabel": "草稿扫码 · 落盘不扣账",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "S2",
+      "kind": "rect",
+      "x": 570,
+      "y": 300,
+      "width": 220,
+      "height": 70,
+      "label": "待入库",
+      "sublabel": "确认出库 · 扣药房在架",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "S3",
+      "kind": "rect",
+      "x": 1000,
+      "y": 300,
+      "width": 220,
+      "height": 70,
+      "label": "已入库",
+      "sublabel": "闭环 · 库房在架回补",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "S4",
+      "kind": "rect",
+      "x": 140,
+      "y": 560,
+      "width": 220,
+      "height": 70,
+      "label": "已撤销",
+      "sublabel": "终态 · 码回在架不进流水",
+      "fill": "#f6f8fb",
+      "stroke": "#626976"
+    },
+    {
+      "id": "G1",
+      "kind": "rect",
+      "x": 60,
+      "y": 700,
+      "width": 560,
+      "height": 76,
+      "label": "未出库草稿 = 不占在架变化",
+      "sublabel": "集合推导只减已确认出库 · 进度落盘刷新续作 · 撤销即释放",
+      "fill": "#fdecea",
+      "stroke": "#d63939"
+    },
+    {
+      "id": "G2",
+      "kind": "rect",
+      "x": 660,
+      "y": 700,
+      "width": 560,
+      "height": 76,
+      "label": "选码守卫（三道闸）",
+      "sublabel": "仅本药房在架码 · 一码不同时在两张退回单 · 重复扫码拦截",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    }
+  ],
+  "arrows": [
+    { "id": "a1", "source": "E1", "target": "S1", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "a2", "source": "E2", "target": "S2", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "a3", "source": "S1", "target": "S2", "source_port": "right", "target_port": "left", "flow": "control", "label": "确认出库" },
+    { "id": "a4", "source": "S2", "target": "S3", "source_port": "right", "target_port": "left", "flow": "control", "label": "库房审核入库" },
+    { "id": "a5", "source": "S1", "target": "S4", "source_port": "bottom", "target_port": "top", "flow": "feedback", "label": "撤销 · 码回在架" }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 48,
+  "legend_y": 812,
+  "legend": [
+    { "flow": "control", "label": "正向流转（事件驱动）" },
+    { "flow": "feedback", "label": "逆向 · 撤销草稿" }
+  ],
+  "footer": "PUL-FMS · 20 退回出库单进度状态机（草稿不扣账口径）· fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 840
+}
