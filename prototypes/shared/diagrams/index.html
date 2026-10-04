@@ -36,7 +36,7 @@
 </head>
 <body>
   <div id="side">
-    <h1>PUL-FMS 图纸<small>业务流程图 × UML · 共 14 张 + 1 份实例 · 按业务模块分组</small></h1>
+    <h1>PUL-FMS 图纸<small>业务流程图 × UML · 共 16 张 + 1 份实例 · 按业务模块分组</small></h1>
     <div id="list"></div>
   </div>
   <div id="main">
@@ -50,7 +50,7 @@
     </div>
     <div id="view">
       <div id="canvas"></div>
-      <div id="hint">fetch 被浏览器拦截（file:// 协议不允许读本地文件）<br>请在本目录起服务：<code>python -m http.server 9991</code> 然后访问 <code>http://localhost:9991</code></div>
+      <div id="hint">图纸加载失败：文件缺失或无法读取<br>若直接双击打开（file://），建议在本目录起服务获得完整体验：<code>python -m http.server 9991</code> 然后访问 <code>http://localhost:9991</code></div>
     </div>
   </div>
 <script>
@@ -64,11 +64,17 @@ var DIAGRAMS = [
   { f: '13-code-flow',   t: '箱码全链路 · 码怎么转', c: '60个一级盒码：到货→入库→领用2盒→拆零发2片' },
   { f: '13-box-instance', t: '箱码实例 · 表存储模拟数据', page: '13-box-instance.html', c: '阿莫西林60盒：五张表在五时刻长什么样' },
   { grp: '库房管理' },
-  { f: '02-purchase-in', t: '采购入库（异常码人工兜底）', c: '扫码失败不卡单：异常码补录后继续入库' },
+  { f: '02-purchase-in', t: '采购到货入库（到货单一页走完）', c: '下载/新增 → 扫码验收 → 审核即生成入库单；异常码补录不卡单 · 反审核可撤回' },
+  { f: '17-purchase-state-machine', t: '采购到货单 · 进度状态机', c: '一维生命周期六态 + 反审核回路；异常=第二维阻断标记不占状态位' },
+  { f: '18-pick-state-machine', t: '领用出库单 · 进度状态机', c: '一维生命周期五态 + 作废回路；备货中草稿不扣账，审核出库即扣账' },
+  { f: '19-ph-in-shelf', t: '领用入库 → 上架 · 药房侧状态机', c: '药房管理从领用入库开始：待入库·在途 → 已入库·待上架 → 已上架；下架/退回/报损为逆向回路（药房管理）' },
+  { f: '20-ph-ret-state-machine', t: '退回出库单 · 进度状态机', c: '一维生命周期三态 + 撤销回路；未出库草稿不扣账，确认出库即扣药房在架（药房管理 · 与图18对偶）' },
   { f: '03-pick-loop',   t: '领用出库 → 药房入库闭环', c: '中心库发2盒 → 门诊药房收2盒，库存同时动（药房管理同用）' },
+  { f: '15-pick-in-loop-seq', dir: 'mermaid', t: '领用出库→入库闭环（时序图）', c: 'Mermaid sequence：申请→备货→审核扣账→在途→核对入库，含两入口等价说明' },
   { f: '08-stock-derivation', t: '库存推导（集合加减法）', c: '在架库存=入库集合−出库集合，不靠快照（药房管理同用）' },
   { grp: '发药管理' },
-  { f: '04-dispensing',  t: '药房发药（方案已定 b · a/c 备选）', c: '处方2片拆零发药；退改需解锁' },
+  { f: '04-dispensing',  t: '门诊发药（三模式 · 当场降级 · 逆向）', c: '边扫边拿 / 窗口先抓后扫（拆零扫整盒码累加持平）/ 药柜预设 · 异常当场补绑不卡流程' },
+  { f: '04b-inpatient-dispensing', t: '住院摆药（先拿后匹配 · 事后补绑 · 逆向）', c: '摆药单驱动先拿药 · 规则匹配偏差=默认出口（命中/偏差都出库）· 台账日结闭环 · 与04共用台账' },
   { grp: '盘点管理' },
   { f: '14-stocktake',   t: '盘点流程（期初→盘点→盈亏）', c: '账面5片实数4片：盘亏1片出库；码损走无码记录' },
   { grp: '人工兜底总览' },
@@ -76,10 +82,11 @@ var DIAGRAMS = [
   { grp: '机制与数据（技术）' },
   { f: '06-data-model',  t: '数据模型 ER（概念总览）', c: '' },
   { f: '12-er-fields',   t: '表结构 ER（字段级 · 核心七表）', c: '' },
-  { f: '09-state-machine', t: '状态机（码实例 × 单据 双轨）', c: '一个码的一生：在架→出库→在架→发药' },
+  { f: '16-er-core', dir: 'mermaid', t: '表结构 ER（轻量草图 · Mermaid）', c: '与图12同口径；DrawDB 美化的离线对照，DDL 见 er/pul-fms-core.sql' },
+  { f: '09-state-machine', t: '状态机（场景式 · 码 × 单据）', c: '一个码的一生：8 场景 × 每列三问（码怎么变→哪张单据驱动→库存怎么动）+ 守恒总账' },
   { f: '11-usecase',     t: '用例图（按角色）', c: '' }
 ];
-var zoom = 1, panX = 0, panY = 0, isPage = false;
+var zoom = 1, panX = 0, panY = 0, isPage = false, seq = 0;
 var canvas = document.getElementById('canvas'), view = document.getElementById('view');
 
 function apply() {
@@ -87,10 +94,16 @@ function apply() {
   document.getElementById('zoomPct').textContent = Math.round(zoom * 100) + '%';
 }
 function fit() {
+  var w, h;
   var svg = canvas.querySelector('svg');
-  if (!svg) return;
-  var w = svg.viewBox ? svg.viewBox.baseVal.width : svg.getBBox().width;
-  var h = svg.viewBox ? svg.viewBox.baseVal.height : svg.getBBox().height;
+  if (svg) {
+    w = svg.viewBox ? svg.viewBox.baseVal.width : svg.getBBox().width;
+    h = svg.viewBox ? svg.viewBox.baseVal.height : svg.getBBox().height;
+  } else {
+    var img = canvas.querySelector('img');
+    if (!img || !img.naturalWidth) return;
+    w = img.naturalWidth; h = img.naturalHeight;
+  }
   var vw = view.clientWidth, vh = view.clientHeight;
   zoom = Math.min(vw / (w + 60), vh / (h + 60), 3);
   panX = (vw - w * zoom) / 2; panY = (vh - h * zoom) / 2;
@@ -98,38 +111,58 @@ function fit() {
 }
 async function show(idx) {
   var d = DIAGRAMS[idx]; if (!d || !d.f) return;
+  var mySeq = ++seq;   // 序号防串：快速切换时，慢响应不得覆盖新图纸
   Object.keys(itemEls).forEach(function (k) { itemEls[k].classList.toggle('active', Number(k) === idx); });
   document.getElementById('title').textContent = d.f + ' · ' + d.t;
   history.replaceState(null, '', '#' + d.f.slice(0, 2));
   var zoomEls = document.querySelectorAll('#zoomOut, #zoomIn, #zoomFit, #zoomPct');
+  var hint = document.getElementById('hint');
   if (d.page) {
     isPage = true;
     zoomEls.forEach(function (el) { el.style.display = 'none'; });
-    view.style.overflow = 'hidden';
     view.style.cursor = 'default';
     canvas.style.transform = 'none';
     canvas.style.padding = '0';
     canvas.style.width = '100%';
-    canvas.innerHTML = '<iframe src="' + d.page + '" style="width:100%;height:' + view.clientHeight + 'px;border:0;display:block;"></iframe>';
-    document.getElementById('hint').style.display = 'none';
+    canvas.innerHTML = '<iframe src="' + d.page + '?embed=1" style="width:100%;height:' + view.clientHeight + 'px;border:0;display:block;"></iframe>';
+    hint.style.display = 'none';
     return;
   }
   isPage = false;
   zoomEls.forEach(function (el) { el.style.display = ''; });
-  view.style.overflow = 'hidden';
   view.style.cursor = 'grab';
   canvas.style.padding = '24px';
   canvas.style.width = '';
+  var url = (d.dir || 'fireworks') + '/' + d.f + '.svg';
   try {
-    var txt = await (await fetch('fireworks/' + d.f + '.svg')).text();
+    var res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    var txt = await res.text();
+    if (mySeq !== seq) return;
     canvas.innerHTML = txt;
+    hint.style.display = 'none';
+    zoom = 1; panX = 0; panY = 0; fit();
   } catch (e) {
-    document.getElementById('hint').style.display = 'flex';
-    return;
+    loadImg(url, mySeq);   // file:// 下 fetch 必被拦截，回退 <img>（不受限）
   }
-  document.getElementById('hint').style.display = 'none';
-  zoom = 1; panX = 0; panY = 0; apply();
-  fit();
+}
+// 回退渲染：fetch 失败时用 <img> 直接读 SVG，缩放/拖拽照常；img 也失败才亮提示
+function loadImg(url, mySeq) {
+  var img = new Image();
+  img.draggable = false;
+  img.onload = function () {
+    if (mySeq !== seq) return;
+    canvas.innerHTML = '';
+    img.style.display = 'block';
+    canvas.appendChild(img);
+    document.getElementById('hint').style.display = 'none';
+    zoom = 1; panX = 0; panY = 0; fit();
+  };
+  img.onerror = function () {
+    if (mySeq !== seq) return;
+    document.getElementById('hint').style.display = 'flex';
+  };
+  img.src = url;
 }
 // 侧栏清单（itemEls 记录「图序号 → 元素」映射，grp 行不占位）
 var list = document.getElementById('list');
