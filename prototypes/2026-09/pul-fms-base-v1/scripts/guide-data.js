@@ -45,16 +45,15 @@ window.GUIDE_DATA = {
       roles: '库管员',
       case: '阿莫西林60盒到货 → 扫码/人工验收入库；不合格品扫码退供应商，异常码人工补录不卡单',
       diagrams: [
-        { f: '02-purchase-in.svg', t: '采购入库（异常码人工兜底）', note: '扫码失败不卡单' }
+        { f: '02-purchase-in.svg', t: '采购到货入库（到货单一页走完）', note: '自动拉取/手动新增 → 扫码或免扫码验收 → 审核生成入库单' },
+        { f: '17-purchase-state-machine.svg', t: '到货单进度状态机', note: '进度一维 + 异常第二维' }
       ],
       menus: {
-        arrive:  { desc: '供应商到货确认',   cat: 'fwd' },
-        pin:     { desc: '扫码/人工双通道验收', cat: 'fwd' },
-        badcode: { desc: '扫码失败人工补录', cat: 'fix' },
+        arrive:  { desc: '下载/验收/审核一页走完 · 异常码台账补录在页内', cat: 'fwd', fix: true },
+        pin:     { desc: '入库结果台账·反审核',   cat: 'qry' },
         pquery:  { desc: '入库明细导出',     cat: 'qry' },
         pout:    { desc: '不合格退供应商',   cat: 'rev' },
-        pOutQ:   { desc: '退货明细追踪',     cat: 'qry' },
-        pdone:   { desc: '已审单·可反审核',  cat: 'qry' }
+        pOutQ:   { desc: '退货明细追踪',     cat: 'qry' }
       }
     },
     wh: {
@@ -62,18 +61,19 @@ window.GUIDE_DATA = {
       roles: '库管员',
       case: '门诊领用2盒 → 按申请单拣货出库 → 库存58盒；效期≤180天预警、过期自动冻结',
       diagrams: [
+        { f: '23-pick-unified-state-machine.svg', t: '领用单全链统一状态机', note: '五态主流水线+三入口+扫码直生捷径（原图18已并入）' },
         { f: '03-pick-loop.svg',        t: '领用出库 → 药房入库闭环', note: '库房发、药房收，库存同时动' },
         { f: '08-stock-derivation.svg', t: '库存推导（集合加减法）',   note: '库存=入库集合−出库集合' }
       ],
       menus: {
+        othIn:     { desc: '无单入库·扫码（赠品等）', cat: 'fix' },
         whstock:   { desc: '效期/冻结一目了然',  cat: 'qry' },
-        quickScan: { desc: '高拍仪连续扫码直出', cat: 'fwd' },
         pick:      { desc: '按申请单拣货出库',   cat: 'fwd', note: '仅扫码 · 人工通道规划中' },
+        quickScan: { desc: '高拍仪连续扫码直出', cat: 'fwd' },
         pickOut:   { desc: '出库单台账·审核跳转', cat: 'qry' },
-        whOutQ:    { desc: '领用/其他出库明细',  cat: 'qry' },
         retIn:     { desc: '药房退回接收+库房直收', cat: 'rev' },
-        othIn:     { desc: '无单入库（捐赠等）', cat: 'fix' },
-        othOut:    { desc: '无单出库（救急）',   cat: 'fix' }
+        othOut:    { desc: '无单出库（救急）',   cat: 'fix' },
+        whOutQ:    { desc: '领用/其他出库明细',  cat: 'qry' }
       }
     },
     ph: {
@@ -81,20 +81,22 @@ window.GUIDE_DATA = {
       roles: '药房药师',
       case: '领用2盒到货 → 扫码入药房上架 → 在架2盒/14片；码扫不出 → 待上架查询排查',
       diagrams: [
+        { f: '23-pick-unified-state-machine.svg', t: '领用单全链统一状态机', note: '一套单据五态走全程 · 含扫码直生捷径（原图19已并入）' },
         { f: '03-pick-loop.svg',        t: '领用出库 → 药房入库闭环', note: '本模块是闭环的下半段' },
+        { f: '20-ph-ret-state-machine.svg', t: '退回出库单进度状态机', note: '逆向 · 进度一维三态 + 撤销回路 · 草稿不扣账' },
         { f: '08-stock-derivation.svg', t: '库存推导（集合加减法）',   note: '药房库存同样按集合算' }
       ],
       menus: {
-        phstock:  { desc: '药房在架库存',   cat: 'qry' },
         req:      { desc: '向库房申领',     cat: 'fwd' },
         reqIn:    { desc: '领用到货入库',   cat: 'fwd' },
-        phInQ:    { desc: '入库明细对账',   cat: 'qry' },
-        retOut:   { desc: '余药退回库房',   cat: 'rev' },
         shelfQ:   { desc: '上架异常排查',   cat: 'fix' },
         shelf:    { desc: '扫码上架',       cat: 'fwd' },
         light:    { desc: '补药指示灯亮',   cat: 'fwd' },
         shelfOff: { desc: '扫码下架',       cat: 'rev' },
-        phloss:   { desc: '破损损耗登记',   cat: 'fix' }
+        retOut:   { desc: '按领用出库单退回', cat: 'rev' },
+        phloss:   { desc: '破损损耗登记',   cat: 'fix' },
+        phstock:  { desc: '药房在架库存',   cat: 'qry' },
+        phInQ:    { desc: '入库明细对账',   cat: 'qry' }
       }
     },
     disp: {
@@ -125,7 +127,7 @@ window.GUIDE_DATA = {
         wardSign:    { desc: '病区扫码签收',      cat: 'fwd', note: '拒收/退回规划中' }
       },
       xlinks: [
-        { key: 'badcode', note: '发药扫码异常也在这里补录（采购管理）' }
+        { key: 'arrive', note: '发药扫码异常在到货单页「异常码台账」补录（采购管理）' }
       ]
     },
     his: {
@@ -157,7 +159,7 @@ window.GUIDE_DATA = {
         invNocode: { desc: '无码/码损人工登记',  cat: 'fix' }
       },
       xlinks: [
-        { key: 'badcode', note: '盘点发现的坏码在这里补录（采购管理）' }
+        { key: 'arrive', note: '盘点发现的坏码在到货单页「异常码台账」补录（采购管理）' }
       ]
     },
     ledger: {
@@ -196,6 +198,8 @@ window.GUIDE_DATA = {
         perm:        { desc: '菜单启停与资源',   cat: 'fwd' },
         users:       { desc: '账号与角色分配',   cat: 'fwd' },
         roles:       { desc: '功能权限+数据范围', cat: 'fwd' },
+        loginLog:    { desc: '登录成功/失败记录', cat: 'qry' },
+        opLog:       { desc: '关键业务操作审计',   cat: 'qry' },
         cabSet:      { desc: '取药柜参数设置',   cat: 'fix' },
         pickLamp:    { desc: '取药指示灯配置',   cat: 'fix' },
         fillLampSet: { desc: '补药灯组设置',     cat: 'fix' },
