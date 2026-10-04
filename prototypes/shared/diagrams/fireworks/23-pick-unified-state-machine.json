@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 860,
+  "title": "领用单 · 全链统一状态机（申请 → 上架）",
+  "subtitle": "五态走全程：待提交（草稿·计划数量）→ 待出库（扫码备货·码渐满）→ 已出库·待入库 → 已入库·待上架 → 已上架；一套四表复用·只换状态不换单；捷径=扫码直生已审核单（2026-10-04 口径）",
+  "containers": [],
+  "nodes": [
+    { "id": "E1", "kind": "rect", "x": 30, "y": 110, "width": 190, "height": 54, "label": "药房申请", "sublabel": "建草稿 · 填计划数量", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "E2", "kind": "rect", "x": 295, "y": 110, "width": 200, "height": 54, "label": "库房制单", "sublabel": "空单 · 直入待出库", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "E3", "kind": "rect", "x": 1120, "y": 110, "width": 200, "height": 54, "label": "药房扫码直生", "sublabel": "捷径 · 无在途单时触发", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "S1", "kind": "rect", "x": 30, "y": 300, "width": 190, "height": 70, "label": "待提交", "sublabel": "草稿 · 计划数量 · 仅本侧可见", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "S2", "kind": "rect", "x": 295, "y": 300, "width": 200, "height": 70, "label": "待出库", "sublabel": "扫码备货中 · 码渐满不占状态位", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "S3", "kind": "rect", "x": 570, "y": 300, "width": 200, "height": 70, "label": "已出库 · 待入库", "sublabel": "审核即扣账 · 码在途", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "S4", "kind": "rect", "x": 845, "y": 300, "width": 200, "height": 70, "label": "已入库 · 待上架", "sublabel": "整单审核 · 货位可选", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "S5", "kind": "rect", "x": 1120, "y": 300, "width": 200, "height": 70, "label": "已上架", "sublabel": "写货位 phLoc · 终态", "fill": "#ffffff", "stroke": "#2fb344" },
+    { "id": "S6", "kind": "rect", "x": 570, "y": 560, "width": 240, "height": 70, "label": "已作废 / 已删除", "sublabel": "终态 · 不进流水不扣账", "fill": "#f6f8fb", "stroke": "#626976" },
+    { "id": "G1", "kind": "rect", "x": 30, "y": 700, "width": 410, "height": 76, "label": "待出库 = 备货 · 不占在架不扣账", "sublabel": "计划数量→单据数量渐满 · 扫码落盘续作 · 作废即释放", "fill": "#fdecea", "stroke": "#d63939" },
+    { "id": "G2", "kind": "rect", "x": 480, "y": 700, "width": 410, "height": 76, "label": "出库守卫（四道闸）", "sublabel": "失效码剔除 · 非申请药品禁止 · 过期/停用 · 盘点冻结", "fill": "#fff7e6", "stroke": "#d48806" },
+    { "id": "G3", "kind": "rect", "x": 930, "y": 700, "width": 410, "height": 76, "label": "直生守卫", "sublabel": "码须本库房在架且非冻结 · 异常码拦截 · 计划数量=实扫回填", "fill": "#fff7e6", "stroke": "#d48806" }
+  ],
+  "arrows": [
+    { "id": "a1", "source": "E1", "target": "S1", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "a2", "source": "E2", "target": "S2", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "a3", "source": "E3", "target": "S5", "source_port": "bottom", "target_port": "top", "flow": "control", "label": "直生已审核单" },
+    { "id": "a4", "source": "S1", "target": "S2", "source_port": "right", "target_port": "left", "flow": "control", "label": "提交申请" },
+    { "id": "a5", "source": "S2", "target": "S3", "source_port": "right", "target_port": "left", "flow": "control", "label": "审核出库" },
+    { "id": "a6", "source": "S3", "target": "S4", "source_port": "right", "target_port": "left", "flow": "control", "label": "审核入库" },
+    { "id": "a7", "source": "S4", "target": "S5", "source_port": "right", "target_port": "left", "flow": "control", "label": "扫码上架" },
+    { "id": "a8", "source": "S1", "target": "S6", "source_port": "bottom", "target_port": "left", "flow": "feedback", "label": "删除草稿" },
+    { "id": "a9", "source": "S2", "target": "S6", "source_port": "bottom", "target_port": "top", "flow": "feedback", "label": "作废·释放码" }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 48,
+  "legend_y": 812,
+  "legend": [
+    { "flow": "control", "label": "正向流转（事件驱动）" },
+    { "flow": "feedback", "label": "逆向 · 删除 / 作废" }
+  ],
+  "footer": "PUL-FMS · 23 领用单全链统一状态机（五态 + 三入口 + 扫码直生捷径 · 18/19 已并入本图）· fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 840
+}
