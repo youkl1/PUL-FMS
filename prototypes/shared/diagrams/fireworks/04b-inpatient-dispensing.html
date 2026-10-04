@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data: blob:">
+  <title>04b-inpatient-dispensing</title>
+  <style>
+    :root { color-scheme: dark; --page:#0f0f1a; --panel:#0f172a; --border:#334155; --text:#e2e8f0; --muted:#94a3b8; --accent:#a855f7; }
+    html[data-theme="light"] { color-scheme:light; --page:#f8fafc; --panel:#fff; --border:#cbd5e1; --text:#0f172a; --muted:#475569; --accent:#7c3aed; }
+    * { box-sizing:border-box; }
+    html,body { width:100%; height:100%; margin:0; overflow:hidden; background:linear-gradient(135deg,var(--page),#1a1a2e); color:var(--text); font-family:'SF Mono','Fira Code',ui-monospace,monospace; }
+    body { display:grid; grid-template-rows:auto 1fr; }
+    .toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:10px 14px; background:color-mix(in srgb,var(--panel) 92%,transparent); border-bottom:1px solid var(--border); z-index:2; }
+    .title { margin-right:auto; font-size:13px; font-weight:700; }
+    button,select { min-height:34px; padding:6px 10px; color:var(--text); background:var(--panel); border:1px solid var(--border); border-radius:8px; font:inherit; cursor:pointer; }
+    button:hover,button:focus-visible,select:focus-visible { border-color:var(--accent); outline:2px solid color-mix(in srgb,var(--accent) 35%,transparent); outline-offset:1px; }
+    #stage { position:relative; overflow:hidden; touch-action:none; cursor:grab; }
+    #stage.dragging { cursor:grabbing; }
+    #canvas { width:100%; height:100%; display:grid; place-items:center; transform-origin:0 0; will-change:transform; }
+    #canvas svg { max-width:calc(100vw - 40px); max-height:calc(100vh - 92px); width:auto; height:auto; filter:drop-shadow(0 22px 60px rgba(0,0,0,.28)); user-select:none; }
+    #status { min-width:76px; color:var(--muted); font-size:12px; text-align:center; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    @media (prefers-reduced-motion:reduce) { * { scroll-behavior:auto!important; transition:none!important; } }
+  </style>
+</head>
+<body>
+  <header class="toolbar" aria-label="Diagram controls">
+    <span class="title">04b-inpatient-dispensing</span>
+    <button type="button" data-action="zoom-out" aria-label="Zoom out">−</button>
+    <button type="button" data-action="reset" aria-label="Reset view">Reset</button>
+    <button type="button" data-action="zoom-in" aria-label="Zoom in">+</button>
+    <span id="status" aria-live="polite">100%</span>
+    <button type="button" data-action="theme" aria-label="Toggle theme">Theme</button>
+    <button type="button" data-action="copy" aria-label="Copy SVG source">Copy SVG</button>
+    <select id="scale" aria-label="Raster export scale"><option value="1">1×</option><option value="2" selected>2×</option><option value="3">3×</option><option value="4">4×</option></select>
+    <select id="format" aria-label="Export format"><option>SVG</option><option>PNG</option><option>JPEG</option><option>WebP</option></select>
+    <button type="button" data-action="download">Export</button>
+  </header>
+  <main id="stage" tabindex="0" aria-label="Interactive diagram. Drag to pan; use plus and minus to zoom.">
+    <div id="canvas"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 1300" width="1680" height="1300" data-generator="fireworks-tech-graph" data-schema-version="1" data-text-metrics="heuristic-v1" data-style-id="1" data-visual-theme="Flat Icon" data-diagram-type="architecture" data-motion-scene="" data-semantic-profile="generic" data-semantic-valid="true" data-quality-profile="standard" data-max-bends-per-edge="12" data-max-total-bends="100" data-max-route-stretch="5.0" data-max-bridged-crossings="8" data-min-node-gap="0.0" data-min-container-gutter="0.0" data-min-label-clearance="2.0" data-min-segment-length="0.0" role="img" focusable="false">
+  <defs>
+    <marker id="arrowA" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed" />
+    </marker>
+    <marker id="arrowB" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981" />
+    </marker>
+    <marker id="arrowC" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb" />
+    </marker>
+    <marker id="arrowE" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f97316" />
+    </marker>
+    <marker id="arrowF" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed" />
+    </marker>
+    <marker id="arrowG" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ef4444" />
+    </marker>
+    <marker id="arrowH" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280" />
+    </marker>
+    <filter id="shadowSoft" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.12" />
+    </filter>
+    <filter id="shadowGlass" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="16" flood-color="#020617" flood-opacity="0.28" />
+    </filter>
+    <style>
+    text { font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', 'Microsoft JhengHei', 'SimHei', sans-serif; }
+    .title { font-size: 30px; font-weight: 700; fill: #111827; }
+    .subtitle { font-size: 14px; font-weight: 500; fill: #6b7280; }
+    .section { font-size: 13px; font-weight: 700; fill: #2563eb; letter-spacing: 1.4px; }
+    .section-sub { font-size: 12px; font-weight: 500; fill: #64748b; }
+    .node-title { font-weight: 700; fill: #111827; }
+    .node-sub { font-weight: 500; fill: #6b7280; }
+    .node-type { font-size: 12px; font-weight: 700; fill: #64748b; letter-spacing: 0.08em; }
+    .arrow-label { font-size: 12px; font-weight: 600; fill: #6b7280; }
+    .legend { font-size: 12px; font-weight: 500; fill: #6b7280; }
+    .footnote { font-size: 12px; font-weight: 500; fill: #64748b; }
+    .metric-label { font-size: 8.5px; font-weight: 700; fill: #64748b; text-transform: uppercase; }
+    .metric-value { font-size: 9.5px; font-weight: 700; fill: #111827; }
+    </style>
+  </defs>
+  <rect data-graph-role="background" width="1680.0" height="1300.0" fill="#ffffff" />
+  <text x="840.0" y="56" text-anchor="middle" class="title">摆药发药流程 · 住院（先拿后匹配 · 事后补绑 · 逆向）</text>
+  <text x="840.0" y="82" text-anchor="middle" class="subtitle">摆药单驱动 · 规则匹配偏差=默认出口 · 异常日结闭环 · 与图 04 共用台账 · 2026-10-03 拍板分图</text>
+  <g id="lane-doc" data-graph-role="container" data-container-id="lane-doc" data-semantic-role="boundary" data-graph-bounds="40,100,1640,250">
+  <rect data-graph-role="container" x="40.0" y="100.0" width="1600.0" height="150.0" rx="16.0" fill="#eef4fb" stroke="#b7cdf0" stroke-width="1.4" stroke-dasharray="6 5" />
+  <text x="58.0" y="124.0" class="section">医生 / HIS</text>
+    <rect id="lane-doc-header" data-graph-role="reserved" data-reserved-kind="container-header" x="48" y="106" width="92.14" height="30" fill="none" stroke="none" />
+  </g>
+  <g id="lane-pha" data-graph-role="container" data-container-id="lane-pha" data-semantic-role="boundary" data-graph-bounds="40,270,1640,830">
+  <rect data-graph-role="container" x="40.0" y="270.0" width="1600.0" height="560.0" rx="16.0" fill="#eef4fb" stroke="#b7cdf0" stroke-width="1.4" stroke-dasharray="6 5" />
+  <text x="58.0" y="294.0" class="section">药房 · 药师（摆药）</text>
+    <rect id="lane-pha-header" data-graph-role="reserved" data-reserved-kind="container-header" x="48" y="276" width="150.9" height="30" fill="none" stroke="none" />
+  </g>
+  <g id="lane-exc" data-graph-role="container" data-container-id="lane-exc" data-semantic-role="boundary" data-graph-bounds="40,850,1640,1090">
+  <rect data-graph-role="container" x="40.0" y="850.0" width="1600.0" height="240.0" rx="16.0" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1.4" stroke-dasharray="6 5" />
+  <text x="58.0" y="874.0" class="section">药房 · 异常补救（事后专区 · 不卡流程）</text>
+    <rect id="lane-exc-header" data-graph-role="reserved" data-reserved-kind="container-header" x="48" y="856" width="271.8" height="30" fill="none" stroke="none" />
+  </g>
+  <g id="lane-ward" data-graph-role="container" data-container-id="lane-ward" data-semantic-role="boundary" data-graph-bounds="40,1110,1640,1220">
+  <rect data-graph-role="container" x="40.0" y="1110.0" width="1600.0" height="110.0" rx="16.0" fill="#eef8f0" stroke="#b7e0c4" stroke-width="1.4" stroke-dasharray="6 5" />
+  <text x="58.0" y="1134.0" class="section">病区 · 护士</text>
+    <rect id="lane-ward-header" data-graph-role="reserved" data-reserved-kind="container-header" x="48" y="1116" width="98.9" height="30" fill="none" stroke="none" />
+  </g>
+  <path id="b01" data-graph-role="edge" data-edge-id="b01" data-source="D1" data-target="M1" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 260,225 L 260,420" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)" />
+  <path id="b02" data-graph-role="edge" data-edge-id="b02" data-source="M1" data-target="M2" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 410,460 L 480,460" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)" />
+  <path id="b03" data-graph-role="edge" data-edge-id="b03" data-source="M2" data-target="DEC" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 780,460 L 870,460" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)" />
+  <path id="b04" data-graph-role="edge" data-edge-id="b04" data-source="DEC" data-target="OUT" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1090,460 L 1230,460" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)" />
+  <path id="b05" data-graph-role="edge" data-edge-id="b05" data-source="DEC" data-target="OUT" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="2" data-route-stretch="1.075" data-bridges="" d="M 980,420 L 980,405 L 1380,405 L 1380,420" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)" />
+  <path id="b06" data-graph-role="edge" data-edge-id="b06" data-source="DEC" data-target="E2" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="2" data-route-stretch="1.0" data-bridges="" d="M 980,500 L 980,834 L 1120,834 L 1120,880" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)" />
+  <path id="b07" data-graph-role="edge" data-edge-id="b07" data-source="OUT" data-target="W1" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="4" data-route-stretch="1.674" data-bridges="" d="M 1380,500 L 1380,520.4 L 1594,520.4 L 1594,1114.6 L 1380,1114.6 L 1380,1135" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)" />
+  <path id="b08-bridge-mask" data-graph-role="bridge-mask" data-owner="b08" d="M 1530,460 L 1570,460 L 1570,515.4 A 5 5 0 0 1 1570,525.4 L 1570,660 L 1570,660" fill="none" stroke="#ffffff" stroke-width="6.9" stroke-linecap="round" stroke-linejoin="round" />
+  <path id="b08" data-graph-role="edge" data-edge-id="b08" data-source="OUT" data-target="R3A" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="1" data-route-stretch="1.0" data-bridges="1570,520.4" d="M 1530,460 L 1570,460 L 1570,515.4 A 5 5 0 0 1 1570,525.4 L 1570,660 L 1570,660" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)" />
+  <path id="b09" data-graph-role="edge" data-edge-id="b09" data-source="R3A" data-target="BK" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="2" data-route-stretch="1.0" data-bridges="" d="M 1400,705 L 1400,719.6 L 1230,719.6 L 1230,740" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)" />
+  <path id="b10" data-graph-role="edge" data-edge-id="b10" data-source="E2" data-target="E1" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 930,930 L 830,930" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)" />
+  <path id="b11" data-graph-role="edge" data-edge-id="b11" data-source="E1" data-target="E2" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="2" data-route-stretch="1.083" data-bridges="" d="M 630,980 L 630,1000.4 L 1120,1000.4 L 1120,980" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)" />
+  <path id="b12" data-graph-role="edge" data-edge-id="b12" data-source="E2" data-target="BK" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="3" data-route-stretch="1.204" data-bridges="" d="M 1310,930 L 1330.4,930 L 1330.4,830.4 L 1230,830.4 L 1230,810" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)" />
+  <path id="b13" data-graph-role="edge" data-edge-id="b13" data-source="W1" data-target="R3B" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1230,1170 L 920,1170" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)" />
+  <g id="node-D1" data-graph-role="node" data-node-id="D1" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="80,135,440,225">
+  <rect x="80.0" y="135.0" width="360.0" height="90.0" rx="10.0" fill="#fff7e6" stroke="#d48806" stroke-width="1.8" filter="url(#shadowSoft)" />
+  <text x="260.0" y="153.0" text-anchor="middle" class="node-type">ORDER</text>
+  <text data-text-role="title" data-full-text="医嘱汇总 → 生成摆药单" data-text-max-width="336.0" x="260.0" y="186.0" text-anchor="middle" class="node-title" font-size="18">医嘱汇总 → 生成摆药单</text>
+  <text data-text-role="subtitle" data-full-text="按顿拆分 · 拆零为常态 · 系统锁药品级数量" data-text-max-width="336.0" x="260.0" y="208.0" text-anchor="middle" class="node-sub" font-size="12">按顿拆分 · 拆零为常态 · 系统锁药品级数量</text>
+  </g>
+  <g id="node-R1" data-graph-role="node" data-node-id="R1" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="980,135,1400,225">
+  <rect x="980.0" y="135.0" width="420.0" height="90.0" rx="10.0" fill="#fdecea" stroke="#d63939" stroke-width="1.8" filter="url(#shadowSoft)" />
+  <text x="1190.0" y="153.0" text-anchor="middle" class="node-type">REVERSE</text>
+  <text data-text-role="title" data-full-text="医嘱撤销 · 分时点处理" data-text-max-width="396.0" x="1190.0" y="186.0" text-anchor="middle" class="node-title" font-size="18">医嘱撤销 · 分时点处理</text>
+  <text data-text-role="subtitle" data-full-text="未摆药=释放锁定 · 已摆药=转摆药退回 R3A" data-text-max-width="396.0" x="1190.0" y="208.0" text-anchor="middle" class="node-sub" font-size="12">未摆药=释放锁定 · 已摆药=转摆药退回 R3A</text>
+  </g>
+  <g id="node-M1" data-graph-role="node" data-node-id="M1" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="110,420,410,500">
+  <rect x="110.0" y="420.0" width="300.0" height="80.0" rx="10.0" fill="#fff7e6" stroke="#d48806" stroke-width="1.8" filter="url(#shadowSoft)" />
+  <text x="260.0" y="438.0" text-anchor="middle" class="node-type">PICK</text>
+  <text data-text-role="title" data-full-text="先拿药" data-text-max-width="276.0" x="260.0" y="466.0" text-anchor="middle" class="node-title" font-size="18">先拿药</text>
+  <text data-text-role="subtitle" data-full-text="摆药单驱动 · 按货位顺序" data-text-max-width="276.0" x="260.0" y="488.0" text-anchor="middle" class="node-sub" font-size="12">摆药单驱动 · 按货位顺序</text>
+  </g>
+  <g id="node-M2" data-graph-role="node" data-node-id="M2" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="480,420,780,500">
+  <rect x="480.0" y="420.0" width="300.0" height="80.0" rx="10.0" fill="#fff7e6" stroke="#d48806" stroke-width="1.8" filter="url(#shadowSoft)" />
+  <text x="630.0" y="438.0" text-anchor="middle" class="node-type">MATCH</text>
+  <text data-text-role="title" data-full-text="后匹配码" data-text-max-width="276.0" x="630.0" y="466.0" text-anchor="middle" class="node-title" font-size="18">后匹配码</text>
+  <text data-text-role="subtitle" data-full-text="规则自动匹配：FEFO+货位序" data-text-max-width="276.0" x="630.0" y="488.0" text-anchor="middle" class="node-sub" font-size="12">规则自动匹配：FEFO+货位序</text>
+  </g>
+  <g id="node-DEC" data-graph-role="node" data-node-id="DEC" data-semantic-role="hexagon" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="870,420,1090,500">
+  <path d="M 892.0 420.0 L 1068.0 420.0 L 1090.0 460.0 L 1068.0 500.0 L 892.0 500.0 L 870.0 460.0 Z" fill="#fff7e6" stroke="#d48806" stroke-width="2.0" filter="url(#shadowSoft)" />
+  <text x="980.0" y="438.0" text-anchor="middle" class="node-type">DECISION</text>
+  <text data-text-role="title" data-full-text="规则匹配命中？" data-text-max-width="168.0" x="980.0" y="466.0" text-anchor="middle" class="node-title" font-size="18">规则匹配命中？</text>
+  <text data-text-role="subtitle" data-full-text="规则≠实际为常态偏差" data-text-max-width="168.0" x="980.0" y="488.0" text-anchor="middle" class="node-sub" font-size="12">规则≠实际为常态偏差</text>
+  </g>
+  <g id="node-OUT" data-graph-role="node" data-node-id="OUT" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1230,420,1530,500">
+  <rect x="1230.0" y="420.0" width="300.0" height="80.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="1.8" filter="url(#shadowSoft)" />
+  <text x="1380.0" y="438.0" text-anchor="middle" class="node-type">SCAN OUT</text>
+  <text data-text-role="title" data-full-text="出库扣账 · 在途" data-text-max-width="276.0" x="1380.0" y="466.0" text-anchor="middle" class="node-title" font-size="18">出库扣账 · 在途</text>
+  <text data-text-role="subtitle" data-full-text="码绑摆药单" data-text-max-width="276.0" x="1380.0" y="488.0" text-anchor="middle" class="node-sub" font-size="12">码绑摆药单</text>
+  </g>
+  <g id="node-R3A" data-graph-role="node" data-node-id="R3A" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1230,615,1570,705">
+  <rect x="1230.0" y="615.0" width="340.0" height="90.0" rx="10.0" fill="#fdecea" stroke="#d63939" stroke-width="1.8" filter="url(#shadowSoft)" />
+  <text x="1400.0" y="633.0" text-anchor="middle" class="node-type">REVERSE</text>
+  <text data-text-role="title" data-full-text="摆药退回（未签收）" data-text-max-width="316.0" x="1400.0" y="666.0" text-anchor="middle" class="node-title" font-size="18">摆药退回（未签收）</text>
+  <text data-text-role="subtitle" data-full-text="解绑回架 · 含医嘱撤销已摆药转入" data-text-max-width="316.0" x="1400.0" y="688.0" text-anchor="middle" class="node-sub" font-size="12">解绑回架 · 含医嘱撤销已摆药转入</text>
+  </g>
+  <g id="node-BK" data-graph-role="node" data-node-id="BK" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1090,740,1370,810">
+  <rect x="1090.0" y="740.0" width="280.0" height="70.0" rx="10.0" fill="#fdecea" stroke="#d63939" stroke-width="1.8" filter="url(#shadowSoft)" />
+  <text x="1230.0" y="758.0" text-anchor="middle" class="node-type">RESTOCK</text>
+  <text data-text-role="title" data-full-text="码回架复用" data-text-max-width="256.0" x="1230.0" y="781.0" text-anchor="middle" class="node-title" font-size="18">码回架复用</text>
+  <text data-text-role="subtitle" data-full-text="逆向公共终点" data-text-max-width="256.0" x="1230.0" y="803.0" text-anchor="middle" class="node-sub" font-size="12">逆向公共终点</text>
+  </g>
+  <g id="node-RULE" data-graph-role="node" data-node-id="RULE" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="110,880,410,980">
+  <rect x="110.0" y="880.0" width="300.0" height="100.0" rx="10.0" fill="#f3e8ff" stroke="#7c3aed" stroke-width="1.8" filter="url(#shadowSoft)" />
+  <text x="260.0" y="898.0" text-anchor="middle" class="node-type">RULE · 铁律</text>
+  <text data-text-role="title" data-full-text="药必须发得出优先" data-text-max-width="276.0" x="260.0" y="936.0" text-anchor="middle" class="node-title" font-size="18">药必须发得出优先</text>
+  <text data-text-role="subtitle" data-full-text="码账事后补平 · 全程留痕" data-text-max-width="276.0" x="260.0" y="958.0" text-anchor="middle" class="node-sub" font-size="12">码账事后补平 · 全程留痕</text>
+  </g>
+  <g id="node-E1" data-graph-role="node" data-node-id="E1" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="430,880,830,980">
+  <rect x="430.0" y="880.0" width="400.0" height="100.0" rx="10.0" fill="#f3e8ff" stroke="#7c3aed" stroke-width="1.8" filter="url(#shadowSoft)" />
+  <text x="630.0" y="898.0" text-anchor="middle" class="node-type">MANUAL BIND</text>
+  <text data-text-role="title" data-full-text="日结前手动补绑" data-text-max-width="376.0" x="630.0" y="936.0" text-anchor="middle" class="node-title" font-size="18">日结前手动补绑</text>
+  <text data-text-role="subtitle" data-full-text="系统推荐 + 人工选定 · bindType=manual" data-text-max-width="376.0" x="630.0" y="958.0" text-anchor="middle" class="node-sub" font-size="12">系统推荐 + 人工选定 · bindType=manual</text>
+  </g>
+  <g id="node-E2" data-graph-role="node" data-node-id="E2" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="930,880,1310,980">
+  <rect x="930.0" y="880.0" width="380.0" height="100.0" rx="10.0" fill="#f3e8ff" stroke="#7c3aed" stroke-width="1.8" filter="url(#shadowSoft)" />
+  <text x="1120.0" y="898.0" text-anchor="middle" class="node-type">LEDGER · 日结</text>
+  <text data-text-role="title" data-full-text="赋码异常台账（与 04 共用）" data-text-max-width="356.0" x="1120.0" y="936.0" text-anchor="middle" class="node-title" font-size="18">赋码异常台账（与 04 共用）</text>
+  <text data-text-role="subtitle" data-full-text="偏差自动生成待补绑 → 确认/改绑/关闭 · 超 24h 升级" data-text-max-width="356.0" x="1120.0" y="958.0" text-anchor="middle" class="node-sub" font-size="12">偏差自动生成待补绑 → 确认/改绑/关闭 · 超 24h 升级</text>
+  </g>
+  <g id="node-R3B" data-graph-role="node" data-node-id="R3B" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="560,1135,920,1205">
+  <rect x="560.0" y="1135.0" width="360.0" height="70.0" rx="10.0" fill="#fdecea" stroke="#d63939" stroke-width="1.8" filter="url(#shadowSoft)" />
+  <text x="740.0" y="1153.0" text-anchor="middle" class="node-type">REVERSE</text>
+  <text data-text-role="title" data-full-text="病区退回（已签收）" data-text-max-width="336.0" x="740.0" y="1176.0" text-anchor="middle" class="node-title" font-size="18">病区退回（已签收）</text>
+  <text data-text-role="subtitle" data-full-text="转退药流程 rx-ret" data-text-max-width="336.0" x="740.0" y="1198.0" text-anchor="middle" class="node-sub" font-size="12">转退药流程 rx-ret</text>
+  </g>
+  <g id="node-W1" data-graph-role="node" data-node-id="W1" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1230,1135,1530,1205">
+  <rect x="1230.0" y="1135.0" width="300.0" height="70.0" rx="10.0" fill="#fff7e6" stroke="#d48806" stroke-width="1.8" filter="url(#shadowSoft)" />
+  <text x="1380.0" y="1153.0" text-anchor="middle" class="node-type">WARD</text>
+  <text data-text-role="title" data-full-text="病区签收 · 在途→闭环" data-text-max-width="276.0" x="1380.0" y="1176.0" text-anchor="middle" class="node-title" font-size="18">病区签收 · 在途→闭环</text>
+  <text data-text-role="subtitle" data-full-text="码随发药单绑患者" data-text-max-width="276.0" x="1380.0" y="1198.0" text-anchor="middle" class="node-sub" font-size="12">码随发药单绑患者</text>
+  </g>
+  <g id="b04-label" data-graph-role="label" data-owner="b04" data-graph-bounds="1121.2,429,1198.8,449">
+  <rect x="1121.2" y="429.0" width="77.6" height="20" rx="6" fill="#ffffff" opacity="0.94" />
+  <text x="1160.0" y="443.0" text-anchor="middle" class="arrow-label">命中 · 绑定</text>
+  </g>
+  <g id="b05-label" data-graph-role="label" data-owner="b05" data-graph-bounds="1111.2,374,1248.8,394">
+  <rect x="1111.2" y="374.0" width="137.60000000000002" height="20" rx="6" fill="#ffffff" opacity="0.94" />
+  <text x="1180.0" y="388.0" text-anchor="middle" class="arrow-label">偏差 · 药照发不卡流程</text>
+  </g>
+  <g id="b06-label" data-graph-role="label" data-owner="b06" data-graph-bounds="839.4,653,977,673">
+  <rect x="839.4" y="653.0" width="137.60000000000002" height="20" rx="6" fill="#ffffff" opacity="0.94" />
+  <text x="908.2" y="667.0" text-anchor="middle" class="arrow-label">偏差 · 自动生成待补绑</text>
+  </g>
+  <g id="b07-label" data-graph-role="label" data-owner="b07" data-graph-bounds="1489.4,803.5,1591,823.5">
+  <rect x="1489.4" y="803.5" width="101.6" height="20" rx="6" fill="#ffffff" opacity="0.94" />
+  <text x="1540.2" y="817.5" text-anchor="middle" class="arrow-label">在途 → 签收闭环</text>
+  </g>
+  <g id="b08-label" data-graph-role="label" data-owner="b08" data-graph-bounds="1445,546,1567,566">
+  <rect x="1445.0" y="546.0" width="122.0" height="20" rx="6" fill="#ffffff" opacity="0.94" />
+  <text x="1506.0" y="560.0" text-anchor="middle" class="arrow-label">摆药退回（未签收）</text>
+  </g>
+  <g id="b10-label" data-graph-role="label" data-owner="b10" data-graph-bounds="843,899,917,919">
+  <rect x="843.0" y="899.0" width="74.0" height="20" rx="6" fill="#ffffff" opacity="0.94" />
+  <text x="880.0" y="913.0" text-anchor="middle" class="arrow-label">日结前补绑</text>
+  </g>
+  <g id="b11-label" data-graph-role="label" data-owner="b11" data-graph-bounds="818.2,987.4,931.8,1007.4">
+  <rect x="818.2" y="987.4" width="113.60000000000001" height="20" rx="6" fill="#ffffff" opacity="0.94" />
+  <text x="875.0" y="1001.4" text-anchor="middle" class="arrow-label">补绑完成 · 待复核</text>
+  </g>
+  <g id="b12-label" data-graph-role="label" data-owner="b12" data-graph-bounds="1213.2,817.4,1347.2,837.4">
+  <rect x="1213.2" y="817.4" width="134.0" height="20" rx="6" fill="#ffffff" opacity="0.94" />
+  <text x="1280.2" y="831.4" text-anchor="middle" class="arrow-label">改绑：释放错绑码回架</text>
+  </g>
+  <g id="b13-label" data-graph-role="label" data-owner="b13" data-graph-bounds="1014,1139,1136,1159">
+  <rect x="1014.0" y="1139.0" width="122.0" height="20" rx="6" fill="#ffffff" opacity="0.94" />
+  <text x="1075.0" y="1153.0" text-anchor="middle" class="arrow-label">病区退回（已签收）</text>
+  </g>
+  <g id="legend" data-graph-role="legend">
+    <rect id="legend-zone" data-graph-role="reserved" data-reserved-kind="legend" x="80" y="1060" width="555.12" height="46" rx="10" fill="none" stroke="none" />
+    <line data-graph-role="decoration" x1="90.0" y1="1074.0" x2="120.0" y2="1074.0" stroke="#7c3aed" stroke-width="2.4" marker-end="url(#arrowA)" />
+    <text data-graph-role="decoration" x="130.0" y="1078.0" class="legend">主流程（正向摆药发药）</text>
+    <line data-graph-role="decoration" x1="290.0" y1="1074.0" x2="320.0" y2="1074.0" stroke="#f97316" stroke-width="2.4" marker-end="url(#arrowE)" />
+    <text data-graph-role="decoration" x="330.0" y="1078.0" class="legend">逆向回流 / 异常补救（红节点=逆向 · 紫节点=异常）</text>
+  </g>
+  <g id="footer" data-graph-role="reserved" data-graph-bounds="48,1263,720,1279">
+  <text x="48.0" y="1275.0" class="footnote">PUL-FMS · 04b 住院摆药 · 先拿后匹配 · 偏差=默认出口（命中/偏差都出库）· 台账日结闭环 · 与图 04 共用 · fireworks-tech-graph Style 1</text>
+  </g>
+</svg></div>
+    <p class="sr-only">Keyboard shortcuts: plus and minus zoom, zero resets, T toggles theme, S exports.</p>
+  </main>
+  <script>
+  (() => {
+    'use strict';
+    const metadata = {"slug": "04b-inpatient-dispensing"};
+    const stage = document.getElementById('stage');
+    const canvas = document.getElementById('canvas');
+    const svg = canvas.querySelector('svg');
+    const status = document.getElementById('status');
+    const scaleSelect = document.getElementById('scale');
+    const formatSelect = document.getElementById('format');
+    let view = { x:0, y:0, scale:1 };
+    let drag = null;
+    const clamp = value => Math.max(.2, Math.min(8, value));
+    const render = () => {
+      canvas.style.transform = `translate(${view.x}px,${view.y}px) scale(${view.scale})`;
+      status.textContent = `${Math.round(view.scale * 100)}%`;
+    };
+    const zoom = (factor, originX=stage.clientWidth/2, originY=stage.clientHeight/2) => {
+      const next = clamp(view.scale * factor);
+      const ratio = next / view.scale;
+      view.x = originX - (originX - view.x) * ratio;
+      view.y = originY - (originY - view.y) * ratio;
+      view.scale = next; render();
+    };
+    const reset = () => { view = {x:0,y:0,scale:1}; render(); };
+    stage.addEventListener('wheel', event => { event.preventDefault(); const rect=stage.getBoundingClientRect(); zoom(event.deltaY < 0 ? 1.12 : .89, event.clientX-rect.left, event.clientY-rect.top); }, {passive:false});
+    stage.addEventListener('pointerdown', event => { drag={id:event.pointerId,x:event.clientX,y:event.clientY,vx:view.x,vy:view.y}; stage.setPointerCapture(event.pointerId); stage.classList.add('dragging'); });
+    stage.addEventListener('pointermove', event => { if(!drag||drag.id!==event.pointerId)return; view.x=drag.vx+event.clientX-drag.x; view.y=drag.vy+event.clientY-drag.y; render(); });
+    const endDrag = () => { drag=null; stage.classList.remove('dragging'); };
+    stage.addEventListener('pointerup', endDrag); stage.addEventListener('pointercancel', endDrag);
+    const source = () => new XMLSerializer().serializeToString(svg);
+    const saveBlob = (blob, extension) => { const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`${(metadata.slug||'fireworks-tech-graph')}.${extension}`; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); };
+    const copySource = async () => {
+      const value=source();
+      try { await navigator.clipboard.writeText(value); status.textContent='Copied'; return; } catch {}
+      const area=document.createElement('textarea'); area.value=value; area.setAttribute('readonly',''); area.style.position='fixed'; area.style.opacity='0'; document.body.appendChild(area); area.select();
+      status.textContent=document.execCommand('copy')?'Copied':'Copy failed'; area.remove();
+    };
+    const exportDiagram = async () => {
+      const format = formatSelect.value.toLowerCase();
+      if(format==='svg') { saveBlob(new Blob([source()],{type:'image/svg+xml;charset=utf-8'}),'svg'); return; }
+      const scale = Math.max(1,Math.min(4,Number(scaleSelect.value)||2));
+      const box = svg.viewBox.baseVal; const width=box.width||svg.clientWidth; const height=box.height||svg.clientHeight;
+      const image = new Image(); const url=URL.createObjectURL(new Blob([source()],{type:'image/svg+xml'}));
+      await new Promise((resolve,reject)=>{ image.onload=resolve; image.onerror=reject; image.src=url; });
+      const raster=document.createElement('canvas'); raster.width=Math.round(width*scale); raster.height=Math.round(height*scale);
+      const ctx=raster.getContext('2d'); if(format==='jpeg'){ctx.fillStyle='#ffffff';ctx.fillRect(0,0,raster.width,raster.height);} ctx.drawImage(image,0,0,raster.width,raster.height); URL.revokeObjectURL(url);
+      const mime=format==='jpeg'?'image/jpeg':format==='webp'?'image/webp':'image/png';
+      const blob=await new Promise(resolve=>raster.toBlob(resolve,mime,.94)); if(blob) saveBlob(blob,format==='jpeg'?'jpg':format);
+    };
+    document.querySelector('.toolbar').addEventListener('click', async event => {
+      const action=event.target.closest('[data-action]')?.dataset.action; if(!action)return;
+      if(action==='zoom-in')zoom(1.2); else if(action==='zoom-out')zoom(.83); else if(action==='reset')reset();
+      else if(action==='theme')document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';
+      else if(action==='download')await exportDiagram();
+      else if(action==='copy') await copySource();
+    });
+    document.addEventListener('keydown', event => {
+      if(event.target.matches('select'))return;
+      if(event.key==='+'||event.key==='=')zoom(1.2); else if(event.key==='-')zoom(.83); else if(event.key==='0'||event.key.toLowerCase()==='r')reset();
+      else if(event.key.toLowerCase()==='t')document.querySelector('[data-action=theme]').click(); else if(event.key.toLowerCase()==='s'){event.preventDefault();exportDiagram();}
+    });
+    render();
+  })();
+  </script>
+</body>
+</html>
