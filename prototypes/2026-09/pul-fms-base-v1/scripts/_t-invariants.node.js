@@ -130,7 +130,7 @@ if (typeof W.blockMove === 'function') {
   window.store.update({ inv: { countDocs: [] } });
 }
 
-console.log('# ledger 不含备货中草稿（2026-10-01 备货草稿态统一）');
+console.log('# ledger 不含待出库未过账单（2026-10-05 领用单五态统一）');
 window.store.update({ wh: {
   pickDocs: [
     { billNo: 'LYCK-DRAFT1', status: '待出库', warehouse: '中心库', pharmacy: '门诊药房', date: '2026-10-01 09:00', codes: [c(CODE_A)] },
@@ -164,6 +164,8 @@ eq('老备货中→待出库', mT0 && mT0.status, '待出库');
 eq('老已出库→已出库·待入库', mT1 && mT1.status, '已出库·待入库');
 eq('已完成申请并入既有单（items 回填）', mT1 && mT1.items && mT1.items.length, 1);
 eq('并单后废除 reqNo 字段', mT1 && mT1.reqNo, undefined);
+eq('并单 items docQty 按备齐回填', mT1 && mT1.items[0] && mT1.items[0].docQty, 2);
+ok('并单 outTime 从 auditTime 回填', mT1 && mT1.outTime === '2026-10-01 10:05');
 ok('无源待备货申请→新单待出库', mNew && mNew.status === '待出库' && mNew.source === '药房申请');
 eq('新单 items 带 docQty=0', mNew && mNew.items[0] && mNew.items[0].docQty, 0);
 eq('reqPool 已清空', mig.reqPool, []);
