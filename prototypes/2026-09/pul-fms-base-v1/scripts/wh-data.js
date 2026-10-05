@@ -459,6 +459,7 @@
     var s = load();
     var t = now();
     var dict = window.PUL_DRUG ? window.PUL_DRUG.flat() : [];
+    var ds = window.PUL_DRUG ? window.PUL_DRUG.load() : null;
     var items = {}, order = [];
     scannedCodes.forEach(function (cd) {
       var dc = '?', base = 1;
@@ -466,7 +467,6 @@
         var p = window.PUL_PCH.parseCode(cd.code, dict);
         if (p.dict) {
           dc = p.dict.drugCode;
-          var ds = window.PUL_DRUG.load();
           var dg = window.PUL_DRUG.drugOf(ds, dc);
           var v = dg ? window.PUL_DRUG.conv(ds, dc, 1, p.dict.packUnit || p.dict.unit, dg.baseUnit) : null;
           base = v == null ? 1 : v;

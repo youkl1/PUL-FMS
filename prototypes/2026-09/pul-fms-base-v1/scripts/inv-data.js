@@ -1,6 +1,6 @@
 /**
  * inv-data.js — 盘点 Mock（store 命名空间 inv）
- * 盘点单扫码对照在架快照：多扫=盘盈，少扫=盘亏；审核后到盘盈入库/盘亏出库过账
+ * 药品盘点单扫码对照在架快照：多扫=盘盈，少扫=盘亏；审核后到盘盈入库单/盘亏出库单过账
  */
 (function () {
   'use strict';
@@ -62,13 +62,15 @@
       wh.pickDocs = wh.pickDocs || [];
       wh.pickDocs.unshift({
         billNo: W.nextNo('PYRK', wh.pickDocs, 'billNo'), date: W.now(), pharmacy: d.node, warehouse: '中心库',
-        status: '药房已入库', auditTime: W.now(), operator: d.auditor || '',
-        codes: df.gain.map(function (c) { return Object.assign({}, c); }), remark: '盘盈入库 ' + d.billNo
+        status: '已入库·待上架', inTime: W.now(), outTime: W.now(), createTime: W.now(), submitTime: W.now(),
+        source: '库房制单', applicant: d.auditor || '', operator: d.auditor || '',
+        items: [], badCodes: [], shelfLoc: '',
+        codes: df.gain.map(function (c) { return Object.assign({}, c); }), remark: '盘盈入库单 ' + d.billNo
       });
     } else {
       wh.othInDocs = wh.othInDocs || [];
       wh.othInDocs.unshift({
-        billNo: W.nextNo('PYRK', wh.othInDocs, 'billNo'), date: W.now(), type: '盘盈入库', warehouse: d.node,
+        billNo: W.nextNo('PYRK', wh.othInDocs, 'billNo'), date: W.now(), type: '盘盈入库单', warehouse: d.node,
         remark: '盘点 ' + d.billNo, status: '已审核', auditTime: W.now(), auditor: d.auditor || '',
         codes: df.gain.map(function (c) { return Object.assign({}, c, { checked: true }); })
       });
