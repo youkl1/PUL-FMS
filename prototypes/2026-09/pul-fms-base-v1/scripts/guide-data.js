@@ -62,7 +62,6 @@ window.GUIDE_DATA = {
       case: '门诊领用2盒 → 按申请单拣货出库 → 库存58盒；效期≤180天预警、过期自动冻结',
       diagrams: [
         { f: '23-pick-unified-state-machine.svg', t: '领用单全链统一状态机', note: '五态主流水线+三入口+扫码直生捷径（原图18已并入）' },
-        { f: '03-pick-loop.svg',        t: '领用出库 → 药房入库闭环', note: '库房发、药房收，库存同时动' },
         { f: '08-stock-derivation.svg', t: '库存推导（集合加减法）',   note: '库存=入库集合−出库集合' }
       ],
       menus: {
@@ -81,8 +80,8 @@ window.GUIDE_DATA = {
       roles: '药房药师',
       case: '领用2盒到货 → 扫码入药房上架 → 在架2盒/14片；码扫不出 → 待上架查询排查',
       diagrams: [
+        { f: '24-ph-full-loop.svg', t: '药房管理全流程泳道图', note: '三泳道全直线：正向+直生捷径+逆向（原图03/21已并入）' },
         { f: '23-pick-unified-state-machine.svg', t: '领用单全链统一状态机', note: '一套单据五态走全程 · 含扫码直生捷径（原图19已并入）' },
-        { f: '03-pick-loop.svg',        t: '领用出库 → 药房入库闭环', note: '本模块是闭环的下半段' },
         { f: '20-ph-ret-state-machine.svg', t: '退回出库单进度状态机', note: '逆向 · 进度一维三态 + 撤销回路 · 草稿不扣账' },
         { f: '08-stock-derivation.svg', t: '库存推导（集合加减法）',   note: '药房库存同样按集合算' }
       ],

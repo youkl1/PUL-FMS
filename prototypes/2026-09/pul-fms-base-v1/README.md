@@ -360,3 +360,14 @@ Non-Goals（本轮不做）：不恢复两段制（备货=数量确认）、不�
 验证：图23 fireworks validate/render/check 全绿、文字零截断、无线条交叉；PNG 无头 Edge 截图目检通过；`_t-guide` 全部通过；`_t-invariants` all passed（未动业务代码）。
 
 附注：图纸浏览器侧栏的 Round AN 重排改动（8 大业务组分组）随本主题首个 commit（b68a81a）一并入库——同源同文件，未强拆。
+
+## 二十四、Round AQ：图24 药房管理全流程泳道图 + 图03/21 隐藏（2026-10-05）
+
+起因：药房管理缺「一张图讲完」的全流程泳道图；用户拍板布局原则「画布可以长一点，线条尽量用直线，流程图直观一点」。设计稿 `docs/superpowers/specs/2026-10-05-ph-full-loop-design.md`。
+
+| 改动 | 文件 | 说明 |
+|---|---|---|
+| 图24 新增 | `24-ph-full-loop.{json,svg,html,png}` | 三泳道（药房两行/库房/系统）1680×960 长画布；主链单行横贯全直线，逆向行在主链正下方，四组垂直通道同列对齐；捷径=扫码直生右进终态；唯二折线=下架顶部回线 |
+| 图03/21 隐藏 | `diagrams/index.html` `guide-data.js` | 从侧栏与导览清单移除（文件保留，口径并入图24）；图15（Mermaid 时序图）保留；可见图纸 22+1 → 21+1 |
+
+验证：图24 fireworks validate/render/check 全绿零截断零交叉；PNG 目检（直线/回线/副标题）；`_t-guide`/`_t-invariants`/`check-prd-menu-sync` 全绿。
