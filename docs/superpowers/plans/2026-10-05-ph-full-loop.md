@@ -186,7 +186,7 @@ Expected：全绿。另无头 Edge 截 index.html（`_shots/diagrams-index-aq.pn
 
 | 改动 | 文件 | 说明 |
 |---|---|---|
-| 图24 新增 | `24-ph-full-loop.{json,svg,html,png}` | 三泳道（药房两行/库房/系统）1560×960 长画布；主链单行横贯全直线，逆向行在主链正下方，四组垂直通道同列对齐；捷径=扫码直生右进终态；唯二折线=下架顶部回线 |
+| 图24 新增 | `24-ph-full-loop.{json,svg,html,png}` | 三泳道（药房两行/库房/系统）设计 1560×960·落地加宽至 1680×960；主链单行横贯全直线，逆向行在主链正下方，四组垂直通道同列对齐；捷径=扫码直生右进终态；唯一折线（两折点）=下架顶部回线 |
 | 图03/21 隐藏 | `diagrams/index.html` `guide-data.js` | 从侧栏与导览清单移除（文件保留，口径并入图24）；图15（Mermaid 时序图）保留；可见图纸 22+1 → 21+1 |
 
 验证：图24 fireworks validate/render/check 全绿零截断零交叉；PNG 目检（直线/回线/副标题）；`_t-guide`/`_t-invariants`/`check-prd-menu-sync` 全绿。
