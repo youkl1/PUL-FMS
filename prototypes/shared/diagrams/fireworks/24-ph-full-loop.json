@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1680,
+  "height": 960,
+  "title": "药房管理 · 全流程泳道图（领用 → 上架 → 逆向）",
+  "subtitle": "三泳道：药房/库房/系统；正向：申请→备货→审核出库→审核入库→上架→在架；捷径：扫码直生已审核单；逆向：下架/退回/报损；单据状态口径见图23",
+  "containers": [
+    { "id": "lane-ph",  "x": 40, "y": 90,  "width": 1590, "height": 330, "label": "药房 · 药师", "stroke": "#b7cdf0", "fill": "#eef4fb" },
+    { "id": "lane-wh",  "x": 40, "y": 440, "width": 1590, "height": 170, "label": "库房 · 库管员", "stroke": "#b7e0c4", "fill": "#eef8f0" },
+    { "id": "lane-sys", "x": 40, "y": 630, "width": 1590, "height": 150, "label": "系统 · 码⇄药转换引擎", "stroke": "#d0d5dd", "fill": "#f6f8fb" }
+  ],
+  "nodes": [
+    { "id": "P1", "kind": "rect", "x": 60, "y": 170, "width": 200, "height": 70, "label": "新增领用申请", "sublabel": "草稿 · 计划数量", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "P2", "kind": "rect", "x": 320, "y": 170, "width": 200, "height": 70, "label": "提交申请", "sublabel": "草稿 → 待出库", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "P5", "kind": "rect", "x": 640, "y": 170, "width": 200, "height": 70, "label": "审核入库", "sublabel": "整单 · 货位可选", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "P6", "kind": "rect", "x": 920, "y": 170, "width": 200, "height": 70, "label": "已入库 · 待上架", "sublabel": "码进本房在架", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "P7", "kind": "rect", "x": 1200, "y": 170, "width": 200, "height": 70, "label": "已上架 · 可发药", "sublabel": "写货位 phLoc", "fill": "#ffffff", "stroke": "#2fb344" },
+    { "id": "E3", "kind": "rect", "x": 1450, "y": 170, "width": 160, "height": 70, "label": "扫码直生", "sublabel": "无在途单 · 直生已审核", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "P9", "kind": "rect", "x": 920, "y": 300, "width": 200, "height": 70, "label": "退回出库", "sublabel": "按单选码预占 · 逐码核对", "fill": "#f6f8fb", "stroke": "#626976" },
+    { "id": "P10", "kind": "rect", "x": 1200, "y": 300, "width": 200, "height": 70, "label": "报损出库", "sublabel": "已审核=已销毁 · 详见图22", "fill": "#f6f8fb", "stroke": "#626976" },
+    { "id": "K1", "kind": "rect", "x": 320, "y": 480, "width": 200, "height": 70, "label": "备货扫码", "sublabel": "单内动作 · 码渐满", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "K2", "kind": "rect", "x": 640, "y": 480, "width": 200, "height": 70, "label": "审核出库", "sublabel": "四道闸 · 扣账在途", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "K3", "kind": "rect", "x": 920, "y": 480, "width": 200, "height": 70, "label": "库房验收", "sublabel": "核对 → 审核入库 · 在架回补", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "X1", "kind": "rect", "x": 320, "y": 660, "width": 200, "height": 70, "label": "解析匹配", "sublabel": "码⇄药换算 · 反解析匹配申请", "fill": "#ffffff", "stroke": "#626976" },
+    { "id": "G1", "kind": "rect", "x": 60, "y": 800, "width": 440, "height": 76, "label": "出库守卫（四道闸）", "sublabel": "失效码剔除 · 非申请药品禁止 · 过期/停用 · 盘点冻结", "fill": "#fff7e6", "stroke": "#d48806" },
+    { "id": "G2", "kind": "rect", "x": 540, "y": 800, "width": 440, "height": 76, "label": "上架 · 直生守卫", "sublabel": "仅本房在架码 · 直生须在架非冻结 · 异常码拦截", "fill": "#fff7e6", "stroke": "#d48806" },
+    { "id": "G3", "kind": "rect", "x": 1020, "y": 800, "width": 440, "height": 76, "label": "逆向口径", "sublabel": "退回=预占不扣账·全核对才审核；报损=已销毁不可恢复", "fill": "#fdecea", "stroke": "#d63939" }
+  ],
+  "arrows": [
+    { "id": "a1", "source": "P1", "target": "P2", "source_port": "right", "target_port": "left", "flow": "control", "label": "提交" },
+    { "id": "a2", "source": "P2", "target": "K1", "source_port": "bottom", "target_port": "top", "flow": "control", "label": "库房接单" },
+    { "id": "a3", "source": "K1", "target": "X1", "source_port": "bottom", "target_port": "top", "flow": "control", "label": "码解析·反解析匹配" },
+    { "id": "a4", "source": "K1", "target": "K2", "source_port": "right", "target_port": "left", "flow": "control", "label": "备齐审核" },
+    { "id": "a5", "source": "K2", "target": "P5", "source_port": "top", "target_port": "bottom", "flow": "control", "label": "在途·收货" },
+    { "id": "a6", "source": "P5", "target": "P6", "source_port": "right", "target_port": "left", "flow": "control", "label": "入库完成" },
+    { "id": "a7", "source": "P6", "target": "P7", "source_port": "right", "target_port": "left", "flow": "control", "label": "扫码上架" },
+    { "id": "a8", "source": "E3", "target": "P7", "source_port": "left", "target_port": "right", "flow": "control" },
+    { "id": "a9", "source": "P7", "target": "P6", "source_port": "top", "target_port": "top", "flow": "feedback", "label": "扫码下架·回待上架" },
+    { "id": "a10", "source": "P6", "target": "P9", "source_port": "bottom", "target_port": "top", "flow": "feedback", "label": "按单退回" },
+    { "id": "a11", "source": "P9", "target": "K3", "source_port": "bottom", "target_port": "top", "flow": "feedback", "label": "全核对·确认出库" },
+    { "id": "a12", "source": "P7", "target": "P10", "source_port": "bottom", "target_port": "top", "flow": "feedback", "label": "报损" }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 48,
+  "legend_y": 895,
+  "legend": [
+    { "flow": "control", "label": "正向流转（事件驱动）" },
+    { "flow": "feedback", "label": "逆向 · 下架 / 退回 / 报损" }
+  ],
+  "footer": "PUL-FMS · 24 药房管理全流程泳道图（正向+捷径+逆向 · 单据状态口径见图23 · 报损详见图22）· fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 925
+}
