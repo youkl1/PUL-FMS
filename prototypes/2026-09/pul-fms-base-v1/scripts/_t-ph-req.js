@@ -1,7 +1,7 @@
 /**
  * _t-ph-req.js — 领用申请单自动交互验证（截图用，非交付页面）
  * 流程：点「新增申请」→ 选择器搜索「加罗新」→ 点候选行「+ 加入」→ 数量改 3 → 提交
- * 断言：reqPool 新增 source=药房申请 的待备货申请，items[0].qty===3
+ * 断言：pickDocs 新增 source=药房申请 的待出库领用单，items[0].qty===3
  */
 window.addEventListener('load', function () {
   setTimeout(function () {
@@ -21,11 +21,13 @@ window.addEventListener('load', function () {
           document.querySelector('#phReqEdit #rqOk').click();
           setTimeout(function () {
             var wh = window.store.load().wh || {};
-            var r = (wh.reqPool || [])[0];
+            var r = null;
+            (wh.pickDocs || []).forEach(function (d) {
+              if (d.source === '药房申请' && d.status === '待出库' && (d.items || []).length === 1 && d.items[0].qty === 3) r = d;
+            });
             console.log('[t-ph-req] 新增申请断言:',
-              r && r.source === '药房申请', r && r.status === '待备货',
-              r && r.items && r.items.length === 1 && r.items[0].qty === 3,
-              r && r.items && r.items[0].drugCode);
+              !!r, r && r.billNo.indexOf('LY') === 0,
+              r && r.items[0].drugCode);
           }, 400);
         }, 300);
       }, 400);
