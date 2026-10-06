@@ -270,7 +270,7 @@
   function openNew() {
     var phs = (FS.pharmacies || []).filter(function (p) { return p.status === '启用'; });
     var phOpts = phs.map(function (p) { return '<option value="' + esc(p.name) + '">' + esc(p.name) + '</option>'; }).join('');
-    UI.modalShell('qsNewM', '新增快捷单（直接出库）',
+    UI.modalShell('qsNewM', '新增备货单（直接出库）',
       '<div class="mb-3"><label class="form-label required">出库库房</label>' +
       '<select class="form-select" id="qsNewWh" disabled title="出库库房=当前登录库房，只能出本库房的货"><option>' + esc(curWh()) + '</option></select></div>' +
       '<div class="mb-3"><label class="form-label required">领用药房</label><select class="form-select" id="qsNewPh">' + phOpts + '</select></div>' +
@@ -342,12 +342,18 @@
       var r = null;
       base.forEach(function (x) { if (x.billNo === selNo) r = x; });
       if (!r) return '<tr><td colspan="10" class="text-center text-secondary" style="padding:20px;">选择上方单据后预览品规明细</td></tr>';
-      return r.items.map(function (it, i) {
+      // 扫码数量实算：单池待出库单可带部分进度（codes 渐满），按药品聚合并按 toBase 折合（与「已扫数」同口径）
+      var gotMap = {};
+      (r.codes || []).forEach(function (c) {
+        var dc = drugOfCode(c.code);
+        gotMap[dc] = Math.round(((gotMap[dc] || 0) + toBase(c)) * 10) / 10;
+      });
+      return (r.items || []).map(function (it, i) {
         return '<tr><td>' + (i + 1) + '</td>' +
           '<td>' + (it.slot ? esc(it.slot) : '<span class="text-secondary">—</span>') + '</td>' +
           '<td>' + esc(it.drugCode) + '</td><td><b>' + esc(drugName(it.drugCode)) + '</b></td>' +
           '<td>' + esc(drugForm(it.drugCode)) + '</td>' +
-          '<td><b>' + it.qty + '</b></td><td class="text-secondary">0</td><td>' + esc(baseUnit(it.drugCode)) + '</td>' +
+          '<td><b>' + it.qty + '</b></td><td><b>' + (gotMap[it.drugCode] || 0) + '</b></td><td>' + esc(baseUnit(it.drugCode)) + '</td>' +
           '<td class="text-secondary">' + esc(maker(it.drugCode)) + '</td><td class="text-secondary">' + esc(approval(it.drugCode)) + '</td></tr>';
       }).join('');
     }
