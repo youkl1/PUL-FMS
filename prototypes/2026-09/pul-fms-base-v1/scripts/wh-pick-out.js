@@ -1,8 +1,8 @@
 /**
- * wh-pick-out.js — 领用出库单（2026-10-01 台账化）：全部出库单（含备货中草稿）+ 库房制单（待提交）管理
- * 数据：wh.pickDocs ⋈ reqPool（reqNo→申请明细）；备货作业唯一源在 wh-pick（本页「继续备货 →」跳转载货）
- * 状态口径统一：待提交（制单草稿，仅 source=库房制单）/ 备货中 / 已出库 / 药房已入库（不再做显示映射）
- * 作废放宽：备货中草稿有无码均可作废（未扣账无库存副作用），有关联申请回写「待备货」
+ * wh-pick-out.js — 领用出库单（纯出库台账）
+ * 口径：只列过账领用单（已出库·待入库 / 已入库·待上架 / 已上架推导），与药房「领用入库单」一一对应
+ * 待提交/待出库/作废归「领用备货单」页；2026-10-05 单池化：来源/明细直读单据本体（reqPool 已废除）
+ * 明细三页签：码详情/药品清单/无库存码
  */
 (function () {
   'use strict';
@@ -15,44 +15,27 @@
   var dtab = 'drug';
   var f = { billNo: '', pharmacy: '', loc: '', status: '', d1: '', d2: '' };
 
-  function save() { W.save(wh); }
   function v(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
   function curNode() { return (window.store.load().currentUser || {}).node || '中心库'; }
-  function curUser() { return (window.store.load().currentUser || {}).name || '演示员'; }
   function drug(dc) { return R.drugOf(dc) || {}; }
   function drugName(dc) { return drug(dc).drugName || dc; }
-  function reqOf(d) {
-    var req = null;
-    (wh.reqPool || []).forEach(function (r) { if (r.reqNo === d.reqNo) req = r; });
-    return req;
-  }
   function stHtml(d) {
-    var st = d.status;
-    if (st === '药房已入库') return '<span class="pch-light ok"><i class="pch-dot"></i>药房已入库</span>';
-    if (st === '已出库') return '<span class="pch-light" style="color:#206bc4;"><i class="pch-dot" style="background:#206bc4;"></i>已出库</span>';
-    if (st === '备货中') return '<span class="pch-light" style="color:#F59E0B;"><i class="pch-dot" style="background:#F59E0B;"></i>备货中</span>';
-    return '<span class="badge bg-secondary-lt">待提交</span>';
+    var st = W.pickStatus(d);
+    if (st === '已上架') return '<span class="pch-light ok"><i class="pch-dot"></i>已上架</span>';
+    if (st === '已入库·待上架') return '<span class="pch-light" style="color:#2FB344;"><i class="pch-dot" style="background:#2FB344;"></i>已入库 · 待上架</span>';
+    return '<span class="pch-light" style="color:#F59E0B;"><i class="pch-dot" style="background:#F59E0B;"></i>已出库 · 待入库</span>';   // TODO(light): 待 PchUI.light 扩展收编
   }
   function srcHtml(d) {
-    if (d._reqDraft) return '<span class="badge bg-purple-lt">库房制单</span>';
-    if (!d.reqNo) return '<span class="badge bg-orange-lt">直接出库</span>';
-    var req = reqOf(d);
-    return req && req.source === '库房制单'
-      ? '<span class="badge bg-purple-lt">库房制单</span>'
-      : '<span class="badge bg-azure-lt">领用申请</span>';
+    if (d.source === '扫码直生') return '<span class="badge bg-cyan-lt">扫码直生</span>';
+    if (d.source === '库房制单' && !(d.items || []).length) return '<span class="badge bg-orange-lt">直接出库</span>';
+    if (d.source === '库房制单') return '<span class="badge bg-purple-lt">库房制单</span>';
+    return '<span class="badge bg-azure-lt">领用申请</span>';
   }
   function locOf(d) {
     var locs = [];
     (d.codes || []).forEach(function (c) { if (c.expectLoc && locs.indexOf(c.expectLoc) < 0) locs.push(c.expectLoc); });
-    var req = d._reqDraft ? d : reqOf(d);
-    var items = d._reqDraft ? (reqItemsOf(d) || []) : ((req && req.items) || []);
-    items.forEach(function (it) { if (it.slot && locs.indexOf(it.slot) < 0) locs.push(it.slot); });
+    (d.items || []).forEach(function (it) { if (it.slot && locs.indexOf(it.slot) < 0) locs.push(it.slot); });
     return locs.join('、') || '-';
-  }
-  function reqItemsOf(d) {
-    var r = null;
-    (wh.reqPool || []).forEach(function (x) { if (x.reqNo === d.billNo) r = x; });
-    return r ? r.items : null;
   }
   function pharmacyOpts() {
     var names = [];
@@ -62,13 +45,6 @@
     (wh.pickDocs || []).forEach(function (d) { if (d.pharmacy && names.indexOf(d.pharmacy) < 0) names.push(d.pharmacy); });
     return names;
   }
-  function slotsOf(phName) {
-    try {
-      var ph = null;
-      (window.PUL_FACILITY.load().pharmacies || []).forEach(function (p) { if (p.name === phName) ph = p; });
-      return ph ? (ph.slots || []) : [];
-    } catch (e) { return []; }
-  }
   function locOpts() {
     var locs = [];
     (wh.pickDocs || []).forEach(function (d) {
@@ -76,28 +52,23 @@
     });
     return locs;
   }
-  // 全部出库单（本库房）+ 待提交制单草稿（source=库房制单）
+  // 纯出库台账：只列过账领用单（已出库·待入库 / 已入库·待上架 / 已上架推导）
   function allDocs() {
     var out = [];
     (wh.pickDocs || []).forEach(function (d) {
       if (d.warehouse !== curNode()) return;
+      if (!W.pickPosted(d)) return;   // 待提交/待出库/已作废归「领用备货单」页
       out.push(d);
-    });
-    (wh.reqPool || []).forEach(function (r) {
-      if (r.source !== '库房制单' || r.status !== '待提交') return;
-      if (r.warehouse !== curNode()) return;
-      out.push({ _reqDraft: true, billNo: r.reqNo, reqNo: r.reqNo, date: r.date, pharmacy: r.pharmacy,
-        warehouse: r.warehouse, operator: r.applicant, status: '待提交', codes: [], remark: r.remark || '' });
     });
     out.sort(function (a, b) { return (a.date || '') < (b.date || '') ? 1 : -1; });
     return out;
   }
   function list() {
     return allDocs().filter(function (d) {
-      if (f.billNo && d.billNo.indexOf(f.billNo) === -1 && (d.reqNo || '').indexOf(f.billNo) === -1) return false;
+      if (f.billNo && d.billNo.indexOf(f.billNo) === -1) return false;
       if (f.pharmacy && d.pharmacy !== f.pharmacy) return false;
       if (f.loc && locOf(d).indexOf(f.loc) === -1) return false;
-      if (f.status && d.status !== f.status) return false;
+      if (f.status && W.pickStatus(d) !== f.status) return false;
       var day = (d.date || '').slice(0, 10);
       if (f.d1 && day < f.d1) return false;
       if (f.d2 && day > f.d2) return false;
@@ -120,14 +91,14 @@
       pharmacyOpts().map(function (p) { return '<option' + (f.pharmacy === p ? ' selected' : '') + '>' + esc(p) + '</option>'; }).join('') + '</select>' +
       '<select class="form-select" id="fLoc" style="width:130px;"><option value="">上架货位：全部</option>' +
       locOpts().map(function (l) { return '<option' + (f.loc === l ? ' selected' : '') + '>' + esc(l) + '</option>'; }).join('') + '</select>' +
-      '<select class="form-select" id="fSt" style="width:110px;"><option value="">状态：全部</option>' +
-      ['待提交', '备货中', '已出库', '药房已入库'].map(function (s) { return '<option' + (f.status === s ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '</select>' +
+      '<select class="form-select" id="fSt" style="width:140px;"><option value="">状态：全部</option>' +
+      ['已出库·待入库', '已入库·待上架', '已上架'].map(function (s) { return '<option' + (f.status === s ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '</select>' +
       '<input type="date" class="form-control" id="fD1" style="width:150px;" value="' + esc(f.d1) + '">' +
       '<span class="text-secondary">-</span>' +
       '<input type="date" class="form-control" id="fD2" style="width:150px;" value="' + esc(f.d2) + '">' +
       '<button class="btn btn-primary" id="btnQuery">查询</button>' +
       '<button class="btn btn-outline-secondary" id="btnReset">重置</button>' +
-      '<div class="ms-auto"><button class="btn btn-success" id="btnNew">+ 新增单据</button></div>' +
+      '<span class="text-secondary ms-auto" style="font-size:12.5px;">备货/制单/作废在「领用备货单」页；本页单据由药房在「领用入库单」逐码核对闭环</span>' +
       '</div></div></div>';
   }
 
@@ -140,31 +111,20 @@
         '<td>' + esc(locOf(d)) + '</td><td>' + esc(d.operator || '-') + '</td>' +
         '<td>' + srcHtml(d) + '</td>' +
         '<td>' + stHtml(d) + '</td>' +
-        '<td onclick="event.stopPropagation()">' + ops(d) + '</td></tr>';
+        '<td>' + (d.status === '已出库·待入库'
+          ? '<span class="text-secondary" style="font-size:12.5px;">待药房入库</span>'
+          : '<span class="text-secondary" style="font-size:12.5px;">闭环 ' + esc(d.inTime || '') + '</span>') + '</td></tr>';
     }).join('');
-    if (!rows) rows = '<tr><td colspan="10" class="text-center text-secondary" style="padding:28px;">无出库单——点右上「+ 新增单据」制单，或到「领用备货单」备货生成</td></tr>';
+    if (!rows) rows = '<tr><td colspan="10" class="text-center text-secondary" style="padding:28px;">暂无出库单——「领用备货单」备货审核出库后出现在此</td></tr>';
     return '<div class="card mb-3"><div class="table-responsive"><table class="table table-vcenter card-table">' +
       '<thead><tr><th>序号</th><th>单据编号</th><th>单据时间</th><th>出库库房</th><th>领用药房</th><th>上架货位</th><th>创建人</th><th>单据来源</th><th>状态</th><th>操作</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div></div>';
   }
-  function ops(d) {
-    if (d._reqDraft) {
-      return '<button class="btn btn-sm btn-outline-primary" data-editreq="' + esc(d.billNo) + '">编辑</button> ' +
-        '<button class="btn btn-sm btn-success" data-submitreq="' + esc(d.billNo) + '">提交</button> ' +
-        '<button class="btn btn-sm btn-outline-danger" data-delreq="' + esc(d.billNo) + '">删除</button>';
-    }
-    if (d.status === '备货中') {
-      return '<a class="btn btn-sm btn-primary" href="wh-pick.html?billNo=' + encodeURIComponent(d.billNo) + '" title="跳转领用备货单工作台继续扫码">继续备货 →</a> ' +
-        '<button class="btn btn-sm btn-outline-danger" data-void="' + esc(d.billNo) + '">✗ 作废</button>';
-    }
-    return '<span class="text-secondary" style="font-size:12.5px;">' + esc(d.auditTime || '') + '</span>';
-  }
 
   // —— 明细三页签 ——
   function drugRows(d) {
-    var req = reqOf(d);
-    if (req) {
-      return (req.items || []).map(function (it, i) {
+    if ((d.items || []).length) {
+      return d.items.map(function (it, i) {
         var dcs = (d.codes || []).filter(function (c) {
           var p = R.parse(c.code);
           return p.dict && p.dict.drugCode === it.drugCode;
@@ -218,7 +178,7 @@
           '<td>' + esc(c.expDate || '—') + '</td><td>' + esc(c.expectLoc || '—') + '</td>' +
           '<td>' + esc(c.phLoc || '待上架') + '</td></tr>';
       }).join('');
-      if (!rows) rows = '<tr><td colspan="7" class="text-center text-secondary">' + (d._reqDraft ? '待提交制单尚未备货' : '尚未扫码') + '</td></tr>';
+      if (!rows) rows = '<tr><td colspan="7" class="text-center text-secondary">尚未扫码</td></tr>';
       body = '<div class="table-responsive"><table class="table table-vcenter card-table">' +
         '<thead><tr><th>序号</th><th>追溯码</th><th>药品</th><th>批次</th><th>效期</th><th>预期货位</th><th>上架货位</th></tr></thead>' +
         '<tbody>' + rows + '</tbody></table></div>';
@@ -239,77 +199,6 @@
       ], dtab) + body + '</div>';
   }
 
-  // ===== 库房制单（缺药领用单）：待提交草稿 =====
-  function openNew(reqNo) {
-    var editing = null;
-    if (reqNo) (wh.reqPool || []).forEach(function (r) { if (r.reqNo === reqNo) editing = r; });
-    var ph = editing ? editing.pharmacy : pharmacyOpts()[0];
-    var body = '<div class="row g-3 mb-2">' +
-      '<div class="col-6"><label class="form-label required">领用药房</label><select class="form-select" id="newPh">' +
-      pharmacyOpts().map(function (p) { return '<option' + (ph === p ? ' selected' : '') + '>' + esc(p) + '</option>'; }).join('') + '</select></div>' +
-      '<div class="col-6"><label class="form-label">备注</label><input class="form-control" id="newRemark" value="' + esc(editing ? (editing.remark || '') : '') + '" placeholder="选填"></div></div>' +
-      '<div id="npPick"></div>' +
-      '<div class="text-secondary" style="font-size:12.5px;">保存为「待提交」制单草稿；提交后进入「领用备货单」备货队列。存量列口径：选中药房 / 当前库房（基本单位）</div>';
-    UI.modalShell('pkNew', editing ? ('编辑制单 · ' + editing.reqNo) : '新增领用单（库房制单）', body,
-      '<button class="btn btn-outline-secondary" data-mclose>取消</button>' +
-      '<button class="btn btn-primary" id="newOk">保存（待提交）</button>', 1100);
-    var el = UI.open('pkNew');
-    var picker = window.PulDrugPicker.mount(el.querySelector('#npPick'), {
-      warehouse: curNode(), pharmacy: ph, slots: slotsOf(ph), showSlot: true,
-      items: editing ? editing.items : []
-    });
-    el.querySelector('#newPh').addEventListener('change', function () {
-      var p2 = el.querySelector('#newPh').value;
-      picker.reload({ pharmacy: p2, slots: slotsOf(p2) });
-    });
-    el.querySelector('#newOk').addEventListener('click', function () {
-      var phVal = el.querySelector('#newPh').value;
-      var items = picker.getItems();
-      if (!phVal) { window.showToast('请选择领用药房'); return; }
-      if (!items.length) { window.showToast('请至少选择 1 个药品（数量需 ≥1）'); return; }
-      if (editing) {
-        editing.pharmacy = phVal;
-        editing.items = items;
-        editing.remark = el.querySelector('#newRemark').value.trim();
-        window.showToast('制单 ' + editing.reqNo + ' 已更新');
-      } else {
-        var reqNo2 = W.nextNo('LY', wh.reqPool, 'reqNo');
-        wh.reqPool.unshift({ reqNo: reqNo2, date: W.now(), pharmacy: phVal, warehouse: curNode(),
-          applicant: curUser(), source: '库房制单', items: items, status: '待提交',
-          remark: el.querySelector('#newRemark').value.trim() });
-        sel = reqNo2;
-        window.showToast('已保存待提交制单 ' + reqNo2 + '，提交后进入备货队列');
-      }
-      save(); UI.close('pkNew'); renderAll();
-    });
-  }
-  function submitReq(reqNo) {
-    var r = null;
-    (wh.reqPool || []).forEach(function (x) { if (x.reqNo === reqNo) r = x; });
-    if (!r) return;
-    UI.confirm('提交制单 <b>' + esc(reqNo) + '</b>？提交后进入「领用备货单」备货队列，不可再编辑。', function () {
-      r.status = '待备货';
-      save(); renderAll();
-      window.showToast('已提交，备货队列可见');
-    }, '提交制单');
-  }
-  function delReq(reqNo) {
-    UI.confirm('删除待提交制单 <b>' + esc(reqNo) + '</b>？未提交不产生影响。', function () {
-      wh.reqPool = wh.reqPool.filter(function (x) { return x.reqNo !== reqNo; });
-      if (sel === reqNo) sel = null;
-      save(); renderAll();
-      window.showToast('已删除');
-    }, '确认删除');
-  }
-  function voidDoc(d) {
-    UI.confirm('作废 <b>' + esc(d.billNo) + '</b>？' + ((d.codes || []).length ? '已扫 ' + d.codes.length + ' 个码未扣账，作废即释放。' : '空单直接删除，不影响库存。'), function () {
-      wh.pickDocs = wh.pickDocs.filter(function (x) { return x.billNo !== d.billNo; });
-      if (d.reqNo) (wh.reqPool || []).forEach(function (r) { if (r.reqNo === d.reqNo) r.status = '待备货'; });
-      if (sel === d.billNo) sel = null;
-      save(); renderAll();
-      window.showToast('已作废' + (d.reqNo ? '，关联申请已回到待备货' : ''));
-    }, '确认作废');
-  }
   function openCodes(drugCode) {
     var d = selDoc();
     if (!d) return;
@@ -337,28 +226,11 @@
     document.getElementById('btnReset').addEventListener('click', function () {
       f = { billNo: '', pharmacy: '', loc: '', status: '', d1: '', d2: '' }; renderAll();
     });
-    document.getElementById('btnNew').addEventListener('click', function () { openNew(); });
     content.querySelectorAll('[data-ptab]').forEach(function (b) {
       b.addEventListener('click', function () { dtab = b.getAttribute('data-ptab'); renderAll(); });
     });
     content.querySelectorAll('[data-sel]').forEach(function (tr) {
       tr.addEventListener('click', function () { sel = tr.getAttribute('data-sel'); renderAll(); });
-    });
-    content.querySelectorAll('[data-void]').forEach(function (b) {
-      b.addEventListener('click', function () {
-        var d = null;
-        (wh.pickDocs || []).forEach(function (x) { if (x.billNo === b.getAttribute('data-void')) d = x; });
-        if (d) voidDoc(d);
-      });
-    });
-    content.querySelectorAll('[data-editreq]').forEach(function (b) {
-      b.addEventListener('click', function () { openNew(b.getAttribute('data-editreq')); });
-    });
-    content.querySelectorAll('[data-submitreq]').forEach(function (b) {
-      b.addEventListener('click', function () { submitReq(b.getAttribute('data-submitreq')); });
-    });
-    content.querySelectorAll('[data-delreq]').forEach(function (b) {
-      b.addEventListener('click', function () { delReq(b.getAttribute('data-delreq')); });
     });
     content.querySelectorAll('[data-codes]').forEach(function (b) {
       b.addEventListener('click', function () { openCodes(b.getAttribute('data-codes')); });
@@ -366,5 +238,6 @@
   }
 
   if (!sel && list().length) sel = list()[0].billNo;
+  if (sel && !selDoc()) sel = list().length ? list()[0].billNo : null;   // 深链指向未过账单（待出库/待提交）时回落
   renderAll();
 })();

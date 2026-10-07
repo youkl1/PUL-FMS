@@ -1,10 +1,10 @@
 /**
- * ph-stock.js — 药房库存：本药房在架码集合呈现（数量=码 count）
- * 待上架=phLoc 空；待收=pickDocs 已出库；货位列替代库房库位
+ * ph-stock.js — 药房库存查询：本药房在架码集合呈现（数量=码 count）
+ * 待上架=phLoc 空；待收=pickDocs 已出库·待入库；货位列替代库房库位维护
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'phstock', crumb: ['药房管理', '药房库存'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'phstock', crumb: ['药房管理', '药房库存查询'] });
   if (!content) return;
 
   var W = window.PUL_WH, D = window.PUL_DRUG, P = window.PUL_PCH, UI = window.PchUI, esc = UI.esc;
@@ -96,7 +96,7 @@
         '<td>' + (wait ? '<span class="text-warning"><b>' + wait + '</b></span>' : '<span class="text-secondary">—</span>') + '</td>' +
         '<td><button class="btn btn-sm btn-outline-primary" data-codes="' + esc(r.idcode) + '|' + esc(r.batch) + '">码明细</button></td></tr>';
     }).join('');
-    if (!list.length) trs = '<tr><td colspan="9" class="text-center text-secondary" style="padding:32px;">无在架库存——领用入库确认后进入本集合</td></tr>';
+    if (!list.length) trs = '<tr><td colspan="9" class="text-center text-secondary" style="padding:32px;">无在架库存——领用入库单确认后进入本集合</td></tr>';
     return '<div class="card"><div class="table-responsive"><table class="table table-vcenter card-table">' +
       '<thead><tr><th>序号</th><th>药品通用名</th><th>制剂规格</th><th>批次号</th><th>有效期至</th><th>效期状态</th><th>在架数</th><th>待上架</th><th>操作</th></tr></thead>' +
       '<tbody>' + trs + '</tbody></table></div>' +
