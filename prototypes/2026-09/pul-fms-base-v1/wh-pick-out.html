@@ -52,12 +52,12 @@
           <p class="subtitle">库房管理 · 出库单台账：筛选 + 新增 + 审核跳转 + 三页签明细</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>对齐老系统「领用出库」：上部是出库单列表（筛选+新增），下部点选单据看码详情 / 药品清单 / 无库存码；审核出库动作唯一源在「领用备货单」，本页 ✓ 跳转载货。</p>
+      <p class="lead"><strong>一句话概括：</strong>纯出库台账：只列过账领用单（已出库·待入库 / 已入库·待上架 / 已上架推导），与药房「领用入库单」一一对应；待提交 / 待出库 / 作废统一在「领用备货单」页，本页只读查明细。</p>
       <div class="section"><div class="section-title">使用角色 + 上下游</div>
         <div class="card-grid">
           <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
             <div class="info-card-title">库管员</div>
-            <div class="info-card-desc">筛选单据 → 点选看明细 → 待出库单 ✓ 跳领用备货单审核</div></div></div>
+            <div class="info-card-desc">筛选出库单 → 点选看码详情/药品清单（只读台账，无操作）</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
             <div class="info-card-desc">上游领用备货单扫码备货；下游药房入库/上架闭环</div></div></div>
@@ -66,16 +66,16 @@
         <div class="steps">
           <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">筛选单据</div><div class="step-desc">按单据编号 / 领用药房 / 上架货位 / 状态 / 日期区间查询</div></div></div>
           <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">点选看明细</div><div class="step-desc">码详情 / 药品清单 / 无库存码三页签，行内「码列表」弹窗</div></div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">审核跳转</div><div class="step-desc">待出库单点「✓ 审核出库」跳领用备货单载货完成审核</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">对应药房入库</div><div class="step-desc">「已出库·待入库」单出现在药房「领用入库单」待入库；药房逐码核对确认后本页状态变「已入库·待上架」，全码上架后推导「已上架」闭环</div></div></div>
         </div></div>
       <div class="section"><div class="section-title">示例</div>
         <div class="example-box"><div class="example-title">中心库 → 门诊药房</div>
-          <div class="example-text">点「+ 新增单据」选门诊药房、挑药填数量（共享药品选择器带双存量）→ 存「待提交」制单草稿 → 提交后进「领用备货单」队列 → 扫码备货审核出库后本页状态变「已出库」。</div>
+          <div class="example-text">「领用备货单」备货扫码审核出库 → 本页出现该单（已出库·待入库）→ 药房「领用入库单」逐码核对确认 → 本页状态变「已入库·待上架」，全码上架后推导「已上架」闭环。</div>
         </div></div>
       <div class="section"><div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
           <div class="example-item-title">单据来源：领用申请 / 库房制单 / 直接出库</div>
-          <div class="example-item-desc">「领用申请」单关联申请池明细（药品清单页签按申请行展示扫码/实物对比）；「库房制单」由库房缺货驱动开待提交草稿，提交后照常备货；「直接出库」无申请单，药品清单按已扫码聚合。无库存码在备货扫码时已拦截，页签保留对齐老系统。</div>
+          <div class="example-item-desc">「领用申请」由药房申请单流转而来，药品清单按计划行展示扫码/实物对比；「库房制单」由库房缺货驱动开待提交草稿，提交后照常备货；「直接出库」无明细行，药品清单按已扫码聚合。无库存码在备货扫码时已拦截，页签保留对齐老系统。</div>
         </div></div></div>
     </div>
   </div>
@@ -89,7 +89,6 @@
   <script src="scripts/purchase-data.js"></script>
   <script src="scripts/purchase-shared.js"></script>
   <script src="scripts/wh-data.js"></script>
-  <script src="scripts/drug-picker.js"></script>
   <script src="scripts/rx-data.js"></script>
   <script src="scripts/facility-data.js"></script>
   <script src="scripts/app-shell.js"></script>

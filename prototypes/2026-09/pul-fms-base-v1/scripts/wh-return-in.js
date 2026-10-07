@@ -150,7 +150,7 @@
           if (onShelf(code)) return { level: 'bad', msg: '该码仍在库房在架，退回异常' };
           var src = retirable(r.pharmacy)[code];
           if (!src) return { level: 'bad', msg: '该码不是「' + r.pharmacy + '」领出未回的码，禁止收' };
-          r.codes.push(src);
+          r.codes.push(Object.assign({}, src));   // 浅拷贝，避免引用在途 pickDoc 原始 code 对象（对齐 ph-ret-out 惯例）
           checked[code] = true;
           save(); renderAll();
           return { level: 'ok', msg: drugNameOf(code) + ' 已收码' + (+src.splitQty > 0 ? '（注意：已拆零发出 ' + src.splitQty + '）' : '') };
@@ -210,7 +210,7 @@
     id.querySelector('#btnRetAddOk').addEventListener('click', function () {
       var pharmacy = id.querySelector('#retAddPharmacy').value;
       var remark = id.querySelector('#retAddRemark').value.trim();
-      var doc = { retNo: W.nextNo('TH', S.retPool), date: W.now(), pharmacy: pharmacy,
+      var doc = { retNo: W.nextNo('TH', S.retPool, 'retNo'), date: W.now(), pharmacy: pharmacy,
         warehouse: curWh(), operator: curUser().name || '演示员', status: '待入库',
         source: '库房直收', remark: remark, codes: [] };
       S.retPool.unshift(doc);
