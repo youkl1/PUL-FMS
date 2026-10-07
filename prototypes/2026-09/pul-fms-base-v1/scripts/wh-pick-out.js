@@ -22,7 +22,7 @@
   function stHtml(d) {
     var st = W.pickStatus(d);
     if (st === '已上架') return '<span class="pch-light ok"><i class="pch-dot"></i>已上架</span>';
-    if (st === '已入库·待上架') return '<span class="pch-light" style="color:#2FB344;"><i class="pch-dot" style="background:#2FB344;"></i>已入库 · 待上架</span>';
+    if (st === '已入库·待上架') return '<span class="pch-light" style="color:#2FB344;"><i class="pch-dot" style="background:#2FB344;"></i>已入库 · 待上架</span>';   // TODO(light): 待 PchUI.light 扩展收编
     return '<span class="pch-light" style="color:#F59E0B;"><i class="pch-dot" style="background:#F59E0B;"></i>已出库 · 待入库</span>';   // TODO(light): 待 PchUI.light 扩展收编
   }
   function srcHtml(d) {

@@ -117,7 +117,7 @@
   // ===== 上：领用单据列表 =====
   function stHtml(st) {
     if (st === '已上架') return '<span class="pch-light ok"><i class="pch-dot"></i>已上架</span>';
-    if (st === '已入库·待上架') return '<span class="pch-light" style="color:#2FB344;"><i class="pch-dot" style="background:#2FB344;"></i>已入库 · 待上架</span>';
+    if (st === '已入库·待上架') return '<span class="pch-light" style="color:#2FB344;"><i class="pch-dot" style="background:#2FB344;"></i>已入库 · 待上架</span>';   // TODO(light): 待 PchUI.light 扩展收编
     if (st === '已出库·待入库') return '<span class="pch-light" style="color:#F59E0B;"><i class="pch-dot" style="background:#F59E0B;"></i>已出库 · 待入库</span>';
     if (st === '已作废') return '<span class="pch-light mute"><i class="pch-dot"></i>已作废</span>';
     if (st === '待提交') return '<span class="badge bg-secondary-lt">待提交</span>';
