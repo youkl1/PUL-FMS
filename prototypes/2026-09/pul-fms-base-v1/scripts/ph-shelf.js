@@ -38,6 +38,17 @@
     return hit;
   }
   function drugNameOf(code20) { var d = dictOf(code20); return d ? d.drugName : '未解析'; }
+  // 码实际持有库房实查：逐库房 stockAll 命中即归（'' 全库房查不分归属；药房节点名禁止当库房传给 directPick）
+  function warehouseOfCode(code20) {
+    var hit = '';
+    (FS.warehouses || []).forEach(function (w) {
+      if (hit) return;
+      var name = typeof w === 'string' ? w : w.name;
+      if (!name) return;
+      W.stockAll(P.load(), S, name).forEach(function (x) { if (x.code === code20) hit = name; });
+    });
+    return hit || '中心库';
+  }
   function expBadge(expDate) {
     var st = W.expStatus(expDate);
     var cls = st === '过期' ? 'bg-red-lt' : (st === '预警' ? 'bg-yellow-lt' : '');
@@ -207,7 +218,13 @@
       // 捷径C：本库房在架但无在途单 → 可直生领用单；否则异常拦截
       var whHit = null;
       W.stockAll(P.load(), S, '').forEach(function (x) { if (x.code === code) whHit = x; });
-      if (mode === 'up' && whHit) { openDirect(whHit); return; }
+      if (mode === 'up' && whHit) {
+        var srcWh = warehouseOfCode(code);
+        // 出库闸门对齐：过期/停用/盘点冻结与常规出库同口径拦截，不弹直生窗
+        var gate = W.blockMove(code, srcWh, 'out', { expDate: whHit.expDate });
+        if (gate) { last = { code: code, level: 'bad', msg: gate, dict: dictOf(code) }; pushLog(code, 'bad', gate); renderAll(); return; }
+        openDirect(whHit, srcWh); return;
+      }
       last = { code: code, level: 'bad', msg: '不在本药房在架（未入库 / 已退 / 已报损）', dict: dictOf(code) };
       pushLog(code, 'bad', last.msg); renderAll(); return;
     }
@@ -219,19 +236,22 @@
         last = { code: code, level: 'warn', msg: '已在 ' + loc, dict: dictOf(code) };
         pushLog(code, 'warn', last.msg); renderAll(); return;
       }
+      // 跃迁检测：写货位前捕获所在单推导态，仅在 未上架→已上架 跃迁时弹🎉（防换位/重扫重复弹）
+      var shelfDoc = null, prePick = '';
+      (S.pickDocs || []).forEach(function (d) {
+        if (d.pharmacy !== ph() || d.status !== '已入库·待上架') return;
+        if ((d.codes || []).some(function (c) { return c.code === code; })) shelfDoc = d;
+      });
+      if (shelfDoc) prePick = W.pickStatus(shelfDoc);
       W.setPhLoc(S, code, loc); save(); scanned++;
       var msg = old ? (name + ' 换位 ' + old + ' → ' + loc + expect) : (name + ' 上架 ' + loc + expect);
       last = { code: code, level: 'ok', msg: msg, dict: dictOf(code) };
       pushLog(code, 'ok', msg, old);
       renderAll();
       if (!stock().some(function (c) { return !c.phLoc; })) window.showToast('🎉 本房待上架已清空');
-      // 全码上架 → 所在单展示推导态「已上架」（pickStatus 推导，不落库）
-      var doneDoc = null;
-      (S.pickDocs || []).forEach(function (d) {
-        if (d.pharmacy !== ph() || d.status !== '已入库·待上架') return;
-        if ((d.codes || []).some(function (c) { return c.code === code; })) doneDoc = d;
-      });
-      if (doneDoc && W.pickStatus(doneDoc) === '已上架') window.showToast('🎉 领用单 ' + doneDoc.billNo + ' 全码上架完成（已上架）');
+      // 全码上架 → 所在单展示推导态「已上架」（pickStatus 推导，不落库）；仅跃迁当次弹
+      if (shelfDoc && prePick !== '已上架' && W.pickStatus(shelfDoc) === '已上架')
+        window.showToast('🎉 领用单 ' + shelfDoc.billNo + ' 全码上架完成（已上架）');
     } else {
       if (!src.phLoc) {
         last = { code: code, level: 'warn', msg: '该码尚未上架', dict: dictOf(code) };
@@ -246,13 +266,14 @@
     }
   }
   // 捷径C 直生确认：本库房在架码 → 一步建「已入库·待上架」领用单（码带 phLoc → 推导已上架）
-  function openDirect(whCode) {
+  // srcWh = warehouseOfCode 实查的持有库房（严禁传药房节点名，否则 doc.warehouse 不匹配 stockAll 扣减 → 双计）
+  function openDirect(whCode, srcWh) {
     if (!loc) { window.showToast('请先选择上架货位再直生'); return; }
     var name = drugNameOf(whCode.code);
     UI.modalShell('shDirect', '扫码直生领用单',
       '<div class="mb-2">追溯码 <b style="font-family:Consolas,monospace;">' + esc(whCode.code) + '</b>（' + esc(name) + '）' +
-      '在本库房<b>在架</b>，但本药房没有对应在途/已入库领用单。</div>' +
-      '<div class="text-secondary" style="font-size:12.5px;line-height:1.7;">确认后一步生成「扫码直生」领用单：库房在架同扣、本药房在架同增，' +
+      '在库房 <b>' + esc(srcWh) + '</b> <b>在架</b>，但本药房没有对应在途/已入库领用单。</div>' +
+      '<div class="text-secondary" style="font-size:12.5px;line-height:1.7;">确认后一步生成「扫码直生」领用单：' + esc(srcWh) + ' 在架同扣、本药房在架同增，' +
       '本码直接上架到货位 <b>' + esc(loc) + '</b>（批次 ' + esc(whCode.batch || '—') + ' · 效期 ' + esc(whCode.expDate || '—') + '）。</div>',
       '<button class="btn btn-outline-secondary" data-mclose>取消</button>' +
       '<button class="btn btn-primary" id="shDirectOk">✓ 直生并上架到 ' + esc(loc) + '</button>', 480);
@@ -261,7 +282,7 @@
       var user = window.store.load().currentUser || {};
       var blocked = logs.filter(function (g) { return g.level === 'bad' && !g.undone; })
         .map(function (g) { return { code: g.code, reason: g.msg, stage: '药房直生' }; });
-      var doc = W.directPick(ph(), user.warehouse || '中心库',
+      var doc = W.directPick(ph(), srcWh,
         [Object.assign({}, whCode, { phLoc: loc })], user.name || '演示员');
       S = W.load();   // directPick 内部自建状态落盘，回读对齐（store 经 JSON 往返，doc 为游离引用，badCodes 须挂到回读态上）
       (S.pickDocs || []).forEach(function (d) { if (d.billNo === doc.billNo) d.badCodes = blocked; });
