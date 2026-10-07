@@ -32,6 +32,7 @@
     var ph = curPharm();
     return S.pickDocs.filter(function (d) {
       if (d.pharmacy !== ph) return false;
+      if (filters.status === '全部' && !W.pickPosted(d)) return false;   // 单池草稿/作废单不进本页
       if (filters.status === '待入库' && d.status !== '已出库·待入库') return false;
       if (filters.status === '已入库' && d.status !== '已入库·待上架') return false;
       if (filters.kw && d.billNo.indexOf(filters.kw) === -1) return false;
