@@ -134,7 +134,7 @@ console.log('# ledger 不含待出库未过账单（2026-10-05 领用单五态�
 window.store.update({ wh: {
   pickDocs: [
     { billNo: 'LYCK-DRAFT1', status: '待出库', warehouse: '中心库', pharmacy: '门诊药房', date: '2026-10-01 09:00', codes: [c(CODE_A)] },
-    { billNo: 'LYCK-POST1', status: '已出库·待入库', warehouse: '中心库', pharmacy: '门诊药房', date: '2026-10-01 10:00', auditTime: '2026-10-01 10:05', codes: [c(CODE_B)] }
+    { billNo: 'LYCK-POST1', status: '已出库·待入库', warehouse: '中心库', pharmacy: '门诊药房', date: '2026-10-01 10:00', outTime: '2026-10-01 10:05', codes: [c(CODE_B)] }
   ],
   retInDocs: [], othInDocs: [], othOutDocs: [], lossDocs: [], retPool: [], phLossDocs: []
 } });

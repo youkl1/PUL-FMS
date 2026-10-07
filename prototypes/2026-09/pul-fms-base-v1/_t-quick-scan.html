@@ -33,7 +33,7 @@
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
         <h1 class="pi-title">领用快捷扫码</h1>
-        <span class="pi-subtitle">原型页 · 高拍仪连续作业：新增快捷单/选申请单 → 扫码加入·扫码移除 → 审核出库</span>
+        <span class="pi-subtitle">原型页 · 高拍仪连续作业：新增备货单/选申请单 → 扫码加入·扫码移除（进度实时落盘）→ 审核出库</span>
       </div>
       <div class="pi-header-right">
         <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
@@ -58,13 +58,13 @@
           <p class="subtitle">库房业务 · 高拍仪连续作业 · 码状态机 ② 库房在架 → 领出在途</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>高拍仪连续作业页：输入框常驻自动回焦、回车即扫、大字反馈条远距离可读；「扫码加入 / 扫码移除」模式开关（旧版「扫码移除」复选框升级）；重复扫码自动过滤；拆零药品在码明细行标记零头。</p>
+      <p class="lead"><strong>一句话概括：</strong>高拍仪连续作业页（备货唯一工作台）：输入框常驻自动回焦、回车即扫、大字反馈条远距离可读；「扫码加入 / 扫码移除」模式开关；重复扫码自动过滤；拆零药品在码明细行标记零头。备货=出库单草稿态：建/选单即生成备货单，每扫一码实时落盘可离开续作，审核出库=同一单据推进状态即扣账。</p>
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
         <div class="card-grid">
           <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
             <div class="info-card-title">药库管理员</div>
-            <div class="info-card-desc">新增快捷单/选待备货申请单 → 高拍仪逐码过机 → 审核出库</div></div></div>
+            <div class="info-card-desc">新增备货单/选待出库领用单（或从「领用备货单」点备货深链进入）→ 高拍仪逐码过机 → 审核出库</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
             <div class="info-card-desc">上游：药房「领用申请」（选单）；下游：「领用备货单」单据列表可见同一批出库单，药房「领用入库」闭环</div></div></div>
@@ -73,9 +73,9 @@
       <div class="section">
         <div class="section-title">如何使用</div>
         <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">建/选单据</div><div class="step-desc">「新增快捷单」无申请直出（选领用药房，即直接出库），或「选单」挑待备货申请单按单备货</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">连续扫码</div><div class="step-desc">扫新码加入；切「扫码移除」再扫=剔除（码明细行也可手动剔除）；重复扫码自动过滤；拆零药品行内标记零头</div></div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">审核出库</div><div class="step-desc">确认 申请数 vs 实出数 后审核：码从在架扣除进入「在途」，申请单转已完成，上架货位随码传递</div></div></div>
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">建/选单据</div><div class="step-desc">「新增备货单」无申请直出（出库库房=当前登录库，选领用药房 + 可选上架货位）；或「选单」按单号/药房/货位筛选、预览品规明细后挑待出库领用单；建/选即进入该单备货</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">连续扫码</div><div class="step-desc">扫新码加入；切「扫码移除」再扫=剔除（码明细行也可手动剔除）；重复扫码自动过滤；拆零药品行内标记零头；每扫一码实时落盘，可离开续作</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">审核出库</div><div class="step-desc">确认 申请数 vs 实出数 后审核：码从在架扣除进入「在途」，单转已出库·待入库，上架货位随码传递</div></div></div>
         </div>
       </div>
       <div class="section">
@@ -88,7 +88,7 @@
         <div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
           <div class="example-item-title">领用快捷扫码（本页）⇄ 领用备货单 ⇄ 药房·领用入库</div>
-          <div class="example-item-desc">本页=执行作业视角（扫码是主角），领用备货单=单据管理视角（列表/筛选/审核）；两页同写 pickDocs，数据互通。直接出库（无申请单）从本页「新增快捷单」进入。</div>
+          <div class="example-item-desc">本页=执行作业视角（扫码是主角），领用备货单=单据管理视角（列表/筛选/明细只读，备货/继续备货深链跳入本页）；两页同写 pickDocs 草稿，数据互通。直接出库（无申请单）从本页「新增备货单」进入。</div>
         </div></div>
       </div>
     </div>

@@ -33,7 +33,7 @@
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
         <h1 class="pi-title">领用备货单</h1>
-        <span class="pi-subtitle">原型页 · 库房主流程：领用单据列表（申请⋈出库一条链）→ 点行备货（药品明细⇄码清单双层）→ 审核出库</span>
+        <span class="pi-subtitle">原型页 · 库房主流程：领用单据列表（申请⋈出库一条链）→ 备货进入「领用快捷扫码」作业 → 审核出库</span>
       </div>
       <div class="pi-header-right">
         <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
@@ -58,37 +58,37 @@
           <p class="subtitle">库房管理 · 码状态机 ② 库房在架 → 领出在途 → 药房在架</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>库房侧主流程：上=领用单据列表（申请⋈出库一条链，可按状态/货位/日期筛选）→ 点行进入备货：申请药品明细清单（含药品编码/厂家/批准文号/上架货位）⇄ 追溯码明细清单（含预期货位）实时联动 → 审核出库，码进「在途」。</p>
+      <p class="lead"><strong>一句话概括：</strong>库房侧主流程：上=领用单据列表（申请⋈出库一条链（含待提交制单），可按状态/货位/日期筛选；库房制单（新增/编辑/提交/删除）与待出库单作废也在本页）→ 点「备货 / 继续备货 / 新增备货单」进入「领用快捷扫码」工作台（药品汇总⇄码明细双层，进度实时落盘）→ 审核出库，码进「在途」；本页明细只读，备货与出库是同一单据的不同状态。</p>
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
         <div class="card-grid">
           <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
             <div class="info-card-title">药库管理员</div>
-            <div class="info-card-desc">单据列表接申请 → 点行按品规数量拣货 → 扫码确认每一盒 → 审核出库</div></div></div>
+            <div class="info-card-desc">单据列表接申请 → 点「备货」进快捷扫码 → 扫码确认每一盒 → 审核出库</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
-            <div class="info-card-desc">上游：药房「领用申请单」（可指定上架货位，随单传到码的预期货位）；下游：药房「领用入库单」闭环在途；无申请的急用场景走「⚡ 直接扫码出库」</div></div></div>
+            <div class="info-card-desc">上游：药房「领用申请单」（可指定上架货位，随单传到码的预期货位）；下游：药房「领用入库单」闭环在途；无申请的急用场景走「＋ 新增备货单」</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">如何使用</div>
         <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">选单据</div><div class="step-desc">列表点选「待备货」申请单（可按单据编号/药房/上架货位/状态/日期筛选）开始备货；「备货中」申请或草稿点「继续备货」接着扫，进度已落盘不怕刷新</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">扫码备货</div><div class="step-desc">「扫码备货」逐码扫入：在架码√加入、非在架码×拦截、超申请数!提示；扫箱码自动按换算链折成基本单位，码清单显示预期货位；每扫一码即存草稿</div></div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">审核出库</div><div class="step-desc">确认 申请数 vs 实出数 差异后审核：码从在架扣除、进入「在途」，申请单转已完成，上架货位随码传递</div></div></div>
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">选单据</div><div class="step-desc">列表按单据编号/药房/上架货位/状态/日期筛选；点「备货」或「继续备货」跳转「领用快捷扫码」（同一单据不同状态，进度落盘不怕刷新）</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">扫码备货</div><div class="step-desc">快捷扫码页逐码扫入：在架码√加入、非在架码×拦截、超申请数!提示；箱码自动折成基本单位；每扫一码即存草稿，可离开续作</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">审核出库</div><div class="step-desc">快捷扫码页确认 申请数 vs 实出数 后审核：码扣在架进「在途」，出库后单转「已出库·待入库」，货位随码传递；药房在「领用入库单」逐码核对后确认入库闭环（库房侧只读，不再代确认）</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">示例</div>
         <div class="example-box"><div class="example-title">码⇄药转换现场</div>
-          <div class="example-text">住院药房申请「加罗新 60 瓶」→ 库管员扫 1 个箱码（1箱=60瓶）→ 右侧码清单 +1 码，左侧已备数 +60 瓶，差额归零变绿可出库——人看的是药，系统记的是码，换算链在中间实时转换。</div>
+          <div class="example-text">住院药房申请「加罗新 60 瓶」→ 点「备货」进快捷扫码 → 扫 1 个箱码（1箱=60瓶）→ 已扫数 +60 瓶，差额归零变绿可出库——人看的是药，系统记的是码，换算链在中间实时转换。</div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
           <div class="example-item-title">领用备货单（本页）⇄ 药房·领用申请单 / 领用入库单 ⇄ 退回入库单</div>
-          <div class="example-item-desc">领用三入口同构：申请备货 / 领用出库单新增制单 / ⚡直接扫码出库，最终都是「一张备货中草稿上扫码」。申请→出库→入库成对闭环；领错/多用退回走「退回入库单」。出库审核即扣账（在途单列展示），与采购「下载/手动」同哲学：直接扫码出库是无单兜底通道。</div>
+          <div class="example-item-desc">领用三入口同构：申请备货 / 本页新增领用单（库房制单，待提交→提交后进队列）/ ＋新增备货单（直接出库），最终都是「一张待出库单上扫码」（作业统一在「领用快捷扫码」页）。申请→出库→入库成对闭环；领错/多用退回走「退回入库单」。出库审核即扣账（在途单列展示），与采购「下载/手动」同哲学：新增备货单是无单兜底通道。</div>
         </div></div>
       </div>
     </div>
@@ -109,6 +109,7 @@
   <script src="scripts/purchase-data.js"></script>
   <script src="scripts/purchase-shared.js"></script>
   <script src="scripts/wh-data.js"></script>
+  <script src="scripts/facility-data.js"></script>
   <script src="scripts/app-shell.js"></script>
   <script src="scripts/wh-pick.js"></script>
   <script>
