@@ -150,7 +150,7 @@ CREATE TABLE `DOC_CODE` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='单据-码清单（原型内嵌 codes[]，建库拆关联表）';
 
 CREATE TABLE `PICK_DOC` (
-  `billNo`    VARCHAR(20)  NOT NULL COMMENT '领用单号 LY…（一单一号全程不换）',
+  `billNo`    VARCHAR(20)  NOT NULL COMMENT '领用单号 LY…（一单一号全程不换；历史数据保留 LYCK 原号）',
   `date`      VARCHAR(20)  DEFAULT NULL COMMENT '单据日期',
   `pharmacy`  VARCHAR(20)  DEFAULT NULL COMMENT '申请/收货药房',
   `warehouse` VARCHAR(20)  DEFAULT NULL COMMENT '供货库房',
