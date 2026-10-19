@@ -1,9 +1,9 @@
 /**
- * orgs.js — 院区管理：院区列表 + 新增/编辑弹窗（appSecret 脱敏）
+ * orgs.js — 院区字典维护：院区列表 + 新增/编辑弹窗（appSecret 脱敏）
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'orgs', crumb: ['组织管理', '院区管理'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'orgs', crumb: ['基础管理', '院区字典维护'] });
   if (!content) return;
 
   var orgs = JSON.parse(JSON.stringify(window.PUL.ORGS));
@@ -41,7 +41,7 @@
       '<div class="table-responsive"><table class="table table-vcenter table-hover card-table">' +
       '<thead><tr><th class="text-center">序号</th><th>机构编号</th><th>院区名称</th><th>下属库房 / 节点（L3）</th><th>供应商平台 appKey</th><th>供应商平台 appSecret</th><th>状态</th><th>操作</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div>' +
-      '<div class="card-footer text-secondary" style="font-size:12px;">库房/节点（L3）挂在院区（L2）下，是上下级关系：新增院区后需到「节点档案」（待实现）为其建库房；院区暂停后其下属库房在登录页同步不可选，历史数据保留。appKey/appSecret 为对接凭证，列表脱敏展示。</div></div>';
+      '</div>';
   }
 
   function modalHtml(o) {

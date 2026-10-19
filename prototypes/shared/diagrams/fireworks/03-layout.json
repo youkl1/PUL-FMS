@@ -19,8 +19,8 @@
       "bridged_crossings": 0,
       "max_route_stretch": 1.0,
       "minimum_container_gutter": 20.0,
-      "minimum_node_gap": 40.0,
-      "shortest_segment": 40.0,
+      "minimum_node_gap": 43.0,
+      "shortest_segment": 43.0,
       "total_bends": 0
     },
     "ok": true,
@@ -80,38 +80,9 @@
         300.0,
         326.0
       ],
-      "target": "W2",
-      "target_port": [
-        370.0,
-        326.0
-      ],
-      "waypoints": []
-    },
-    {
-      "bends": 0,
-      "bridges": [],
-      "crossings": [],
-      "id": "a3",
-      "length": 60.0,
-      "route": [
-        [
-          620.0,
-          326.0
-        ],
-        [
-          680.0,
-          326.0
-        ]
-      ],
-      "route_stretch": 1.0,
-      "source": "W2",
-      "source_port": [
-        620.0,
-        326.0
-      ],
       "target": "W3",
       "target_port": [
-        680.0,
+        370.0,
         326.0
       ],
       "waypoints": []
@@ -124,23 +95,23 @@
       "length": 108.0,
       "route": [
         [
-          770.0,
+          480.0,
           360.0
         ],
         [
-          770.0,
+          480.0,
           468.0
         ]
       ],
       "route_stretch": 1.0,
       "source": "W3",
       "source_port": [
-        770.0,
+        480.0,
         360.0
       ],
       "target": "Y1",
       "target_port": [
-        770.0,
+        480.0,
         468.0
       ],
       "waypoints": []
@@ -150,10 +121,10 @@
       "bridges": [],
       "crossings": [],
       "id": "a5",
-      "length": 40.0,
+      "length": 320.0,
       "route": [
         [
-          900.0,
+          620.0,
           500.0
         ],
         [
@@ -164,7 +135,7 @@
       "route_stretch": 1.0,
       "source": "Y1",
       "source_port": [
-        900.0,
+        620.0,
         500.0
       ],
       "target": "Y2",
@@ -340,8 +311,8 @@
   },
   "summary": {
     "bridged_crossings": 0,
-    "edges": 9,
-    "nodes": 10
+    "edges": 8,
+    "nodes": 9
   },
   "text_metrics": "heuristic-v1",
   "typography": {

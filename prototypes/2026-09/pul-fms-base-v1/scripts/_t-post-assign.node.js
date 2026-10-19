@@ -57,10 +57,10 @@ function c(code, extra) {
 }
 var wh = W.load();
 wh.pickDocs = [
-  { billNo: 'LY20260920001', status: '已入库·待上架', pharmacy: '门诊药房', date: '2026-09-20 09:00',
+  { billNo: 'LY20260920001', status: '已入库', pharmacy: '门诊药房', date: '2026-09-20 09:00',
     codes: [c(C_N1), c(C_M01, { phLoc: 'M-01', expDate: '2027-01-01' }),
       c(C_OTHER), c(C_SPLIT, { split: '是', splitQty: '10' })] },
-  { billNo: 'LY20260925001', status: '已入库·待上架', pharmacy: '门诊药房', date: '2026-09-25 09:00',
+  { billNo: 'LY20260925001', status: '已入库', pharmacy: '门诊药房', date: '2026-09-25 09:00',
     codes: [c(C_N2), c(C_N3), c(C_M02, { phLoc: 'M-02', expDate: '2028-06-14' })] }
 ];
 W.save(wh);

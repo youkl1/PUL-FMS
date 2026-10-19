@@ -6,11 +6,11 @@
   <meta name="prototype-category" content="web-admin">
   <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 基础平台骨架">
   <title>模块导览 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/index.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/index.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -33,6 +33,7 @@
         <span class="pi-subtitle">原型页 · 先看懂业务再点功能 · 流程图 + 案例 + 正/逆/兜底入口</span>
       </div>
       <div class="pi-header-right">
+        <a class="pi-back" id="resetDemo" href="javascript:void 0" title="清空本会话所有操作痕迹（扫码/审核/删除等），恢复种子初始数据">⟲ 重置演示数据</a>
         <a class="pi-back" href="plan.html">← 返回方案总览</a>
       </div>
     </header>
@@ -53,13 +54,19 @@
 
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/guide-data.js"></script>
-  <script src="scripts/guide.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/guide-data.js?v=20261015-6"></script>
+  <script src="scripts/guide.js?v=20261015-3"></script>
   <script>
     document.getElementById('planBadge').addEventListener('click', function () { window.location.href = 'plan.html'; });
+    // 2026-10-16 Round DB：重置演示数据——种子态（代码写死的初始数据）vs 会话态（sessionStorage 累积的操作痕迹）对不上时一键归位
+    document.getElementById('resetDemo').addEventListener('click', function () {
+      if (!confirm('重置演示数据？\n\n将清空本会话内所有操作痕迹（扫码/审核/删除/重新下载等），恢复到种子初始数据，不可撤销。')) return;
+      window.store.reset();
+      location.reload();
+    });
   </script>
 </body>
 </html>

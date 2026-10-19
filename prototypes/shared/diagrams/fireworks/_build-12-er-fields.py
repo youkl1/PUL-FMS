@@ -1,185 +1,185 @@
 #!/usr/bin/env python3
-# _build-12-er-fields.py — 生成 12-er-fields.json（字段级表结构 ER）
-# 表 = 表头节点 + 逐字段行节点堆叠；字段与 prototypes/2026-09/pul-fms-base-v1/scripts/ 数据脚本逐一核实
+# _build-12-er-fields.py — 生成 12-er-fields.json（表结构 ER · 关系版）
+# 2026-10-05 重构：只要表名 + 作用行 + PK/FK 关联字段；字段级明细见 er/pul-fms-full.sql 与 git 历史
+# 灰底 = 派生视图/规划（非物理表）：STOCK_BALANCE（逻辑视图，物化为实现层决策）、SCAN_LOG【规划】
+# 标注军规：带标签的竖边间隙必须 ≥40px（30px 实测放不下标签）；字典层级绿边统一不标（图例已说明 1:N）
+# 直线军规（2026-10-05 用户拍板「线条尽量用直线」反推的端口规律，渲染器 anchor_on_side 实测确认）：
+#   ① 横边：连表头 left/right 端口（锚在表头纵向中心 = top+18），两表头「顶对齐」→ 端口同轴 → bends=0 直线
+#   ② 竖边：连表底必须连「末行 bottom」（如 DRUGS_r03）、连表顶连「表头 top」；
+#      若连表头 bottom，正下方是自家的行 → 渲染器绕左/右侧画 3 折 U 形（实测 e1 bends=3 绕到 x=36 左边距）
 import json
 
-W, H = 320, 26          # 表宽 / 字段行高
+W, H = 320, 26          # 表宽 / 行高
 ROW_GAP, HEAD_H, HEAD_GAP = 2, 36, 4
 
-def table(nodes, tid, title, x, y, fields, head_fill, head_stroke, row_stroke="#c9d4e0"):
+def table(nodes, tid, title, x, y, rows, head_fill, head_stroke, row_stroke="#c9d4e0", desc_fill=None):
+    """rows[0] 固定为作用行（desc_fill 浅底），其余为 PK/FK 关联字段行。返回表底 y。"""
     nodes.append({"id": tid, "kind": "rect", "x": x, "y": y, "width": W, "height": HEAD_H,
                   "label": title, "fill": head_fill, "stroke": head_stroke, "stroke_width": 2.0})
     cy = y + HEAD_H + HEAD_GAP
-    for i, f in enumerate(fields):
+    for i, r in enumerate(rows):
         nodes.append({"id": f"{tid}_r{i+1:02d}", "kind": "rect", "x": x, "y": cy,
-                      "width": W, "height": H, "label": f, "fill": "#ffffff",
+                      "width": W, "height": H, "label": r,
+                      "fill": (desc_fill if (i == 0 and desc_fill) else "#ffffff"),
                       "stroke": row_stroke, "stroke_width": 1.0, "flat": True,
                       "title_size": 11, "rx": 4})
         cy += H + ROW_GAP
-    return cy - ROW_GAP  # 表底 y
+    return cy - ROW_GAP
 
 nodes = []
 BLUE, GREEN, ORANGE, GRAY = "#e6f4ff", "#e9f7ee", "#fff7e6", "#f6f8fb"
 BLUES, GREENS, ORANGES, GRAYS = "#206bc4", "#2fb344", "#d48806", "#626976"
+BLUE_D, GREEN_D, ORANGE_D, GRAY_D = "#f0f7ff", "#f0faf2", "#fffaf0", "#eceff3"
 
-# ===== 列 1（x=60）：药品字典 =====
-b1 = table(nodes, "DRUGS", "DRUGS · 药品主表", 60, 150, [
-    "PK drugCode · 药品编码 YP010201",
-    "drugName · 品名",
-    "formSpec · 规格 ｜ dosForm · 剂型",
-    "maker · 生产厂家",
-    "approval · 批准文号",
-    "category · 分类（西药/中成药）",
-    "baseUnit · 库存基本单位（换算链尾）",
-    "units · 换算链 [{u,eq}] → 1箱=60盒",
-    "minUnit · 拆零 {u,per} → 1盒=7片",
-    "ipUnpack / opUnpack · 住院/门诊拆零",
-    "price · 参考进价",
-    "warehouse · 所属库房 →WAREHOUSE",
-    "status · 启用 / 停用",
-    "同一标识码不同库房分别建档",
-], BLUE, BLUES)
+# ===== 列 1（x=60）：药品字典 + 异常留痕 =====
+table(nodes, "DRUGS", "DRUGS · 药品主表", 60, 140, [
+    "作用：药品档案与换算规则，基本单位在药上",
+    "PK drugCode · 药品编码",
+    "warehouse → WAREHOUSE · 所属库房",
+], BLUE, BLUES, desc_fill=BLUE_D)
 
-b2 = table(nodes, "IDCODES", "IDCODES · 标识码子表", 60, 620, [
-    "PK idcode · 7 位标识码 8414784",
-    "FK drugCode → DRUGS",
-    "level · 码等级（1=盒 2=箱）",
-    "packSpec · 包装规格「箱60瓶」",
-    "packUnit · 包装单位（规格解析）",
-    "status · 启用 / 停用",
-], BLUE, BLUES)
-
-b3 = table(nodes, "BAD_CODES", "BAD_CODES · 异常码台账", 60, 866, [
+table(nodes, "IDCODES", "IDCODES · 标识码子表", 60, 302, [
+    "作用：一药多码登记（等级+包装规格）",
     "PK idcode · 7 位标识码",
-    "level · 码等级",
-    "drugName / formSpec / packSpec · 快照",
-    "maker / approval · 厂家+文号快照",
-    "type · 未维护标识码 / 解析失败",
-    "维护 → upsert 写回 DRUGS+IDCODES",
-], ORANGE, ORANGES)
+    "FK drugCode → DRUGS",
+], BLUE, BLUES, desc_fill=BLUE_D)
 
-# ===== 列 2（x=440）：码实例与码清单 =====
-b4 = table(nodes, "TRACE_CODE", "TRACE_CODE · 追溯码实例", 440, 150, [
-    "PK code · 20 位 = 7标识码+9序列+4校验",
-    "→ idcode 前 7 位（逻辑 FK → IDCODES）",
-    "batch · 批次号 250702",
-    "prodDate · 生产日期",
-    "expDate · 有效期至（FEFO 依据）",
-    "level · 码等级恒=1（箱/中包码展开入库）",
-    "location · 库位 A-01-02 →WH_LOCATION",
-    "split / splitQty · 拆零标记+拆零数",
-    "checked · 已验收",
-    "code2 / code3 · 二三级码（父子关联）",
-    "_src · 来源单据（运行时推导）",
-    "无 status 字段 · 由单据集合推导（图 08）",
-], BLUE, BLUES)
+table(nodes, "BAD_CODES", "BAD_CODES · 异常码台账", 60, 454, [
+    "作用：解析失败/未维护码台账，维护后回写",
+    "PK idcode · 按标识码 upsert",
+], ORANGE, ORANGES, desc_fill=ORANGE_D)
 
-b5 = table(nodes, "DOC_CODE", "DOC_CODE · 单据-码清单", 440, 560, [
+table(nodes, "SCAN_LOG", "SCAN_LOG · 扫码留痕【规划】", 60, 580, [
+    "作用：全量扫码事件留痕（审计/GSP）",
+    "time / device / operator / rawCode / result",
+], GRAY, GRAYS, "#d0d5dd", desc_fill=GRAY_D)
+
+# ===== 列 2（x=440）：码实例与派生视图（TRACE_CODE 与 IDCODES 同高 → e2 直线；顶留空给 e6 直线走廊） =====
+table(nodes, "TRACE_CODE", "TRACE_CODE · 追溯码实例", 440, 302, [
+    "作用：库存载体一码一条，状态由单据推导",
+    "PK code · 20 位追溯码",
+    "前 7 位 idcode → IDCODES（逻辑 FK）",
+    "location → WH_LOCATION · 库位",
+], BLUE, BLUES, desc_fill=BLUE_D)
+
+table(nodes, "DOC_CODE", "DOC_CODE · 单据-码清单", 440, 492, [
+    "作用：单据⇄码 N:N，带批次/库位快照",
     "PK (billNo, code) · 联合主键",
     "FK billNo → DOC",
-    "FK code → TRACE_CODE（20 位）",
-    "batch / prodDate / expDate · 批次效期快照",
-    "location / checked · 库位+验收快照",
-    "split / splitQty · 拆零快照",
-    "原型内嵌 codes[] · 建库拆关联表",
-], BLUE, BLUES)
+    "FK code → TRACE_CODE",
+], BLUE, BLUES, desc_fill=BLUE_D)
 
-# ===== 列 3（x=820）：单据与申请 =====
-b6 = table(nodes, "DOC", "DOC · 单据（7 类）", 820, 150, [
-    "PK billNo · 单号 LYCK20260913001",
-    "docType · 7 类（采购入库/领用出库/损耗等）",
-    "date · 单据日期",
-    "warehouse · 库房 →WAREHOUSE",
-    "pharmacy · 药房（领用/退回）→PHARMACY",
-    "supplier · 供应商（采购场景）",
-    "status · 状态机（未审核/已审核/已出库…）",
-    "auditTime / auditor · 审核时间+审核人",
-    "operator · 经办人",
-    "invoice · 发票号（采购场景）",
-    "remark · 备注",
-    "申请单另立 REQ（药品口径 · 无码）",
-], BLUE, BLUES)
+table(nodes, "STOCK_BALANCE", "STOCK_BALANCE · 药品库存汇总（视图）", 440, 682, [
+    "作用：药品口径在架库存，查询入口",
+    "(drugCode, warehouse, batch) · 分组键",
+    "qty = Σ 在架码 · 由单据集合推导（图 08）",
+    "逻辑视图 / 物化汇总表 = 实现层决策",
+], GRAY, GRAYS, "#d0d5dd", desc_fill=GRAY_D)
 
-b7 = table(nodes, "REQ", "REQ · 领用申请单", 820, 560, [
-    "PK reqNo · 申请单号 LY20260914001",
-    "date · 申请日期",
+# ===== 列 3（x=820）：申请与单据（REQ_ITEM 顶=DRUGS 顶=140 → e6 直线；DOC 顶=DOC_CODE 顶=492 → e4 直线） =====
+table(nodes, "REQ_ITEM", "REQ_ITEM · 申请行", 820, 140, [
+    "作用：申请明细，按药品+基本单位计量",
+    "PK (reqNo, drugCode) · 联合主键",
+    "FK drugCode → DRUGS",
+], BLUE, BLUES, desc_fill=BLUE_D)
+
+table(nodes, "REQ", "REQ · 领用申请单", 820, 302, [
+    "作用：药房请领，药品口径无码",
+    "PK reqNo · 申请单号",
     "pharmacy → PHARMACY",
     "warehouse → WAREHOUSE",
-    "applicant · 申请人",
-    "status · 待备货 / 已完成",
-    "remark · 备注",
-], BLUE, BLUES)
+], BLUE, BLUES, desc_fill=BLUE_D)
 
-b8 = table(nodes, "REQ_ITEM", "REQ_ITEM · 申请行（药品口径）", 820, 830, [
-    "PK (reqNo, drugCode) · 联合主键",
-    "FK drugCode → DRUGS · 药品+基本单位",
-    "qty · 申请数量（基本单位）",
-], BLUE, BLUES)
+table(nodes, "DOC", "DOC · 单据（7 类）", 820, 492, [
+    "作用：全业务单据事实源，状态机驱动库存",
+    "PK billNo · 单号",
+    "warehouse → WAREHOUSE",
+    "pharmacy → PHARMACY（领用/退回）",
+], BLUE, BLUES, desc_fill=BLUE_D)
 
-# ===== 列 4（x=1200）：组织字典（关键字段） =====
-b9 = table(nodes, "WAREHOUSE", "WAREHOUSE · 库房", 1200, 150, [
-    "PK code WH001 · name 中心库",
-    "FK org 院区 · type 常温/阴凉/麻精",
-    "status · 启用",
-], GREEN, GREENS, "#b7e0c4")
+# ===== 列 4（x=1200）：组织字典（绿边统一不标，图例已说明 1:N） =====
+table(nodes, "WAREHOUSE", "WAREHOUSE · 库房", 1200, 140, [
+    "作用：库房字典，院区行级隔离",
+    "PK code · 类型常温/阴凉/麻精",
+], GREEN, GREENS, "#b7e0c4", desc_fill=GREEN_D)
 
-b10 = table(nodes, "WH_LOCATION", "WH_LOCATION · 库位", 1200, 310, [
-    "PK code A-01-02 · name 库位名",
-    "status · 启用",
-], GREEN, GREENS, "#b7e0c4")
+table(nodes, "WH_LOCATION", "WH_LOCATION · 库位", 1200, 258, [
+    "作用：库房内存放位置",
+    "PK code · 库位",
+], GREEN, GREENS, "#b7e0c4", desc_fill=GREEN_D)
 
-b11 = table(nodes, "PHARMACY", "PHARMACY · 药房", 1200, 440, [
-    "PK code PH001 · name 门诊药房",
-    "FK org 院区 · type 门诊/住院/急诊",
-    "status · 启用",
-], GREEN, GREENS, "#b7e0c4")
+table(nodes, "PHARMACY", "PHARMACY · 药房", 1200, 376, [
+    "作用：药房字典（门诊/住院/急诊）",
+    "PK code",
+], GREEN, GREENS, "#b7e0c4", desc_fill=GREEN_D)
 
-b12 = table(nodes, "PH_LOCATION", "PH_LOCATION · 货位", 1200, 600, [
-    "PK code M-01 · name 货位名",
-    "status · 启用",
-], GREEN, GREENS, "#b7e0c4")
+table(nodes, "PH_LOCATION", "PH_LOCATION · 货位", 1200, 494, [
+    "作用：药房内陈列货位",
+    "PK code",
+], GREEN, GREENS, "#b7e0c4", desc_fill=GREEN_D)
 
-b13 = table(nodes, "CABINET", "CABINET · 取药柜（本期字典）", 1200, 730, [
-    "PK code CB01 · name 门诊取药柜 1 号",
+table(nodes, "CABINET", "CABINET · 取药柜", 1200, 612, [
+    "作用：智能取药柜字典（本期新增）",
+    "PK code",
     "FK pharmacy → PHARMACY",
-    "status · 启用 / 停用",
-], GREEN, GREENS, "#b7e0c4")
+], GREEN, GREENS, "#b7e0c4", desc_fill=GREEN_D)
 
-b14 = table(nodes, "CAB_CELL", "CAB_CELL · 取药槽", 1200, 890, [
-    "PK code C1-03 · name 1 层 3 槽",
-    "status · 空闲 / 占用（经摆药层）",
-], GREEN, GREENS, "#b7e0c4")
+table(nodes, "CAB_CELL", "CAB_CELL · 取药槽", 1200, 758, [
+    "作用：柜内最小槽位，经摆药层占用",
+    "PK code",
+], GREEN, GREENS, "#b7e0c4", desc_fill=GREEN_D)
 
-nodes.append({
-    "id": "NOTE", "kind": "review_card", "c4_type": "NOTE · 设计要点",
-    "x": 1200, "y": 1030, "width": 320, "height": 92, "label": "设计要点",
-    "description": "库存无 status · 由单据集合推导（图 08）｜ 码实例 = 库存载体 ｜ 院区 = org 行级隔离（图 10）",
-    "fill": GRAY, "stroke": GRAYS,
-})
+# ===== NOTE · 设计要点（表格式 4 行，防截断）；y=872 与 STOCK_BALANCE 底(832) 留 40 间隙 =====
+NX, NY, NW = 60, 872, 700
+nodes.append({"id": "NOTE", "kind": "rect", "x": NX, "y": NY, "width": NW, "height": HEAD_H,
+              "label": "NOTE · 设计要点与物理实施口径", "fill": GRAY, "stroke": GRAYS, "stroke_width": 2.0})
+for i, t in enumerate([
+    "库存无 status · 由单据集合推导（图 08）；查询三层下钻：药品汇总 → 批次 → 码实例",
+    "扫码异常三分流：解析失败→BAD_CODES ｜ 退货无库存→PURCHASE_NOSTOCK ｜ 盘点差异→INV_CODE",
+    "大表皆 append-only：分区+归档+可全量重算；STOCK_BALANCE 物化后以日结对账兜底",
+    "DOC_ITEM（定价/金额行）进 backlog：采购价场景启用时照 RX_ITEM + 行码绑定模式扩展",
+]):
+    nodes.append({"id": f"NOTE_r{i+1:02d}", "kind": "rect", "x": NX, "y": NY + HEAD_H + HEAD_GAP + i * (H + ROW_GAP),
+                  "width": NW, "height": H, "label": t, "fill": "#ffffff",
+                  "stroke": "#d0d5dd", "stroke_width": 1.0, "flat": True, "title_size": 11, "rx": 4})
 
 edges = [
-    {"id": "e1", "source": "DRUGS_r14", "target": "IDCODES", "source_port": "bottom", "target_port": "top",
+    # e1 竖边：连 DRUGS 末行底(220,262) → IDCODES 表头顶(220,302)，间隙 40 → 直线
+    {"id": "e1", "source": "DRUGS_r03", "target": "IDCODES", "source_port": "bottom", "target_port": "top",
      "flow": "read", "label": "1:N 一药多码"},
-    {"id": "e2", "source": "IDCODES_r06", "target": "TRACE_CODE", "source_port": "right", "target_port": "left",
-     "flow": "read", "label": "1:N 派生实例", "route_points": [[415, 813], [415, 167]]},
-    {"id": "e3", "source": "TRACE_CODE_r12", "target": "DOC_CODE", "source_port": "bottom", "target_port": "top",
+    # e2 横边：IDCODES 顶=TRACE_CODE 顶=302 → 表头 right/left 端口同轴 y=320 → 直线
+    {"id": "e2", "source": "IDCODES", "target": "TRACE_CODE", "source_port": "right", "target_port": "left",
+     "flow": "read"},
+    # e3 竖边：TRACE_CODE 末行底(600,452) → DOC_CODE 表头顶(600,492)，间隙 40 → 直线
+    {"id": "e3", "source": "TRACE_CODE_r04", "target": "DOC_CODE", "source_port": "bottom", "target_port": "top",
      "flow": "read", "label": "N:N 码随单转"},
+    # e4 横边：DOC 顶=DOC_CODE 顶=492 → 表头 left/right 端口同轴 y=510 → 直线
     {"id": "e4", "source": "DOC", "target": "DOC_CODE", "source_port": "left", "target_port": "right",
-     "flow": "read", "route_points": [[790, 167], [790, 578]]},
-    {"id": "e5", "source": "REQ_r07", "target": "REQ_ITEM", "source_port": "bottom", "target_port": "top",
+     "flow": "read"},
+    # e5 竖边（向上）：REQ 表头顶(980,302) → REQ_ITEM 末行底(980,262)，间隙 40 → 直线
+    {"id": "e5", "source": "REQ", "target": "REQ_ITEM_r03", "source_port": "top", "target_port": "bottom",
      "flow": "read", "label": "1:N 申请行"},
+    # e6 横边：DRUGS 顶=REQ_ITEM 顶=140 → 表头 right/left 端口同轴 y=158 → 直线横跨 col2 上方净空
     {"id": "e6", "source": "DRUGS", "target": "REQ_ITEM", "source_port": "right", "target_port": "left",
-     "flow": "read", "label": "1:N 药品口径", "route_points": [[395, 167], [395, 848]]},
-    {"id": "e8", "source": "WAREHOUSE_r03", "target": "WH_LOCATION", "source_port": "bottom", "target_port": "top",
-     "flow": "control", "label": "1:N 库位"},
-    {"id": "e9", "source": "PHARMACY_r03", "target": "PH_LOCATION", "source_port": "bottom", "target_port": "top",
-     "flow": "control", "label": "1:N 货位"},
+     "flow": "read", "label": "1:N 药品口径"},
+    # e8 竖边：WAREHOUSE 末行底(1360,234) → WH_LOCATION 表头顶(1360,258)，间隙 24（无标签）→ 直线
+    {"id": "e8", "source": "WAREHOUSE_r02", "target": "WH_LOCATION", "source_port": "bottom", "target_port": "top",
+     "flow": "control"},
+    # e9 竖边：PHARMACY 末行底(1360,470) → PH_LOCATION 表头顶(1360,494)，间隙 24（无标签）→ 直线
+    {"id": "e9", "source": "PHARMACY_r02", "target": "PH_LOCATION", "source_port": "bottom", "target_port": "top",
+     "flow": "control"},
+    # e10：右侧通道距画布边仅 32px，标签放不下 → 不标（CABINET 行内已写 FK pharmacy）；保留右通道 L 绕行
     {"id": "e10", "source": "PHARMACY", "target": "CABINET", "source_port": "right", "target_port": "right",
-     "flow": "control", "label": "1:N 取药柜", "route_points": [[1548, 501], [1548, 791]]},
+     "flow": "control", "route_points": [[1548, 430], [1548, 630]]},
+    # e11 竖边：CABINET 末行底(1360,734) → CAB_CELL 表头顶(1360,758)，间隙 24（无标签）→ 直线
     {"id": "e11", "source": "CABINET_r03", "target": "CAB_CELL", "source_port": "bottom", "target_port": "top",
-     "flow": "control", "label": "1:N 槽"},
+     "flow": "control"},
+    # e13 L 形（2 折）：DOC 表头 right(1140,510) → 列间通道 x=1170 上行 → WAREHOUSE 表头 left(1200,158)；60px 通道放不下标签，关系见 DOC 行
     {"id": "e13", "source": "DOC", "target": "WAREHOUSE", "source_port": "right", "target_port": "left",
-     "flow": "read", "label": "warehouse"},
+     "flow": "read", "route_points": [[1170, 510], [1170, 158]]},
+    # e14 竖边（虚线）：DOC_CODE 末行底(600,642) → STOCK_BALANCE 表头顶(600,682)，间隙 40 → 直线
+    {"id": "e14", "source": "DOC_CODE_r04", "target": "STOCK_BALANCE", "source_port": "bottom", "target_port": "top",
+     "flow": "data", "dashed": True, "label": "GROUP BY 聚合"},
 ]
 
 doc = {
@@ -190,23 +190,23 @@ doc = {
     "quality_profile": "standard",
     "text_policy": "strict",
     "width": 1580,
-    "height": 1180,
-    "title": "表结构 ER（字段级）· 码⇄药⇄单 核心七表 + 组织字典",
-    "subtitle": "字段与原型数据脚本逐一核实（drug-data / purchase-data / wh-data / facility-data）· PK=主键 FK=外键 · 蓝=业务核心 绿=组织字典 橙=异常台账",
+    "height": 1115,
+    "title": "表结构 ER（关系版）· 码⇄药⇄单 核心七表 + 组织字典",
+    "subtitle": "只列主键与外键 · 字段级见 er/pul-fms-full.sql ｜ 蓝=业务核心 绿=组织字典 橙=异常台账 灰=派生视图/规划（非物理表）",
     "containers": [],
     "nodes": nodes,
     "arrows": edges,
     "legend_orientation": "horizontal",
     "legend_x": 60,
-    "legend_y": 1120,
+    "legend_y": 1055,
     "legend": [
         {"flow": "read", "label": "外键引用 1:N"},
-        {"flow": "control", "label": "字典层级 1:N"},
+        {"flow": "control", "label": "字典层级 1:N（绿边不逐个标注）"},
+        {"flow": "data", "label": "派生视图（虚线 · 非物理表）"},
     ],
-    "footer": "PUL-FMS · 12 表结构 ER（字段级）· fireworks-tech-graph Style 1",
+    "footer": "PUL-FMS · 12 表结构 ER（关系版）· fireworks-tech-graph Style 1",
     "footer_x": 48,
-    "footer_y": 1150,
+    "footer_y": 1085,
 }
 json.dump(doc, open("12-er-fields.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
 print(f"nodes={len(nodes)} edges={len(edges)}")
-print("bottoms:", b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14)

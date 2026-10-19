@@ -34,7 +34,7 @@
     var d = p.dict;
     var head = d
       ? '<b>' + esc(d.drugName) + '</b> · ' + esc(d.formSpec) + ' · 批次见流水 · 标识码 ' + esc(p.idcode)
-      : '<span class="badge bg-red-lt">未解析</span> 标识码 ' + esc(p.idcode) + ' 不在字典，可去 <a href="bad-codes.html">异常标识码</a>';
+      : '<span class="badge bg-red-lt">未解析</span> 标识码 ' + esc(p.idcode) + ' 不在字典，可去 <a href="purchase-arrive.html?view=bad">异常码台账</a>';
     var loc = result.loc ? ' · 货位/库位 ' + esc(result.loc) : '';
     var hist = (result.hist || []).slice().reverse();
     var rows = hist.map(function (e) {

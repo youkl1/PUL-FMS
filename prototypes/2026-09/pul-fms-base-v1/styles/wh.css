@@ -39,3 +39,23 @@ tr.wh-row-expired > td { background: #FDF2F4; }
 .wh-pick-diff.full { color: #2FB344; }
 .wh-pick-diff.part { color: #F59E0B; }
 .wh-pick-diff.over { color: #D63939; }
+
+/* ===== 备货出库扫码（高拍仪连续作业，框架无此组件：模式开关/大字反馈条自写） ===== */
+/* 扫码加入 / 扫码移除 模式开关（沿用 wh-unit-toggle 视觉语言，加大一号） */
+.qs-mode { display: inline-flex; border: 1px solid #D9DEE4; border-radius: 8px; overflow: hidden; }
+.qs-mode button { border: none; background: #fff; padding: 10px 20px; font-size: 14px; font-weight: 600; color: #64748B; cursor: pointer; font-family: inherit; }
+.qs-mode button.active-add { background: #2563EB; color: #fff; }
+.qs-mode button.active-rm { background: #D63939; color: #fff; }
+/* 大输入框（高拍仪自动回车，回车即扫） */
+.qs-input { font-size: 18px !important; padding: 12px 16px !important; font-family: Consolas, monospace; }
+/* 最近一码大字反馈条（远距离可读） */
+.qs-feedback { margin-top: 10px; padding: 10px 16px; border-radius: 8px; font-size: 16px; font-weight: 600; min-height: 46px; display: flex; align-items: center; }
+.qs-feedback.ok { background: #EAF7EE; color: #2FB344; }
+.qs-feedback.warn { background: #FEF3E2; color: #F59E0B; }
+.qs-feedback.bad { background: #FDECEC; color: #D63939; }
+.qs-feedback.idle { background: #F5F7FA; color: #94A3B8; font-weight: 400; font-size: 13.5px; }
+/* 统计 chips（对齐旧版无库码/异常码计数） */
+.qs-chips { display: flex; gap: 10px; }
+.qs-chip { padding: 4px 12px; border-radius: 14px; font-size: 12.5px; background: #F1F5F9; color: #475569; }
+.qs-chip b { font-size: 15px; }
+.qs-chip.bad { background: #FDECEC; color: #D63939; }

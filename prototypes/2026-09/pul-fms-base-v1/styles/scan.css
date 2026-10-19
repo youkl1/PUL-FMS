@@ -1,0 +1,31 @@
+/* scan.css — 扫码域共享样式（统一扫码验证 scan-lab / 统一扫码 scan-hub 共用）
+ * 框架无此组件：悬浮场景面板 / 场景矩阵 / 大反馈条 / 场景页签；三态反馈沿用 pch-scan-* 语义色
+ */
+.lab-badges { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.lab-last { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 10px 14px; border-radius: 8px; font-size: 14px; font-weight: 600; border: 1px solid #E5E7EB; background: #FAFBFC; color: #B0BAC9; }
+.lab-last.ok { color: var(--pch-ok); border-color: var(--pch-ok); background: #F0FAF4; }
+.lab-last.warn { color: var(--pch-warn); border-color: var(--pch-warn); background: #FEF9EC; }
+.lab-last.bad { color: var(--pch-bad); border-color: var(--pch-bad); background: #FDF2F2; }
+.lab-fab { position: fixed; right: 18px; bottom: 18px; z-index: 1200; border: none; border-radius: 22px; padding: 10px 18px; font-size: 14px; font-weight: 600; cursor: pointer; background: #2563EB; color: #fff; box-shadow: 0 6px 18px rgba(37,99,235,.35); font-family: inherit; }
+.lab-panel { position: fixed; right: 18px; bottom: 66px; z-index: 1200; width: 720px; max-width: 96vw; max-height: 80vh; overflow: auto; background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; box-shadow: 0 12px 40px rgba(15,23,42,.18); }
+.lab-panel-head { display: flex; align-items: center; padding: 10px 14px; border-bottom: 1px solid #EEF2F7; font-weight: 600; font-size: 14px; }
+.lab-panel-body { padding: 12px 14px; }
+.lab-matrix { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.lab-matrix th, .lab-matrix td { border: 1px solid #EEF2F7; padding: 4px; text-align: center; font-size: 12px; }
+.lab-matrix th { background: #F8FAFC; color: #64748B; font-weight: 600; }
+.lab-cell { display: block; width: 100%; border: 1px solid #D9DEE4; border-radius: 6px; background: #fff; padding: 6px 2px; font-size: 12px; cursor: pointer; font-family: inherit; line-height: 1.4; }
+.lab-cell:hover { border-color: #2563EB; }
+.lab-cell.cur { background: #2563EB; color: #fff; border-color: #2563EB; font-weight: 600; }
+.lab-cell:disabled { background: #F1F5F9; color: #94A3B8; cursor: not-allowed; }
+.lab-codes { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+.lab-code-btn { display: flex; align-items: center; gap: 8px; border: 1px solid #EEF2F7; border-radius: 6px; background: #FAFBFC; padding: 4px 8px; font-size: 12px; cursor: pointer; font-family: inherit; text-align: left; }
+.lab-code-btn:hover { border-color: #2563EB; background: #fff; }
+.lab-code-btn .c { font-family: Consolas, monospace; font-size: 12px; color: #334155; }
+.lab-code-btn .t { font-weight: 600; }
+.lab-code-btn .t.ok { color: var(--pch-ok); }
+.lab-code-btn .t.warn { color: var(--pch-warn); }
+.lab-code-btn .t.bad { color: var(--pch-bad); }
+.lab-rule { background: #F8FAFC; border-left: 3px solid #2563EB; padding: 6px 10px; font-size: 12.5px; color: #475569; border-radius: 0 6px 6px 0; margin-top: 8px; }
+/* 统一扫码工作台：场景页签带待办计数 */
+.hub-tab-badge { display: inline-block; min-width: 18px; padding: 0 5px; margin-left: 4px; border-radius: 9px; background: #2563EB; color: #fff; font-size: 11px; line-height: 18px; text-align: center; }
+.pch-tab .hub-tab-off { color: #94A3B8; font-size: 11px; margin-left: 4px; }

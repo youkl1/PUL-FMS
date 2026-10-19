@@ -52,7 +52,7 @@
       '<div class="table-responsive"><table class="table table-vcenter card-table">' +
       '<thead><tr><th>编码</th><th>名称</th><th class="text-center">排序</th><th>状态</th><th class="text-center">被引用</th><th>操作</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div>' +
-      '<div class="card-footer text-secondary" style="font-size:12px;">编码保存后不可修改（5.3.2）；停用后业务页面不可选择该项、历史数据保留原值（5.3.3）；已被引用的项不可删除仅可停用（5.3.4）。</div></div>';
+      '</div>';
   }
 
   function modalHtml(it) {

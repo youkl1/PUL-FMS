@@ -6,11 +6,11 @@
   <meta name="prototype-category" content="web-admin">
   <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 基础平台骨架">
   <title>登录 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/login.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/login.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -26,9 +26,15 @@
     #btnIntroDetail:hover { border-color: var(--wa-primary); color: var(--wa-primary); background: var(--wa-primary-light); }
     /* 框架无此组件：登录第二步的「库房管理/药房管理」模式选择大卡（沿用 Tabler 视觉语言） */
     .mode-cards { display: flex; gap: 10px; }
-    .mode-card { flex: 1; padding: 14px 8px; border: 1.5px solid var(--wa-border, #dce1e7); border-radius: 8px; background: #fff; font-size: 14px; font-weight: 500; color: var(--wa-text-body, #354052); cursor: pointer; transition: all 150ms ease-out; font-family: inherit; }
+    .mode-card { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; padding: 12px 8px; border: 1.5px solid var(--wa-border, #dce1e7); border-radius: 8px; background: #fff; font-size: 14px; font-weight: 500; color: var(--wa-text-body, #354052); cursor: pointer; transition: all 150ms ease-out; font-family: inherit; }
     .mode-card:hover { border-color: #206bc4; color: #206bc4; }
     .mode-card.active { border-color: #206bc4; background: #e8f1fb; color: #206bc4; }
+    /* 数量徽标：中性灰底，选中态随卡片变蓝 */
+    .mode-count { min-width: 20px; padding: 1px 7px; border-radius: 10px; background: #f1f5f9; color: #64748b; font-size: 11px; font-weight: 600; }
+    .mode-card.active .mode-count { background: #206bc4; color: #fff; }
+    /* 标签行：左侧字段名 + 右侧数量提示 */
+    .label-row { display: flex; justify-content: space-between; align-items: baseline; }
+    .label-count { font-size: 11px; color: #64748b; font-weight: 400; }
   </style>
 </head>
 <body>
@@ -64,7 +70,7 @@
                     <!-- 第一步：账号密码 -->
                     <div id="step1">
                       <h2 class="h3 text-center mb-1">登录系统</h2>
-                      <p class="text-secondary text-center mb-3" style="font-size:12px;">先验证账号，再按角色数据范围决定是否需要选院区/库房</p>
+                      <p class="text-secondary text-center mb-3" style="font-size:12px;">验证账号后，按您的权限选择要进入的库房 / 药房</p>
                       <div class="mb-3">
                         <label class="form-label">账号</label>
                         <input type="text" class="form-control" id="inpAccount" placeholder="请输入账号" autocomplete="off">
@@ -83,21 +89,21 @@
                     </div>
                     <!-- 第二步：选院区（超管）→ 选业务模块（双栖用户）→ 选具体库房/药房 -->
                     <div id="step2" style="display:none;">
-                      <h2 class="h3 text-center mb-1" id="step2Title">选择工作上下文</h2>
+                      <h2 class="h3 text-center mb-1" id="step2Title">选择进入的库房 / 药房</h2>
                       <p class="text-secondary text-center mb-3" style="font-size:12px;" id="step2Desc"></p>
                       <div class="mb-3">
                         <label class="form-label">院区 <span class="text-secondary" style="font-size:11px;" id="orgHint"></span></label>
                         <select class="form-select" id="selOrg"></select>
                       </div>
                       <div class="mb-3" id="modeField" style="display:none;">
-                        <label class="form-label">业务模块（您同时属于库房与药房，请先选择）</label>
+                        <label class="form-label">管理类型</label>
                         <div class="mode-cards" id="modeCards">
-                          <button type="button" class="mode-card" data-mode="库房管理">🏬 库房管理</button>
-                          <button type="button" class="mode-card" data-mode="药房管理">💊 药房管理</button>
+                          <button type="button" class="mode-card" data-mode="库房管理">🏬 库房管理<span class="mode-count" data-kind="库房">0</span></button>
+                          <button type="button" class="mode-card" data-mode="药房管理">💊 药房管理<span class="mode-count" data-kind="药房">0</span></button>
                         </div>
                       </div>
                       <div class="mb-3">
-                        <label class="form-label" id="nodeLabel">库房 / 药房</label>
+                        <div class="form-label label-row"><span id="nodeLabel">库房 / 药房</span><span class="label-count" id="nodeCount"></span></div>
                         <select class="form-select" id="selNode"></select>
                       </div>
                       <div class="form-footer">
@@ -111,7 +117,7 @@
                   </div>
                 </div>
                 <div class="text-center text-secondary mt-3" style="font-size:12px;">
-                  多院区单实例 · 行数据按登录所选库房/药房自动隔离，再按本人隔离
+                  进入系统后，仅显示所选库房 / 药房的数据
                 </div>
               </div>
             </div>
@@ -192,10 +198,10 @@
 
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/login.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/login.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

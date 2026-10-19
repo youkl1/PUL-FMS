@@ -4,7 +4,7 @@
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'lossQ', crumb: ['库房管理', '库房业务', '损耗明细查询'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'lossQ', crumb: ['出库管理', '损耗明细查询', '损耗明细查询'] });
   if (!content) return;
 
   var W = window.PUL_WH, D = window.PUL_DRUG, P = window.PUL_PCH, UI = window.PchUI, esc = UI.esc;

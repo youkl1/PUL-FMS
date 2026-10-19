@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1580 1180" width="1580" height="1180" data-generator="fireworks-tech-graph" data-schema-version="1" data-text-metrics="heuristic-v1" data-style-id="1" data-visual-theme="Flat Icon" data-diagram-type="architecture" data-motion-scene="" data-semantic-profile="generic" data-semantic-valid="true" data-quality-profile="standard" data-max-bends-per-edge="12" data-max-total-bends="100" data-max-route-stretch="5.0" data-max-bridged-crossings="8" data-min-node-gap="0.0" data-min-container-gutter="0.0" data-min-label-clearance="2.0" data-min-segment-length="0.0">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1580 1115" width="1580" height="1115" data-generator="fireworks-tech-graph" data-schema-version="1" data-text-metrics="heuristic-v1" data-style-id="1" data-visual-theme="Flat Icon" data-diagram-type="architecture" data-motion-scene="" data-semantic-profile="generic" data-semantic-valid="true" data-quality-profile="standard" data-max-bends-per-edge="12" data-max-total-bends="100" data-max-route-stretch="5.0" data-max-bridged-crossings="8" data-min-node-gap="0.0" data-min-container-gutter="0.0" data-min-label-clearance="2.0" data-min-segment-length="0.0">
   <defs>
     <marker id="arrowA" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
       <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
@@ -43,460 +43,319 @@
     .metric-value { font-size: 9.5px; font-weight: 700; fill: #111827; }
     </style>
   </defs>
-  <rect data-graph-role="background" width="1580.0" height="1180.0" fill="#ffffff"/>
-  <text x="790.0" y="56" text-anchor="middle" class="title">表结构 ER（字段级）· 码⇄药⇄单 核心七表 + 组织字典</text>
-  <text x="790.0" y="82" text-anchor="middle" class="subtitle">字段与原型数据脚本逐一核实（drug-data / purchase-data / wh-data / facility-data）· PK=主键 FK=外键 · 蓝=业务核心 绿=组织字典 橙=异常台账</text>
-  <path id="e2" data-graph-role="edge" data-edge-id="e2" data-source="IDCODES_r06" data-target="TRACE_CODE" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="4" data-route-stretch="1.003" data-bridges="" d="M 380,813 L 415,813 L 415,167 L 416,167 L 416,168 L 440,168" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
-  <path id="e4" data-graph-role="edge" data-edge-id="e4" data-source="DOC" data-target="DOC_CODE" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="8" data-route-stretch="1.064" data-bridges="" d="M 820,168 L 790,168 L 790,167 L 784,167 L 784,578 L 790,578 L 790,586 L 780.4,586 L 780.4,578 L 760,578" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
-  <path id="e6" data-graph-role="edge" data-edge-id="e6" data-source="DRUGS" data-target="REQ_ITEM" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="6" data-route-stretch="1.643" data-bridges="" d="M 380,168 L 395,168 L 395,167 L 380,167 L 380,186 L 36,186 L 36,848 L 395,848 L 820,848" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
-  <path id="e10" data-graph-role="edge" data-edge-id="e10" data-source="PHARMACY" data-target="CABINET" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="4" data-route-stretch="1.49" data-bridges="" d="M 1520,458 L 1548,458 L 1548,501 L 1548,791 L 1544,791 L 1544,748 L 1520,748" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
-  <path id="e1" data-graph-role="edge" data-edge-id="e1" data-source="DRUGS_r14" data-target="IDCODES" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 220,580 L 220,620" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
-  <path id="e3" data-graph-role="edge" data-edge-id="e3" data-source="TRACE_CODE_r12" data-target="DOC_CODE" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 600,524 L 600,560" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
-  <path id="e5" data-graph-role="edge" data-edge-id="e5" data-source="REQ_r07" data-target="REQ_ITEM" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 980,794 L 980,830" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
-  <path id="e8" data-graph-role="edge" data-edge-id="e8" data-source="WAREHOUSE_r03" data-target="WH_LOCATION" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1360,272 L 1360,310" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
-  <path id="e9" data-graph-role="edge" data-edge-id="e9" data-source="PHARMACY_r03" data-target="PH_LOCATION" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1360,562 L 1360,600" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
-  <path id="e11" data-graph-role="edge" data-edge-id="e11" data-source="CABINET_r03" data-target="CAB_CELL" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1360,852 L 1360,890" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
-  <path id="e13" data-graph-role="edge" data-edge-id="e13" data-source="DOC" data-target="WAREHOUSE" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1140,168 L 1200,168" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
-  <g id="node-DRUGS" data-graph-role="node" data-node-id="DRUGS" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,150,380,186">
-  <rect x="60.0" y="150.0" width="320.0" height="36.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="2.0" filter="url(#shadowSoft)"/>
-  <text data-text-role="title" data-full-text="DRUGS · 药品主表" data-text-max-width="296.0" x="220.0" y="168.0" text-anchor="middle" class="node-title" font-size="18">DRUGS · 药品主表</text>
-  </g>
-  <g id="node-DRUGS_r01" data-graph-role="node" data-node-id="DRUGS_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,190,380,216">
-  <rect x="60.0" y="190.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="PK drugCode · 药品编码 YP010201" data-text-max-width="296.0" x="220.0" y="203.0" text-anchor="middle" class="node-title" font-size="11.0">PK drugCode · 药品编码 YP010201</text>
-  </g>
-  <g id="node-DRUGS_r02" data-graph-role="node" data-node-id="DRUGS_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,218,380,244">
-  <rect x="60.0" y="218.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="drugName · 品名" data-text-max-width="296.0" x="220.0" y="231.0" text-anchor="middle" class="node-title" font-size="11.0">drugName · 品名</text>
-  </g>
-  <g id="node-DRUGS_r03" data-graph-role="node" data-node-id="DRUGS_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,246,380,272">
-  <rect x="60.0" y="246.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="formSpec · 规格 ｜ dosForm · 剂型" data-text-max-width="296.0" x="220.0" y="259.0" text-anchor="middle" class="node-title" font-size="11.0">formSpec · 规格 ｜ dosForm · 剂型</text>
-  </g>
-  <g id="node-DRUGS_r04" data-graph-role="node" data-node-id="DRUGS_r04" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,274,380,300">
-  <rect x="60.0" y="274.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="maker · 生产厂家" data-text-max-width="296.0" x="220.0" y="287.0" text-anchor="middle" class="node-title" font-size="11.0">maker · 生产厂家</text>
-  </g>
-  <g id="node-DRUGS_r05" data-graph-role="node" data-node-id="DRUGS_r05" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,302,380,328">
-  <rect x="60.0" y="302.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="approval · 批准文号" data-text-max-width="296.0" x="220.0" y="315.0" text-anchor="middle" class="node-title" font-size="11.0">approval · 批准文号</text>
-  </g>
-  <g id="node-DRUGS_r06" data-graph-role="node" data-node-id="DRUGS_r06" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,330,380,356">
-  <rect x="60.0" y="330.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="category · 分类（西药/中成药）" data-text-max-width="296.0" x="220.0" y="343.0" text-anchor="middle" class="node-title" font-size="11.0">category · 分类（西药/中成药）</text>
-  </g>
-  <g id="node-DRUGS_r07" data-graph-role="node" data-node-id="DRUGS_r07" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,358,380,384">
-  <rect x="60.0" y="358.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="baseUnit · 库存基本单位（换算链尾）" data-text-max-width="296.0" x="220.0" y="371.0" text-anchor="middle" class="node-title" font-size="11.0">baseUnit · 库存基本单位（换算链尾）</text>
-  </g>
-  <g id="node-DRUGS_r08" data-graph-role="node" data-node-id="DRUGS_r08" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,386,380,412">
-  <rect x="60.0" y="386.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="units · 换算链 [{u,eq}] → 1箱=60盒" data-text-max-width="296.0" x="220.0" y="399.0" text-anchor="middle" class="node-title" font-size="11.0">units · 换算链 [{u,eq}] → 1箱=60盒</text>
-  </g>
-  <g id="node-DRUGS_r09" data-graph-role="node" data-node-id="DRUGS_r09" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,414,380,440">
-  <rect x="60.0" y="414.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="minUnit · 拆零 {u,per} → 1盒=7片" data-text-max-width="296.0" x="220.0" y="427.0" text-anchor="middle" class="node-title" font-size="11.0">minUnit · 拆零 {u,per} → 1盒=7片</text>
-  </g>
-  <g id="node-DRUGS_r10" data-graph-role="node" data-node-id="DRUGS_r10" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,442,380,468">
-  <rect x="60.0" y="442.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="ipUnpack / opUnpack · 住院/门诊拆零" data-text-max-width="296.0" x="220.0" y="455.0" text-anchor="middle" class="node-title" font-size="11.0">ipUnpack / opUnpack · 住院/门诊拆零</text>
-  </g>
-  <g id="node-DRUGS_r11" data-graph-role="node" data-node-id="DRUGS_r11" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,470,380,496">
-  <rect x="60.0" y="470.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="price · 参考进价" data-text-max-width="296.0" x="220.0" y="483.0" text-anchor="middle" class="node-title" font-size="11.0">price · 参考进价</text>
-  </g>
-  <g id="node-DRUGS_r12" data-graph-role="node" data-node-id="DRUGS_r12" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,498,380,524">
-  <rect x="60.0" y="498.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="warehouse · 所属库房 →WAREHOUSE" data-text-max-width="296.0" x="220.0" y="511.0" text-anchor="middle" class="node-title" font-size="11.0">warehouse · 所属库房 →WAREHOUSE</text>
-  </g>
-  <g id="node-DRUGS_r13" data-graph-role="node" data-node-id="DRUGS_r13" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,526,380,552">
-  <rect x="60.0" y="526.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="status · 启用 / 停用" data-text-max-width="296.0" x="220.0" y="539.0" text-anchor="middle" class="node-title" font-size="11.0">status · 启用 / 停用</text>
-  </g>
-  <g id="node-DRUGS_r14" data-graph-role="node" data-node-id="DRUGS_r14" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,554,380,580">
-  <rect x="60.0" y="554.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="同一标识码不同库房分别建档" data-text-max-width="296.0" x="220.0" y="567.0" text-anchor="middle" class="node-title" font-size="11.0">同一标识码不同库房分别建档</text>
-  </g>
-  <g id="node-IDCODES" data-graph-role="node" data-node-id="IDCODES" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,620,380,656">
-  <rect x="60.0" y="620.0" width="320.0" height="36.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="2.0" filter="url(#shadowSoft)"/>
-  <text data-text-role="title" data-full-text="IDCODES · 标识码子表" data-text-max-width="296.0" x="220.0" y="638.0" text-anchor="middle" class="node-title" font-size="18">IDCODES · 标识码子表</text>
-  </g>
-  <g id="node-IDCODES_r01" data-graph-role="node" data-node-id="IDCODES_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,660,380,686">
-  <rect x="60.0" y="660.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="PK idcode · 7 位标识码 8414784" data-text-max-width="296.0" x="220.0" y="673.0" text-anchor="middle" class="node-title" font-size="11.0">PK idcode · 7 位标识码 8414784</text>
-  </g>
-  <g id="node-IDCODES_r02" data-graph-role="node" data-node-id="IDCODES_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,688,380,714">
-  <rect x="60.0" y="688.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="FK drugCode → DRUGS" data-text-max-width="296.0" x="220.0" y="701.0" text-anchor="middle" class="node-title" font-size="11.0">FK drugCode → DRUGS</text>
-  </g>
-  <g id="node-IDCODES_r03" data-graph-role="node" data-node-id="IDCODES_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,716,380,742">
-  <rect x="60.0" y="716.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="level · 码等级（1=盒 2=箱）" data-text-max-width="296.0" x="220.0" y="729.0" text-anchor="middle" class="node-title" font-size="11.0">level · 码等级（1=盒 2=箱）</text>
-  </g>
-  <g id="node-IDCODES_r04" data-graph-role="node" data-node-id="IDCODES_r04" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,744,380,770">
-  <rect x="60.0" y="744.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="packSpec · 包装规格「箱60瓶」" data-text-max-width="296.0" x="220.0" y="757.0" text-anchor="middle" class="node-title" font-size="11.0">packSpec · 包装规格「箱60瓶」</text>
-  </g>
-  <g id="node-IDCODES_r05" data-graph-role="node" data-node-id="IDCODES_r05" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,772,380,798">
-  <rect x="60.0" y="772.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="packUnit · 包装单位（规格解析）" data-text-max-width="296.0" x="220.0" y="785.0" text-anchor="middle" class="node-title" font-size="11.0">packUnit · 包装单位（规格解析）</text>
-  </g>
-  <g id="node-IDCODES_r06" data-graph-role="node" data-node-id="IDCODES_r06" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,800,380,826">
-  <rect x="60.0" y="800.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="status · 启用 / 停用" data-text-max-width="296.0" x="220.0" y="813.0" text-anchor="middle" class="node-title" font-size="11.0">status · 启用 / 停用</text>
-  </g>
-  <g id="node-BAD_CODES" data-graph-role="node" data-node-id="BAD_CODES" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,866,380,902">
-  <rect x="60.0" y="866.0" width="320.0" height="36.0" rx="10.0" fill="#fff7e6" stroke="#d48806" stroke-width="2.0" filter="url(#shadowSoft)"/>
-  <text data-text-role="title" data-full-text="BAD_CODES · 异常码台账" data-text-max-width="296.0" x="220.0" y="884.0" text-anchor="middle" class="node-title" font-size="18">BAD_CODES · 异常码台账</text>
-  </g>
-  <g id="node-BAD_CODES_r01" data-graph-role="node" data-node-id="BAD_CODES_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,906,380,932">
-  <rect x="60.0" y="906.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="PK idcode · 7 位标识码" data-text-max-width="296.0" x="220.0" y="919.0" text-anchor="middle" class="node-title" font-size="11.0">PK idcode · 7 位标识码</text>
-  </g>
-  <g id="node-BAD_CODES_r02" data-graph-role="node" data-node-id="BAD_CODES_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,934,380,960">
-  <rect x="60.0" y="934.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="level · 码等级" data-text-max-width="296.0" x="220.0" y="947.0" text-anchor="middle" class="node-title" font-size="11.0">level · 码等级</text>
-  </g>
-  <g id="node-BAD_CODES_r03" data-graph-role="node" data-node-id="BAD_CODES_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,962,380,988">
-  <rect x="60.0" y="962.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="drugName / formSpec / packSpec · 快照" data-text-max-width="296.0" x="220.0" y="975.0" text-anchor="middle" class="node-title" font-size="11.0">drugName / formSpec / packSpec · 快照</text>
-  </g>
-  <g id="node-BAD_CODES_r04" data-graph-role="node" data-node-id="BAD_CODES_r04" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,990,380,1016">
-  <rect x="60.0" y="990.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="maker / approval · 厂家+文号快照" data-text-max-width="296.0" x="220.0" y="1003.0" text-anchor="middle" class="node-title" font-size="11.0">maker / approval · 厂家+文号快照</text>
-  </g>
-  <g id="node-BAD_CODES_r05" data-graph-role="node" data-node-id="BAD_CODES_r05" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,1018,380,1044">
-  <rect x="60.0" y="1018.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="type · 未维护标识码 / 解析失败" data-text-max-width="296.0" x="220.0" y="1031.0" text-anchor="middle" class="node-title" font-size="11.0">type · 未维护标识码 / 解析失败</text>
-  </g>
-  <g id="node-BAD_CODES_r06" data-graph-role="node" data-node-id="BAD_CODES_r06" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,1046,380,1072">
-  <rect x="60.0" y="1046.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="维护 → upsert 写回 DRUGS+IDCODES" data-text-max-width="296.0" x="220.0" y="1059.0" text-anchor="middle" class="node-title" font-size="11.0">维护 → upsert 写回 DRUGS+IDCODES</text>
-  </g>
-  <g id="node-TRACE_CODE" data-graph-role="node" data-node-id="TRACE_CODE" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,150,760,186">
-  <rect x="440.0" y="150.0" width="320.0" height="36.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="2.0" filter="url(#shadowSoft)"/>
-  <text data-text-role="title" data-full-text="TRACE_CODE · 追溯码实例" data-text-max-width="296.0" x="600.0" y="168.0" text-anchor="middle" class="node-title" font-size="18">TRACE_CODE · 追溯码实例</text>
-  </g>
-  <g id="node-TRACE_CODE_r01" data-graph-role="node" data-node-id="TRACE_CODE_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,190,760,216">
-  <rect x="440.0" y="190.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="PK code · 20 位 = 7标识码+9序列+4校验" data-text-max-width="296.0" x="600.0" y="203.0" text-anchor="middle" class="node-title" font-size="11.0">PK code · 20 位 = 7标识码+9序列+4校验</text>
-  </g>
-  <g id="node-TRACE_CODE_r02" data-graph-role="node" data-node-id="TRACE_CODE_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,218,760,244">
-  <rect x="440.0" y="218.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="→ idcode 前 7 位（逻辑 FK → IDCODES）" data-text-max-width="296.0" x="600.0" y="231.0" text-anchor="middle" class="node-title" font-size="11.0">→ idcode 前 7 位（逻辑 FK → IDCODES）</text>
-  </g>
-  <g id="node-TRACE_CODE_r03" data-graph-role="node" data-node-id="TRACE_CODE_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,246,760,272">
-  <rect x="440.0" y="246.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="batch · 批次号 250702" data-text-max-width="296.0" x="600.0" y="259.0" text-anchor="middle" class="node-title" font-size="11.0">batch · 批次号 250702</text>
-  </g>
-  <g id="node-TRACE_CODE_r04" data-graph-role="node" data-node-id="TRACE_CODE_r04" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,274,760,300">
-  <rect x="440.0" y="274.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="prodDate · 生产日期" data-text-max-width="296.0" x="600.0" y="287.0" text-anchor="middle" class="node-title" font-size="11.0">prodDate · 生产日期</text>
-  </g>
-  <g id="node-TRACE_CODE_r05" data-graph-role="node" data-node-id="TRACE_CODE_r05" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,302,760,328">
-  <rect x="440.0" y="302.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="expDate · 有效期至（FEFO 依据）" data-text-max-width="296.0" x="600.0" y="315.0" text-anchor="middle" class="node-title" font-size="11.0">expDate · 有效期至（FEFO 依据）</text>
-  </g>
-  <g id="node-TRACE_CODE_r06" data-graph-role="node" data-node-id="TRACE_CODE_r06" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,330,760,356">
-  <rect x="440.0" y="330.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="level · 码等级恒=1（箱/中包码展开入库）" data-text-max-width="296.0" x="600.0" y="343.0" text-anchor="middle" class="node-title" font-size="11.0">level · 码等级恒=1（箱/中包码展开入库）</text>
-  </g>
-  <g id="node-TRACE_CODE_r07" data-graph-role="node" data-node-id="TRACE_CODE_r07" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,358,760,384">
-  <rect x="440.0" y="358.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="location · 库位 A-01-02 →WH_LOCATION" data-text-max-width="296.0" x="600.0" y="371.0" text-anchor="middle" class="node-title" font-size="11.0">location · 库位 A-01-02 →WH_LOCATION</text>
-  </g>
-  <g id="node-TRACE_CODE_r08" data-graph-role="node" data-node-id="TRACE_CODE_r08" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,386,760,412">
-  <rect x="440.0" y="386.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="split / splitQty · 拆零标记+拆零数" data-text-max-width="296.0" x="600.0" y="399.0" text-anchor="middle" class="node-title" font-size="11.0">split / splitQty · 拆零标记+拆零数</text>
-  </g>
-  <g id="node-TRACE_CODE_r09" data-graph-role="node" data-node-id="TRACE_CODE_r09" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,414,760,440">
-  <rect x="440.0" y="414.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="checked · 已验收" data-text-max-width="296.0" x="600.0" y="427.0" text-anchor="middle" class="node-title" font-size="11.0">checked · 已验收</text>
-  </g>
-  <g id="node-TRACE_CODE_r10" data-graph-role="node" data-node-id="TRACE_CODE_r10" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,442,760,468">
-  <rect x="440.0" y="442.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="code2 / code3 · 二三级码（父子关联）" data-text-max-width="296.0" x="600.0" y="455.0" text-anchor="middle" class="node-title" font-size="11.0">code2 / code3 · 二三级码（父子关联）</text>
-  </g>
-  <g id="node-TRACE_CODE_r11" data-graph-role="node" data-node-id="TRACE_CODE_r11" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,470,760,496">
-  <rect x="440.0" y="470.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="_src · 来源单据（运行时推导）" data-text-max-width="296.0" x="600.0" y="483.0" text-anchor="middle" class="node-title" font-size="11.0">_src · 来源单据（运行时推导）</text>
-  </g>
-  <g id="node-TRACE_CODE_r12" data-graph-role="node" data-node-id="TRACE_CODE_r12" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,498,760,524">
-  <rect x="440.0" y="498.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="无 status 字段 · 由单据集合推导（图 08）" data-text-max-width="296.0" x="600.0" y="511.0" text-anchor="middle" class="node-title" font-size="11.0">无 status 字段 · 由单据集合推导（图 08）</text>
-  </g>
-  <g id="node-DOC_CODE" data-graph-role="node" data-node-id="DOC_CODE" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,560,760,596">
-  <rect x="440.0" y="560.0" width="320.0" height="36.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="2.0" filter="url(#shadowSoft)"/>
-  <text data-text-role="title" data-full-text="DOC_CODE · 单据-码清单" data-text-max-width="296.0" x="600.0" y="578.0" text-anchor="middle" class="node-title" font-size="18">DOC_CODE · 单据-码清单</text>
-  </g>
-  <g id="node-DOC_CODE_r01" data-graph-role="node" data-node-id="DOC_CODE_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,600,760,626">
-  <rect x="440.0" y="600.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="PK (billNo, code) · 联合主键" data-text-max-width="296.0" x="600.0" y="613.0" text-anchor="middle" class="node-title" font-size="11.0">PK (billNo, code) · 联合主键</text>
-  </g>
-  <g id="node-DOC_CODE_r02" data-graph-role="node" data-node-id="DOC_CODE_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,628,760,654">
-  <rect x="440.0" y="628.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="FK billNo → DOC" data-text-max-width="296.0" x="600.0" y="641.0" text-anchor="middle" class="node-title" font-size="11.0">FK billNo → DOC</text>
-  </g>
-  <g id="node-DOC_CODE_r03" data-graph-role="node" data-node-id="DOC_CODE_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,656,760,682">
-  <rect x="440.0" y="656.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="FK code → TRACE_CODE（20 位）" data-text-max-width="296.0" x="600.0" y="669.0" text-anchor="middle" class="node-title" font-size="11.0">FK code → TRACE_CODE（20 位）</text>
-  </g>
-  <g id="node-DOC_CODE_r04" data-graph-role="node" data-node-id="DOC_CODE_r04" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,684,760,710">
-  <rect x="440.0" y="684.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="batch / prodDate / expDate · 批次效期快照" data-text-max-width="296.0" x="600.0" y="697.0" text-anchor="middle" class="node-title" font-size="11.0">batch / prodDate / expDate · 批次效期快照</text>
-  </g>
-  <g id="node-DOC_CODE_r05" data-graph-role="node" data-node-id="DOC_CODE_r05" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,712,760,738">
-  <rect x="440.0" y="712.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="location / checked · 库位+验收快照" data-text-max-width="296.0" x="600.0" y="725.0" text-anchor="middle" class="node-title" font-size="11.0">location / checked · 库位+验收快照</text>
-  </g>
-  <g id="node-DOC_CODE_r06" data-graph-role="node" data-node-id="DOC_CODE_r06" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,740,760,766">
-  <rect x="440.0" y="740.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="split / splitQty · 拆零快照" data-text-max-width="296.0" x="600.0" y="753.0" text-anchor="middle" class="node-title" font-size="11.0">split / splitQty · 拆零快照</text>
-  </g>
-  <g id="node-DOC_CODE_r07" data-graph-role="node" data-node-id="DOC_CODE_r07" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,768,760,794">
-  <rect x="440.0" y="768.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="原型内嵌 codes[] · 建库拆关联表" data-text-max-width="296.0" x="600.0" y="781.0" text-anchor="middle" class="node-title" font-size="11.0">原型内嵌 codes[] · 建库拆关联表</text>
-  </g>
-  <g id="node-DOC" data-graph-role="node" data-node-id="DOC" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,150,1140,186">
-  <rect x="820.0" y="150.0" width="320.0" height="36.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="2.0" filter="url(#shadowSoft)"/>
-  <text data-text-role="title" data-full-text="DOC · 单据（7 类）" data-text-max-width="296.0" x="980.0" y="168.0" text-anchor="middle" class="node-title" font-size="18">DOC · 单据（7 类）</text>
-  </g>
-  <g id="node-DOC_r01" data-graph-role="node" data-node-id="DOC_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,190,1140,216">
-  <rect x="820.0" y="190.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="PK billNo · 单号 LYCK20260913001" data-text-max-width="296.0" x="980.0" y="203.0" text-anchor="middle" class="node-title" font-size="11.0">PK billNo · 单号 LYCK20260913001</text>
-  </g>
-  <g id="node-DOC_r02" data-graph-role="node" data-node-id="DOC_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,218,1140,244">
-  <rect x="820.0" y="218.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="docType · 7 类（采购入库/领用出库/损耗等）" data-text-max-width="296.0" x="980.0" y="231.0" text-anchor="middle" class="node-title" font-size="11.0">docType · 7 类（采购入库/领用出库/损耗等）</text>
-  </g>
-  <g id="node-DOC_r03" data-graph-role="node" data-node-id="DOC_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,246,1140,272">
-  <rect x="820.0" y="246.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="date · 单据日期" data-text-max-width="296.0" x="980.0" y="259.0" text-anchor="middle" class="node-title" font-size="11.0">date · 单据日期</text>
-  </g>
-  <g id="node-DOC_r04" data-graph-role="node" data-node-id="DOC_r04" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,274,1140,300">
-  <rect x="820.0" y="274.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="warehouse · 库房 →WAREHOUSE" data-text-max-width="296.0" x="980.0" y="287.0" text-anchor="middle" class="node-title" font-size="11.0">warehouse · 库房 →WAREHOUSE</text>
-  </g>
-  <g id="node-DOC_r05" data-graph-role="node" data-node-id="DOC_r05" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,302,1140,328">
-  <rect x="820.0" y="302.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="pharmacy · 药房（领用/退回）→PHARMACY" data-text-max-width="296.0" x="980.0" y="315.0" text-anchor="middle" class="node-title" font-size="11.0">pharmacy · 药房（领用/退回）→PHARMACY</text>
-  </g>
-  <g id="node-DOC_r06" data-graph-role="node" data-node-id="DOC_r06" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,330,1140,356">
-  <rect x="820.0" y="330.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="supplier · 供应商（采购场景）" data-text-max-width="296.0" x="980.0" y="343.0" text-anchor="middle" class="node-title" font-size="11.0">supplier · 供应商（采购场景）</text>
-  </g>
-  <g id="node-DOC_r07" data-graph-role="node" data-node-id="DOC_r07" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,358,1140,384">
-  <rect x="820.0" y="358.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="status · 状态机（未审核/已审核/已出库…）" data-text-max-width="296.0" x="980.0" y="371.0" text-anchor="middle" class="node-title" font-size="11.0">status · 状态机（未审核/已审核/已出库…）</text>
-  </g>
-  <g id="node-DOC_r08" data-graph-role="node" data-node-id="DOC_r08" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,386,1140,412">
-  <rect x="820.0" y="386.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="auditTime / auditor · 审核时间+审核人" data-text-max-width="296.0" x="980.0" y="399.0" text-anchor="middle" class="node-title" font-size="11.0">auditTime / auditor · 审核时间+审核人</text>
-  </g>
-  <g id="node-DOC_r09" data-graph-role="node" data-node-id="DOC_r09" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,414,1140,440">
-  <rect x="820.0" y="414.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="operator · 经办人" data-text-max-width="296.0" x="980.0" y="427.0" text-anchor="middle" class="node-title" font-size="11.0">operator · 经办人</text>
-  </g>
-  <g id="node-DOC_r10" data-graph-role="node" data-node-id="DOC_r10" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,442,1140,468">
-  <rect x="820.0" y="442.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="invoice · 发票号（采购场景）" data-text-max-width="296.0" x="980.0" y="455.0" text-anchor="middle" class="node-title" font-size="11.0">invoice · 发票号（采购场景）</text>
-  </g>
-  <g id="node-DOC_r11" data-graph-role="node" data-node-id="DOC_r11" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,470,1140,496">
-  <rect x="820.0" y="470.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="remark · 备注" data-text-max-width="296.0" x="980.0" y="483.0" text-anchor="middle" class="node-title" font-size="11.0">remark · 备注</text>
-  </g>
-  <g id="node-DOC_r12" data-graph-role="node" data-node-id="DOC_r12" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,498,1140,524">
-  <rect x="820.0" y="498.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="申请单另立 REQ（药品口径 · 无码）" data-text-max-width="296.0" x="980.0" y="511.0" text-anchor="middle" class="node-title" font-size="11.0">申请单另立 REQ（药品口径 · 无码）</text>
-  </g>
-  <g id="node-REQ" data-graph-role="node" data-node-id="REQ" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,560,1140,596">
-  <rect x="820.0" y="560.0" width="320.0" height="36.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="2.0" filter="url(#shadowSoft)"/>
-  <text data-text-role="title" data-full-text="REQ · 领用申请单" data-text-max-width="296.0" x="980.0" y="578.0" text-anchor="middle" class="node-title" font-size="18">REQ · 领用申请单</text>
-  </g>
-  <g id="node-REQ_r01" data-graph-role="node" data-node-id="REQ_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,600,1140,626">
-  <rect x="820.0" y="600.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="PK reqNo · 申请单号 LY20260914001" data-text-max-width="296.0" x="980.0" y="613.0" text-anchor="middle" class="node-title" font-size="11.0">PK reqNo · 申请单号 LY20260914001</text>
-  </g>
-  <g id="node-REQ_r02" data-graph-role="node" data-node-id="REQ_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,628,1140,654">
-  <rect x="820.0" y="628.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="date · 申请日期" data-text-max-width="296.0" x="980.0" y="641.0" text-anchor="middle" class="node-title" font-size="11.0">date · 申请日期</text>
-  </g>
-  <g id="node-REQ_r03" data-graph-role="node" data-node-id="REQ_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,656,1140,682">
-  <rect x="820.0" y="656.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="pharmacy → PHARMACY" data-text-max-width="296.0" x="980.0" y="669.0" text-anchor="middle" class="node-title" font-size="11.0">pharmacy → PHARMACY</text>
-  </g>
-  <g id="node-REQ_r04" data-graph-role="node" data-node-id="REQ_r04" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,684,1140,710">
-  <rect x="820.0" y="684.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="warehouse → WAREHOUSE" data-text-max-width="296.0" x="980.0" y="697.0" text-anchor="middle" class="node-title" font-size="11.0">warehouse → WAREHOUSE</text>
+  <rect data-graph-role="background" width="1580.0" height="1115.0" fill="#ffffff"/>
+  <text x="790.0" y="56" text-anchor="middle" class="title">表结构 ER（关系版）· 码⇄药⇄单 核心七表 + 组织字典</text>
+  <text x="790.0" y="82" text-anchor="middle" class="subtitle">只列主键与外键 · 字段级见 er/pul-fms-full.sql ｜ 蓝=业务核心 绿=组织字典 橙=异常台账 灰=派生视图/规划（非物理表）</text>
+  <path id="e10" data-graph-role="edge" data-edge-id="e10" data-source="PHARMACY" data-target="CABINET" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="2" data-route-stretch="1.237" data-bridges="" d="M 1520,394 L 1548,394 L 1548,430 L 1548,630 L 1520,630" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
+  <path id="e13" data-graph-role="edge" data-edge-id="e13" data-source="DOC" data-target="WAREHOUSE" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="2" data-route-stretch="1.0" data-bridges="" d="M 1140,510 L 1170,510 L 1170,158 L 1200,158" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="e1" data-graph-role="edge" data-edge-id="e1" data-source="DRUGS_r03" data-target="IDCODES" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 220,262 L 220,302" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="e2" data-graph-role="edge" data-edge-id="e2" data-source="IDCODES" data-target="TRACE_CODE" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 380,320 L 440,320" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="e3" data-graph-role="edge" data-edge-id="e3" data-source="TRACE_CODE_r04" data-target="DOC_CODE" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 600,452 L 600,492" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="e4" data-graph-role="edge" data-edge-id="e4" data-source="DOC" data-target="DOC_CODE" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 820,510 L 760,510" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="e5" data-graph-role="edge" data-edge-id="e5" data-source="REQ" data-target="REQ_ITEM_r03" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 980,302 L 980,262" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="e6" data-graph-role="edge" data-edge-id="e6" data-source="DRUGS" data-target="REQ_ITEM" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 380,158 L 820,158" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="e8" data-graph-role="edge" data-edge-id="e8" data-source="WAREHOUSE_r02" data-target="WH_LOCATION" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1360,234 L 1360,258" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
+  <path id="e9" data-graph-role="edge" data-edge-id="e9" data-source="PHARMACY_r02" data-target="PH_LOCATION" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1360,470 L 1360,494" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
+  <path id="e11" data-graph-role="edge" data-edge-id="e11" data-source="CABINET_r03" data-target="CAB_CELL" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1360,734 L 1360,758" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
+  <path id="e14" data-graph-role="edge" data-edge-id="e14" data-source="DOC_CODE_r04" data-target="STOCK_BALANCE" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 600,642 L 600,682" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)" stroke-dasharray="6,4"/>
+  <g id="node-DRUGS" data-graph-role="node" data-node-id="DRUGS" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,140,380,176">
+  <rect x="60.0" y="140.0" width="320.0" height="36.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="DRUGS · 药品主表" data-text-max-width="296.0" x="220.0" y="158.0" text-anchor="middle" class="node-title" font-size="18">DRUGS · 药品主表</text>
+  </g>
+  <g id="node-DRUGS_r01" data-graph-role="node" data-node-id="DRUGS_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,180,380,206">
+  <rect x="60.0" y="180.0" width="320.0" height="26.0" rx="4.0" fill="#f0f7ff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：药品档案与换算规则，基本单位在药上" data-text-max-width="296.0" x="220.0" y="193.0" text-anchor="middle" class="node-title" font-size="11.0">作用：药品档案与换算规则，基本单位在药上</text>
+  </g>
+  <g id="node-DRUGS_r02" data-graph-role="node" data-node-id="DRUGS_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,208,380,234">
+  <rect x="60.0" y="208.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="PK drugCode · 药品编码" data-text-max-width="296.0" x="220.0" y="221.0" text-anchor="middle" class="node-title" font-size="11.0">PK drugCode · 药品编码</text>
+  </g>
+  <g id="node-DRUGS_r03" data-graph-role="node" data-node-id="DRUGS_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,236,380,262">
+  <rect x="60.0" y="236.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="warehouse → WAREHOUSE · 所属库房" data-text-max-width="296.0" x="220.0" y="249.0" text-anchor="middle" class="node-title" font-size="11.0">warehouse → WAREHOUSE · 所属库房</text>
+  </g>
+  <g id="node-IDCODES" data-graph-role="node" data-node-id="IDCODES" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,302,380,338">
+  <rect x="60.0" y="302.0" width="320.0" height="36.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="IDCODES · 标识码子表" data-text-max-width="296.0" x="220.0" y="320.0" text-anchor="middle" class="node-title" font-size="18">IDCODES · 标识码子表</text>
+  </g>
+  <g id="node-IDCODES_r01" data-graph-role="node" data-node-id="IDCODES_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,342,380,368">
+  <rect x="60.0" y="342.0" width="320.0" height="26.0" rx="4.0" fill="#f0f7ff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：一药多码登记（等级+包装规格）" data-text-max-width="296.0" x="220.0" y="355.0" text-anchor="middle" class="node-title" font-size="11.0">作用：一药多码登记（等级+包装规格）</text>
+  </g>
+  <g id="node-IDCODES_r02" data-graph-role="node" data-node-id="IDCODES_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,370,380,396">
+  <rect x="60.0" y="370.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="PK idcode · 7 位标识码" data-text-max-width="296.0" x="220.0" y="383.0" text-anchor="middle" class="node-title" font-size="11.0">PK idcode · 7 位标识码</text>
+  </g>
+  <g id="node-IDCODES_r03" data-graph-role="node" data-node-id="IDCODES_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,398,380,424">
+  <rect x="60.0" y="398.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="FK drugCode → DRUGS" data-text-max-width="296.0" x="220.0" y="411.0" text-anchor="middle" class="node-title" font-size="11.0">FK drugCode → DRUGS</text>
+  </g>
+  <g id="node-BAD_CODES" data-graph-role="node" data-node-id="BAD_CODES" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,454,380,490">
+  <rect x="60.0" y="454.0" width="320.0" height="36.0" rx="10.0" fill="#fff7e6" stroke="#d48806" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="BAD_CODES · 异常码台账" data-text-max-width="296.0" x="220.0" y="472.0" text-anchor="middle" class="node-title" font-size="18">BAD_CODES · 异常码台账</text>
+  </g>
+  <g id="node-BAD_CODES_r01" data-graph-role="node" data-node-id="BAD_CODES_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,494,380,520">
+  <rect x="60.0" y="494.0" width="320.0" height="26.0" rx="4.0" fill="#fffaf0" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：解析失败/未维护码台账，维护后回写" data-text-max-width="296.0" x="220.0" y="507.0" text-anchor="middle" class="node-title" font-size="11.0">作用：解析失败/未维护码台账，维护后回写</text>
+  </g>
+  <g id="node-BAD_CODES_r02" data-graph-role="node" data-node-id="BAD_CODES_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,522,380,548">
+  <rect x="60.0" y="522.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="PK idcode · 按标识码 upsert" data-text-max-width="296.0" x="220.0" y="535.0" text-anchor="middle" class="node-title" font-size="11.0">PK idcode · 按标识码 upsert</text>
+  </g>
+  <g id="node-SCAN_LOG" data-graph-role="node" data-node-id="SCAN_LOG" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,580,380,616">
+  <rect x="60.0" y="580.0" width="320.0" height="36.0" rx="10.0" fill="#f6f8fb" stroke="#626976" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="SCAN_LOG · 扫码留痕【规划】" data-text-max-width="296.0" x="220.0" y="598.0" text-anchor="middle" class="node-title" font-size="18">SCAN_LOG · 扫码留痕【规划】</text>
+  </g>
+  <g id="node-SCAN_LOG_r01" data-graph-role="node" data-node-id="SCAN_LOG_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,620,380,646">
+  <rect x="60.0" y="620.0" width="320.0" height="26.0" rx="4.0" fill="#eceff3" stroke="#d0d5dd" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：全量扫码事件留痕（审计/GSP）" data-text-max-width="296.0" x="220.0" y="633.0" text-anchor="middle" class="node-title" font-size="11.0">作用：全量扫码事件留痕（审计/GSP）</text>
+  </g>
+  <g id="node-SCAN_LOG_r02" data-graph-role="node" data-node-id="SCAN_LOG_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,648,380,674">
+  <rect x="60.0" y="648.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#d0d5dd" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="time / device / operator / rawCode / result" data-text-max-width="296.0" x="220.0" y="661.0" text-anchor="middle" class="node-title" font-size="11.0">time / device / operator / rawCode / result</text>
+  </g>
+  <g id="node-TRACE_CODE" data-graph-role="node" data-node-id="TRACE_CODE" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,302,760,338">
+  <rect x="440.0" y="302.0" width="320.0" height="36.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="TRACE_CODE · 追溯码实例" data-text-max-width="296.0" x="600.0" y="320.0" text-anchor="middle" class="node-title" font-size="18">TRACE_CODE · 追溯码实例</text>
+  </g>
+  <g id="node-TRACE_CODE_r01" data-graph-role="node" data-node-id="TRACE_CODE_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,342,760,368">
+  <rect x="440.0" y="342.0" width="320.0" height="26.0" rx="4.0" fill="#f0f7ff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：库存载体一码一条，状态由单据推导" data-text-max-width="296.0" x="600.0" y="355.0" text-anchor="middle" class="node-title" font-size="11.0">作用：库存载体一码一条，状态由单据推导</text>
+  </g>
+  <g id="node-TRACE_CODE_r02" data-graph-role="node" data-node-id="TRACE_CODE_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,370,760,396">
+  <rect x="440.0" y="370.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="PK code · 20 位追溯码" data-text-max-width="296.0" x="600.0" y="383.0" text-anchor="middle" class="node-title" font-size="11.0">PK code · 20 位追溯码</text>
+  </g>
+  <g id="node-TRACE_CODE_r03" data-graph-role="node" data-node-id="TRACE_CODE_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,398,760,424">
+  <rect x="440.0" y="398.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="前 7 位 idcode → IDCODES（逻辑 FK）" data-text-max-width="296.0" x="600.0" y="411.0" text-anchor="middle" class="node-title" font-size="11.0">前 7 位 idcode → IDCODES（逻辑 FK）</text>
+  </g>
+  <g id="node-TRACE_CODE_r04" data-graph-role="node" data-node-id="TRACE_CODE_r04" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,426,760,452">
+  <rect x="440.0" y="426.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="location → WH_LOCATION · 库位" data-text-max-width="296.0" x="600.0" y="439.0" text-anchor="middle" class="node-title" font-size="11.0">location → WH_LOCATION · 库位</text>
+  </g>
+  <g id="node-DOC_CODE" data-graph-role="node" data-node-id="DOC_CODE" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,492,760,528">
+  <rect x="440.0" y="492.0" width="320.0" height="36.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="DOC_CODE · 单据-码清单" data-text-max-width="296.0" x="600.0" y="510.0" text-anchor="middle" class="node-title" font-size="18">DOC_CODE · 单据-码清单</text>
+  </g>
+  <g id="node-DOC_CODE_r01" data-graph-role="node" data-node-id="DOC_CODE_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,532,760,558">
+  <rect x="440.0" y="532.0" width="320.0" height="26.0" rx="4.0" fill="#f0f7ff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：单据⇄码 N:N，带批次/库位快照" data-text-max-width="296.0" x="600.0" y="545.0" text-anchor="middle" class="node-title" font-size="11.0">作用：单据⇄码 N:N，带批次/库位快照</text>
+  </g>
+  <g id="node-DOC_CODE_r02" data-graph-role="node" data-node-id="DOC_CODE_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,560,760,586">
+  <rect x="440.0" y="560.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="PK (billNo, code) · 联合主键" data-text-max-width="296.0" x="600.0" y="573.0" text-anchor="middle" class="node-title" font-size="11.0">PK (billNo, code) · 联合主键</text>
+  </g>
+  <g id="node-DOC_CODE_r03" data-graph-role="node" data-node-id="DOC_CODE_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,588,760,614">
+  <rect x="440.0" y="588.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="FK billNo → DOC" data-text-max-width="296.0" x="600.0" y="601.0" text-anchor="middle" class="node-title" font-size="11.0">FK billNo → DOC</text>
+  </g>
+  <g id="node-DOC_CODE_r04" data-graph-role="node" data-node-id="DOC_CODE_r04" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,616,760,642">
+  <rect x="440.0" y="616.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="FK code → TRACE_CODE" data-text-max-width="296.0" x="600.0" y="629.0" text-anchor="middle" class="node-title" font-size="11.0">FK code → TRACE_CODE</text>
+  </g>
+  <g id="node-STOCK_BALANCE" data-graph-role="node" data-node-id="STOCK_BALANCE" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,682,760,718">
+  <rect x="440.0" y="682.0" width="320.0" height="36.0" rx="10.0" fill="#f6f8fb" stroke="#626976" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="STOCK_BALANCE · 药品库存汇总（视图）" data-text-max-width="296.0" x="600.0" y="700.0" text-anchor="middle" class="node-title" font-size="14.54">STOCK_BALANCE · 药品库存汇总（视图）</text>
+  </g>
+  <g id="node-STOCK_BALANCE_r01" data-graph-role="node" data-node-id="STOCK_BALANCE_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,722,760,748">
+  <rect x="440.0" y="722.0" width="320.0" height="26.0" rx="4.0" fill="#eceff3" stroke="#d0d5dd" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：药品口径在架库存，查询入口" data-text-max-width="296.0" x="600.0" y="735.0" text-anchor="middle" class="node-title" font-size="11.0">作用：药品口径在架库存，查询入口</text>
+  </g>
+  <g id="node-STOCK_BALANCE_r02" data-graph-role="node" data-node-id="STOCK_BALANCE_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,750,760,776">
+  <rect x="440.0" y="750.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#d0d5dd" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="(drugCode, warehouse, batch) · 分组键" data-text-max-width="296.0" x="600.0" y="763.0" text-anchor="middle" class="node-title" font-size="11.0">(drugCode, warehouse, batch) · 分组键</text>
+  </g>
+  <g id="node-STOCK_BALANCE_r03" data-graph-role="node" data-node-id="STOCK_BALANCE_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,778,760,804">
+  <rect x="440.0" y="778.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#d0d5dd" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="qty = Σ 在架码 · 由单据集合推导（图 08）" data-text-max-width="296.0" x="600.0" y="791.0" text-anchor="middle" class="node-title" font-size="11.0">qty = Σ 在架码 · 由单据集合推导（图 08）</text>
+  </g>
+  <g id="node-STOCK_BALANCE_r04" data-graph-role="node" data-node-id="STOCK_BALANCE_r04" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="440,806,760,832">
+  <rect x="440.0" y="806.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#d0d5dd" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="逻辑视图 / 物化汇总表 = 实现层决策" data-text-max-width="296.0" x="600.0" y="819.0" text-anchor="middle" class="node-title" font-size="11.0">逻辑视图 / 物化汇总表 = 实现层决策</text>
+  </g>
+  <g id="node-REQ_ITEM" data-graph-role="node" data-node-id="REQ_ITEM" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,140,1140,176">
+  <rect x="820.0" y="140.0" width="320.0" height="36.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="REQ_ITEM · 申请行" data-text-max-width="296.0" x="980.0" y="158.0" text-anchor="middle" class="node-title" font-size="18">REQ_ITEM · 申请行</text>
+  </g>
+  <g id="node-REQ_ITEM_r01" data-graph-role="node" data-node-id="REQ_ITEM_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,180,1140,206">
+  <rect x="820.0" y="180.0" width="320.0" height="26.0" rx="4.0" fill="#f0f7ff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：申请明细，按药品+基本单位计量" data-text-max-width="296.0" x="980.0" y="193.0" text-anchor="middle" class="node-title" font-size="11.0">作用：申请明细，按药品+基本单位计量</text>
+  </g>
+  <g id="node-REQ_ITEM_r02" data-graph-role="node" data-node-id="REQ_ITEM_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,208,1140,234">
+  <rect x="820.0" y="208.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="PK (reqNo, drugCode) · 联合主键" data-text-max-width="296.0" x="980.0" y="221.0" text-anchor="middle" class="node-title" font-size="11.0">PK (reqNo, drugCode) · 联合主键</text>
+  </g>
+  <g id="node-REQ_ITEM_r03" data-graph-role="node" data-node-id="REQ_ITEM_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,236,1140,262">
+  <rect x="820.0" y="236.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="FK drugCode → DRUGS" data-text-max-width="296.0" x="980.0" y="249.0" text-anchor="middle" class="node-title" font-size="11.0">FK drugCode → DRUGS</text>
+  </g>
+  <g id="node-REQ" data-graph-role="node" data-node-id="REQ" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,302,1140,338">
+  <rect x="820.0" y="302.0" width="320.0" height="36.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="REQ · 领用申请单" data-text-max-width="296.0" x="980.0" y="320.0" text-anchor="middle" class="node-title" font-size="18">REQ · 领用申请单</text>
+  </g>
+  <g id="node-REQ_r01" data-graph-role="node" data-node-id="REQ_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,342,1140,368">
+  <rect x="820.0" y="342.0" width="320.0" height="26.0" rx="4.0" fill="#f0f7ff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：药房请领，药品口径无码" data-text-max-width="296.0" x="980.0" y="355.0" text-anchor="middle" class="node-title" font-size="11.0">作用：药房请领，药品口径无码</text>
+  </g>
+  <g id="node-REQ_r02" data-graph-role="node" data-node-id="REQ_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,370,1140,396">
+  <rect x="820.0" y="370.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="PK reqNo · 申请单号" data-text-max-width="296.0" x="980.0" y="383.0" text-anchor="middle" class="node-title" font-size="11.0">PK reqNo · 申请单号</text>
+  </g>
+  <g id="node-REQ_r03" data-graph-role="node" data-node-id="REQ_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,398,1140,424">
+  <rect x="820.0" y="398.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="pharmacy → PHARMACY" data-text-max-width="296.0" x="980.0" y="411.0" text-anchor="middle" class="node-title" font-size="11.0">pharmacy → PHARMACY</text>
   </g>
-  <g id="node-REQ_r05" data-graph-role="node" data-node-id="REQ_r05" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,712,1140,738">
-  <rect x="820.0" y="712.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="applicant · 申请人" data-text-max-width="296.0" x="980.0" y="725.0" text-anchor="middle" class="node-title" font-size="11.0">applicant · 申请人</text>
+  <g id="node-REQ_r04" data-graph-role="node" data-node-id="REQ_r04" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,426,1140,452">
+  <rect x="820.0" y="426.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="warehouse → WAREHOUSE" data-text-max-width="296.0" x="980.0" y="439.0" text-anchor="middle" class="node-title" font-size="11.0">warehouse → WAREHOUSE</text>
   </g>
-  <g id="node-REQ_r06" data-graph-role="node" data-node-id="REQ_r06" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,740,1140,766">
-  <rect x="820.0" y="740.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="status · 待备货 / 已完成" data-text-max-width="296.0" x="980.0" y="753.0" text-anchor="middle" class="node-title" font-size="11.0">status · 待备货 / 已完成</text>
+  <g id="node-DOC" data-graph-role="node" data-node-id="DOC" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,492,1140,528">
+  <rect x="820.0" y="492.0" width="320.0" height="36.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="DOC · 单据（7 类）" data-text-max-width="296.0" x="980.0" y="510.0" text-anchor="middle" class="node-title" font-size="18">DOC · 单据（7 类）</text>
   </g>
-  <g id="node-REQ_r07" data-graph-role="node" data-node-id="REQ_r07" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,768,1140,794">
-  <rect x="820.0" y="768.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="remark · 备注" data-text-max-width="296.0" x="980.0" y="781.0" text-anchor="middle" class="node-title" font-size="11.0">remark · 备注</text>
+  <g id="node-DOC_r01" data-graph-role="node" data-node-id="DOC_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,532,1140,558">
+  <rect x="820.0" y="532.0" width="320.0" height="26.0" rx="4.0" fill="#f0f7ff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：全业务单据事实源，状态机驱动库存" data-text-max-width="296.0" x="980.0" y="545.0" text-anchor="middle" class="node-title" font-size="11.0">作用：全业务单据事实源，状态机驱动库存</text>
   </g>
-  <g id="node-REQ_ITEM" data-graph-role="node" data-node-id="REQ_ITEM" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,830,1140,866">
-  <rect x="820.0" y="830.0" width="320.0" height="36.0" rx="10.0" fill="#e6f4ff" stroke="#206bc4" stroke-width="2.0" filter="url(#shadowSoft)"/>
-  <text data-text-role="title" data-full-text="REQ_ITEM · 申请行（药品口径）" data-text-max-width="296.0" x="980.0" y="848.0" text-anchor="middle" class="node-title" font-size="18">REQ_ITEM · 申请行（药品口径）</text>
+  <g id="node-DOC_r02" data-graph-role="node" data-node-id="DOC_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,560,1140,586">
+  <rect x="820.0" y="560.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="PK billNo · 单号" data-text-max-width="296.0" x="980.0" y="573.0" text-anchor="middle" class="node-title" font-size="11.0">PK billNo · 单号</text>
   </g>
-  <g id="node-REQ_ITEM_r01" data-graph-role="node" data-node-id="REQ_ITEM_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,870,1140,896">
-  <rect x="820.0" y="870.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="PK (reqNo, drugCode) · 联合主键" data-text-max-width="296.0" x="980.0" y="883.0" text-anchor="middle" class="node-title" font-size="11.0">PK (reqNo, drugCode) · 联合主键</text>
+  <g id="node-DOC_r03" data-graph-role="node" data-node-id="DOC_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,588,1140,614">
+  <rect x="820.0" y="588.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="warehouse → WAREHOUSE" data-text-max-width="296.0" x="980.0" y="601.0" text-anchor="middle" class="node-title" font-size="11.0">warehouse → WAREHOUSE</text>
   </g>
-  <g id="node-REQ_ITEM_r02" data-graph-role="node" data-node-id="REQ_ITEM_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,898,1140,924">
-  <rect x="820.0" y="898.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="FK drugCode → DRUGS · 药品+基本单位" data-text-max-width="296.0" x="980.0" y="911.0" text-anchor="middle" class="node-title" font-size="11.0">FK drugCode → DRUGS · 药品+基本单位</text>
+  <g id="node-DOC_r04" data-graph-role="node" data-node-id="DOC_r04" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,616,1140,642">
+  <rect x="820.0" y="616.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="pharmacy → PHARMACY（领用/退回）" data-text-max-width="296.0" x="980.0" y="629.0" text-anchor="middle" class="node-title" font-size="11.0">pharmacy → PHARMACY（领用/退回）</text>
   </g>
-  <g id="node-REQ_ITEM_r03" data-graph-role="node" data-node-id="REQ_ITEM_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="820,926,1140,952">
-  <rect x="820.0" y="926.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="qty · 申请数量（基本单位）" data-text-max-width="296.0" x="980.0" y="939.0" text-anchor="middle" class="node-title" font-size="11.0">qty · 申请数量（基本单位）</text>
+  <g id="node-WAREHOUSE" data-graph-role="node" data-node-id="WAREHOUSE" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,140,1520,176">
+  <rect x="1200.0" y="140.0" width="320.0" height="36.0" rx="10.0" fill="#e9f7ee" stroke="#2fb344" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="WAREHOUSE · 库房" data-text-max-width="296.0" x="1360.0" y="158.0" text-anchor="middle" class="node-title" font-size="18">WAREHOUSE · 库房</text>
   </g>
-  <g id="node-WAREHOUSE" data-graph-role="node" data-node-id="WAREHOUSE" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,150,1520,186">
-  <rect x="1200.0" y="150.0" width="320.0" height="36.0" rx="10.0" fill="#e9f7ee" stroke="#2fb344" stroke-width="2.0" filter="url(#shadowSoft)"/>
-  <text data-text-role="title" data-full-text="WAREHOUSE · 库房" data-text-max-width="296.0" x="1360.0" y="168.0" text-anchor="middle" class="node-title" font-size="18">WAREHOUSE · 库房</text>
+  <g id="node-WAREHOUSE_r01" data-graph-role="node" data-node-id="WAREHOUSE_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,180,1520,206">
+  <rect x="1200.0" y="180.0" width="320.0" height="26.0" rx="4.0" fill="#f0faf2" stroke="#b7e0c4" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：库房字典，院区行级隔离" data-text-max-width="296.0" x="1360.0" y="193.0" text-anchor="middle" class="node-title" font-size="11.0">作用：库房字典，院区行级隔离</text>
   </g>
-  <g id="node-WAREHOUSE_r01" data-graph-role="node" data-node-id="WAREHOUSE_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,190,1520,216">
-  <rect x="1200.0" y="190.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="PK code WH001 · name 中心库" data-text-max-width="296.0" x="1360.0" y="203.0" text-anchor="middle" class="node-title" font-size="11.0">PK code WH001 · name 中心库</text>
+  <g id="node-WAREHOUSE_r02" data-graph-role="node" data-node-id="WAREHOUSE_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,208,1520,234">
+  <rect x="1200.0" y="208.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="PK code · 类型常温/阴凉/麻精" data-text-max-width="296.0" x="1360.0" y="221.0" text-anchor="middle" class="node-title" font-size="11.0">PK code · 类型常温/阴凉/麻精</text>
   </g>
-  <g id="node-WAREHOUSE_r02" data-graph-role="node" data-node-id="WAREHOUSE_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,218,1520,244">
-  <rect x="1200.0" y="218.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="FK org 院区 · type 常温/阴凉/麻精" data-text-max-width="296.0" x="1360.0" y="231.0" text-anchor="middle" class="node-title" font-size="11.0">FK org 院区 · type 常温/阴凉/麻精</text>
+  <g id="node-WH_LOCATION" data-graph-role="node" data-node-id="WH_LOCATION" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,258,1520,294">
+  <rect x="1200.0" y="258.0" width="320.0" height="36.0" rx="10.0" fill="#e9f7ee" stroke="#2fb344" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="WH_LOCATION · 库位" data-text-max-width="296.0" x="1360.0" y="276.0" text-anchor="middle" class="node-title" font-size="18">WH_LOCATION · 库位</text>
   </g>
-  <g id="node-WAREHOUSE_r03" data-graph-role="node" data-node-id="WAREHOUSE_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,246,1520,272">
-  <rect x="1200.0" y="246.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="status · 启用" data-text-max-width="296.0" x="1360.0" y="259.0" text-anchor="middle" class="node-title" font-size="11.0">status · 启用</text>
+  <g id="node-WH_LOCATION_r01" data-graph-role="node" data-node-id="WH_LOCATION_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,298,1520,324">
+  <rect x="1200.0" y="298.0" width="320.0" height="26.0" rx="4.0" fill="#f0faf2" stroke="#b7e0c4" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：库房内存放位置" data-text-max-width="296.0" x="1360.0" y="311.0" text-anchor="middle" class="node-title" font-size="11.0">作用：库房内存放位置</text>
   </g>
-  <g id="node-WH_LOCATION" data-graph-role="node" data-node-id="WH_LOCATION" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,310,1520,346">
-  <rect x="1200.0" y="310.0" width="320.0" height="36.0" rx="10.0" fill="#e9f7ee" stroke="#2fb344" stroke-width="2.0" filter="url(#shadowSoft)"/>
-  <text data-text-role="title" data-full-text="WH_LOCATION · 库位" data-text-max-width="296.0" x="1360.0" y="328.0" text-anchor="middle" class="node-title" font-size="18">WH_LOCATION · 库位</text>
+  <g id="node-WH_LOCATION_r02" data-graph-role="node" data-node-id="WH_LOCATION_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,326,1520,352">
+  <rect x="1200.0" y="326.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="PK code · 库位" data-text-max-width="296.0" x="1360.0" y="339.0" text-anchor="middle" class="node-title" font-size="11.0">PK code · 库位</text>
   </g>
-  <g id="node-WH_LOCATION_r01" data-graph-role="node" data-node-id="WH_LOCATION_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,350,1520,376">
-  <rect x="1200.0" y="350.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="PK code A-01-02 · name 库位名" data-text-max-width="296.0" x="1360.0" y="363.0" text-anchor="middle" class="node-title" font-size="11.0">PK code A-01-02 · name 库位名</text>
+  <g id="node-PHARMACY" data-graph-role="node" data-node-id="PHARMACY" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,376,1520,412">
+  <rect x="1200.0" y="376.0" width="320.0" height="36.0" rx="10.0" fill="#e9f7ee" stroke="#2fb344" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="PHARMACY · 药房" data-text-max-width="296.0" x="1360.0" y="394.0" text-anchor="middle" class="node-title" font-size="18">PHARMACY · 药房</text>
   </g>
-  <g id="node-WH_LOCATION_r02" data-graph-role="node" data-node-id="WH_LOCATION_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,378,1520,404">
-  <rect x="1200.0" y="378.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="status · 启用" data-text-max-width="296.0" x="1360.0" y="391.0" text-anchor="middle" class="node-title" font-size="11.0">status · 启用</text>
+  <g id="node-PHARMACY_r01" data-graph-role="node" data-node-id="PHARMACY_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,416,1520,442">
+  <rect x="1200.0" y="416.0" width="320.0" height="26.0" rx="4.0" fill="#f0faf2" stroke="#b7e0c4" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：药房字典（门诊/住院/急诊）" data-text-max-width="296.0" x="1360.0" y="429.0" text-anchor="middle" class="node-title" font-size="11.0">作用：药房字典（门诊/住院/急诊）</text>
   </g>
-  <g id="node-PHARMACY" data-graph-role="node" data-node-id="PHARMACY" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,440,1520,476">
-  <rect x="1200.0" y="440.0" width="320.0" height="36.0" rx="10.0" fill="#e9f7ee" stroke="#2fb344" stroke-width="2.0" filter="url(#shadowSoft)"/>
-  <text data-text-role="title" data-full-text="PHARMACY · 药房" data-text-max-width="296.0" x="1360.0" y="458.0" text-anchor="middle" class="node-title" font-size="18">PHARMACY · 药房</text>
+  <g id="node-PHARMACY_r02" data-graph-role="node" data-node-id="PHARMACY_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,444,1520,470">
+  <rect x="1200.0" y="444.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="PK code" data-text-max-width="296.0" x="1360.0" y="457.0" text-anchor="middle" class="node-title" font-size="11.0">PK code</text>
   </g>
-  <g id="node-PHARMACY_r01" data-graph-role="node" data-node-id="PHARMACY_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,480,1520,506">
-  <rect x="1200.0" y="480.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="PK code PH001 · name 门诊药房" data-text-max-width="296.0" x="1360.0" y="493.0" text-anchor="middle" class="node-title" font-size="11.0">PK code PH001 · name 门诊药房</text>
+  <g id="node-PH_LOCATION" data-graph-role="node" data-node-id="PH_LOCATION" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,494,1520,530">
+  <rect x="1200.0" y="494.0" width="320.0" height="36.0" rx="10.0" fill="#e9f7ee" stroke="#2fb344" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="PH_LOCATION · 货位" data-text-max-width="296.0" x="1360.0" y="512.0" text-anchor="middle" class="node-title" font-size="18">PH_LOCATION · 货位</text>
   </g>
-  <g id="node-PHARMACY_r02" data-graph-role="node" data-node-id="PHARMACY_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,508,1520,534">
-  <rect x="1200.0" y="508.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="FK org 院区 · type 门诊/住院/急诊" data-text-max-width="296.0" x="1360.0" y="521.0" text-anchor="middle" class="node-title" font-size="11.0">FK org 院区 · type 门诊/住院/急诊</text>
+  <g id="node-PH_LOCATION_r01" data-graph-role="node" data-node-id="PH_LOCATION_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,534,1520,560">
+  <rect x="1200.0" y="534.0" width="320.0" height="26.0" rx="4.0" fill="#f0faf2" stroke="#b7e0c4" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：药房内陈列货位" data-text-max-width="296.0" x="1360.0" y="547.0" text-anchor="middle" class="node-title" font-size="11.0">作用：药房内陈列货位</text>
   </g>
-  <g id="node-PHARMACY_r03" data-graph-role="node" data-node-id="PHARMACY_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,536,1520,562">
-  <rect x="1200.0" y="536.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="status · 启用" data-text-max-width="296.0" x="1360.0" y="549.0" text-anchor="middle" class="node-title" font-size="11.0">status · 启用</text>
+  <g id="node-PH_LOCATION_r02" data-graph-role="node" data-node-id="PH_LOCATION_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,562,1520,588">
+  <rect x="1200.0" y="562.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="PK code" data-text-max-width="296.0" x="1360.0" y="575.0" text-anchor="middle" class="node-title" font-size="11.0">PK code</text>
   </g>
-  <g id="node-PH_LOCATION" data-graph-role="node" data-node-id="PH_LOCATION" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,600,1520,636">
-  <rect x="1200.0" y="600.0" width="320.0" height="36.0" rx="10.0" fill="#e9f7ee" stroke="#2fb344" stroke-width="2.0" filter="url(#shadowSoft)"/>
-  <text data-text-role="title" data-full-text="PH_LOCATION · 货位" data-text-max-width="296.0" x="1360.0" y="618.0" text-anchor="middle" class="node-title" font-size="18">PH_LOCATION · 货位</text>
+  <g id="node-CABINET" data-graph-role="node" data-node-id="CABINET" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,612,1520,648">
+  <rect x="1200.0" y="612.0" width="320.0" height="36.0" rx="10.0" fill="#e9f7ee" stroke="#2fb344" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="CABINET · 取药柜" data-text-max-width="296.0" x="1360.0" y="630.0" text-anchor="middle" class="node-title" font-size="18">CABINET · 取药柜</text>
   </g>
-  <g id="node-PH_LOCATION_r01" data-graph-role="node" data-node-id="PH_LOCATION_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,640,1520,666">
-  <rect x="1200.0" y="640.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="PK code M-01 · name 货位名" data-text-max-width="296.0" x="1360.0" y="653.0" text-anchor="middle" class="node-title" font-size="11.0">PK code M-01 · name 货位名</text>
+  <g id="node-CABINET_r01" data-graph-role="node" data-node-id="CABINET_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,652,1520,678">
+  <rect x="1200.0" y="652.0" width="320.0" height="26.0" rx="4.0" fill="#f0faf2" stroke="#b7e0c4" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：智能取药柜字典（本期新增）" data-text-max-width="296.0" x="1360.0" y="665.0" text-anchor="middle" class="node-title" font-size="11.0">作用：智能取药柜字典（本期新增）</text>
   </g>
-  <g id="node-PH_LOCATION_r02" data-graph-role="node" data-node-id="PH_LOCATION_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,668,1520,694">
-  <rect x="1200.0" y="668.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="status · 启用" data-text-max-width="296.0" x="1360.0" y="681.0" text-anchor="middle" class="node-title" font-size="11.0">status · 启用</text>
+  <g id="node-CABINET_r02" data-graph-role="node" data-node-id="CABINET_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,680,1520,706">
+  <rect x="1200.0" y="680.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="PK code" data-text-max-width="296.0" x="1360.0" y="693.0" text-anchor="middle" class="node-title" font-size="11.0">PK code</text>
   </g>
-  <g id="node-CABINET" data-graph-role="node" data-node-id="CABINET" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,730,1520,766">
-  <rect x="1200.0" y="730.0" width="320.0" height="36.0" rx="10.0" fill="#e9f7ee" stroke="#2fb344" stroke-width="2.0" filter="url(#shadowSoft)"/>
-  <text data-text-role="title" data-full-text="CABINET · 取药柜（本期字典）" data-text-max-width="296.0" x="1360.0" y="748.0" text-anchor="middle" class="node-title" font-size="18">CABINET · 取药柜（本期字典）</text>
+  <g id="node-CABINET_r03" data-graph-role="node" data-node-id="CABINET_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,708,1520,734">
+  <rect x="1200.0" y="708.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="FK pharmacy → PHARMACY" data-text-max-width="296.0" x="1360.0" y="721.0" text-anchor="middle" class="node-title" font-size="11.0">FK pharmacy → PHARMACY</text>
   </g>
-  <g id="node-CABINET_r01" data-graph-role="node" data-node-id="CABINET_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,770,1520,796">
-  <rect x="1200.0" y="770.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="PK code CB01 · name 门诊取药柜 1 号" data-text-max-width="296.0" x="1360.0" y="783.0" text-anchor="middle" class="node-title" font-size="11.0">PK code CB01 · name 门诊取药柜 1 号</text>
+  <g id="node-CAB_CELL" data-graph-role="node" data-node-id="CAB_CELL" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,758,1520,794">
+  <rect x="1200.0" y="758.0" width="320.0" height="36.0" rx="10.0" fill="#e9f7ee" stroke="#2fb344" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="CAB_CELL · 取药槽" data-text-max-width="296.0" x="1360.0" y="776.0" text-anchor="middle" class="node-title" font-size="18">CAB_CELL · 取药槽</text>
   </g>
-  <g id="node-CABINET_r02" data-graph-role="node" data-node-id="CABINET_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,798,1520,824">
-  <rect x="1200.0" y="798.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="FK pharmacy → PHARMACY" data-text-max-width="296.0" x="1360.0" y="811.0" text-anchor="middle" class="node-title" font-size="11.0">FK pharmacy → PHARMACY</text>
+  <g id="node-CAB_CELL_r01" data-graph-role="node" data-node-id="CAB_CELL_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,798,1520,824">
+  <rect x="1200.0" y="798.0" width="320.0" height="26.0" rx="4.0" fill="#f0faf2" stroke="#b7e0c4" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="作用：柜内最小槽位，经摆药层占用" data-text-max-width="296.0" x="1360.0" y="811.0" text-anchor="middle" class="node-title" font-size="11.0">作用：柜内最小槽位，经摆药层占用</text>
   </g>
-  <g id="node-CABINET_r03" data-graph-role="node" data-node-id="CABINET_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,826,1520,852">
+  <g id="node-CAB_CELL_r02" data-graph-role="node" data-node-id="CAB_CELL_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,826,1520,852">
   <rect x="1200.0" y="826.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="status · 启用 / 停用" data-text-max-width="296.0" x="1360.0" y="839.0" text-anchor="middle" class="node-title" font-size="11.0">status · 启用 / 停用</text>
+  <text data-text-role="title" data-full-text="PK code" data-text-max-width="296.0" x="1360.0" y="839.0" text-anchor="middle" class="node-title" font-size="11.0">PK code</text>
   </g>
-  <g id="node-CAB_CELL" data-graph-role="node" data-node-id="CAB_CELL" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,890,1520,926">
-  <rect x="1200.0" y="890.0" width="320.0" height="36.0" rx="10.0" fill="#e9f7ee" stroke="#2fb344" stroke-width="2.0" filter="url(#shadowSoft)"/>
-  <text data-text-role="title" data-full-text="CAB_CELL · 取药槽" data-text-max-width="296.0" x="1360.0" y="908.0" text-anchor="middle" class="node-title" font-size="18">CAB_CELL · 取药槽</text>
+  <g id="node-NOTE" data-graph-role="node" data-node-id="NOTE" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,872,760,908">
+  <rect x="60.0" y="872.0" width="700.0" height="36.0" rx="10.0" fill="#f6f8fb" stroke="#626976" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="NOTE · 设计要点与物理实施口径" data-text-max-width="676.0" x="410.0" y="890.0" text-anchor="middle" class="node-title" font-size="18">NOTE · 设计要点与物理实施口径</text>
   </g>
-  <g id="node-CAB_CELL_r01" data-graph-role="node" data-node-id="CAB_CELL_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,930,1520,956">
-  <rect x="1200.0" y="930.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="PK code C1-03 · name 1 层 3 槽" data-text-max-width="296.0" x="1360.0" y="943.0" text-anchor="middle" class="node-title" font-size="11.0">PK code C1-03 · name 1 层 3 槽</text>
+  <g id="node-NOTE_r01" data-graph-role="node" data-node-id="NOTE_r01" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,912,760,938">
+  <rect x="60.0" y="912.0" width="700.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#d0d5dd" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="库存无 status · 由单据集合推导（图 08）；查询三层下钻：药品汇总 → 批次 → 码实例" data-text-max-width="676.0" x="410.0" y="925.0" text-anchor="middle" class="node-title" font-size="11.0">库存无 status · 由单据集合推导（图 08）；查询三层下钻：药品汇总 → 批次 → 码实例</text>
   </g>
-  <g id="node-CAB_CELL_r02" data-graph-role="node" data-node-id="CAB_CELL_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,958,1520,984">
-  <rect x="1200.0" y="958.0" width="320.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#b7e0c4" stroke-width="1.0"/>
-  <text data-text-role="title" data-full-text="status · 空闲 / 占用（经摆药层）" data-text-max-width="296.0" x="1360.0" y="971.0" text-anchor="middle" class="node-title" font-size="11.0">status · 空闲 / 占用（经摆药层）</text>
+  <g id="node-NOTE_r02" data-graph-role="node" data-node-id="NOTE_r02" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,940,760,966">
+  <rect x="60.0" y="940.0" width="700.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#d0d5dd" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="扫码异常三分流：解析失败→BAD_CODES ｜ 退货无库存→PURCHASE_NOSTOCK ｜ 盘点差异→INV_CODE" data-text-max-width="676.0" x="410.0" y="953.0" text-anchor="middle" class="node-title" font-size="11.0">扫码异常三分流：解析失败→BAD_CODES ｜ 退货无库存→PURCHASE_NOSTOCK ｜ 盘点差异→INV_CODE</text>
   </g>
-  <g id="node-NOTE" data-graph-role="node" data-node-id="NOTE" data-semantic-role="NOTE · 设计要点" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1200,1030,1520,1122">
-  <rect x="1200.0" y="1030.0" width="320.0" height="92.0" rx="7" fill="#f6f8fb" stroke="#626976" stroke-width="1.8"/>
-  <path data-graph-role="decoration" d="M 1207.637 1030.668 H 1513.637 Q 1518.637 1030.668 1518.637 1036.668 V 1113.668" fill="none" stroke="#626976" stroke-width="0.8" opacity="0.42"/>
-  <text data-text-role="type" data-full-text="NOTE · 设计要点" data-text-max-width="292.0" x="1214.0" y="1048.0" class="node-type" font-size="12.0">NOTE · 设计要点</text>
-  <text data-text-role="title" data-full-text="设计要点" data-text-max-width="292.0" x="1214.0" y="1071.0" class="node-title" font-size="15" text-anchor="start">设计要点</text>
-  <text data-text-role="description" data-line="1" data-full-text="库存无 status · 由单据集合推导（图 08）｜ 码实例 = 库存载体 ｜ 院区 = org 行级隔离（图 10）" x="1214.0" y="1086.0" class="node-sub" font-size="11.5" text-anchor="start">库存无 status · 由单据集合推导（图 08）｜ 码实</text>
-  <text data-text-role="description" data-line="2" data-full-text="库存无 status · 由单据集合推导（图 08）｜ 码实例 = 库存载体 ｜ 院区 = org 行级隔离（图 10）" x="1214.0" y="1100.0" class="node-sub" font-size="11.5" text-anchor="start">例 = 库存载体 ｜ 院区 = org 行级隔离（图 10）</text>
+  <g id="node-NOTE_r03" data-graph-role="node" data-node-id="NOTE_r03" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,968,760,994">
+  <rect x="60.0" y="968.0" width="700.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#d0d5dd" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="大表皆 append-only：分区+归档+可全量重算；STOCK_BALANCE 物化后以日结对账兜底" data-text-max-width="676.0" x="410.0" y="981.0" text-anchor="middle" class="node-title" font-size="11.0">大表皆 append-only：分区+归档+可全量重算；STOCK_BALANCE 物化后以日结对账兜底</text>
   </g>
-  <g id="e1-label" data-graph-role="label" data-owner="e1" data-graph-bounds="132.92,586,217,606">
-  <rect x="132.92" y="586.0" width="84.08" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
-  <text x="174.96" y="600.0" text-anchor="middle" class="arrow-label">1:N 一药多码</text>
+  <g id="node-NOTE_r04" data-graph-role="node" data-node-id="NOTE_r04" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,996,760,1022">
+  <rect x="60.0" y="996.0" width="700.0" height="26.0" rx="4.0" fill="#ffffff" stroke="#d0d5dd" stroke-width="1.0"/>
+  <text data-text-role="title" data-full-text="DOC_ITEM（定价/金额行）进 backlog：采购价场景启用时照 RX_ITEM + 行码绑定模式扩展" data-text-max-width="676.0" x="410.0" y="1009.0" text-anchor="middle" class="node-title" font-size="11.0">DOC_ITEM（定价/金额行）进 backlog：采购价场景启用时照 RX_ITEM + 行码绑定模式扩展</text>
   </g>
-  <g id="e2-label" data-graph-role="label" data-owner="e2" data-graph-bounds="327.92,595.2,412,615.2">
-  <rect x="327.92" y="595.2" width="84.08" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
-  <text x="369.96" y="609.2" text-anchor="middle" class="arrow-label">1:N 派生实例</text>
+  <g id="e1-label" data-graph-role="label" data-owner="e1" data-graph-bounds="132.92,268,217,288">
+  <rect x="132.92" y="268.0" width="84.08" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
+  <text x="174.96" y="282.0" text-anchor="middle" class="arrow-label">1:N 一药多码</text>
   </g>
-  <g id="e3-label" data-graph-role="label" data-owner="e3" data-graph-bounds="512.92,528,597,548">
-  <rect x="512.92" y="528.0" width="84.08" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
-  <text x="554.96" y="542.0" text-anchor="middle" class="arrow-label">N:N 码随单转</text>
+  <g id="e3-label" data-graph-role="label" data-owner="e3" data-graph-bounds="512.92,458,597,478">
+  <rect x="512.92" y="458.0" width="84.08" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
+  <text x="554.96" y="472.0" text-anchor="middle" class="arrow-label">N:N 码随单转</text>
   </g>
-  <g id="e5-label" data-graph-role="label" data-owner="e5" data-graph-bounds="904.92,798,977,818">
-  <rect x="904.92" y="798.0" width="72.08" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
-  <text x="940.96" y="812.0" text-anchor="middle" class="arrow-label">1:N 申请行</text>
+  <g id="e5-label" data-graph-role="label" data-owner="e5" data-graph-bounds="904.92,268,977,288">
+  <rect x="904.92" y="268.0" width="72.08" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
+  <text x="940.96" y="282.0" text-anchor="middle" class="arrow-label">1:N 申请行</text>
   </g>
-  <g id="e6-label" data-graph-role="label" data-owner="e6" data-graph-bounds="565.46,817,649.54,837">
-  <rect x="565.46" y="817.0" width="84.08" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
-  <text x="607.5" y="831.0" text-anchor="middle" class="arrow-label">1:N 药品口径</text>
+  <g id="e6-label" data-graph-role="label" data-owner="e6" data-graph-bounds="557.96,127,642.04,147">
+  <rect x="557.96" y="127.0" width="84.08" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
+  <text x="600.0" y="141.0" text-anchor="middle" class="arrow-label">1:N 药品口径</text>
   </g>
-  <g id="e8-label" data-graph-role="label" data-owner="e8" data-graph-bounds="1296.92,277,1357,297">
-  <rect x="1296.92" y="277.0" width="60.08" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
-  <text x="1326.96" y="291.0" text-anchor="middle" class="arrow-label">1:N 库位</text>
-  </g>
-  <g id="e9-label" data-graph-role="label" data-owner="e9" data-graph-bounds="1296.92,567,1357,587">
-  <rect x="1296.92" y="567.0" width="60.08" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
-  <text x="1326.96" y="581.0" text-anchor="middle" class="arrow-label">1:N 货位</text>
-  </g>
-  <g id="e10-label" data-graph-role="label" data-owner="e10" data-graph-bounds="1472.92,574,1545,594">
-  <rect x="1472.92" y="574.0" width="72.08" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
-  <text x="1508.96" y="588.0" text-anchor="middle" class="arrow-label">1:N 取药柜</text>
-  </g>
-  <g id="e11-label" data-graph-role="label" data-owner="e11" data-graph-bounds="1308.92,857,1357,877">
-  <rect x="1308.92" y="857.0" width="48.08" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
-  <text x="1332.96" y="871.0" text-anchor="middle" class="arrow-label">1:N 槽</text>
-  </g>
-  <g id="e13-label" data-graph-role="label" data-owner="e13" data-graph-bounds="1131.68,124,1208.32,144">
-  <rect x="1131.68" y="124.0" width="76.64" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
-  <text x="1170.0" y="138.0" text-anchor="middle" class="arrow-label">warehouse</text>
+  <g id="e14-label" data-graph-role="label" data-owner="e14" data-graph-bounds="501.64,648,597,668">
+  <rect x="501.64" y="648.0" width="95.36" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
+  <text x="549.32" y="662.0" text-anchor="middle" class="arrow-label">GROUP BY 聚合</text>
   </g>
   <g id="legend" data-graph-role="legend">
-    <rect id="legend-zone" data-graph-role="reserved" data-reserved-kind="legend" x="48" y="1084" width="278.16" height="46" rx="10" fill="none" stroke="none"/>
-    <line data-graph-role="decoration" x1="58.0" y1="1098.0" x2="88.0" y2="1098.0" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arrowC)"/>
-    <text data-graph-role="decoration" x="98.0" y="1102.0" class="legend">外键引用 1:N</text>
-    <line data-graph-role="decoration" x1="196.08" y1="1098.0" x2="226.08" y2="1098.0" stroke="#7c3aed" stroke-width="2.4" marker-end="url(#arrowA)"/>
-    <text data-graph-role="decoration" x="236.08" y="1102.0" class="legend">字典层级 1:N</text>
+    <rect id="legend-zone" data-graph-role="reserved" data-reserved-kind="legend" x="432" y="1044" width="613.76" height="46" rx="10" fill="none" stroke="none"/>
+    <line data-graph-role="decoration" x1="442.0" y1="1058.0" x2="472.0" y2="1058.0" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arrowC)"/>
+    <text data-graph-role="decoration" x="482.0" y="1062.0" class="legend">外键引用 1:N</text>
+    <line data-graph-role="decoration" x1="580.08" y1="1058.0" x2="610.08" y2="1058.0" stroke="#7c3aed" stroke-width="2.4" marker-end="url(#arrowA)"/>
+    <text data-graph-role="decoration" x="620.08" y="1062.0" class="legend">字典层级 1:N（绿边不逐个标注）</text>
+    <line data-graph-role="decoration" x1="826.1600000000001" y1="1058.0" x2="856.1600000000001" y2="1058.0" stroke="#f97316" stroke-width="2.4" marker-end="url(#arrowE)"/>
+    <text data-graph-role="decoration" x="866.1600000000001" y="1062.0" class="legend">派生视图（虚线 · 非物理表）</text>
   </g>
-  <g id="footer" data-graph-role="reserved" data-graph-bounds="48,1138,426,1154">
-  <text x="48.0" y="1150.0" class="footnote">PUL-FMS · 12 表结构 ER（字段级）· fireworks-tech-graph Style 1</text>
+  <g id="footer" data-graph-role="reserved" data-graph-bounds="48,1073,426,1089">
+  <text x="48.0" y="1085.0" class="footnote">PUL-FMS · 12 表结构 ER（关系版）· fireworks-tech-graph Style 1</text>
   </g>
 </svg>

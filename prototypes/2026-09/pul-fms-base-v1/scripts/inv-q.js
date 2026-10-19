@@ -1,9 +1,9 @@
 /**
- * inv-q.js — 盈亏查询：已审核盘点单汇总
+ * inv-q.js — 盈亏明细查询：已审核药品盘点单汇总
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'invQ', crumb: ['盘点管理', '盈亏查询'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'invQ', crumb: ['盘点管理', '盈亏明细查询'] });
   if (!content) return;
   var I = window.PUL_INV, UI = window.PchUI, esc = UI.esc;
   var S = I.load();
@@ -27,7 +27,7 @@
         '<td>' + (d.gainPosted ? '盈已入' : (df.gain.length ? '盈未入' : '—')) + ' / ' +
           (d.lossPosted ? '亏已出' : (df.loss.length ? '亏未出' : '—')) + '</td></tr>';
     }).join('');
-    if (!rows) rows = '<tr><td colspan="8" class="text-center text-secondary" style="padding:28px;">无已审核盘点单</td></tr>';
+    if (!rows) rows = '<tr><td colspan="8" class="text-center text-secondary" style="padding:28px;">无已审核药品盘点单</td></tr>';
     content.innerHTML = '<div class="card mb-3"><div class="card-body" style="padding:12px 16px;">' +
       '<div class="d-flex" style="gap:10px;"><input class="form-control" id="fKw" style="width:200px;" placeholder="单号 / 节点 / 类型" value="' + esc(kw) + '">' +
       '<button class="btn btn-outline-primary" id="btnQuery">查询</button>' +

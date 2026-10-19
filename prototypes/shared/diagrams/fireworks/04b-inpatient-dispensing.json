@@ -5,222 +5,30 @@
   "style": 1,
   "quality_profile": "standard",
   "text_policy": "strict",
-  "width": 1680,
-  "height": 1300,
+  "width": 1860,
+  "height": 1200,
   "title": "摆药发药流程 · 住院（先拿后匹配 · 事后补绑 · 逆向）",
   "subtitle": "摆药单驱动 · 规则匹配偏差=默认出口 · 异常日结闭环 · 与图 04 共用台账 · 2026-10-03 拍板分图",
   "containers": [
-    {
-      "id": "lane-doc",
-      "x": 40,
-      "y": 100,
-      "width": 1600,
-      "height": 150,
-      "label": "医生 / HIS",
-      "stroke": "#b7cdf0",
-      "fill": "#eef4fb"
-    },
-    {
-      "id": "lane-pha",
-      "x": 40,
-      "y": 270,
-      "width": 1600,
-      "height": 560,
-      "label": "药房 · 药师（摆药）",
-      "stroke": "#b7cdf0",
-      "fill": "#eef4fb"
-    },
-    {
-      "id": "lane-exc",
-      "x": 40,
-      "y": 850,
-      "width": 1600,
-      "height": 240,
-      "label": "药房 · 异常补救（事后专区 · 不卡流程）",
-      "stroke": "#d8b4fe",
-      "fill": "#faf5ff"
-    },
-    {
-      "id": "lane-ward",
-      "x": 40,
-      "y": 1110,
-      "width": 1600,
-      "height": 110,
-      "label": "病区 · 护士",
-      "stroke": "#b7e0c4",
-      "fill": "#eef8f0"
-    }
+    { "id": "lane-doc", "x": 40, "y": 90, "width": 1780, "height": 150, "label": "医生 / HIS", "stroke": "#b7cdf0", "fill": "#eef4fb" },
+    { "id": "lane-pha", "x": 40, "y": 260, "width": 1780, "height": 510, "label": "药房 · 药师（摆药）", "stroke": "#b7cdf0", "fill": "#eef4fb" },
+    { "id": "lane-exc", "x": 40, "y": 790, "width": 1780, "height": 210, "label": "药房 · 异常补救（事后专区 · 不卡流程）", "stroke": "#d8b4fe", "fill": "#faf5ff" },
+    { "id": "lane-ward", "x": 40, "y": 1020, "width": 1780, "height": 110, "label": "病区 · 护士", "stroke": "#b7e0c4", "fill": "#eef8f0" }
   ],
   "nodes": [
-    {
-      "id": "D1",
-      "kind": "rect",
-      "x": 80,
-      "y": 135,
-      "width": 360,
-      "height": 90,
-      "type_label": "ORDER",
-      "label": "医嘱汇总 → 生成摆药单",
-      "sublabel": "按顿拆分 · 拆零为常态 · 系统锁药品级数量",
-      "fill": "#fff7e6",
-      "stroke": "#d48806"
-    },
-    {
-      "id": "R1",
-      "kind": "rect",
-      "x": 980,
-      "y": 135,
-      "width": 420,
-      "height": 90,
-      "type_label": "REVERSE",
-      "label": "医嘱撤销 · 分时点处理",
-      "sublabel": "未摆药=释放锁定 · 已摆药=转摆药退回 R3A",
-      "fill": "#fdecea",
-      "stroke": "#d63939"
-    },
-    {
-      "id": "M1",
-      "kind": "rect",
-      "x": 110,
-      "y": 420,
-      "width": 300,
-      "height": 80,
-      "type_label": "PICK",
-      "label": "先拿药",
-      "sublabel": "摆药单驱动 · 按货位顺序",
-      "fill": "#fff7e6",
-      "stroke": "#d48806"
-    },
-    {
-      "id": "M2",
-      "kind": "rect",
-      "x": 480,
-      "y": 420,
-      "width": 300,
-      "height": 80,
-      "type_label": "MATCH",
-      "label": "后匹配码",
-      "sublabel": "规则自动匹配：FEFO+货位序",
-      "fill": "#fff7e6",
-      "stroke": "#d48806"
-    },
-    {
-      "id": "DEC",
-      "kind": "hexagon",
-      "x": 870,
-      "y": 420,
-      "width": 220,
-      "height": 80,
-      "type_label": "DECISION",
-      "label": "规则匹配命中？",
-      "sublabel": "规则≠实际为常态偏差",
-      "fill": "#fff7e6",
-      "stroke": "#d48806"
-    },
-    {
-      "id": "OUT",
-      "kind": "rect",
-      "x": 1230,
-      "y": 420,
-      "width": 300,
-      "height": 80,
-      "type_label": "SCAN OUT",
-      "label": "出库扣账 · 在途",
-      "sublabel": "码绑摆药单",
-      "fill": "#e6f4ff",
-      "stroke": "#206bc4"
-    },
-    {
-      "id": "R3A",
-      "kind": "rect",
-      "x": 1230,
-      "y": 615,
-      "width": 340,
-      "height": 90,
-      "type_label": "REVERSE",
-      "label": "摆药退回（未签收）",
-      "sublabel": "解绑回架 · 含医嘱撤销已摆药转入",
-      "fill": "#fdecea",
-      "stroke": "#d63939"
-    },
-    {
-      "id": "BK",
-      "kind": "rect",
-      "x": 1090,
-      "y": 740,
-      "width": 280,
-      "height": 70,
-      "type_label": "RESTOCK",
-      "label": "码回架复用",
-      "sublabel": "逆向公共终点",
-      "fill": "#fdecea",
-      "stroke": "#d63939"
-    },
-    {
-      "id": "RULE",
-      "kind": "rect",
-      "x": 110,
-      "y": 880,
-      "width": 300,
-      "height": 100,
-      "type_label": "RULE · 铁律",
-      "label": "药必须发得出优先",
-      "sublabel": "码账事后补平 · 全程留痕",
-      "fill": "#f3e8ff",
-      "stroke": "#7c3aed"
-    },
-    {
-      "id": "E1",
-      "kind": "rect",
-      "x": 430,
-      "y": 880,
-      "width": 400,
-      "height": 100,
-      "type_label": "MANUAL BIND",
-      "label": "日结前手动补绑",
-      "sublabel": "系统推荐 + 人工选定 · bindType=manual",
-      "fill": "#f3e8ff",
-      "stroke": "#7c3aed"
-    },
-    {
-      "id": "E2",
-      "kind": "rect",
-      "x": 930,
-      "y": 880,
-      "width": 380,
-      "height": 100,
-      "type_label": "LEDGER · 日结",
-      "label": "赋码异常台账（与 04 共用）",
-      "sublabel": "偏差自动生成待补绑 → 确认/改绑/关闭 · 超 24h 升级",
-      "fill": "#f3e8ff",
-      "stroke": "#7c3aed"
-    },
-    {
-      "id": "R3B",
-      "kind": "rect",
-      "x": 560,
-      "y": 1135,
-      "width": 360,
-      "height": 70,
-      "type_label": "REVERSE",
-      "label": "病区退回（已签收）",
-      "sublabel": "转退药流程 rx-ret",
-      "fill": "#fdecea",
-      "stroke": "#d63939"
-    },
-    {
-      "id": "W1",
-      "kind": "rect",
-      "x": 1230,
-      "y": 1135,
-      "width": 300,
-      "height": 70,
-      "type_label": "WARD",
-      "label": "病区签收 · 在途→闭环",
-      "sublabel": "码随发药单绑患者",
-      "fill": "#fff7e6",
-      "stroke": "#d48806"
-    }
+    { "id": "D1", "kind": "rect", "x": 80, "y": 125, "width": 360, "height": 90, "type_label": "ORDER", "label": "医嘱汇总 → 生成摆药单", "sublabel": "按顿拆分 · 拆零为常态 · 系统锁药品级数量", "fill": "#fff7e6", "stroke": "#d48806" },
+    { "id": "R1", "kind": "rect", "x": 1200, "y": 125, "width": 420, "height": 90, "type_label": "REVERSE", "label": "医嘱撤销 · 分时点处理", "sublabel": "未摆药=释放锁定 · 已摆药=转摆药退回 R3A", "fill": "#fdecea", "stroke": "#d63939" },
+    { "id": "M1", "kind": "rect", "x": 130, "y": 330, "width": 260, "height": 80, "type_label": "PICK", "label": "先拿药", "sublabel": "摆药单驱动 · 按货位顺序", "fill": "#fff7e6", "stroke": "#d48806" },
+    { "id": "M2", "kind": "rect", "x": 490, "y": 330, "width": 260, "height": 80, "type_label": "MATCH", "label": "后匹配码", "sublabel": "规则自动匹配：FEFO+货位序", "fill": "#fff7e6", "stroke": "#d48806" },
+    { "id": "DEC", "kind": "hexagon", "x": 860, "y": 330, "width": 220, "height": 80, "type_label": "DECISION", "label": "规则匹配命中？", "sublabel": "规则≠实际为常态偏差", "fill": "#fff7e6", "stroke": "#d48806" },
+    { "id": "OUT", "kind": "rect", "x": 1190, "y": 330, "width": 280, "height": 80, "type_label": "SCAN OUT", "label": "出库扣账", "sublabel": "码绑摆药单", "fill": "#e6f4ff", "stroke": "#206bc4" },
+    { "id": "R3A", "kind": "rect", "x": 1420, "y": 540, "width": 340, "height": 90, "type_label": "REVERSE", "label": "摆药退回（未签收）", "sublabel": "解绑回架 · 含医嘱撤销已摆药转入", "fill": "#fdecea", "stroke": "#d63939" },
+    { "id": "BK", "kind": "rect", "x": 1450, "y": 680, "width": 280, "height": 70, "type_label": "RESTOCK", "label": "码回架复用", "sublabel": "逆向公共终点", "fill": "#fdecea", "stroke": "#d63939" },
+    { "id": "RULE", "kind": "rect", "x": 60, "y": 850, "width": 260, "height": 80, "type_label": "RULE · 铁律", "label": "药必须发得出优先", "sublabel": "码账事后补平 · 全程留痕", "fill": "#f3e8ff", "stroke": "#7c3aed" },
+    { "id": "E1", "kind": "rect", "x": 340, "y": 850, "width": 320, "height": 100, "type_label": "MANUAL BIND", "label": "日结前手动补绑", "sublabel": "系统推荐 + 人工选定 · bindType=manual", "fill": "#f3e8ff", "stroke": "#7c3aed" },
+    { "id": "E2", "kind": "rect", "x": 780, "y": 850, "width": 380, "height": 100, "type_label": "LEDGER · 日结", "label": "赋码异常台账（与 04 共用）", "sublabel": "偏差自动生成待补绑 → 确认/改绑/关闭 · 超 24h 升级", "fill": "#f3e8ff", "stroke": "#7c3aed" },
+    { "id": "R3B", "kind": "rect", "x": 560, "y": 1040, "width": 360, "height": 70, "type_label": "REVERSE", "label": "病区退回（已签收）", "sublabel": "转退药流程 rx-ret", "fill": "#fdecea", "stroke": "#d63939" },
+    { "id": "W1", "kind": "rect", "x": 1180, "y": 1040, "width": 300, "height": 70, "type_label": "WARD", "label": "病区签收 · 闭环", "sublabel": "码随发药单绑患者", "fill": "#fff7e6", "stroke": "#d48806" }
   ],
   "arrows": [
     { "id": "b01", "source": "D1", "target": "M1", "source_port": "bottom", "target_port": "top", "flow": "control" },
@@ -229,7 +37,7 @@
     { "id": "b04", "source": "DEC", "target": "OUT", "source_port": "right", "target_port": "left", "flow": "control", "label": "命中 · 绑定" },
     { "id": "b05", "source": "DEC", "target": "OUT", "source_port": "top", "target_port": "top", "flow": "data", "label": "偏差 · 药照发不卡流程" },
     { "id": "b06", "source": "DEC", "target": "E2", "source_port": "bottom", "target_port": "top", "flow": "data", "label": "偏差 · 自动生成待补绑" },
-    { "id": "b07", "source": "OUT", "target": "W1", "source_port": "bottom", "target_port": "top", "flow": "control", "label": "在途 → 签收闭环" },
+    { "id": "b07", "source": "OUT", "target": "W1", "source_port": "bottom", "target_port": "top", "flow": "control", "label": "送达 → 签收闭环" },
     { "id": "b08", "source": "OUT", "target": "R3A", "source_port": "right", "target_port": "right", "flow": "data", "label": "摆药退回（未签收）" },
     { "id": "b09", "source": "R3A", "target": "BK", "source_port": "bottom", "target_port": "top", "flow": "data" },
     { "id": "b10", "source": "E2", "target": "E1", "source_port": "left", "target_port": "right", "flow": "data", "label": "日结前补绑" },
@@ -238,19 +46,13 @@
     { "id": "b13", "source": "W1", "target": "R3B", "source_port": "left", "target_port": "right", "flow": "data", "label": "病区退回（已签收）" }
   ],
   "legend_orientation": "horizontal",
-  "legend_x": 90,
-  "legend_y": 1240,
+  "legend_x": 48,
+  "legend_y": 1145,
   "legend": [
-    {
-      "flow": "control",
-      "label": "主流程（正向摆药发药）"
-    },
-    {
-      "flow": "data",
-      "label": "逆向回流 / 异常补救（红节点=逆向 · 紫节点=异常）"
-    }
+    { "flow": "control", "label": "主流程（正向摆药发药）" },
+    { "flow": "data", "label": "逆向回流 / 异常补救（红节点=逆向 · 紫节点=异常）" }
   ],
   "footer": "PUL-FMS · 04b 住院摆药 · 先拿后匹配 · 偏差=默认出口（命中/偏差都出库）· 台账日结闭环 · 与图 04 共用 · fireworks-tech-graph Style 1",
   "footer_x": 48,
-  "footer_y": 1275
+  "footer_y": 1178
 }

@@ -1,17 +1,17 @@
 /**
- * perm.js — 菜单管理：左侧菜单资源树（模块→子组→菜单→按钮）+ 右侧子节点表
+ * perm.js — 权限管理：左侧菜单资源树（模块→子组→菜单→按钮）+ 右侧子节点表
  * 数据源 = window.PUL.MENU_TREE（与左侧导航、角色权限树同源），演示内存态增编启停。
  * 参考老系统「权限菜单」：左树右表、+ 添加子权限、行级 编辑/禁用。
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'perm', crumb: ['系统管理', '菜单管理'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'perm', crumb: ['系统管理', '权限管理'] });
   if (!content) return;
 
   // 模块/子组编码（语义码，对齐老系统资源编码风格）
   var GROUP_CODES = {
-    '基础管理': 'BASE', '库房管理': 'WH', '库房管理/采购管理': 'PCH', '库房管理/库房业务': 'WHBIZ',
-    '药房管理': 'PH', '发药管理': 'DISP', '盘点管理': 'INV', '台账管理': 'LEDGER', '医保管理': 'MI', '系统管理': 'SYS'
+    '基础管理': 'BASE', '库房管理': 'WH', '库房管理/采购管理': 'PCH', '库房管理/库房管理': 'WHBIZ',
+    '药房管理': 'PH', '出库管理': 'DISP', '盘点管理': 'INV', '台账管理': 'LEDGER', '医保管理': 'MI', '系统管理': 'SYS'
   };
   // 菜单 code → 路由（来自 app-shell NAV；无 href = 待实现）
   var HREF_MAP = {};
@@ -112,7 +112,7 @@
       '<div class="table-responsive"><table class="table table-vcenter table-hover card-table">' +
       '<thead><tr><th>资源编码</th><th>名称</th><th>类型</th><th>路由标识</th><th>状态</th><th>操作</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div>' +
-      '<div class="card-footer text-secondary" style="font-size:12px;">菜单树与左侧导航、角色管理-菜单权限树同源（data.js MENU_TREE）：新增/禁用菜单会同步影响导航可见性与角色可勾选范围；按钮类节点即角色树里的操作叶。原型为内存态演示，刷新还原。</div></div>';
+      '</div>';
   }
 
   // ===== 新增/编辑弹窗 =====

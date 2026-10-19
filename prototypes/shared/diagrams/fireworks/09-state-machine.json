@@ -6,53 +6,96 @@
   "quality_profile": "showcase",
   "text_policy": "strict",
   "width": 1360,
-  "height": 990,
-  "title": "状态机（双轨）",
-  "subtitle": "追溯码实例状态 × 单据状态 · 「入槽」为可选状态而非必经 · 手动补绑核验维度见左下注",
+  "height": 1270,
+  "title": "状态机 · 一个码的一生（场景式）",
+  "subtitle": "正向 5 景 + 逆向 3 景 · 每列三问：码怎么变 → 凭什么变（哪张单据驱动） → 账怎么平（库存增减） · 底部守恒总账",
   "containers": [
-    { "id": "code", "x": 40, "y": 100, "width": 1280, "height": 520, "label": "追溯码实例状态轨", "stroke": "#b7cdf0", "fill": "#eef4fb" },
-    { "id": "doc", "x": 40, "y": 660, "width": 1280, "height": 290, "label": "单据状态轨（7 类单据同构）", "stroke": "#b7e0c4", "fill": "#eef8f0" }
+    { "id": "fwd", "x": 40, "y": 100, "width": 1280, "height": 390, "label": "正向主链路 · 药往病人走（5 个场景）", "stroke": "#b7cdf0", "fill": "#eef4fb" },
+    { "id": "rev", "x": 40, "y": 520, "width": 1280, "height": 380, "label": "逆向 · 出清 — 码往回搬或离开系统", "stroke": "#e0b26a", "fill": "#fff7e6" },
+    { "id": "doc", "x": 40, "y": 1024, "width": 1280, "height": 170, "label": "单据状态轨 · 7 类单据同构（草稿→生效→终态，审核是码搬家的唯一扳机）", "stroke": "#b7e0c4", "fill": "#eef8f0" }
   ],
   "nodes": [
-    { "id": "C7", "kind": "rect", "x": 270, "y": 140, "width": 170, "height": 76, "type_label": "TERMINAL", "label": "已损耗销毁", "sublabel": "终态 · 不可恢复", "fill": "#f6f8fb", "stroke": "#2fb344" },
-    { "id": "C4", "kind": "rect", "x": 790, "y": 140, "width": 170, "height": 76, "type_label": "OPTIONAL", "label": "入槽", "sublabel": "可选状态", "fill": "#fff7e6", "stroke": "#d48806" },
-    { "id": "C6", "kind": "rect", "x": 60, "y": 290, "width": 140, "height": 76, "type_label": "TERMINAL", "label": "已退供应商", "sublabel": "终态", "fill": "#f6f8fb", "stroke": "#2fb344" },
-    { "id": "C1", "kind": "rect", "x": 270, "y": 290, "width": 170, "height": 76, "type_label": "STOCK", "label": "已入库 · 在架", "fill": "#ffffff", "stroke": "#206bc4" },
-    { "id": "C2", "kind": "rect", "x": 530, "y": 290, "width": 170, "height": 76, "type_label": "IN-TRANSIT", "label": "在途", "sublabel": "领用出库已审核", "fill": "#ffffff", "stroke": "#206bc4" },
-    { "id": "C3", "kind": "rect", "x": 790, "y": 290, "width": 170, "height": 76, "type_label": "PHARM-STOCK", "label": "药房库存", "fill": "#ffffff", "stroke": "#206bc4" },
-    { "id": "C5", "kind": "rect", "x": 1130, "y": 290, "width": 170, "height": 76, "type_label": "TERMINAL", "label": "已发药", "sublabel": "终态", "fill": "#f6f8fb", "stroke": "#2fb344" },
-    { "id": "C8", "kind": "rect", "x": 530, "y": 406, "width": 170, "height": 76, "type_label": "RETURNING", "label": "退回库房途中", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "C1", "kind": "rect", "x": 60, "y": 150, "width": 216, "height": 80, "type_label": "① 采购入库", "label": "码进在架", "sublabel": "供应商 → 库房", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "T1", "kind": "rect", "x": 60, "y": 270, "width": 216, "height": 72, "type_label": "凭证", "label": "采购入库单 · 审核", "sublabel": "审核一刻码才生在架", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "K1", "kind": "rect", "x": 60, "y": 382, "width": 216, "height": 76, "type_label": "库存", "label": "在架 +N", "sublabel": "在途/药房不变", "fill": "#ffffff", "stroke": "#2fb344" },
 
-    { "id": "D1", "kind": "rect", "x": 120, "y": 700, "width": 190, "height": 76, "type_label": "DRAFT", "label": "建单 · 草稿", "fill": "#ffffff", "stroke": "#206bc4" },
-    { "id": "D2", "kind": "rect", "x": 480, "y": 700, "width": 190, "height": 76, "type_label": "EFFECTIVE", "label": "已审核 · 生效", "sublabel": "进入库存集合推导", "fill": "#ffffff", "stroke": "#206bc4" },
-    { "id": "D3", "kind": "rect", "x": 120, "y": 840, "width": 190, "height": 76, "type_label": "TERMINAL", "label": "终态 · 不可改", "fill": "#f6f8fb", "stroke": "#2fb344" },
-    { "id": "DNOTE", "kind": "rect", "x": 900, "y": 740, "width": 360, "height": 76, "type_label": "NOTE", "label": "7 类单据同构", "sublabel": "采购入/采购退/领用/退回入/其他入/其他出/损耗", "fill": "#ffffff", "stroke": "#626976", "flat": true },
-    { "id": "CNOTE", "kind": "rect", "x": 60, "y": 526, "width": 640, "height": 64, "type_label": "NOTE · T3", "label": "绑定带核验维度：扫码核验 / 手动补绑（待复核）/ 已复核", "sublabel": "状态机不变 · bindType=scan / manual", "fill": "#ffffff", "stroke": "#626976", "flat": true }
+    { "id": "C2", "kind": "rect", "x": 316, "y": 150, "width": 216, "height": 80, "type_label": "② 领用出库", "label": "在架 → 在途", "sublabel": "库房已扣账", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "T2", "kind": "rect", "x": 316, "y": 270, "width": 216, "height": 72, "type_label": "凭证", "label": "领用出库单 · 审核", "sublabel": "一张单批带 N 个码", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "K2", "kind": "rect", "x": 316, "y": 382, "width": 216, "height": 76, "type_label": "库存", "label": "在架 −N · 在途 +N", "sublabel": "出库审核即扣账", "fill": "#ffffff", "stroke": "#2fb344" },
+
+    { "id": "C3", "kind": "rect", "x": 572, "y": 150, "width": 216, "height": 80, "type_label": "③ 药房入库", "label": "在途 → 药房", "sublabel": "扫码确认 · 闭环", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "T3", "kind": "rect", "x": 572, "y": 270, "width": 216, "height": 72, "type_label": "凭证", "label": "领用入库单 · 确认", "sublabel": "码改记药房位置/货位", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "K3", "kind": "rect", "x": 572, "y": 382, "width": 216, "height": 76, "type_label": "库存", "label": "在途 −N · 药房 +N", "sublabel": "在途清零 = 闭环", "fill": "#ffffff", "stroke": "#2fb344" },
+
+    { "id": "C4", "kind": "rect", "x": 828, "y": 150, "width": 216, "height": 80, "type_label": "④ 发药 · 整盒", "label": "码出系统", "sublabel": "整盒绑定处方 · 终态", "fill": "#f6f8fb", "stroke": "#2fb344" },
+    { "id": "T4", "kind": "rect", "x": 828, "y": 270, "width": 216, "height": 72, "type_label": "凭证", "label": "发药单 · 绑定处方", "sublabel": "整盒离架", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "K4", "kind": "rect", "x": 828, "y": 382, "width": 216, "height": 76, "type_label": "库存", "label": "药房 −N", "sublabel": "整盒离架", "fill": "#ffffff", "stroke": "#2fb344" },
+
+    { "id": "C5", "kind": "rect", "x": 1084, "y": 150, "width": 216, "height": 80, "type_label": "⑤ 发药 · 拆零", "label": "码留药房 · 拆零", "sublabel": "④ 的变体 · 打开盒发 n 片", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "T5", "kind": "rect", "x": 1084, "y": 270, "width": 216, "height": 72, "type_label": "凭证", "label": "发药单 · 拆零", "sublabel": "累计记拆零 n 片", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "K5", "kind": "rect", "x": 1084, "y": 382, "width": 216, "height": 76, "type_label": "库存", "label": "药房 −n 片", "sublabel": "码满最小单位才离架", "fill": "#ffffff", "stroke": "#2fb344" },
+
+    { "id": "C6", "kind": "rect", "x": 60, "y": 570, "width": 216, "height": 76, "type_label": "⑥ 药房退回", "label": "药房 → 在架", "sublabel": "退回途中过渡", "fill": "#ffffff", "stroke": "#d63939" },
+    { "id": "T6", "kind": "rect", "x": 60, "y": 686, "width": 216, "height": 68, "type_label": "凭证", "label": "退回出库单 + 退回入库单", "sublabel": "药房退 → 库房收", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "K6", "kind": "rect", "x": 60, "y": 794, "width": 216, "height": 72, "type_label": "库存", "label": "药房 −N · 在架 +N", "fill": "#ffffff", "stroke": "#2fb344" },
+
+    { "id": "C7", "kind": "rect", "x": 316, "y": 570, "width": 216, "height": 76, "type_label": "⑦ 损耗", "label": "码出系统", "sublabel": "终态 · 不可恢复", "fill": "#f6f8fb", "stroke": "#d63939" },
+    { "id": "T7", "kind": "rect", "x": 316, "y": 686, "width": 216, "height": 68, "type_label": "凭证", "label": "损耗单 · 审核", "sublabel": "审核出清", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "K7", "kind": "rect", "x": 316, "y": 794, "width": 216, "height": 72, "type_label": "库存", "label": "在架/药房 −N", "sublabel": "库房损耗 / 药房损耗", "fill": "#ffffff", "stroke": "#2fb344" },
+
+    { "id": "C8", "kind": "rect", "x": 572, "y": 570, "width": 216, "height": 76, "type_label": "⑧ 采购退货", "label": "码出系统", "sublabel": "退回供应商 · 终态", "fill": "#f6f8fb", "stroke": "#d63939" },
+    { "id": "T8", "kind": "rect", "x": 572, "y": 686, "width": 216, "height": 68, "type_label": "凭证", "label": "采购退货单 · 审核", "sublabel": "审核出清", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+    { "id": "K8", "kind": "rect", "x": 572, "y": 794, "width": 216, "height": 72, "type_label": "库存", "label": "在架 −N", "fill": "#ffffff", "stroke": "#2fb344" },
+
+    { "id": "SLOT", "kind": "rect", "x": 828, "y": 640, "width": 472, "height": 100, "type_label": "说明", "label": "「入槽」不是状态，是药房在架的属性", "sublabel": "赋码方式 = 扫码 / 手动补绑 · 不搬家 · 三态库存数字不变", "fill": "#ffffff", "stroke": "#626976", "flat": true },
+
+    { "id": "B1", "kind": "rect", "x": 60, "y": 930, "width": 600, "height": 64, "type_label": "守恒总账", "label": "任一时刻，每个码必居且只居一格", "sublabel": "库房在架 │ 在途 │ 药房在架 │ 已出系统（已发药/已损耗/已退供应商）", "fill": "#eef8f0", "stroke": "#2fb344" },
+    { "id": "B2", "kind": "rect", "x": 700, "y": 930, "width": 600, "height": 64, "type_label": "平账公式", "label": "累计入库 = 在架 + 在途 + 药房在架 + 已出系统", "sublabel": "库存不靠快照，由单据集合推导 · 盘点与全程追溯靠这个式子平账", "fill": "#eef8f0", "stroke": "#2fb344" },
+
+    { "id": "D1", "kind": "rect", "x": 80, "y": 1064, "width": 190, "height": 64, "type_label": "草稿", "label": "建单 · 可改", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "D2", "kind": "rect", "x": 400, "y": 1064, "width": 220, "height": 64, "type_label": "生效", "label": "已审核 · 生效", "sublabel": "驱动上方码搬家", "fill": "#ffffff", "stroke": "#206bc4" },
+    { "id": "D3", "kind": "rect", "x": 760, "y": 1064, "width": 190, "height": 64, "type_label": "终态", "label": "闭环 · 不可改", "fill": "#f6f8fb", "stroke": "#2fb344" },
+    { "id": "DNOTE", "kind": "rect", "x": 1000, "y": 1064, "width": 284, "height": 64, "type_label": "说明", "label": "7 类单据同构", "sublabel": "采购入/退 · 领用 · 退回入 · 其他入/出 · 损耗", "fill": "#ffffff", "stroke": "#626976", "flat": true }
   ],
   "arrows": [
-    { "id": "t1", "source": "C1", "target": "C2", "source_port": "right", "target_port": "left", "flow": "control", "label": "领用出库" },
-    { "id": "t2", "source": "C2", "target": "C3", "source_port": "right", "target_port": "left", "flow": "control", "label": "确认入库" },
-    { "id": "t3", "source": "C3", "target": "C5", "source_port": "right", "target_port": "left", "flow": "control", "label": "出库扫码" },
-    { "id": "t4", "source": "C3", "target": "C4", "source_port": "top", "target_port": "bottom", "flow": "async", "label": "绑定入槽" },
-    { "id": "t5", "source": "C4", "target": "C5", "source_port": "right", "target_port": "top", "flow": "async", "label": "出库扫码" },
-    { "id": "t6", "source": "C1", "target": "C6", "source_port": "left", "target_port": "right", "flow": "feedback", "label": "采购退货" },
-    { "id": "t7", "source": "C1", "target": "C7", "source_port": "top", "target_port": "bottom", "flow": "feedback", "label": "损耗报损" },
-    { "id": "t9", "source": "C3", "target": "C8", "source_port": "bottom", "target_port": "right", "flow": "feedback", "label": "退回库房" },
-    { "id": "t10", "source": "C8", "target": "C1", "source_port": "left", "target_port": "bottom", "flow": "control", "label": "退回入库" },
+    { "id": "hc1", "source": "C1", "target": "C2", "source_port": "right", "target_port": "left", "flow": "control" },
+    { "id": "hc2", "source": "C2", "target": "C3", "source_port": "right", "target_port": "left", "flow": "control" },
+    { "id": "hc3", "source": "C3", "target": "C4", "source_port": "right", "target_port": "left", "flow": "control" },
+    { "id": "hc4", "source": "C4", "target": "C5", "source_port": "right", "target_port": "left", "flow": "async" },
+
+    { "id": "vt1", "source": "C1", "target": "T1", "source_port": "bottom", "target_port": "top", "flow": "data" },
+    { "id": "vt2", "source": "C2", "target": "T2", "source_port": "bottom", "target_port": "top", "flow": "data" },
+    { "id": "vt3", "source": "C3", "target": "T3", "source_port": "bottom", "target_port": "top", "flow": "data" },
+    { "id": "vt4", "source": "C4", "target": "T4", "source_port": "bottom", "target_port": "top", "flow": "data" },
+    { "id": "vt5", "source": "C5", "target": "T5", "source_port": "bottom", "target_port": "top", "flow": "data" },
+    { "id": "vk1", "source": "T1", "target": "K1", "source_port": "bottom", "target_port": "top", "flow": "read" },
+    { "id": "vk2", "source": "T2", "target": "K2", "source_port": "bottom", "target_port": "top", "flow": "read" },
+    { "id": "vk3", "source": "T3", "target": "K3", "source_port": "bottom", "target_port": "top", "flow": "read" },
+    { "id": "vk4", "source": "T4", "target": "K4", "source_port": "bottom", "target_port": "top", "flow": "read" },
+    { "id": "vk5", "source": "T5", "target": "K5", "source_port": "bottom", "target_port": "top", "flow": "read" },
+
+    { "id": "vt6", "source": "C6", "target": "T6", "source_port": "bottom", "target_port": "top", "flow": "data" },
+    { "id": "vt7", "source": "C7", "target": "T7", "source_port": "bottom", "target_port": "top", "flow": "data" },
+    { "id": "vt8", "source": "C8", "target": "T8", "source_port": "bottom", "target_port": "top", "flow": "data" },
+    { "id": "vk6", "source": "T6", "target": "K6", "source_port": "bottom", "target_port": "top", "flow": "read" },
+    { "id": "vk7", "source": "T7", "target": "K7", "source_port": "bottom", "target_port": "top", "flow": "read" },
+    { "id": "vk8", "source": "T8", "target": "K8", "source_port": "bottom", "target_port": "top", "flow": "read" },
 
     { "id": "d1", "source": "D1", "target": "D2", "source_port": "right", "target_port": "left", "flow": "control", "label": "审核" },
-    { "id": "d2", "source": "D1", "target": "D3", "source_port": "bottom", "target_port": "top", "flow": "feedback", "label": "作废", "route_points": [[215, 808]] },
-    { "id": "d3", "source": "D2", "target": "D3", "source_port": "bottom", "target_port": "right", "flow": "control", "label": "闭环" }
+    { "id": "d3", "source": "D2", "target": "D3", "source_port": "right", "target_port": "left", "flow": "control", "label": "闭环" },
+    { "id": "d2", "source": "D1", "target": "D3", "source_port": "bottom", "target_port": "bottom", "flow": "feedback", "label": "作废" }
   ],
   "legend_orientation": "horizontal",
   "legend_x": 60,
-  "legend_y": 956,
+  "legend_y": 1218,
   "legend": [
-    { "flow": "control", "label": "主迁移 / 审核" },
+    { "flow": "control", "label": "码状态 · 主迁移" },
+    { "flow": "data", "label": "单据驱动（凭证）" },
+    { "flow": "read", "label": "库存增减" },
     { "flow": "feedback", "label": "出清 · 退回 · 作废" },
-    { "flow": "async", "label": "可选（入槽）" }
+    { "flow": "async", "label": "变体（拆零）" }
   ],
-  "footer": "PUL-FMS · 09 状态机（双轨） · fireworks-tech-graph Style 1",
+  "footer": "PUL-FMS · 09 状态机（场景式）· 码的一生 × 单据双轨 · fireworks-tech-graph Style 1",
   "footer_x": 48,
-  "footer_y": 978
+  "footer_y": 1248
 }

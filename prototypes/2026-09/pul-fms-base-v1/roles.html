@@ -6,11 +6,11 @@
   <meta name="prototype-category" content="web-admin">
   <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 系统管理">
   <title>角色管理 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/roles.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/roles.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -58,7 +58,7 @@
           <p class="subtitle">系统管理 · 角色定义与三级权限配置</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>本页维护需求 4.1.2 的 6 类标准角色（精简版）与自定义角色：新增/编辑走弹窗，<strong>菜单权限与数据范围-自定义复用同一套树组件</strong>（父子联动勾选），数据范围采用若依 DataScope 五档模型挂在角色上，用户按角色自动继承。</p>
+      <p class="lead"><strong>一句话概括：</strong>本页维护 6 类标准角色与自定义角色：新增/编辑走弹窗，<strong>菜单权限用树形勾选</strong>（勾上级自动带全下级）；角色只管能进哪些菜单、点哪些按钮，库房/药房的授权在用户管理逐人设置。</p>
 
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
@@ -67,14 +67,14 @@
             <div class="info-card-icon">👤</div>
             <div class="info-card-body">
               <div class="info-card-title">系统管理员 · 林建国</div>
-              <div class="info-card-desc">创建/编辑角色、勾选菜单权限树、设定数据范围五档</div>
+              <div class="info-card-desc">创建/编辑角色、勾选菜单权限树</div>
             </div>
           </div>
           <div class="info-card">
             <div class="info-card-icon">🔀</div>
             <div class="info-card-body">
               <div class="info-card-title">上下游</div>
-              <div class="info-card-desc">上游：工作台 → 系统管理；下游：用户管理按角色分配账号，角色调整自动同步该角色全部用户（4.4.3）</div>
+              <div class="info-card-desc">上游：工作台 → 系统管理；下游：用户管理按角色分配账号，角色调整自动同步该角色全部用户</div>
             </div>
           </div>
         </div>
@@ -83,9 +83,9 @@
       <div class="section">
         <div class="section-title">如何使用</div>
         <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">点行看预览</div><div class="step-desc">左侧角色表点选任意角色，右侧只读面板展示其菜单权限与数据范围</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">新增 / 编辑走弹窗</div><div class="step-desc">弹窗内填角色名、备注；菜单权限与数据范围两列并排：菜单权限为树结构，勾上级自动带全下级，下级部分选中时上级显示半选</div></div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">定数据范围</div><div class="step-desc">若依五档：全部 / 自定义 / 本院区 / 本院区及以下 / 仅本人；选「自定义」时用与菜单权限同款树勾库房；保存后该角色用户同步生效</div></div></div>
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">点行看预览</div><div class="step-desc">左侧角色表点选任意角色，右侧只读面板展示其菜单权限</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">新增 / 编辑走弹窗</div><div class="step-desc">弹窗内填角色名、备注；菜单权限为树结构，勾上级自动带全下级，下级部分选中时上级显示半选</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">库房/药房授权不在这里</div><div class="step-desc">到用户管理对该用户点「授权」，按院区树勾库房/药房；保存后该用户登录即可看到</div></div></div>
         </div>
       </div>
 
@@ -93,7 +93,7 @@
         <div class="section-title">示例</div>
         <div class="example-box">
           <div class="example-title">场景示例</div>
-          <div class="example-text">编辑「发药药师」：菜单权限勾了处方列表·查看、发药工作台·查看+发药、拆零工作台·拆包；数据范围选<strong>自定义数据权限</strong>并勾选「门诊药房」→ 该角色下 12 名药师登录后只见门诊药房数据，无需在用户页逐人配置。</div>
+          <div class="example-text">编辑「发药药师」：菜单权限勾了处方发药扫码·查看+发药、处方取药赋码·赋码 → 保存后该角色下 12 名药师的菜单同步更新；他们能进哪个药房，在用户管理逐人「授权」。</div>
         </div>
       </div>
 
@@ -101,8 +101,8 @@
         <div class="section-title">场景呼应</div>
         <div class="example-list">
           <div class="example-item">
-            <div class="example-item-title">角色管理（定权限模板 + 数据范围）→ 用户管理（多选角色套用到人）</div>
-            <div class="example-item-desc">数据权限模型对齐若依（ruoyi-vue-pro 39.2k star）：范围挂角色、用户继承；内置标准角色不可删除，可新增自定义角色（如麻精药品药师）。</div>
+            <div class="example-item-title">角色管理（定菜单权限）→ 用户管理（勾角色 + 授权库房/药房）</div>
+            <div class="example-item-desc">内置标准角色不可删除，可新增自定义角色（如麻精药品药师）；库房/药房授权与角色解耦，换岗顶班不用改角色。</div>
           </div>
         </div>
       </div>
@@ -118,10 +118,10 @@
 
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/roles.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/roles.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

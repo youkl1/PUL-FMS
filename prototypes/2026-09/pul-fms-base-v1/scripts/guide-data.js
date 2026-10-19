@@ -12,10 +12,8 @@ window.GUIDE_DATA = {
     { key: 'wh',       group: '库房管理', icon: 'warehouse' },
     { key: 'ph',       group: '药房管理', icon: 'box'       },
     { key: 'disp',     group: '出库管理', icon: 'rx'        },
-    { key: 'his',      group: 'HIS单据',  icon: 'search'    },
-    { key: 'inv',      group: '盘点管理', icon: 'clipboard' },
-    { key: 'ledger',   group: '台账管理', icon: 'chart'     },
-    { key: 'mi',       group: '医保管理', icon: 'shield'    },
+    { key: 'scan',     group: '扫码管理', icon: 'scan'      },
+    // his/inv/ledger/mi 四组 2026-10-15 随侧栏摘单一并下线导览入口；modules 内容保留待恢复
     { key: 'sys',      group: '系统管理', icon: 'key'       }
   ],
   modules: {
@@ -43,7 +41,7 @@ window.GUIDE_DATA = {
     purchase: {
       tagline: '药从供应商到库房：订、收、退',
       roles: '库管员',
-      case: '阿莫西林60盒到货 → 扫码/人工验收入库；不合格品扫码退供应商，异常码人工补录不卡单',
+      case: '阿莫西林60盒到货 → 下载自动解析+库存码校验，解析成功直接审核入库（扫码可选核对）；不合格品扫码退供应商，异常码人工补录不卡单',
       diagrams: [
         { f: '02-purchase-in.svg', t: '采购到货入库（到货单一页走完）', note: '自动拉取/手动新增 → 扫码或免扫码验收 → 审核生成入库单' },
         { f: '17-purchase-state-machine.svg', t: '到货单进度状态机', note: '进度一维 + 异常第二维' }
@@ -68,7 +66,6 @@ window.GUIDE_DATA = {
         othIn:     { desc: '无单入库·扫码（赠品等）', cat: 'fix' },
         whstock:   { desc: '效期/冻结一目了然',  cat: 'qry' },
         pick:      { desc: '按申请单拣货出库',   cat: 'fwd', note: '仅扫码 · 人工通道规划中' },
-        quickScan: { desc: '高拍仪连续扫码直出', cat: 'fwd' },
         pickOut:   { desc: '出库单台账·审核跳转', cat: 'qry' },
         retIn:     { desc: '药房退回接收+库房直收', cat: 'rev' },
         othOut:    { desc: '无单出库（救急）',   cat: 'fix' },
@@ -87,9 +84,8 @@ window.GUIDE_DATA = {
       ],
       menus: {
         req:      { desc: '向库房申领',     cat: 'fwd' },
-        reqIn:    { desc: '领用到货入库',   cat: 'fwd' },
+        reqIn:    { desc: '在途单台账',     cat: 'fwd' },
         shelfQ:   { desc: '上架异常排查',   cat: 'fix' },
-        shelf:    { desc: '扫码上架',       cat: 'fwd' },
         light:    { desc: '补药指示灯亮',   cat: 'fwd' },
         shelfOff: { desc: '扫码下架',       cat: 'rev' },
         retOut:   { desc: '按领用出库单退回', cat: 'rev' },
@@ -129,9 +125,20 @@ window.GUIDE_DATA = {
         { key: 'arrive', note: '发药扫码异常在到货单页「异常码台账」补录（采购管理）' }
       ]
     },
+    // 扫码管理（2026-10-11）：Round BG 收编三作业页 → Round BH 一体化拍板——菜单只留统一入口+沙盒，
+    //   quick-scan/ph-scan-in/ph-shelf 摘菜单转深链（页面=重定向壳，billNo 由 scan-hub 全池反查承接）
+    scan: {
+      tagline: '追溯码作业的通用能力：一条主干 + 清单四态，现场扫码一个入口点完',
+      roles: '库管员 · 药房药师',
+      case: '统一扫码页七场景待办队列：采购入库/采购退货/调拨出库/调拨入库/药品上架页内扫码审核；门诊出药/住院摆药跳出处方域工作流',
+      diagrams: [],
+      menus: {
+        scanHub: { desc: '统一扫码工作台（唯一作业入口：七场景队列+页内扫码+按药品清单扫码开关）', cat: 'fwd' },
+        scanLab: { desc: '统一扫码流程验证（6 场景 × 清单四态沙盒）', cat: 'fix' }
+      }
+    },
     his: {
-      tagline: 'HIS 侧单据对账：处方、摆药的只读视图',
-      roles: '药房药师 · 院区管理员',
+      tagline: 'HIS 侧单据对账：处方、摆药的只读视图',      roles: '药房药师 · 院区管理员',
       case: '医保对账日：按处方单号查张伟的处方 → 药品汇总核对发药总量，与 HIS 逐张对齐',
       diagrams: [],
       menus: {

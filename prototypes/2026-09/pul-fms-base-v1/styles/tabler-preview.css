@@ -46,6 +46,17 @@
   margin-left: auto; font-size: 10px; padding: 1px 6px; border-radius: 4px;
   background: rgba(255,255,255,.14); color: rgba(255,255,255,.75); flex-shrink: 0;
 }
+/* 「新」chip：自主新增菜单标记（需求来源维度），琥珀色与灰白 pending-badge（实现状态维度）区分 */
+.app-nav-item .origin-badge, .app-nav-legend .origin-badge {
+  margin-left: 6px; font-size: 10px; padding: 0 5px; border-radius: 4px; line-height: 16px;
+  background: #f59f00; color: #fff; flex-shrink: 0; font-style: normal;
+}
+/* 侧边栏底部图例 */
+.app-nav-legend {
+  padding: 10px 14px; border-top: 1px solid rgba(255,255,255,.12); flex-shrink: 0;
+  font-size: 11px; color: rgba(255,255,255,.5); display: flex; align-items: center;
+}
+.app-nav-legend .origin-badge { margin-left: 0; margin-right: 6px; }
 /* ===== 菜单组上下折叠（手风琴）：点组标题展开/收起，默认只展开当前页所在组 ===== */
 /* 字号层级：主菜单(组) 14px > 菜单项 13px ≥ 子组 12.5px，主菜单必须最醒目 */
 .app-nav-group-title {
@@ -94,6 +105,19 @@
   padding: 0 3px; border-radius: 3px;
 }
 .app-tab .tab-x:hover { color: #dc2626; background: #fee2e2; }
+
+/* ===== 页签右键菜单（批量关闭；共享层无此组件，自写，沿用页签视觉语言） ===== */
+.app-tab-menu {
+  position: fixed; z-index: 3000; min-width: 148px; padding: 4px;
+  background: #fff; border: 1px solid #e6e8eb; border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+.app-tab-menu-item {
+  padding: 6px 12px; font-size: 12.5px; color: #1e293b; border-radius: 4px;
+  cursor: pointer; user-select: none;
+  transition: background 150ms ease-out, color 150ms ease-out;
+}
+.app-tab-menu-item:hover { background: #f1f5f9; color: #206bc4; }
 
 /* ===== 顶部用户条 ===== */
 .app-topbar {
@@ -170,3 +194,8 @@
 .org-node-l1 { background: #dbeafe; color: #1d4ed8; }
 .org-node-l2 { background: #dcfce7; color: #15803d; }
 .org-node-l3 { background: #f1f5f9; color: #475569; }
+
+/* ===== embed 模式（2026-10-13 Round BT：页面以弹窗 iframe 内嵌复用，如统一扫码弹窗）——藏壳层只留业务区 ===== */
+.app-embed { display: block; min-height: 0; }
+.app-embed > .app-sidebar, .app-embed .app-topbar, .app-embed .app-tabs { display: none !important; }
+.app-embed .app-main { width: 100%; }

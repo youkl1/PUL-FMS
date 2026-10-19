@@ -1,0 +1,44 @@
+%% 15 领用备货出库 → 药房入库闭环（时序图）
+%% 唯一事实源：本 .mmd；渲染：python _render.py（playwright + 本地 mermaid@10 UMD）
+%% 口径与系统一致：出库审核即扣账（在架扣减→在途），药房确认入库闭环清零在途
+sequenceDiagram
+    autonumber
+    actor P as 药房药师
+    participant REQ as ph-req 领用申请
+    actor K as 库管员
+    participant PICK as wh-pick 领用备货出库
+    participant WH as 库房在架 stockAll
+    participant IN as ph-req-in 领用入库
+    participant PH as 药房在架 pharmacyStock
+
+    P->>REQ: 提交申请（品规+数量，不扫码）
+    REQ-->>PICK: reqPool 新增「待备货」申请单
+
+    K->>PICK: 选择申请单（或「一步式领用」直出）
+    PICK->>WH: 按 FEFO+货位 给出建议码
+    loop 逐码备货
+        K->>PICK: 扫在架追溯码
+        alt 码在架且匹配申请药品
+            PICK-->>K: ✓ 加入码清单（扫箱码按换算链折合 1箱=60瓶）
+        else 非在架 / 已出库 / 过期停用
+            PICK-->>K: ✗ 硬拦截不入单
+        end
+    end
+
+    K->>PICK: 审核出库（弹窗核对 申请数 vs 实出数）
+    PICK->>WH: 扣账：码出在架 → pickDocs「已出库」在途
+    Note over PICK,WH: 出库审核即扣账，在途单列
+
+    P->>IN: 打开在途单，逐码核对
+    loop 双通道核对（扫码 / 点行）
+        P->>IN: 扫到货码
+        alt 码在本出库单内
+            IN-->>P: ✓ 已核对（重复扫提醒）
+        else 不在本单
+            IN-->>P: ✗ 拦截，禁止混入
+        end
+    end
+    P->>IN: 全部核对完 → 确认入库
+    IN->>PH: pickDocs 置「药房已入库」，码进药房在架（可后续上架写 phLoc）
+    IN-->>WH: 在途清零，闭环
+    Note over IN,PH: 库房页「确认药房入库」一键闭环写同一字段，两入口等价

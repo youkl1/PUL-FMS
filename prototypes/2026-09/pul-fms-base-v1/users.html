@@ -6,11 +6,11 @@
   <meta name="prototype-category" content="web-admin">
   <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 系统管理">
   <title>用户管理 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/users.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/users.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -58,7 +58,7 @@
           <p class="subtitle">系统管理 · 账号生命周期与角色分配</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>本页管理登录账号的全生命周期：新增账号（填 HIS 编号、手机、邮箱）、多选角色套用权限模板、重置密码、禁用/恢复；数据权限不在此配置 —— 随角色自动生效（若依 DataScope 模型）。</p>
+      <p class="lead"><strong>一句话概括：</strong>本页管理登录账号的全生命周期：新增账号（填 HIS 编号、手机、邮箱）、勾选角色决定能进哪些菜单、勾选所属院区、重置密码、禁用/恢复；能进哪些库房/药房在列表点「授权」单独设置。</p>
 
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
@@ -67,14 +67,14 @@
             <div class="info-card-icon">👤</div>
             <div class="info-card-body">
               <div class="info-card-title">系统管理员 / 院区管理员</div>
-              <div class="info-card-desc">按层级创建账号：总院管理员建全院账号，院区管理员只能建本院区账号（4.4.1）</div>
+              <div class="info-card-desc">按层级创建账号：总院管理员建全院账号，院区管理员只建本院区账号</div>
             </div>
           </div>
           <div class="info-card">
             <div class="info-card-icon">🔀</div>
             <div class="info-card-body">
               <div class="info-card-title">上下游</div>
-              <div class="info-card-desc">上游：角色管理（权限模板与数据范围来源）；下游：用户拿账号登录，系统按角色数据范围分流（单节点直达 / 多节点再选模式与节点），权限变更需上级审批（4.4.2）</div>
+              <div class="info-card-desc">上游：角色管理（决定能进哪些菜单）；下游：用户拿账号登录，按授权的库房/药房选择进入（只有一个时直接进入）</div>
             </div>
           </div>
         </div>
@@ -84,8 +84,8 @@
         <div class="section-title">如何使用</div>
         <div class="steps">
           <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">筛选定位用户</div><div class="step-desc">按院区 / 角色 / 状态筛选或搜索，点「查询」生效、「重置」清空；底部翻页</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">新增或编辑用户</div><div class="step-desc">填用户名/姓名/HIS用户编号/手机/邮箱 → 多选角色 → 设状态（正常/禁用）；数据权限随角色自动带出，无需手配</div></div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">重置密码 / 禁用</div><div class="step-desc">勾选行后点顶部「重置密码」；人员离职点「禁用」冻结账号（4.4.4），禁用账号登录被拒</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">新增 / 编辑 / 授权</div><div class="step-desc">填用户名/姓名/HIS用户编号/手机/邮箱 → 勾角色 → 勾所属院区（可多选）→ 设状态；保存后点「授权」，在树里勾能进的库房/药房（保存授权会记录操作人和时间）</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">重置密码 / 禁用</div><div class="step-desc">勾选行后点顶部「重置密码」；人员离职点「禁用」冻结账号，禁用账号登录被拒</div></div></div>
         </div>
       </div>
 
@@ -93,7 +93,7 @@
         <div class="section-title">示例</div>
         <div class="example-box">
           <div class="example-title">场景示例</div>
-          <div class="example-text">新建「住院药房药师 · 小李」：填用户名 pharm.li、HIS 编号 HIS0456，角色勾<strong>发药药师</strong> → 保存后其数据权限自动等于发药药师角色的范围（自定义：门诊药房），登录时系统识别为单节点角色<strong>直接进工作台</strong>，只见门诊药房数据 —— 管理员无需再碰数据权限。</div>
+          <div class="example-text">新建「住院药房药师 · 小李」：填用户名 pharm.li、HIS 编号 HIS0456，角色勾<strong>发药药师</strong>，所属院区勾<strong>中心院区</strong> → 保存后点「授权」勾<strong>住院药房</strong> → 小李登录时直接进住院药房工作台，只见住院药房数据。</div>
         </div>
       </div>
 
@@ -101,8 +101,8 @@
         <div class="section-title">场景呼应</div>
         <div class="example-list">
           <div class="example-item">
-            <div class="example-item-title">角色管理（模板）→ 用户管理（套用到人）→ 登录页（选院区/库房验证）</div>
-            <div class="example-item-desc">本页创建/调整的账号可直接去登录页验证；「数据范围」列展示的是其角色携带的若依五档范围，保持单一事实来源。</div>
+            <div class="example-item-title">角色管理（定菜单权限）→ 用户管理（建账号 + 授权库房/药房）→ 登录页（选院区/库房验证）</div>
+            <div class="example-item-desc">本页创建/调整的账号可直接去登录页验证；「数据范围」列展示该用户被授权的库房/药房，与角色无关。</div>
           </div>
         </div>
       </div>
@@ -118,10 +118,10 @@
 
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/users.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/users.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

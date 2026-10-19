@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
-  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 库房业务">
-  <title>其他出库 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 库房管理">
+  <title>其他出库单 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
-  <link rel="stylesheet" href="styles/wh.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/wh.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -32,8 +32,8 @@
     <header class="pi-header">
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">其他出库</h1>
-        <span class="pi-subtitle">原型页 · 无下游单据的通用出库：借出/样品/其他，扫码选在架码扣减</span>
+        <h1 class="pi-title">其他出库单</h1>
+        <span class="pi-subtitle">原型页 · 无下游单据的通用出库：借出/样品/其他，选在架码+扫码核对（进度持久化）+ 审核表单扣减</span>
       </div>
       <div class="pi-header-right">
         <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
@@ -54,41 +54,42 @@
       <div class="detail-modal-header">
         <div class="detail-modal-icon">📤</div>
         <div class="detail-modal-title-wrap">
-          <h2>其他出库</h2>
-          <p class="subtitle">库房业务 · 通用出库兜底：领用/退货/损耗之外的码出通道</p>
+          <h2>其他出库单</h2>
+          <p class="subtitle">库房管理 · 通用出库兜底：领用/退货/损耗之外的码出通道</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>领用、退货、损耗以外的出库都走这里：借出、样品、其他。逐码扫码选在架码，审核后码出库房（终态，不再参与库存）。</p>
+      <p class="lead"><strong>一句话概括：</strong>领用、退货、损耗以外的出库都走这里：借出、样品、其他。从本库在架码勾选入清单（选入即预占），扫码核对实物（核对进度落码记录，刷新/切单可续作），全部核对完成后审核表单确认出库（终态，不再参与库存）。列表「实物数量/解析数量/扫码数量」三列与采购到货单同口径。</p>
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
         <div class="card-grid">
           <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
             <div class="info-card-title">药库管理员</div>
-            <div class="info-card-desc">建单（选出库类型+接收方）→ 扫码选码 → 审核出库</div></div></div>
+            <div class="info-card-desc">建单（选出库类型+接收方）→ 选在架码 → 扫码核对 → 审核出库</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
-            <div class="info-card-desc">上游：无（人工发起）；下游：审核后库房库存即时扣减；借出归还应走「其他入库」回补</div></div></div>
+            <div class="info-card-desc">上游：无（人工发起）；下游：审核后库房库存查询即时扣减；借出归还应走「其他入库单」回补</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">如何使用</div>
         <div class="steps">
           <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">建单</div><div class="step-desc">「+ 新增出库单」选类型（借出/样品/其他）+ 接收方 + 备注</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">选码</div><div class="step-desc">「扫码选码」逐码扫入在架码；非在架码红色拦截</div></div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">审核</div><div class="step-desc">确认码清单后审核出库，码从在架扣除</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">选在架码</div><div class="step-desc">从本库在架勾选要出的码（选入即预占，其他出库单不可再选）</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">扫码核对</div><div class="step-desc">行内「扫码核对」逐码扫实物：单内√已核对（进度落码记录，刷新可续）；在架未入清单⚠提示；非在架×拦截；弹窗内可「直接审核」</div></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">审核</div><div class="step-desc">全部核对完成后审核表单确认出库库房，码从在架扣除（终态）</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">示例</div>
         <div class="example-box"><div class="example-title">样品出库</div>
-          <div class="example-text">药事会评审取样：建「样品」出库单 → 扫 1 盒唯可来（在架）→ 审核 → 库房库存 -1 盒，该码状态终态、不再参与任何后续业务。</div>
+          <div class="example-text">药事会评审取样：建「样品」出库单 → 「选在架码」勾 1 盒唯可来 → 扫该码核对 → 审核 → 库房库存查询 -1 盒，该码状态终态、不再参与任何后续业务。</div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
-          <div class="example-item-title">其他出库（本页）⇄ 其他入库 ⇄ 损耗出库单</div>
-          <div class="example-item-desc">与其他入库互为逆操作（借出归还场景）；与损耗出库的区别：损耗=院内灭失需原因字典，其他出库=离开库房但药品仍存在。</div>
+          <div class="example-item-title">其他出库单（本页）⇄ 其他入库单 ⇄ 损耗出库单</div>
+          <div class="example-item-desc">与其他入库单互为逆操作（借出归还场景）；与损耗出库的区别：损耗=院内灭失需原因字典，其他出库单=离开库房但药品仍存在。列表「实物/解析/扫码」三数量列与明细「码详情/药品清单」页签和采购到货单同构。</div>
         </div></div>
       </div>
     </div>
@@ -98,19 +99,20 @@
     style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
            background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
            font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
-    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 库房业务</span>
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 库房管理</span>
   </div>
 
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/drug-data.js"></script>
-  <script src="scripts/purchase-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/wh-data.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/wh-other-out.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/drug-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/wh-data.js?v=20261015-6"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/doc-detail.js?v=20261016-1"></script>
+  <script src="scripts/wh-other-out.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

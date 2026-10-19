@@ -50,6 +50,26 @@ function ok(name, cond) {
   else { failed++; console.log('  FAIL ' + name); }
 }
 
+console.log('# 药品字典 /api/DM_DrugInfo 必填字段（2026-10-16）');
+var DRUG_REQUIRED = ['drugCode', 'medCode', 'drugName', 'medListCodg', 'minPackUnit', 'formSpec', 'dosForm',
+  'dosageUnit', 'saleUnit', 'priceUnitType', 'minPackQty', 'approval', 'maker', 'supCode', 'supName', 'rxFlag',
+  'price', 'retailPrice', 'storeCode', 'warehouse', 'coded', 'opUnpack', 'ipUnpack', 'drugcate', 'drugType',
+  'status', 'medWhCode', 'medWhName', 'lastUpdateTime', 'tracUnit', 'tracRate', 'selUnTrac', 'meaUnit', 'meaRatio'];
+function drugMissing(d) {
+  return DRUG_REQUIRED.filter(function (k) { return d[k] === undefined || d[k] === null || d[k] === ''; })
+    .map(function (k) { return d.drugCode + '.' + k; });
+}
+var drugSeed = window.PUL_DRUG.load();
+eq('种子主表必填字段完整', drugSeed.drugs.reduce(function (a, d) { return a.concat(drugMissing(d)); }, []), []);
+ok('一级标识码与包装规格完整', drugSeed.drugs.every(function (d) {
+  return drugSeed.idcodes.some(function (c) { return c.drugCode === d.drugCode && +c.level === 1 && c.idcode && c.packSpec; });
+}));
+var legacyDrug = window.PUL_DRUG.normalizeDrug({ drugCode: 'OLD001' });
+eq('老记录幂等补齐必填字段', drugMissing(legacyDrug), []);
+var legacyMedCode = legacyDrug.medCode;
+window.PUL_DRUG.normalizeDrug(legacyDrug);
+eq('重复迁移不覆盖已补值', legacyDrug.medCode, legacyMedCode);
+
 var CODE_A = '8461935999000018000';
 var CODE_B = '8416917999000018000';
 function c(code, extra) {
@@ -72,13 +92,13 @@ var wh = {
 var zx = W.stockAll(pch, wh, '中心库').map(function (x) { return x.code; });
 ok('中心库看不到分院码', zx.indexOf(CODE_B) < 0);
 ok('待出库未扣账不扣在架', zx.indexOf(CODE_A) >= 0);
-wh.pickDocs[0].status = '已出库·待入库';
+wh.pickDocs[0].status = '已出库';
 zx = W.stockAll(pch, wh, '中心库').map(function (x) { return x.code; });
-ok('已出库·待入库才扣在架', zx.indexOf(CODE_A) < 0);
+ok('已出库才扣在架', zx.indexOf(CODE_A) < 0);
 
 console.log('# 拆零不扣整码');
 var pickIn = {
-  billNo: 'LYCK1', status: '已入库·待上架', pharmacy: '门诊药房', warehouse: '中心库',
+  billNo: 'LYCK1', status: '已入库', pharmacy: '门诊药房', warehouse: '中心库',
   codes: [c(CODE_A)]
 };
 var wh2 = { pickDocs: [pickIn], retPool: [], phLossDocs: [] };
@@ -134,13 +154,13 @@ console.log('# ledger 不含待出库未过账单（2026-10-05 领用单五态�
 window.store.update({ wh: {
   pickDocs: [
     { billNo: 'LYCK-DRAFT1', status: '待出库', warehouse: '中心库', pharmacy: '门诊药房', date: '2026-10-01 09:00', codes: [c(CODE_A)] },
-    { billNo: 'LYCK-POST1', status: '已出库·待入库', warehouse: '中心库', pharmacy: '门诊药房', date: '2026-10-01 10:00', outTime: '2026-10-01 10:05', codes: [c(CODE_B)] }
+    { billNo: 'LYCK-POST1', status: '已出库', warehouse: '中心库', pharmacy: '门诊药房', date: '2026-10-01 10:00', outTime: '2026-10-01 10:05', codes: [c(CODE_B)] }
   ],
   retInDocs: [], othInDocs: [], othOutDocs: [], lossDocs: [], retPool: [], phLossDocs: []
 } });
 var evs = window.PUL_LEDGER.collect();
 ok('待出库未过账不进流水', !evs.some(function (e) { return e.billNo === 'LYCK-DRAFT1'; }));
-ok('已出库·待入库进流水', evs.some(function (e) { return e.billNo === 'LYCK-POST1'; }));
+ok('已出库进流水', evs.some(function (e) { return e.billNo === 'LYCK-POST1'; }));
 
 console.log('# reqPool→pickDocs 迁移（2026-10-05 领用单统一·两池并一池）');
 window.store.update({ wh: {
@@ -161,7 +181,7 @@ mig.pickDocs.forEach(function (d) {
   if (d.billNo === 'LY-T1') mNew = d;
 });
 eq('老备货中→待出库', mT0 && mT0.status, '待出库');
-eq('老已出库→已出库·待入库', mT1 && mT1.status, '已出库·待入库');
+eq('老已出库→已出库', mT1 && mT1.status, '已出库');
 eq('已完成申请并入既有单（items 回填）', mT1 && mT1.items && mT1.items.length, 1);
 eq('并单后废除 reqNo 字段', mT1 && mT1.reqNo, undefined);
 eq('并单 items docQty 按备齐回填', mT1 && mT1.items[0] && mT1.items[0].docQty, 2);
@@ -172,13 +192,24 @@ eq('reqPool 已清空', mig.reqPool, []);
 var mig2 = W.load();
 eq('迁移幂等（单数不变）', mig2.pickDocs.length, mig.pickDocs.length);
 
-console.log('# pickStatus 推导：已入库·待上架 且全码有 phLoc → 已上架');
-ok('全码上架推导已上架', W.pickStatus({ status: '已入库·待上架', codes: [c(CODE_A, { phLoc: 'M-01' })] }) === '已上架');
-ok('部分上架仍已入库·待上架', W.pickStatus({ status: '已入库·待上架', codes: [c(CODE_A, { phLoc: 'M-01' }), c(CODE_B)] }) === '已入库·待上架');
-ok('空码单不推导已上架', W.pickStatus({ status: '已入库·待上架', codes: [] }) === '已入库·待上架');
-eq('pickPosted 五态口径', ['待提交', '待出库', '已出库·待入库', '已入库·待上架', '已作废'].map(function (s) {
+console.log('# pickStatus 推导：已入库 且全码有 phLoc → 推导已上架（展示在独立上架状态列）');
+ok('全码上架推导已上架', W.pickStatus({ status: '已入库', codes: [c(CODE_A, { phLoc: 'M-01' })] }) === '已上架');
+ok('部分上架仍已入库', W.pickStatus({ status: '已入库', codes: [c(CODE_A, { phLoc: 'M-01' }), c(CODE_B)] }) === '已入库');
+ok('空码单不推导已上架', W.pickStatus({ status: '已入库', codes: [] }) === '已入库');
+eq('pickPosted 五态口径（词表 v3）', ['草稿', '待出库', '已出库', '已入库', '已作废'].map(function (s) {
   return W.pickPosted({ status: s });
 }), [false, false, true, true, false]);
+
+console.log('# OLD2NEW v3 迁移：旧复合词/旧词表 → 新五态（2026-10-08）');
+var OLD2NEW = { '待提交': '草稿', '待备货': '待出库', '备货中': '待出库', '已出库·待入库': '已出库', '已出库': '已出库', '药房已入库': '已入库', '已入库·待上架': '已入库', '已完成': '已入库' };
+var oldWords = ['待提交', '待备货', '备货中', '已出库·待入库', '药房已入库', '已入库·待上架', '已完成'];
+var badMig = oldWords.filter(function (w) {
+  var st = OLD2NEW[w];
+  return !st || ['草稿', '待出库', '已出库', '已入库', '已作废'].indexOf(st) < 0;
+});
+ok('旧词映射全部落在五态内', badMig.length === 0);
+eq('迁移后过账口径不变（已出库·待入库→已出库仍过账）', W.pickPosted({ status: OLD2NEW['已出库·待入库'] }), true);
+eq('迁移后过账口径不变（已入库·待上架→已入库仍过账）', W.pickPosted({ status: OLD2NEW['已入库·待上架'] }), true);
 
 console.log('# retPool migrate 补 refNo（2026-10-03 药房退回锚定领用出库单）');
 window.store.update({ wh: {

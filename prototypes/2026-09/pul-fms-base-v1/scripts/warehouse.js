@@ -1,10 +1,10 @@
 /**
- * warehouse.js — 库房库位字典（主子表）：库房挂院区，一院区多库房，一库房多库位
+ * warehouse.js — 库房库位维护字典（主子表）：库房挂院区，一院区多库房，一库房多库位
  * 主表：库房（编码/名称/类型/所属院区/状态）；选中行 → 库位子表（可新增/启停）
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'wh', crumb: ['组织管理', '库房库位'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'wh', crumb: ['基础管理', '库房库位维护'] });
   if (!content) return;
 
   var F = window.PUL_FACILITY, UI = window.PchUI, esc = UI.esc;
@@ -59,7 +59,7 @@
     return '<div class="card mb-3"><div class="table-responsive"><table class="table table-vcenter table-hover card-table">' +
       '<thead><tr><th>序号</th><th>库房编码</th><th>库房名称</th><th>库房类型</th><th>所属院区</th><th class="text-center">库位数</th><th>状态</th><th>操作</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div>' +
-      '<div class="card-footer text-secondary" style="font-size:12.5px;">共 ' + list.length + ' 个库房 · 库房必须指定所属院区，一个院区可有多个库房 · 点行查看库位子表</div></div>';
+      '</div>';
   }
 
   function subCard() {

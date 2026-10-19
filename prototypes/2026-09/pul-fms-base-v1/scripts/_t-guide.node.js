@@ -45,11 +45,12 @@ GD.order.forEach(function (m) {
 });
 
 // 3) 除医保/组织/系统/HIS（纯维护/纯查询类）外每模块至少一个 fix 兜底入口
+//    cat='fix' 独立兜底页，或 fix:true 兜底能力并入主流程页（2026-10-03 异常码台账并入到货单页）
 GD.order.forEach(function (m) {
   if (m.key === 'mi' || m.key === 'sys' || m.key === 'org' || m.key === 'his') return;
   var mod = GD.modules[m.key] || {};
   var menus = mod.menus || {};
-  ok(m.group + ' 有兜底入口', Object.keys(menus).some(function (k) { return menus[k].cat === 'fix'; }));
+  ok(m.group + ' 有兜底入口', Object.keys(menus).some(function (k) { return menus[k].cat === 'fix' || menus[k].fix === true; }));
 });
 
 // 4) diagrams 图文件存在（prototypes/shared/diagrams 唯一源，scripts/ 上三级到 prototypes/）

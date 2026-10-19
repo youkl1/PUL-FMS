@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
   <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 基础管理">
-  <title>基站灯组 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <title>基站灯组维护 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -31,8 +31,8 @@
     <header class="pi-header">
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">基站灯组</h1>
-        <span class="pi-subtitle">原型页 · 主子表：基站（挂药房）↔ 取药灯组（扫码新增）（客户新版字典 #6，本期只做字典）</span>
+        <h1 class="pi-title">基站灯组维护</h1>
+        <span class="pi-subtitle">原型页 · 基站（挂药房→货位，灯组/单灯类型+IP/端口）↔ 灯组平铺（扫码新增·≤200·可改绑/游离）</span>
       </div>
       <div class="pi-header-right">
         <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
@@ -53,35 +53,36 @@
       <div class="detail-modal-header">
         <div class="detail-modal-icon">💡</div>
         <div class="detail-modal-title-wrap">
-          <h2>基站灯组</h2>
+          <h2>基站灯组维护</h2>
           <p class="subtitle">基础管理 · 基站挂药房，取药灯组一律扫码新增</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>本页维护取药灯控的两级结构：基站必须指定所属药房（一台基站覆盖一个药房的取药区域），基站下的取药灯组<b>只认扫码新增</b>——扫灯组机身条码登记地址码，杜绝手工录入错号。</p>
+      <p class="lead"><strong>一句话概括：</strong>本页维护取药灯控台账：基站挂「院区→药房→货位」，分灯组基站/单灯基站，带 IP/端口/说明；取药灯组<b>只认扫码新增</b>（扫机身条码、支持连续扫），一个基站最多 200 个灯组。灯组可改绑基站、可取消所属基站变游离，右栏可切「游离灯组」视图；「取药槽编号」列即灯组对照情况（绑定在系统管理「取药槽灯组对照」维护）。</p>
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
         <div class="card-grid">
           <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
             <div class="info-card-title">系统管理员（信息科）</div>
-            <div class="info-card-desc">新增基站、扫码登记灯组；重复扫同一地址码会被拦截提示</div></div></div>
+            <div class="info-card-desc">新增基站、扫码登记灯组；重复扫同一地址码会被拦截提示；单基站灯组达 200 上限后禁止再登记</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
-            <div class="info-card-desc">上游：药房货位（基站挂药房）；下游（后期）：取药槽 ↔ 灯组一对一绑定，发药时亮灯指引</div></div></div>
+            <div class="info-card-desc">上游：药房货位维护（基站挂药房的货位）；下游：取药槽↔灯组一对一绑定（系统管理「取药槽灯组对照」），发药时亮灯指引</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">如何使用</div>
         <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">查基站</div><div class="step-desc">按所属药房/名称筛选；点行查看该基站的灯组子表</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">扫码新增灯组</div><div class="step-desc">选中基站 → 点「扫码新增灯组」→ 逐只扫机身条码，回车即登记，可连续扫</div></div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">移除灯组</div><div class="step-desc">灯组损坏/更换时在子表移除（需确认，移除后对应槽位无灯可亮）</div></div></div>
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">查基站</div><div class="step-desc">按药房/名称/编号/基站IP筛选；点行右侧显示该基站的灯组</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">扫码新增灯组</div><div class="step-desc">基站行内点 ⚡ → 逐只扫机身条码，回车即登记，可连续扫；重复扫与超 200 上限均拦截</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">灯组归属管理</div><div class="step-desc">灯组可改绑基站（⇄）、取消所属基站变游离（⊘）；右栏切「游离灯组」视图统一查看与重新分配</div></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">删除校验</div><div class="step-desc">基站下有灯组不能删；灯组已对照取药槽不能移除，均提示原因</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
-          <div class="example-item-title">基站灯组（本页）↔ 取药柜（后期绑定）</div>
-          <div class="example-item-desc">客户口径：一个取药槽对应一个取药灯组，一个药品可占多个取药槽——绑定关系维护后期开放；本期字典先把基站与灯组台账立住。</div>
+          <div class="example-item-title">基站灯组维护（本页）↔ 取药槽灯组对照 ↔ 取药柜维护</div>
+          <div class="example-item-desc">一个取药槽对应一个取药灯组（一对一，仅物理柜）；灯组表「取药槽编号」列实时反映对照结果，绑定动作在「取药槽灯组对照」页扫码完成。</div>
         </div></div>
       </div>
     </div>
@@ -96,12 +97,12 @@
 
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/facility-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/light.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/facility-data.js?v=20261015-3"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/light.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PUL-FMS 原型库</title>
+  <style>
+    :root {
+      --bg: #030712;
+      --bg-elevated: #0b1221;
+      --surface: rgba(17, 25, 40, 0.78);
+      --surface-hover: rgba(23, 33, 54, 0.86);
+      --border: rgba(148, 163, 184, 0.12);
+      --border-strong: rgba(56, 189, 248, 0.28);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --cyan: #22d3ee;
+      --cyan-glow: rgba(34, 211, 238, 0.35);
+      --violet: #8b5cf6;
+      --violet-glow: rgba(139, 92, 246, 0.35);
+      --amber: #f59e0b;
+      --amber-glow: rgba(245, 158, 11, 0.35);
+      --desktop: #38bdf8;
+      --mobile: #34d399;
+      --shadow-card: 0 8px 32px rgba(2, 8, 23, 0.45);
+      --shadow-glow: 0 0 40px rgba(34, 211, 238, 0.10);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* 顶部指挥台 */
+    .site-header {
+      position: relative;
+      background: radial-gradient(ellipse at 50% 0%, rgba(56, 189, 248, 0.18), transparent 55%),
+                  linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg) 100%);
+      color: #fff;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .site-header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(34, 211, 238, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.65), transparent 75%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.65), transparent 75%);
+      pointer-events: none;
+      animation: gridMove 24s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { transform: perspective(500px) translateY(0); }
+      100% { transform: perspective(500px) translateY(40px); }
+    }
+
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .glow-orb.cyan { top: -80px; right: 10%; width: 320px; height: 320px; background: var(--cyan); }
+    .glow-orb.violet { bottom: -60px; left: 5%; width: 260px; height: 260px; background: var(--violet); }
+
+    .header-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 64px 24px 48px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .header-main { flex: 1; min-width: 0; }
+
+    .header-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 14px;
+      text-shadow: 0 0 18px var(--cyan-glow);
+    }
+
+    .header-label .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan-glow);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.65; transform: scale(1.15); }
+    }
+
+    h1 {
+      font-size: clamp(36px, 5.6vw, 56px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.08;
+      margin-bottom: 12px;
+      background: linear-gradient(90deg, #fff 0%, #bae6fd 55%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 16px;
+      max-width: 540px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+
+    .stat {
+      text-align: left;
+      min-width: 92px;
+      padding: 16px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+      transition: transform 200ms ease-out, border-color 200ms ease-out;
+    }
+
+    .stat::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0.6;
+    }
+
+    .stat:hover { transform: translateY(-3px); border-color: var(--border-strong); }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-value.accent { color: var(--amber); text-shadow: 0 0 18px var(--amber-glow); }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 6px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    /* 业务分类 */
+    .business-section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .section-title span {
+      color: var(--cyan);
+      text-shadow: 0 0 16px var(--cyan-glow);
+    }
+
+    .section-desc {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-top: 6px;
+    }
+
+    .business-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .business-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-decoration: none;
+      color: var(--text);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), border-color 220ms ease-out, box-shadow 220ms ease-out;
+    }
+
+    .business-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 50%), rgba(34, 211, 238, 0.10), transparent 40%);
+      opacity: 0;
+      transition: opacity 220ms ease-out;
+      pointer-events: none;
+    }
+
+    .business-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-card), var(--shadow-glow);
+    }
+
+    .business-card:hover::before { opacity: 1; }
+
+    .business-card-accent {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      opacity: 0.8;
+    }
+
+    .business-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .business-card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+
+    .business-card-count {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--cyan);
+      background: rgba(34, 211, 238, 0.10);
+      border: 1px solid rgba(34, 211, 238, 0.22);
+      padding: 4px 10px;
+      border-radius: 999px;
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.12);
+    }
+
+    .business-card-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .business-card-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: auto;
+    }
+
+    .business-card-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .business-card-arrow {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 18px;
+      height: 18px;
+      color: var(--text-dim);
+      transition: transform 180ms ease-out, color 180ms ease-out;
+    }
+
+    .business-card:hover .business-card-arrow {
+      color: var(--cyan);
+      transform: translate(3px, -3px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 28px 24px 40px;
+      font-size: 12px;
+      color: var(--text-dim);
+      border-top: 1px solid var(--border);
+      background: var(--bg-elevated);
+    }
+
+    @media (max-width: 1024px) {
+      .business-grid { grid-template-columns: repeat(2, 1fr); }
+      .header-inner { flex-direction: column; align-items: flex-start; }
+      .stats { align-self: flex-start; }
+    }
+
+    @media (max-width: 720px) {
+      .header-inner { padding: 48px 16px 36px; }
+      h1 { font-size: 34px; }
+      .stats { flex-wrap: wrap; }
+      .business-section { padding: 36px 16px 48px; }
+      .business-grid { grid-template-columns: 1fr; }
+      .section-header { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .site-header::before, .header-label .dot { animation: none; }
+      .business-card, .business-card::before, .business-card-arrow, .stat { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="glow-orb cyan" aria-hidden="true"></div>
+    <div class="glow-orb violet" aria-hidden="true"></div>
+    <div class="header-inner">
+      <div class="header-main">
+        <div class="header-label"><span class="dot" aria-hidden="true"></span>Prototype Library</div>
+        <h1>PUL-FMS 原型库</h1>
+        <p class="subtitle">高保真交互原型 · 按月归档 · 即点即看</p>
+      </div>
+      <div class="stats" role="group" aria-label="原型统计">
+        <div class="stat"><div class="stat-value">2</div><div class="stat-label">总原型数</div></div>
+        <div class="stat"><div class="stat-value accent">2</div><div class="stat-label">电脑端</div></div>
+        <div class="stat"><div class="stat-value accent">0</div><div class="stat-label">移动端</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="business-section" aria-label="业务分类">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">业务分类 <span>Business Categories</span></h2>
+          <p class="section-desc">按业务线浏览全部原型，点击卡片进入分类详情</p>
+        </div>
+      </div>
+      <div class="business-grid" id="businessGrid">
+        
+        <a class="business-card" href="business/pul-fms-base/" style="--delay: 0ms">
+          <div class="business-card-accent"></div>
+          <div class="business-card-header">
+            <div class="business-card-title">PUL-FMS 药品精细化管理系统 · 基础平台骨架</div>
+            <div class="business-card-count">1</div>
+          </div>
+          <div class="business-card-desc">该分类下暂无描述</div>
+          <div class="business-card-meta">
+            <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg> 电脑端 1</span>
+            <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> 移动端 0</span>
+            <span style="opacity:.7"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 2026-10-16</span>
+          </div>
+          <svg class="business-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a class="business-card" href="business/uncategorized/" style="--delay: 40ms">
+          <div class="business-card-accent"></div>
+          <div class="business-card-header">
+            <div class="business-card-title">PUL-FMS 药品精细化管理系统 · 方案文档</div>
+            <div class="business-card-count">1</div>
+          </div>
+          <div class="business-card-desc">该分类下暂无描述</div>
+          <div class="business-card-meta">
+            <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg> 电脑端 1</span>
+            <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> 移动端 0</span>
+            <span style="opacity:.7"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 2026-10-12</span>
+          </div>
+          <svg class="business-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    部署于 /opt/pul-fms · nginx 静态站点 · 自动同步
+  </footer>
+
+  <script>
+    // 卡片光晕跟随鼠标
+    document.querySelectorAll('.business-card').forEach(function(card) {
+      card.addEventListener('mousemove', function(e) {
+        var rect = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+      });
+    });
+
+    // 交错入场
+    (function() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var cards = document.querySelectorAll('.business-card');
+      cards.forEach(function(card, i) {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(16px)';
+        setTimeout(function() {
+          card.style.transition = 'opacity 400ms ease-out, transform 400ms cubic-bezier(0.16, 1, 0.3, 1)';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 80 + i * 60);
+      });
+    })();
+  </script>
+</body>
+</html>

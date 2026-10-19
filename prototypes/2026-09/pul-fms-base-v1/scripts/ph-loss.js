@@ -54,7 +54,7 @@
     var rowsHtml = list.map(function (d) {
       var audited = d.status === '已审核';
       return '<tr class="pch-doc-row' + (d.billNo === sel ? ' pch-doc-sel' : '') + '" data-sel="' + esc(d.billNo) + '">' +
-        '<td><b>' + esc(d.billNo) + '</b></td><td class="text-secondary">' + esc(d.date) + '</td>' +
+        '<td><b>' + esc(d.billNo) + '</b></td><td>报损出库</td><td class="text-secondary">' + esc(d.date) + '</td>' +
         '<td><span class="badge bg-red-lt">' + esc(d.reason) + '</span></td>' +
         '<td>' + d.codes.length + '</td><td class="text-secondary">' + esc(d.remark || '—') + '</td>' +
         '<td>' + (audited ? '<span class="pch-light mute"><i class="pch-dot"></i>已销毁</span>'
@@ -63,32 +63,33 @@
           ? '<span class="text-secondary" style="font-size:12.5px;">' + esc(d.auditor || '') + '</span>'
           : '<button class="btn btn-sm btn-danger" data-audit="' + esc(d.billNo) + '"' + (d.codes.length ? '' : ' disabled') + '>审核销毁</button>') + '</td></tr>';
     }).join('');
-    if (!list.length) rowsHtml = '<tr><td colspan="7" class="text-center text-secondary" style="padding:28px;">暂无损耗单</td></tr>';
+    if (!list.length) rowsHtml = '<tr><td colspan="8" class="text-center text-secondary" style="padding:28px;">暂无损耗单</td></tr>';
     return '<div class="card mb-3"><div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>单据编号</th><th>日期</th><th>原因</th><th>码数</th><th>说明</th><th>状态</th><th>操作</th></tr></thead>' +
+      '<thead><tr><th>单据编号</th><th>单据类型</th><th>日期</th><th>原因</th><th>码数</th><th>说明</th><th>状态</th><th>操作</th></tr></thead>' +
       '<tbody>' + rowsHtml + '</tbody></table></div>' +
-      '<div class="card-footer" style="font-size:12.5px;"><span class="text-secondary">审核=已销毁终态，只扣本药房在架，不可恢复</span></div></div>';
+      '</div>';
   }
 
+  // 2026-10-18 Task5：报损码清单迁移 PulDocDetail.renderCodes 独立表格（data-del 移除监听不动；卡片壳/扫码选码按钮保留）
   function codesCard() {
     var d = selDoc();
     var body;
     if (!d) {
       body = '<div class="text-center text-secondary" style="padding:28px;">点选单据行，查看码清单</div>';
     } else {
-      var rowsHtml = d.codes.map(function (c, i) {
+      var rows = d.codes.map(function (c) {
         var p = P.parseCode(c.code, DICT);
-        return '<tr><td>' + (i + 1) + '</td>' +
-          '<td style="font-family:Consolas,monospace;font-size:12.5px;">' + esc(c.code) + '</td>' +
-          '<td><b>' + esc(p.dict ? p.dict.drugName : '未解析') + '</b></td>' +
-          '<td>' + esc(c.batch) + '</td><td>' + esc(c.expDate) + '</td>' +
-          (d.status === '已审核' ? '<td class="text-secondary">—</td>'
-            : '<td><button class="btn btn-sm btn-outline-danger" data-del="' + esc(c.code) + '">移除</button></td>') + '</tr>';
-      }).join('');
-      if (!d.codes.length) rowsHtml = '<tr><td colspan="6" class="text-center text-secondary" style="padding:24px;">码清单为空——点右上「扫码选码」</td></tr>';
-      body = '<div class="table-responsive" style="max-height:320px;overflow-y:auto;"><table class="table table-vcenter card-table">' +
-        '<thead><tr><th>序号</th><th>追溯码</th><th>药品</th><th>批次</th><th>效期</th><th>操作</th></tr></thead>' +
-        '<tbody>' + rowsHtml + '</tbody></table></div>';
+        return {
+          code: c.code, drugName: p.dict ? p.dict.drugName : '未解析', batch: c.batch, expDate: c.expDate,
+          _opCell: d.status === '已审核' ? '<span class="text-secondary">—</span>'
+            : '<button class="btn btn-sm btn-outline-danger" data-del="' + esc(c.code) + '">移除</button>'
+        };
+      });
+      body = window.PulDocDetail.renderCodes({ codes: rows }, {
+        columns: ['seq', 'code', 'drugName', 'batch', 'expDate'],
+        extraColumns: [{ key: 'op', title: '操作', cell: function (r) { return r._opCell; } }],
+        emptyText: '码清单为空——点右上「扫码选码」'
+      });
     }
     return '<div class="card"><div class="card-header"><b>报损码清单</b>' +
       (d ? '<span class="text-secondary ms-2" style="font-size:12.5px;">' + esc(d.billNo) + ' · ' + d.codes.length + ' 个码</span>' : '') +
@@ -115,11 +116,34 @@
     });
   }
 
+  // 二期 Task B：openScan 大版面接线适配——已选码按 药品+批次 聚合成药品清单行模型（仅视图模型，不改业务）
+  function scanDrugRows(d) {
+    var map = {};
+    d.codes.forEach(function (c) {
+      var key = c.code.slice(0, 7) + '|' + c.batch;
+      if (!map[key]) map[key] = { drugName: '—', formSpec: '—', batch: c.batch, qty: 0 };
+      map[key].qty += 1;
+      if (map[key].drugName === '—') {
+        var p = P.parseCode(c.code, DICT);
+        if (p.dict) { map[key].drugName = p.dict.drugName; map[key].formSpec = p.dict.formSpec || '—'; }
+      }
+    });
+    return Object.keys(map).map(function (k) { return map[k]; });
+  }
+
   function openScanModal() {
     var d = selDoc();
     if (!d || d.status === '已审核') return;
     UI.openScan({
       title: '扫码选码 · ' + d.billNo,
+      headerHtml: '<div class="pch-scan-fields">' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">单据类型</span>报损出库</span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">单据单号</span><b>' + esc(d.billNo) + '</b></span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">单据时间</span>' + esc(d.date) + '</span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">发货方</span>' + esc(d.pharmacy) + '</span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">收货方</span>报损出库</span></div>',
+      drugsRows: function () { return scanDrugRows(d); },
+      drugsOptions: { columns: ['seq', 'drugName', 'formSpec', 'batch', 'qty'], emptyText: '尚未选码——扫码后自动建行' },
       hint: '扫本药房在架追溯码加入报损；审核后进入已销毁终态',
       gate: 'loss', node: ph(),
       onScan: function (code) {

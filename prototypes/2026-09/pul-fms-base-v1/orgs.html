@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
-  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 组织管理">
-  <title>院区管理 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 基础管理">
+  <title>院区字典维护 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/orgs.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/orgs.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -31,7 +31,7 @@
     <header class="pi-header">
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">院区管理</h1>
+        <h1 class="pi-title">院区字典维护</h1>
         <span class="pi-subtitle">原型页 · L2 院区档案 + 供应商平台对接凭证</span>
       </div>
       <div class="pi-header-right">
@@ -54,8 +54,8 @@
       <div class="detail-modal-header">
         <div class="detail-modal-icon">🏥</div>
         <div class="detail-modal-title-wrap">
-          <h2>院区管理</h2>
-          <p class="subtitle">组织管理 · L2 院区档案与对接配置</p>
+          <h2>院区字典维护</h2>
+          <p class="subtitle">基础管理 · L2 院区档案与对接配置</p>
         </div>
       </div>
       <p class="lead"><strong>一句话概括：</strong>本页维护三级组织架构中的 L2 院区档案：院区名称、机构编号（对接 HIS）、供应商平台 appKey/appSecret（统采对接凭证，脱敏展示）、启停状态；<strong>库房/节点（L3）挂在院区之下</strong>，列表中可直接看到每个院区的下属库房。</p>
@@ -74,7 +74,7 @@
             <div class="info-card-icon">🔀</div>
             <div class="info-card-body">
               <div class="info-card-title">上下游</div>
-              <div class="info-card-desc">上游：工作台 → 组织管理；下游：登录页院区下拉、用户管理院区筛选、节点档案（L3）挂在院区之下</div>
+              <div class="info-card-desc">上游：工作台 → 基础管理；下游：登录页院区下拉、用户管理院区筛选、节点档案（L3）挂在院区之下</div>
             </div>
           </div>
         </div>
@@ -101,7 +101,7 @@
         <div class="section-title">场景呼应</div>
         <div class="example-list">
           <div class="example-item">
-            <div class="example-item-title">院区管理（L2）→ 登录页（选院区）→ 节点档案（L3，待实现）</div>
+            <div class="example-item-title">院区字典维护（L2）→ 登录页（选院区）→ 节点档案（L3，待实现）</div>
             <div class="example-item-desc">院区是登录上下文与数据权限的基本单位；appSecret 属敏感凭证，列表脱敏展示、完整值仅编辑弹窗可见（演示环境为 Mock 数据）。</div>
           </div>
         </div>
@@ -113,15 +113,15 @@
     style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
            background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
            font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
-    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 组织管理</span>
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 基础管理</span>
   </div>
 
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/orgs.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/orgs.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

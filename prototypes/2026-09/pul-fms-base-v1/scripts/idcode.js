@@ -2,10 +2,11 @@
  * idcode.js — 标识码字典（主子表之子表）：标识码全量台账
  * 20 位追溯码的前 7 位 = 产品资源码；码等级 1=最小销售包装 / 2=中包装 / 3=大包装（扫上级码可展开下级）
  * 停用 = 不再参与解析（扫码按异常码拦截）；新增须挂到药品主表
+ * 查重按库房隔离（2026-09-28 对齐药品字典口径）：同库房拦截 / 跨库房提示放行
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'idcode', crumb: ['基础管理', '标识码字典'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'idcode', crumb: ['基础管理', '药品标识码查询'] });
   if (!content) return;
 
   var D = window.PUL_DRUG, UI = window.PchUI, esc = UI.esc;
@@ -59,7 +60,7 @@
         '<td><b>' + esc(d.drugName || '（未知药品）') + '</b></td>' +
         '<td>' + esc(d.formSpec || '-') + '</td>' +
         '<td>' + esc(c.packSpec) + '</td><td>' + esc(c.packUnit) + '</td>' +
-        '<td class="text-secondary">' + esc(d.drugCode ? D.unitsText(d) : '—') + '</td>' +
+        '<td class="text-secondary">' + esc(d.drugCode ? D.unitsRatio(d) : '—') + '</td>' +
         '<td class="text-secondary">' + esc(d.dosForm || '-') + '</td>' +
         '<td>' + (c.status === '启用' ? UI.light('正常') : '<span class="pch-light mute"><i class="pch-dot"></i>停用</span>') + '</td>' +
         '<td><div class="btn-list">' +
@@ -110,7 +111,16 @@
       var unit = el.querySelector('#ieUnit').value.trim();
       if (!c && !/^\d{7}$/.test(code)) { window.showToast('标识码须为 7 位数字'); return; }
       if (!pack || !unit) { window.showToast('包装规格 / 包装单位为必填项'); return; }
-      if (!c && D.idcodeOf(S, code)) { window.showToast('标识码 ' + code + ' 已存在'); return; }
+      // 查重按库房隔离（对齐药品字典口径，客户拍板：同一标识码可在不同库房分别建档）
+      if (!c) {
+        var targetDrug = D.drugOf(S, el.querySelector('#ieDrug').value);
+        var dup = D.idcodeOf(S, code);
+        if (dup) {
+          var dupDrug = D.drugOf(S, dup.drugCode);
+          if (dupDrug && targetDrug && dupDrug.warehouse === targetDrug.warehouse) { window.showToast('标识码 ' + code + ' 在本库房已建档'); return; }
+          window.showToast('提示：标识码 ' + code + ' 已在「' + (dupDrug ? dupDrug.warehouse : '-') + '」建档，本库房将独立建档');
+        }
+      }
       if (c) {
         c.drugCode = el.querySelector('#ieDrug').value;
         c.level = +el.querySelector('#ieLevel').value; c.packSpec = pack; c.packUnit = unit;
@@ -141,7 +151,7 @@
     document.getElementById('pgNext').addEventListener('click', function () { page++; renderAll(); });
     document.getElementById('btnAdd').addEventListener('click', function () { openEdit(null); });
     document.getElementById('btnSync').addEventListener('click', function () {
-      window.showToast('本期仅占位：从上级平台批量同步标识码功能后期开放');
+      window.showToast('批量更新在「药品字典维护」页工具栏「更新标识码」执行（按药品匹配挂接，幂等）');
     });
     content.querySelectorAll('[data-edit]').forEach(function (b) {
       b.addEventListener('click', function () { openEdit(b.getAttribute('data-edit')); });

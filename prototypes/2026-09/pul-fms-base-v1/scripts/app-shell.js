@@ -57,11 +57,13 @@
       { key: 'perm', name: '权限管理', icon: 'key', href: 'perm.html' },
       { key: 'users', name: '用户管理', icon: 'users', href: 'users.html' },
       { key: 'roles', name: '角色管理', icon: 'key', href: 'roles.html' },
+      { key: 'loginLog', name: '登录日志', icon: 'logout', href: 'log-login.html' },
+      { key: 'opLog', name: '操作日志', icon: 'clipboard', href: 'log-op.html' },
       { key: 'cabSet', name: '取药柜设置', icon: 'box', href: null, badge: '待补' },
       { key: 'pickLamp', name: '取药指示灯', icon: 'bulb', href: null, badge: '待补' },
       { key: 'fillLampSet', name: '补药灯组设置', icon: 'bulb', href: null, badge: '待补' },
-      { key: 'slotLampMap', name: '取药槽灯组对照', icon: 'swap', href: null, badge: '待补' },
-      { key: 'slotDrugMap', name: '取药槽药品对照', icon: 'pills', href: null, badge: '待补' }
+      { key: 'slotLampMap', name: '取药槽灯组对照', icon: 'swap', href: 'slot-lamp-map.html' },
+      { key: 'slotDrugMap', name: '取药槽药品对照', icon: 'pills', href: 'slot-drug-map.html' }
     ]},
     { type: 'group', name: '基础管理', items: [
       { key: 'orgs', name: '院区字典维护', icon: 'building', href: 'orgs.html' },
@@ -77,33 +79,29 @@
     { type: 'group', name: '采购管理', items: [
       { key: 'arrive', name: '采购到货单', icon: 'truck', href: 'purchase-arrive.html' },
       { key: 'pin', name: '采购入库单', icon: 'box', href: 'purchase-in.html' },
-      { key: 'badcode', name: '异常标识码', icon: 'scan', href: 'bad-codes.html' },
-      { key: 'pquery', name: '入库明细查询', icon: 'search', href: 'purchase-detail.html' },
+      { key: 'pquery', name: '采购明细', icon: 'search', href: 'purchase-detail.html' },
       { key: 'pout', name: '采购退货单', icon: 'swap', href: 'purchase-out.html' },
-      { key: 'pOutQ', name: '退货明细查询', icon: 'search', href: 'purchase-out-query.html' },
-      { key: 'pdone', name: '已完成单', icon: 'clipboard', href: 'purchase-done.html', origin: 'n' }
+      { key: 'pOutQ', name: '退货明细查询', icon: 'search', href: 'purchase-out-query.html' }
     ]},
     { type: 'group', name: '库房管理', items: [
-      { key: 'whstock', name: '库房库存查询', icon: 'chart', href: 'wh-stock.html' },
-      { key: 'quickScan', name: '领用快捷扫码', icon: 'scan', href: 'quick-scan.html' },
-      { key: 'pick', name: '领用备货单', icon: 'box', href: 'wh-pick.html' },
-      { key: 'pickOut', name: '领用出库单', icon: 'box', href: 'wh-pick-out.html' },
-      { key: 'whOutQ', name: '出库明细查询', icon: 'search', href: 'wh-out-query.html' },
-      { key: 'retIn', name: '领用退回', icon: 'swap', href: 'wh-return-in.html' },
       { key: 'othIn', name: '其他入库单', icon: 'box', href: 'wh-other-in.html' },
-      { key: 'othOut', name: '其他出库单', icon: 'box', href: 'wh-other-out.html' }
+      { key: 'whstock', name: '库房库存查询', icon: 'chart', href: 'wh-stock.html' },
+      { key: 'pick', name: '调拨出库单', icon: 'box', href: 'wh-pick.html' },
+      { key: 'pickOut', name: '领用出库单', icon: 'box', href: 'wh-pick-out.html' },
+      { key: 'retIn', name: '领用退回', icon: 'swap', href: 'wh-return-in.html' },
+      { key: 'othOut', name: '其他出库单', icon: 'box', href: 'wh-other-out.html' },
+      { key: 'whOutQ', name: '出库明细查询', icon: 'search', href: 'wh-out-query.html' }
     ]},
     { type: 'group', name: '药房管理', items: [
-      { key: 'phstock', name: '药房库存查询', icon: 'chart', href: 'ph-stock.html' },
       { key: 'req', name: '领用申请单', icon: 'box', href: 'ph-req.html' },
-      { key: 'reqIn', name: '领用入库单', icon: 'box', href: 'ph-req-in.html' },
-      { key: 'phInQ', name: '入库明细查询', icon: 'search', href: 'ph-in-query.html' },
-      { key: 'retOut', name: '退回出库单', icon: 'swap', href: 'ph-ret-out.html' },
+      { key: 'reqIn', name: '调拨入库单', icon: 'box', href: 'ph-req-in.html' },
       { key: 'shelfQ', name: '待上架药品查询', icon: 'search', href: 'ph-shelf-q.html' },
-      { key: 'shelf', name: '药品扫码上架', icon: 'scan', href: 'ph-shelf.html' },
       { key: 'light', name: '补药指示灯亮', icon: 'bulb', href: null, badge: '占位' },
       { key: 'shelfOff', name: '药品扫码下架', icon: 'scan', href: null, badge: '待补' },
-      { key: 'phloss', name: '药房损耗', icon: 'clipboard', href: 'ph-loss.html', origin: 'n' }
+      { key: 'retOut', name: '退回出库单', icon: 'swap', href: 'ph-ret-out.html' },
+      { key: 'phloss', name: '药房损耗', icon: 'clipboard', href: 'ph-loss.html', origin: 'n' },
+      { key: 'phstock', name: '药房库存查询', icon: 'chart', href: 'ph-stock.html' },
+      { key: 'phInQ', name: '入库明细查询', icon: 'search', href: 'ph-in-query.html' }
     ]},
     { type: 'group', name: '出库管理', items: [
       { key: 'disp', name: '处方发药扫码', icon: 'scan', href: 'disp.html' },
@@ -125,33 +123,62 @@
       { key: 'lossQ', name: '损耗明细查询', icon: 'search', href: 'wh-loss-query.html' },
       { key: 'wardSign', name: '病区签收', icon: 'scan', href: 'ward-sign.html', origin: 'n' }
     ]},
-    { type: 'group', name: 'HIS单据', items: [
-      { key: 'rxQ', name: 'HIS处方单查询', icon: 'search', href: null, badge: '待补' },
-      { key: 'rxSum', name: 'HIS处方单药品汇总', icon: 'chart', href: null, badge: '待补' },
-      { key: 'trayQ', name: 'HIS摆药单查询', icon: 'search', href: 'tray-q.html' },
-      { key: 'traySum', name: 'HIS摆药单药品汇总', icon: 'chart', href: null, badge: '待补' }
-    ]},
-    { type: 'group', name: '盘点管理', items: [
-      { key: 'invInit', name: '期初存量（期初盘点）', icon: 'clipboard', href: 'inv-init.html' },
-      { key: 'inv', name: '药品盘点单', icon: 'clipboard', href: 'inv.html' },
-      { key: 'invGain', name: '盘盈入库单', icon: 'box', href: 'inv-gain.html' },
-      { key: 'invLoss', name: '盘亏出库单', icon: 'box', href: 'inv-loss.html' },
-      { key: 'invQ', name: '盈亏明细查询', icon: 'search', href: 'inv-q.html' },
-      { key: 'invSumQ', name: '盈亏汇总查询', icon: 'chart', href: null, badge: '待补' },
-      { key: 'invNocode', name: '无码药品记录', icon: 'book', href: 'inv-nocode.html' }
-    ]},
-    { type: 'group', name: '台账管理', items: [
-      { key: 'ledger', name: '日记账查询', icon: 'book', href: 'ledger.html' },
-      { key: 'ledgerM', name: '月记账查询', icon: 'book', href: null, badge: '待补' },
-      { key: 'ledgerQ', name: '季度账查询', icon: 'search', href: null, badge: '待补' },
-      { key: 'traceQ', name: '追溯码查询', icon: 'search', href: 'trace-q.html', origin: 'n' },
-      { key: 'flowQ', name: '药品流向查询', icon: 'chart', href: 'flow-q.html', origin: 'n' }
-    ]},
-    { type: 'group', name: '医保管理', items: [
-      { key: 'miUpload', name: '医保上传接口', icon: 'shield', href: null, badge: '预留' },
-      { key: 'miUploadQ', name: '上传情况查询', icon: 'search', href: null, badge: '待补' }
+    { type: 'group', name: '扫码管理', items: [
+      { key: 'scanHub', name: '统一扫码', icon: 'scan', href: 'scan-hub.html', origin: 'n' },
+      { key: 'scanLab', name: '统一扫码验证', icon: 'scan', href: 'scan-lab.html', origin: 'n' }
     ]}
+    // HIS单据 / 盘点管理 / 台账管理 / 医保管理 四组 2026-10-15 应需求方要求从侧栏摘除（先下线，页面文件与深链保留）
   ];
+
+  // ===== 线上演示菜单开关（2026-10-09 拍板，2026-10-10 组内排除扩开放）=====
+  // 本地（localhost / 127.0.0.1 / file://）侧边栏全量不隐藏；菜单隐藏只发生在部署域名下，按 LIVE_OPEN 白名单渲染：
+  //   组名: null              → 整组开放
+  //   组名: {all, hide:[key]} → 整组开放但排除 hide 项（系统管理 5 项硬件设置 / 基础管理 取药柜+基站灯组+取药槽查询+基础字典）
+  //   组名: [key]             → 只开放指定项（采购管理仅到货单）
+  //   未列入的组不渲染。收窄的只是左侧导航：权限树（MENU_TREE）/页签跳转/深链直达保持全量。
+  var LIVE_OPEN = {
+    '系统管理': { all: true, hide: ['cabSet', 'pickLamp', 'fillLampSet', 'slotLampMap', 'slotDrugMap'] },
+    '基础管理': { all: true, hide: ['cabinet', 'lamp', 'slotQ', 'dict'] },
+    '采购管理': ['arrive']                   // 2026-10-16 线上业务菜单仅展示采购到货单；其余页面与深链保留
+  };
+  var IS_LIVE = (typeof location !== 'undefined') &&
+    location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && location.hostname !== '';
+  // hidden:true = 本地+线上全端隐藏的兜底开关（当前无项使用；菜单隐藏统一走 LIVE_OPEN 线上排除，本地保持全量）。
+  // 仅剔除侧边栏渲染，NAV 本体保留 → PRD 同步校验 / 页签跳转 / 深链直达 / findActive 不受影响
+  function stripHidden(entries) {
+    var out = [];
+    entries.forEach(function (e) {
+      if (e.type === 'item') { if (!e.hidden) out.push(e); return; }
+      var g = { type: 'group', name: e.name, items: (e.items || []).filter(function (it) { return !it.hidden; }), subs: [] };
+      (e.subs || []).forEach(function (s) {
+        var si = (s.items || []).filter(function (it) { return !it.hidden; });
+        if (si.length) g.subs.push({ name: s.name, items: si });
+      });
+      if (g.items.length || g.subs.length) out.push(g);
+    });
+    return out;
+  }
+  function visibleNav() {
+    if (!IS_LIVE) return stripHidden(NAV);
+    var out = [];
+    NAV.forEach(function (e) {
+      if (e.type === 'item') { out.push(e); return; }
+      if (!(e.name in LIVE_OPEN)) return;               // 未列入白名单的组不渲染
+      var allow = LIVE_OPEN[e.name];
+      if (allow === null) { out.push(e); return; }      // null = 整组开放（null 是 falsy，必须先 in 判断）
+      function keep(it) {
+        return allow.all ? allow.hide.indexOf(it.key) === -1 : allow.indexOf(it.key) !== -1;
+      }
+      var g = { type: 'group', name: e.name, items: [], subs: [] };
+      (e.items || []).forEach(function (it) { if (keep(it)) g.items.push(it); });
+      (e.subs || []).forEach(function (s) {
+        var si = (s.items || []).filter(keep);
+        if (si.length) g.subs.push({ name: s.name, items: si });
+      });
+      if (g.items.length || g.subs.length) out.push(g);
+    });
+    return stripHidden(out);
+  }
 
   function navItem(it, active) {
     // origin='n' → 名称后挂「新」chip（需求来源维度；pending-badge 是实现状态维度，可并存）
@@ -205,7 +232,7 @@
         '<div class="' + itemsCls + '" data-group-items="' + key + '"' + (collapsed ? ' style="display:none;"' : '') + '>';
     }
     var html = '';
-    NAV.forEach(function (entry) {
+    visibleNav().forEach(function (entry) {
       if (entry.type === 'item') { html += navItem(entry, active); return; }
       var gCollapsed = collapsedOf(entry.name, entry.name === loc.group);
       html += block('app-nav-group-title', 'app-nav-group-items', entry.name, entry.name, gCollapsed);
@@ -227,7 +254,7 @@
     if (!tabs || !tabs.length) return '';
     var h = '<div class="app-tabs">';
     tabs.forEach(function (t) {
-      h += '<span class="app-tab' + (t.key === active ? ' active' : '') + '" data-tab-href="' + t.href + '">' + t.name +
+      h += '<span class="app-tab' + (t.key === active ? ' active' : '') + '" data-tab-key="' + t.key + '" data-tab-href="' + t.href + '">' + t.name +
         (t.key === 'index' ? '' : '<i class="tab-x" data-tab-close="' + t.key + '" title="关闭页签">×</i>') + '</span>';
     });
     return h + '</div>';
@@ -322,17 +349,19 @@
     opts = opts || {};
     var mount = document.getElementById(mountId);
     if (!mount) return null;
+    // 2026-10-13 Round BT：embed=1（弹窗 iframe 内嵌复用，如统一扫码弹窗）——不写 openTabs 页签、根加 app-embed 藏壳层
+    var embed = /[?&]embed=1/.test(location.search);
     var user = ensureUser();
     var navState = window.store ? window.store.load() : {};
     // 页签：当前页入列（工作台固定为首签）
     var tabs = navState.openTabs || [];
     var cur = tabOf(opts.active);
-    if (cur && !tabs.some(function (t) { return t.key === cur.key; })) {
+    if (!embed && cur && !tabs.some(function (t) { return t.key === cur.key; })) {
       tabs = tabs.concat([cur]);
       if (window.store) window.store.update({ openTabs: tabs });
     }
     mount.innerHTML =
-      '<div class="app-page">' +
+      '<div class="app-page' + (embed ? ' app-embed' : '') + '">' +
         '<aside class="app-sidebar">' +
           '<a class="app-brand" href="index.html">' +
             '<span class="app-brand-icon">' + icon('pills', 17) + '</span>' +
@@ -356,7 +385,56 @@
       if (window.store) window.store.update({ currentUser: null, openTabs: [] });
       window.location.href = 'login.html';
     });
-    // 页签：点击切换 / 关闭（关当前签跳到最后一个剩余签）
+    // 页签：点击切换 / 关闭 / 右键批量关闭（关活动签跳到最后一个剩余签，无剩余回工作台）
+    function applyTabs(rest) {
+      if (window.store) window.store.update({ openTabs: rest });
+      if (!rest.some(function (t) { return t.key === opts.active; })) {
+        window.location.href = rest.length ? rest[rest.length - 1].href : 'index.html';
+        return;
+      }
+      var bar = mount.querySelector('.app-tabs');
+      if (bar) { var div = document.createElement('div'); div.innerHTML = renderTabs(rest, opts.active); bar.replaceWith(div.firstChild); bindTabs(); }
+    }
+    // 页签右键菜单：关闭当前/其他/右侧/全部（共享层无此组件，自写；工作台固定不可关）
+    function closeTabMenu() {
+      var m = document.querySelector('.app-tab-menu');
+      if (m) m.remove();
+    }
+    function showTabMenu(px, py, key) {
+      closeTabMenu();
+      var tabs = (window.store ? window.store.load() : {}).openTabs || [];
+      var idx = -1;
+      tabs.forEach(function (t, i) { if (t.key === key) idx = i; });
+      if (idx < 0) return;
+      var items = [];
+      if (key !== 'index') items.push({ name: '关闭当前页签', act: function () { applyTabs(tabs.filter(function (t) { return t.key !== key; })); } });
+      items.push(
+        { name: '关闭其他页签', act: function () { applyTabs(tabs.filter(function (t) { return t.key === 'index' || t.key === key; })); } },
+        { name: '关闭右侧页签', act: function () { applyTabs(tabs.slice(0, idx + 1)); } },
+        { name: '关闭全部页签', act: function () { applyTabs(tabs.filter(function (t) { return t.key === 'index'; })); } });
+      var m = document.createElement('div');
+      m.className = 'app-tab-menu';
+      m.innerHTML = items.map(function (it, i) { return '<div class="app-tab-menu-item" data-i="' + i + '">' + it.name + '</div>'; }).join('');
+      document.body.appendChild(m);
+      var r = m.getBoundingClientRect();
+      m.style.left = Math.max(4, Math.min(px, window.innerWidth - r.width - 8)) + 'px';
+      m.style.top = Math.max(4, Math.min(py, window.innerHeight - r.height - 8)) + 'px';
+      m.querySelectorAll('.app-tab-menu-item').forEach(function (el) {
+        el.addEventListener('click', function () {
+          var it = items[parseInt(el.getAttribute('data-i'), 10)];
+          closeTabMenu();
+          it.act();
+        });
+      });
+      // 点击/右键其他处/Esc 收起菜单（延迟挂载，避开本触发的冒泡）
+      setTimeout(function () {
+        document.addEventListener('click', closeTabMenu, { once: true });
+        document.addEventListener('contextmenu', closeTabMenu, { once: true });
+        document.addEventListener('keydown', function onkey(ev) {
+          if (ev.key === 'Escape') { closeTabMenu(); document.removeEventListener('keydown', onkey); }
+        });
+      }, 0);
+    }
     function bindTabs() {
       mount.querySelectorAll('[data-tab-href]').forEach(function (el) {
         el.addEventListener('click', function () {
@@ -368,14 +446,14 @@
           e.stopPropagation();
           var key = x.getAttribute('data-tab-close');
           var st = window.store ? window.store.load() : {};
-          var rest = (st.openTabs || []).filter(function (t) { return t.key !== key; });
-          if (window.store) window.store.update({ openTabs: rest });
-          if (key === opts.active) {
-            window.location.href = rest.length ? rest[rest.length - 1].href : 'index.html';
-          } else {
-            var bar = mount.querySelector('.app-tabs');
-            if (bar) { var div = document.createElement('div'); div.innerHTML = renderTabs(rest, opts.active); bar.replaceWith(div.firstChild); bindTabs(); }
-          }
+          applyTabs((st.openTabs || []).filter(function (t) { return t.key !== key; }));
+        });
+      });
+      mount.querySelectorAll('.app-tab').forEach(function (el) {
+        el.addEventListener('contextmenu', function (e) {
+          e.preventDefault();
+          e.stopPropagation();   // 不冒泡到 document，避免新菜单被一次性收起监听立刻关掉
+          showTabMenu(e.clientX, e.clientY, el.getAttribute('data-tab-key'));
         });
       });
     }
@@ -397,8 +475,28 @@
       });
     });
     bindSwitchModal(mount, user);
+    enhancePlanBadge();
     return mount.querySelector('#appContent');
   }
 
-  window.AppShell = { render: render, icon: icon, NAV: NAV };
+  // 2026-10-16 Round DB 用户拍板：全站悬浮 pill 补「⟲ 重置」入口——种子态（代码初始数据）vs 会话态（sessionStorage
+  // 操作痕迹）对不上时一键归位；74 页 pill 是硬编码副本，统一在此处增强（guide.html 头部另有同款按钮）
+  function enhancePlanBadge() {
+    var b = document.getElementById('planBadge');
+    if (!b || b.querySelector('.pb-reset')) return;
+    var r = document.createElement('span');
+    r.className = 'pb-reset';
+    r.textContent = '⟲ 重置';
+    r.title = '清空本会话所有操作痕迹（扫码/审核/删除等），恢复种子初始数据';
+    r.style.cssText = 'margin-left:2px;padding-left:8px;border-left:1px solid rgba(255,255,255,.4);cursor:pointer;';
+    r.addEventListener('click', function (e) {
+      e.stopPropagation();   // 不触发 pill 本体跳 plan.html
+      if (!confirm('重置演示数据？\n\n将清空本会话内所有操作痕迹（扫码/审核/删除/重新下载等），恢复到种子初始数据，不可撤销。')) return;
+      window.store.reset();
+      location.reload();
+    });
+    b.appendChild(r);
+  }
+
+  window.AppShell = { render: render, icon: icon, NAV: NAV, visibleNav: visibleNav };
 })();

@@ -6,7 +6,7 @@
   var content = window.AppShell.render('desktopPreview', { active: 'index', crumb: ['工作台'] });
   if (!content) return;
   var user = window.store.load().currentUser;
-  // 数据范围（若依 DataScope）随角色继承；登录候选上下文由它算出
+  // 我的数据范围 = 授权（节点/整院区）合并；登录候选上下文由它算出
   var myScope = window.PUL.userScopeText(window.PUL.findUser(user.account) || user);
 
   function orgNode(node) {
@@ -22,8 +22,8 @@
   }
 
   var stats = [
-    { num: 3,  label: '采购到货待入库', tone: 'bg-blue-lt' },
-    { num: 5,  label: '盘点单待审核',   tone: 'bg-azure-lt' },
+    { num: 3,  label: '采购到货单待入库', tone: 'bg-blue-lt' },
+    { num: 5,  label: '药品盘点单待审核',   tone: 'bg-azure-lt' },
     { num: 12, label: '效期预警药品',   tone: 'bg-yellow-lt' },
     { num: 8,  label: '待发药处方',     tone: 'bg-red-lt' }
   ];
@@ -37,7 +37,7 @@
       ' · 登录上下文：<b>' + (user.org || '-') + ' / ' + (user.warehouse || '-') + '</b>（顶栏可「部门切换」）</div>' +
     '</div></div></div>' +
     '<div class="col-sm-4"><div class="card"><div class="card-body">' +
-      '<div class="text-secondary mb-1" style="font-size:12px;">我的数据范围（若依 DataScope，随角色生效）</div>' +
+      '<div class="text-secondary mb-1" style="font-size:12px;">我的数据范围（按本人授权生效）</div>' +
       '<div style="font-size:15px;font-weight:600;color:#1e293b;">' + myScope + '</div>' +
       '<div class="text-secondary mt-1" style="font-size:11.5px;">登录选定库房/药房后，行数据按该上下文自动隔离</div>' +
     '</div></div></div></div>';

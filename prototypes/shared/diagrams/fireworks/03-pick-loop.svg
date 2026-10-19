@@ -45,7 +45,7 @@
   </defs>
   <rect data-graph-role="background" width="1360.0" height="800.0" fill="#ffffff"/>
   <text x="680.0" y="56" text-anchor="middle" class="title">领用出库 → 药房入库闭环</text>
-  <text x="680.0" y="82" text-anchor="middle" class="subtitle">申请(药) ⇄ 备货(码) 双层表达 · 审核即扣账 · 在途闭环</text>
+  <text x="680.0" y="82" text-anchor="middle" class="subtitle">申请(药) → 直接扫码备货·反向解析自动匹配 → 审核即扣账 · 在途闭环</text>
   <g id="lane-ph" data-graph-role="container" data-container-id="lane-ph" data-semantic-role="boundary" data-graph-bounds="40,100,1320,225">
   <rect data-graph-role="container" x="40.0" y="100.0" width="1280.0" height="125.0" rx="16.0" fill="#eef4fb" stroke="#b7cdf0" stroke-width="1.4" stroke-dasharray="6 5"/>
   <text x="58.0" y="124.0" class="section">药房 · 申请人</text>
@@ -62,10 +62,9 @@
     <rect id="lane-sys-header" data-graph-role="reserved" data-reserved-kind="container-header" x="48" y="436" width="158.44" height="30" fill="none" stroke="none"/>
   </g>
   <path id="a1" data-graph-role="edge" data-edge-id="a1" data-source="H1" data-target="W1" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 190,202 L 190,292" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
-  <path id="a2" data-graph-role="edge" data-edge-id="a2" data-source="W1" data-target="W2" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 300,326 L 370,326" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
-  <path id="a3" data-graph-role="edge" data-edge-id="a3" data-source="W2" data-target="W3" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 620,326 L 680,326" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
-  <path id="a4" data-graph-role="edge" data-edge-id="a4" data-source="W3" data-target="Y1" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 770,360 L 770,468" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
-  <path id="a5" data-graph-role="edge" data-edge-id="a5" data-source="Y1" data-target="Y2" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 900,500 L 940,500" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="a2" data-graph-role="edge" data-edge-id="a2" data-source="W1" data-target="W3" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 300,326 L 370,326" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
+  <path id="a4" data-graph-role="edge" data-edge-id="a4" data-source="W3" data-target="Y1" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 480,360 L 480,468" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="a5" data-graph-role="edge" data-edge-id="a5" data-source="Y1" data-target="Y2" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 620,500 L 940,500" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
   <path id="a6" data-graph-role="edge" data-edge-id="a6" data-source="Y2" data-target="Y3" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1070,500 L 1115,500" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
   <path id="a7" data-graph-role="edge" data-edge-id="a7" data-source="Y3" data-target="W6" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1200,468 L 1200,360" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
   <path id="a8" data-graph-role="edge" data-edge-id="a8" data-source="W6" data-target="H5" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="" data-motion-stage="" data-motion-order="" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1200,292 L 1200,202" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
@@ -83,27 +82,24 @@
   <g id="node-W1" data-graph-role="node" data-node-id="W1" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="80,292,300,360">
   <rect x="80.0" y="292.0" width="220.0" height="68.0" rx="10.0" fill="#ffffff" stroke="#2fb344" stroke-width="1.8" filter="url(#shadowSoft)"/>
   <text x="190.0" y="310.0" text-anchor="middle" class="node-type">POOL</text>
-  <text data-text-role="title" data-full-text="申请单池选单（或一步式领用）" data-text-max-width="196.0" x="190.0" y="332.0" text-anchor="middle" class="node-title" font-size="12.96">申请单池选单（或一步式领用）</text>
+  <text data-text-role="title" data-full-text="待备货申请池" data-text-max-width="196.0" x="190.0" y="332.0" text-anchor="middle" class="node-title" font-size="18">待备货申请池</text>
+  <text data-text-role="subtitle" data-full-text="按码自动匹配 · 免选单" data-text-max-width="196.0" x="190.0" y="354.0" text-anchor="middle" class="node-sub" font-size="12">按码自动匹配 · 免选单</text>
   </g>
-  <g id="node-W2" data-graph-role="node" data-node-id="W2" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="370,292,620,360">
-  <rect x="370.0" y="292.0" width="250.0" height="68.0" rx="10.0" fill="#ffffff" stroke="#2fb344" stroke-width="1.8" filter="url(#shadowSoft)"/>
-  <text x="495.0" y="310.0" text-anchor="middle" class="node-type">DUAL VIEW</text>
-  <text data-text-role="title" data-full-text="双层表达：药品明细 ⇄ 码清单" data-text-max-width="226.0" x="495.0" y="332.0" text-anchor="middle" class="node-title" font-size="15.73">双层表达：药品明细 ⇄ 码清单</text>
-  </g>
-  <g id="node-W3" data-graph-role="node" data-node-id="W3" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="680,292,860,360">
-  <rect x="680.0" y="292.0" width="180.0" height="68.0" rx="10.0" fill="#ffffff" stroke="#2fb344" stroke-width="1.8" filter="url(#shadowSoft)"/>
-  <text x="770.0" y="310.0" text-anchor="middle" class="node-type">SCAN</text>
-  <text data-text-role="title" data-full-text="扫码备货" data-text-max-width="156.0" x="770.0" y="332.0" text-anchor="middle" class="node-title" font-size="18">扫码备货</text>
+  <g id="node-W3" data-graph-role="node" data-node-id="W3" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="370,292,590,360">
+  <rect x="370.0" y="292.0" width="220.0" height="68.0" rx="10.0" fill="#ffffff" stroke="#2fb344" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text x="480.0" y="310.0" text-anchor="middle" class="node-type">SCAN</text>
+  <text data-text-role="title" data-full-text="扫码备货 · 反向解析" data-text-max-width="196.0" x="480.0" y="332.0" text-anchor="middle" class="node-title" font-size="18">扫码备货 · 反向解析</text>
+  <text data-text-role="subtitle" data-full-text="直接扫码 · 免选单" data-text-max-width="196.0" x="480.0" y="354.0" text-anchor="middle" class="node-sub" font-size="12">直接扫码 · 免选单</text>
   </g>
   <g id="node-W6" data-graph-role="node" data-node-id="W6" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="1100,292,1300,360">
   <rect x="1100.0" y="292.0" width="200.0" height="68.0" rx="10.0" fill="#ffffff" stroke="#2fb344" stroke-width="1.8" filter="url(#shadowSoft)"/>
   <text x="1200.0" y="310.0" text-anchor="middle" class="node-type">AUDIT OUT</text>
   <text data-text-role="title" data-full-text="审核出库 · 即扣账" data-text-max-width="176.0" x="1200.0" y="332.0" text-anchor="middle" class="node-title" font-size="18">审核出库 · 即扣账</text>
   </g>
-  <g id="node-Y1" data-graph-role="node" data-node-id="Y1" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="640,468,900,532">
-  <rect x="640.0" y="468.0" width="260.0" height="64.0" rx="10.0" fill="#ffffff" stroke="#626976" stroke-width="1.8"/>
-  <text x="770.0" y="486.0" text-anchor="middle" class="node-type">PARSE</text>
-  <text data-text-role="title" data-full-text="parseCode 解析：码→药品·折基本单位" data-text-max-width="236.0" x="770.0" y="506.0" text-anchor="middle" class="node-title" font-size="12.31">parseCode 解析：码→药品·折基本单位</text>
+  <g id="node-Y1" data-graph-role="node" data-node-id="Y1" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="340,468,620,532">
+  <rect x="340.0" y="468.0" width="280.0" height="64.0" rx="10.0" fill="#ffffff" stroke="#626976" stroke-width="1.8"/>
+  <text x="480.0" y="486.0" text-anchor="middle" class="node-type">PARSE</text>
+  <text data-text-role="title" data-full-text="parseCode 反解析：码→药品·折基本单位" data-text-max-width="256.0" x="480.0" y="506.0" text-anchor="middle" class="node-title" font-size="12.64">parseCode 反解析：码→药品·折基本单位</text>
   </g>
   <g id="node-Y2" data-graph-role="node" data-node-id="Y2" data-semantic-role="hexagon" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="940,458,1070,542">
   <path d="M 962.0 458.0 L 1048.0 458.0 L 1070.0 500.0 L 1048.0 542.0 L 962.0 542.0 L 940.0 500.0 Z" fill="#fff7e6" stroke="#d48806" stroke-width="2.0" filter="url(#shadowSoft)"/>
@@ -118,15 +114,15 @@
   <g id="node-Y4" data-graph-role="node" data-node-id="Y4" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="815,585,1195,645">
   <rect x="815.0" y="585.0" width="380.0" height="60.0" rx="10.0" fill="#fdecea" stroke="#d63939" stroke-width="1.8"/>
   <text x="1005.0" y="603.0" text-anchor="middle" class="node-type">REJECT</text>
-  <text data-text-role="title" data-full-text="✕拦截：非在架/不在本单 ⚠重复/超申请 → 提示后重扫" data-text-max-width="356.0" x="1005.0" y="621.0" text-anchor="middle" class="node-title" font-size="13.74">✕拦截：非在架/不在本单 ⚠重复/超申请 → 提示后重扫</text>
+  <text data-text-role="title" data-full-text="✕拦截：非在架/无匹配申请 ⚠重复/超申请 → 提示后重扫" data-text-max-width="356.0" x="1005.0" y="621.0" text-anchor="middle" class="node-title" font-size="13.19">✕拦截：非在架/无匹配申请 ⚠重复/超申请 → 提示后重扫</text>
   </g>
   <g id="a1-label" data-graph-role="label" data-owner="a1" data-graph-bounds="65,223,187,243">
   <rect x="65.0" y="223.0" width="122.0" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
   <text x="126.0" y="237.0" text-anchor="middle" class="arrow-label">申请单（药品口径）</text>
   </g>
-  <g id="a4-label" data-graph-role="label" data-owner="a4" data-graph-bounds="670.44,400,767,420">
-  <rect x="670.44" y="400.0" width="96.56" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
-  <text x="718.72" y="414.0" text-anchor="middle" class="arrow-label">扫 20 位追溯码</text>
+  <g id="a4-label" data-graph-role="label" data-owner="a4" data-graph-bounds="380.44,400,477,420">
+  <rect x="380.44" y="400.0" width="96.56" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
+  <text x="428.72" y="414.0" text-anchor="middle" class="arrow-label">扫 20 位追溯码</text>
   </g>
   <g id="a7-label" data-graph-role="label" data-owner="a7" data-graph-bounds="1107.4,400,1197,420">
   <rect x="1107.4" y="400.0" width="89.6" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
@@ -149,7 +145,7 @@
     <line data-graph-role="decoration" x1="1020.0" y1="732.0" x2="1050.0" y2="732.0" stroke="#ef4444" stroke-width="2.4" marker-end="url(#arrowG)"/>
     <text data-graph-role="decoration" x="1060.0" y="736.0" class="legend">校验拦截</text>
   </g>
-  <g id="footer" data-graph-role="reserved" data-graph-bounds="48,763,433,779">
-  <text x="48.0" y="775.0" class="footnote">PUL-FMS · 03 领用出库→药房入库闭环 · fireworks-tech-graph Style 1</text>
+  <g id="footer" data-graph-role="reserved" data-graph-bounds="48,763,580,779">
+  <text x="48.0" y="775.0" class="footnote">PUL-FMS · 03 领用出库→药房入库闭环（2026-10-04 直接扫码反解析口径）· fireworks-tech-graph Style 1</text>
   </g>
 </svg>

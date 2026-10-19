@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
   <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 采购管理">
-  <title>采购到货 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <title>采购到货单 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -31,8 +31,8 @@
     <header class="pi-header">
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">采购到货</h1>
-        <span class="pi-subtitle">原型页 · 供应商码单池（中继服务单向传入）· 下载生成入库单</span>
+        <h1 class="pi-title">采购到货单</h1>
+        <span class="pi-subtitle">原型页 · 下载/新增（扫码录入·清单录入双模式）→ 自动解析+库存码校验（下载失败可重下）→ 直接审核入库 · 行内「扫码录入」跳统一扫码 · 含异常码台账</span>
       </div>
       <div class="pi-header-right">
         <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
@@ -53,40 +53,42 @@
       <div class="detail-modal-header">
         <div class="detail-modal-icon">🚚</div>
         <div class="detail-modal-title-wrap">
-          <h2>采购到货</h2>
-          <p class="subtitle">采购管理 · 内外网唯一数据入口：供应商码单池</p>
+          <h2>采购到货单</h2>
+          <p class="subtitle">采购管理 · 到货全流程一页走完：下载/新增（扫码录入·清单录入）→ 自动解析+库存码校验 → 直接审核入库（扫码可选核对，统一扫码页作业）</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>供应商送货前在自助平台录入追溯码单，经中继服务单向传入院内形成本页的「码单池」；库房核对实物到货后勾选下载，自动生成采购入库单。</p>
+      <p class="lead"><strong>一句话概括：</strong>供应商送货前在自助平台录入追溯码单，库房在本页「下载单据」拉取（接口异常→下载失败可重新下载；断网可手动新增兜底：扫码录入=逐码建行，清单录入=先选药品清单再扫码核对），下载后自动批量解析并校验库存重复，<strong>审核=判定计划数量=扫码数量（不一致报异常、不允许审核；无码审核须计划数量大于 0）</strong>，审核通过直接生成采购入库单（码入在架 + HIS 推送；无码审核标记无码推送）。</p>
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
         <div class="card-grid">
           <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
             <div class="info-card-title">药库管理员 / 验收员</div>
-            <div class="info-card-desc">查看供应商预录入的码单与药品明细，确认实物到货后下载</div></div></div>
+            <div class="info-card-desc">下载码单 → 自动解析（异常=解析失败/库存码已存在）→ 审核入库；可选扫码核对实物（行内「扫码录入」跳统一扫码页：绿=在码单内/红=多送串货，支持扫码移除）；异常码先维护字典再重新解析</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
-            <div class="info-card-desc">上游：供应商自助平台 → 中继服务（内外网单向，外部数据唯一入口）；下游：下载后进入「采购入库」核对审核</div></div></div>
+            <div class="info-card-desc">上游：供应商自助平台（内外网单向，外部数据唯一入口）；下游：审核后生成「采购入库单」（只读结果列表，可反审核退回本页）</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">如何使用</div>
         <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">查码单</div><div class="step-desc">按订单号/供应商/是否已下载筛选，点行查看药品明细预览</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">下载</div><div class="step-desc">勾选码单点「选中下载」→ 自动生成入库单（含全部追溯码），转采购入库核对</div></div></div>
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">拿到货单</div><div class="step-desc">点「下载单据」从供应商平台拉取：「更新列表」触发接口拉最新码单，勾选后「选中下载」入库；接口异常 → 单据状态=下载失败，行内「重新下载」重试或「删除」放回码单池；断网点「+ 新增到货单」手动建单（单据时间可补录；录入方式二选一：扫码录入=逐码建行 / 清单录入=先选药品清单）</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">自动解析 + 库存码校验</div><div class="step-desc">下载成功即自动批量解析并校验库存重复：标识码未维护→「去维护」页内补录字典后重新解析；库存码已存在→码详情删除重复码。行内「扫码录入」跳统一扫码页逐码核对（支持扫码移除）——有码必核：审核判定计划数量=扫码数量</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">审核入库</div><div class="step-desc">解析成功（异常=0）即可点「审核入库」，填库房/库位/发票号 → 直接生成采购入库单（已审核·在架·HIS 已推送）</div></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">异常码台账</div><div class="step-desc">筛选栏「⚠ 异常码台账」切到跨单据台账：拦截定位 → 维护补录（HIS 候选绑定/手工补录）→ 被拦单据自动恢复可审</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">示例</div>
         <div class="example-box"><div class="example-title">场景示例</div>
-          <div class="example-text">三明九州通发货前录入码单 FK5XSG01481340-1 → 本页出现该单（已下载=否）→ 药到货后勾选下载 → 采购入库列表出现同号入库单，码详情已带全部盒码。</div>
+          <div class="example-text">三明九州通发货前录入码单 FK5XSG01484347-1 → 本页「下载单据」选中下载 → 自动解析 2 码全通过 → 直接「审核入库」填库房「中心库」→ 采购入库单列表出现同号单（已审核），库房库存查询可见；华润码单 223342530 下载后自动校验出 1 个库存重复码，删除后才可审核。</div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
-          <div class="example-item-title">采购到货（本页）→ 采购入库 → 已完成单</div>
-          <div class="example-item-desc">字段对齐老系统「下载单据」弹窗（采购订单号/订单时间/供应商名称/发货企业/已下载）；架构原则 5：内外网单向，本页是外部数据唯一入口。</div>
+          <div class="example-item-title">采购到货单（本页，全流程）→ 采购入库单（结果列表）→ 反审核回本页</div>
+          <div class="example-item-desc">下载单据弹窗字段对齐老系统（采购订单号/订单时间/供应商名称/发货企业/已下载）；状态支线=下载失败（接口异常，重新下载/删除）；审核判定（2026-10-12 统一）：异常码硬拦 + 盘点冻结 + 计划数量=扫码数量一致性（不一致报异常）；无码审核=码清单空∧计划数量大于 0。</div>
         </div></div>
       </div>
     </div>
@@ -101,13 +103,18 @@
 
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/drug-data.js"></script>
-  <script src="scripts/purchase-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/purchase-arrive.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/drug-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/wh-data.js?v=20261015-6"></script>
+  <script src="scripts/facility-data.js?v=20261015-3"></script>
+  <script src="scripts/drug-picker.js?v=20261015-12"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/scan-core.js?v=20261015-11"></script>
+  <script src="scripts/doc-detail.js?v=20261016-1"></script>
+  <script src="scripts/purchase-arrive.js?v=20261016-4"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

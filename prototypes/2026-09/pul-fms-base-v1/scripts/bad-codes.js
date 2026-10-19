@@ -4,7 +4,7 @@
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'badcode', crumb: ['库房管理', '采购管理', '异常标识码'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'badcode', crumb: ['采购管理', '异常标识码', '异常标识码'] });
   if (!content) return;
 
   var P = window.PUL_PCH, UI = window.PchUI, esc = UI.esc;
@@ -27,13 +27,13 @@
       return true;
     });
   }
-  // 该标识码是否正拦截着某张入库单
+  // 该标识码是否正拦截着某张到货单（未审核入库的到货单才会被异常码卡住）
   function blocking(idcode) {
     var hit = [];
-    S.inDocs.forEach(function (d) {
-      if (d.audit === '已审核') return;
-      (d.codes || []).forEach(function (c) {
-        if (c.code.slice(0, 7) === idcode && hit.indexOf(d.billNo) === -1) hit.push(d.billNo);
+    S.arrive.forEach(function (o) {
+      if (o.downloaded === '是' || o.confirm === '已退货') return;
+      (o.codes || []).forEach(function (c) {
+        if (c.code.slice(0, 7) === idcode && hit.indexOf(o.orderNo) === -1) hit.push(o.orderNo);
       });
     });
     return hit;
@@ -87,26 +87,82 @@
       '</div></div></div>';
   }
 
-  // ===== 维护弹窗：补录标识码字典 =====
+  // ===== 维护弹窗（匹配详情）：异常码信息 + HIS 药品库候选表「追加标识码」绑定；无候选时手工补录兜底 =====
   function openFix(idcode) {
     var b = S.badCodes.filter(function (x) { return x.idcode === idcode; })[0];
     if (!b) return;
-    UI.modalShell('pchFix', '维护标识码字典 · ' + idcode,
+    var drugs = (window.PUL_DRUG ? window.PUL_DRUG.load().drugs : S.dict) || [];
+    var unknown = b.drugName === '（未知药品）';
+    // 演示派生：医保编码 / his标识码（真实环境来自 HIS 药品视图）
+    function hisFields(dc) {
+      var n = parseInt(String(dc || '').replace(/\D/g, ''), 10) || 0;
+      return { yb: 'XJ0' + (100000 + n), his: (8481000 + n) + ',' + (8488000 + n) };
+    }
+    function candRows(kw) {
+      var list = drugs.filter(function (d) { return !kw || (d.drugName || '').indexOf(kw) !== -1; });
+      if (!list.length) return '<tr><td colspan="9" class="text-center text-secondary" style="padding:20px;">HIS 药品库无匹配——换个关键字，或用上方表单「手工补录保存」</td></tr>';
+      return list.map(function (d, i) {
+        var h = hisFields(d.drugCode);
+        return '<tr><td>' + (i + 1) + '</td><td><b>' + esc(d.drugName) + '</b></td>' +
+          '<td>' + esc(d.formSpec) + '</td><td class="text-secondary">' + esc(d.maker) + '</td>' +
+          '<td class="text-secondary">' + esc(d.approval) + '</td>' +
+          '<td class="text-secondary">' + h.yb + '</td><td>' + esc(d.drugCode) + '</td>' +
+          '<td class="text-secondary">' + h.his + '</td>' +
+          '<td><button class="btn btn-sm btn-success" data-bind="' + esc(d.drugCode) + '">追加标识码</button></td></tr>';
+      }).join('');
+    }
+    UI.modalShell('pchFix', '匹配详情 · 维护标识码 ' + idcode,
       '<div class="row g-3 mb-3">' +
-      '<div class="col-6"><label class="form-label">标识码</label><input class="form-control" value="' + esc(b.idcode) + '" disabled></div>' +
-      '<div class="col-6"><label class="form-label">层级</label><select class="form-select" id="fxLevel">' +
-        [1, 2, 3].map(function (n) { return '<option' + (b.level === n ? ' selected' : '') + '>' + n + '</option>'; }).join('') + '</select></div></div>' +
-      '<div class="row g-3 mb-3">' +
-      '<div class="col-6"><label class="form-label">药名通用名 *</label><input class="form-control" id="fxName" value="' + (b.drugName === '（未知药品）' ? '' : esc(b.drugName)) + '"></div>' +
-      '<div class="col-6"><label class="form-label">制剂规格</label><input class="form-control" id="fxForm" value="' + (b.formSpec === '-' ? '' : esc(b.formSpec)) + '"></div></div>' +
-      '<div class="row g-3 mb-3">' +
-      '<div class="col-6"><label class="form-label">包装规格</label><input class="form-control" id="fxPack" value="' + (b.packSpec === '-' ? '' : esc(b.packSpec)) + '"></div>' +
-      '<div class="col-6"><label class="form-label">批准文号</label><input class="form-control" id="fxAppr" value="' + (b.approval === '-' ? '' : esc(b.approval)) + '"></div></div>' +
-      '<div class="mb-2"><label class="form-label">生产厂家</label><input class="form-control" id="fxMaker" value="' + (b.maker === '-' ? '' : esc(b.maker)) + '"></div>' +
-      '<div class="text-secondary" style="font-size:12.5px;">保存后写入标识码字典，被拦截的入库单自动恢复可解析。</div>',
+      '<div class="col-3"><label class="form-label">标识码</label><input class="form-control" value="' + esc(b.idcode) + '" disabled></div>' +
+      '<div class="col-3"><label class="form-label">层级</label><select class="form-select" id="fxLevel">' +
+        [1, 2, 3].map(function (n) { return '<option' + (b.level === n ? ' selected' : '') + '>' + n + '</option>'; }).join('') + '</select></div>' +
+      '<div class="col-6"><label class="form-label">药名通用名 *</label><input class="form-control" id="fxName" value="' + (unknown ? '' : esc(b.drugName)) + '"></div></div>' +
+      '<div class="row g-3 mb-2">' +
+      '<div class="col-3"><label class="form-label">制剂规格</label><input class="form-control" id="fxForm" value="' + (b.formSpec === '-' ? '' : esc(b.formSpec)) + '"></div>' +
+      '<div class="col-3"><label class="form-label">包装规格</label><input class="form-control" id="fxPack" value="' + (b.packSpec === '-' ? '' : esc(b.packSpec)) + '"></div>' +
+      '<div class="col-3"><label class="form-label">批准文号</label><input class="form-control" id="fxAppr" value="' + (b.approval === '-' ? '' : esc(b.approval)) + '"></div>' +
+      '<div class="col-3"><label class="form-label">生产厂家</label><input class="form-control" id="fxMaker" value="' + (b.maker === '-' ? '' : esc(b.maker)) + '"></div></div>' +
+      '<div class="card" style="margin:8px 0 2px;"><div class="card-header" style="padding:8px 12px;"><b style="font-size:13px;">HIS 药品库匹配候选</b>' +
+        '<div class="ms-auto d-flex" style="gap:8px;"><input class="form-control form-control-sm" id="fxKw" style="width:180px;" placeholder="按药名通用名匹配" value="' + (unknown ? '' : esc(b.drugName)) + '">' +
+        '<button class="btn btn-sm btn-outline-primary" id="fxFind">查询</button></div></div>' +
+      '<div class="table-responsive" style="max-height:260px;overflow-y:auto;"><table class="table table-vcenter card-table" style="font-size:12.5px;">' +
+      '<thead><tr><th>序号</th><th>药名通用名</th><th>药品规格</th><th>生产厂家</th><th>批准文号</th><th>医保编码</th><th>药品编码</th><th>his标识码</th><th>操作</th></tr></thead>' +
+      '<tbody id="fxCand">' + candRows(unknown ? '' : b.drugName) + '</tbody></table></div>' +
+      '<div class="card-footer text-secondary" style="font-size:12px;padding:6px 12px;">「追加标识码」= 把异常标识码绑定到该药品（药品编码不变，字典子表 +1 行）；医保编码 / his标识码为原型演示派生值</div></div>',
       '<button class="btn btn-outline-secondary" data-mclose>取消</button>' +
-      '<button class="btn btn-primary" id="fxOk">保存到字典</button>', 640);
+      '<button class="btn btn-primary" id="fxOk">手工补录保存</button>', 1080);
     var el = UI.open('pchFix');
+    function done(msg) {
+      S.badCodes = S.badCodes.filter(function (x) { return x.idcode !== idcode; });
+      save(); UI.close('pchFix'); renderAll();
+      window.showToast(msg);
+    }
+    // 追加标识码：绑定到 HIS 候选药品（复用其 drugCode，字典子表 +1 行）
+    function bindCand() {
+      el.querySelectorAll('[data-bind]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var dc = btn.getAttribute('data-bind');
+          var d = drugs.filter(function (x) { return x.drugCode === dc; })[0];
+          if (!d) return;
+          var pack = el.querySelector('#fxPack').value.trim();
+          if (!pack || pack === '-') {
+            var c0 = (window.PUL_DRUG ? window.PUL_DRUG.load().idcodes : []).filter(function (c) { return c.drugCode === dc && c.level === 1; })[0];
+            pack = c0 ? c0.packSpec : (d.baseUnit || '盒');
+          }
+          var entry = { idcode: b.idcode, level: +el.querySelector('#fxLevel').value, drugName: d.drugName,
+            formSpec: d.formSpec, packSpec: pack, maker: d.maker, approval: d.approval, drugCode: d.drugCode,
+            dosForm: d.dosForm, unit: d.baseUnit || '盒', ipUnpack: d.ipUnpack, opUnpack: d.opUnpack, warehouse: d.warehouse };
+          if (window.PUL_DRUG) window.PUL_DRUG.upsertFromFix(entry); else S.dict.push(entry);
+          done('标识码 ' + idcode + ' 已追加绑定到「' + d.drugName + '」（' + d.drugCode + '），相关入库单已恢复可解析');
+        });
+      });
+    }
+    el.querySelector('#fxFind').addEventListener('click', function () {
+      el.querySelector('#fxCand').innerHTML = candRows(el.querySelector('#fxKw').value.trim());
+      bindCand();
+    });
+    bindCand();
+    // 手工补录兜底：候选表无匹配时直接建字典
     el.querySelector('#fxOk').addEventListener('click', function () {
       var name = el.querySelector('#fxName').value.trim();
       if (!name) { window.showToast('药名通用名为必填项'); return; }
@@ -118,9 +174,7 @@
         approval: el.querySelector('#fxAppr').value.trim() || '-',
         drugCode: 'YP' + String(Date.now()).slice(-6), ipUnpack: '否', opUnpack: '否', unit: '盒' };
       if (window.PUL_DRUG) window.PUL_DRUG.upsertFromFix(entry); else S.dict.push(entry);
-      S.badCodes = S.badCodes.filter(function (x) { return x.idcode !== idcode; });
-      save(); UI.close('pchFix'); renderAll();
-      window.showToast('标识码 ' + idcode + ' 已补录字典，相关入库单已恢复可解析');
+      done('标识码 ' + idcode + ' 已手工补录字典，相关入库单已恢复可解析');
     });
   }
 

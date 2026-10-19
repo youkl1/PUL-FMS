@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
   <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 药房管理">
-  <title>待上架查询 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <title>待上架药品查询 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
-  <link rel="stylesheet" href="styles/wh.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/wh.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -32,8 +32,8 @@
     <header class="pi-header">
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">待上架查询</h1>
-        <span class="pi-subtitle">原型页 · 已入库未绑货位的在架码清单，去「扫码上下架」上架</span>
+        <h1 class="pi-title">待上架药品查询</h1>
+        <span class="pi-subtitle">原型页 · 已入库未绑货位的在架码清单，去「药品扫码上架」上架</span>
       </div>
       <div class="pi-header-right">
         <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
@@ -48,8 +48,8 @@
       <div class="detail-modal-header">
         <div class="detail-modal-icon">📋</div>
         <div class="detail-modal-title-wrap">
-          <h2>待上架查询</h2>
-          <p class="subtitle">药房管理 · 领用入库后、绑货位前</p>
+          <h2>待上架药品查询</h2>
+          <p class="subtitle">药房管理 · 领用入库单后、绑货位前</p>
         </div>
       </div>
       <p class="lead"><strong>一句话概括：</strong>本药房在架但货位为空的追溯码列表——入库完成不等于上架完成。</p>
@@ -57,15 +57,15 @@
         <div class="card-grid">
           <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
             <div class="info-card-title">发药药师</div>
-            <div class="info-card-desc">查待上架码，点「去上架」跳扫码上下架</div></div></div>
+            <div class="info-card-desc">查待上架码，点「去上架」跳药品扫码上架</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
-            <div class="info-card-desc">上游领用入库；下游扫码上下架写 phLoc</div></div></div>
+            <div class="info-card-desc">上游领用入库单；下游药品扫码上架写 phLoc</div></div></div>
         </div></div>
       <div class="section"><div class="section-title">如何使用</div>
         <div class="steps">
           <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">筛选</div><div class="step-desc">药品名 / 标识码 / 批次</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">去上架</div><div class="step-desc">跳到扫码上下架页，选货位后扫该码</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">去上架</div><div class="step-desc">跳到药品扫码上架页，选货位后扫该码</div></div></div>
           <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">下架回流</div><div class="step-desc">上下架页下架后码回到本列表</div></div></div>
         </div></div>
       <div class="section"><div class="section-title">示例</div>
@@ -74,8 +74,8 @@
         </div></div>
       <div class="section"><div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
-          <div class="example-item-title">待上架查询 ⇄ 扫码上下架 ⇄ 药房库存</div>
-          <div class="example-item-desc">查询页不改数据；上架动作只在扫码上下架发生。</div>
+          <div class="example-item-title">待上架药品查询 ⇄ 药品扫码上架 ⇄ 药房库存查询</div>
+          <div class="example-item-desc">查询页不改数据；上架动作只在药品扫码上架发生。</div>
         </div></div></div>
     </div>
   </div>
@@ -83,14 +83,14 @@
     📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 药房管理</span>
   </div>
   <div class="toast" id="toast"></div>
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/drug-data.js"></script>
-  <script src="scripts/purchase-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/wh-data.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/ph-shelf-q.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/drug-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/wh-data.js?v=20261015-6"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/ph-shelf-q.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

@@ -12,16 +12,19 @@
   var P = window.PUL_PCH, UI = window.PchUI, esc = UI.esc;
   var S = P.load();
   var sel = null, tab = 'codes';
-  var filters = { billNo: '', supplier: '', invoice: '', dateFrom: '', dateTo: '' };
+  var filters = { billNo: '', shipper: '', receiver: '', invoice: '', dateFrom: '', dateTo: '' };
 
   function selDoc() {
     for (var i = 0; i < S.inDocs.length; i++) if (S.inDocs[i].billNo === sel) return S.inDocs[i];
     return null;
   }
+  // 扫码数量 = 已核对码数（2026-10-13 Round BV 列表补「扫码数量」列；入库单为审核通过的结果台账，码即已扫）
+  function checkedCount(d) { return (d.codes || []).filter(function (c) { return c.checked; }).length; }
   function filtered() {
     return S.inDocs.filter(function (d) {
       if (filters.billNo && d.billNo.indexOf(filters.billNo) === -1) return false;
-      if (filters.supplier && d.supplier.indexOf(filters.supplier) === -1) return false;
+      if (filters.shipper && (d.shipper || d.supplier || '').indexOf(filters.shipper) === -1) return false;
+      if (filters.receiver && (d.receiver || '').indexOf(filters.receiver) === -1) return false;
       if (filters.invoice && (d.invoice || '').indexOf(filters.invoice) === -1) return false;
       if (filters.dateFrom && d.date.slice(0, 10) < filters.dateFrom) return false;
       if (filters.dateTo && d.date.slice(0, 10) > filters.dateTo) return false;
@@ -29,18 +32,20 @@
     });
   }
 
+  // 筛选栏（2026-10-13 Round BT：统一「文本标签+控件」——PchUI.fItem；供应商→发货方 + 增收货方）
   function filterBar() {
+    var F = UI.fItem;
     return '<div class="card mb-3"><div class="card-body" style="padding:12px 16px;">' +
       '<div class="d-flex flex-wrap align-items-center" style="gap:10px;">' +
-      '<input class="form-control" id="fBillNo" style="width:160px;" placeholder="单据编号" value="' + esc(filters.billNo) + '">' +
-      '<input class="form-control" id="fSupplier" style="width:170px;" placeholder="供应商" value="' + esc(filters.supplier) + '">' +
-      '<input class="form-control" id="fInvoice" style="width:140px;" placeholder="发票号" value="' + esc(filters.invoice) + '">' +
-      '<input class="form-control" id="fDateFrom" type="date" style="width:150px;" value="' + filters.dateFrom + '">' +
-      '<span class="text-secondary">-</span>' +
-      '<input class="form-control" id="fDateTo" type="date" style="width:150px;" value="' + filters.dateTo + '">' +
+      F('单据编号', '<input class="form-control" id="fBillNo" style="width:150px;" value="' + esc(filters.billNo) + '">') +
+      F('发货方', '<input class="form-control" id="fShipper" style="width:160px;" value="' + esc(filters.shipper) + '">') +
+      F('收货方', '<input class="form-control" id="fReceiver" style="width:110px;" value="' + esc(filters.receiver) + '">') +
+      F('发票号', '<input class="form-control" id="fInvoice" style="width:130px;" value="' + esc(filters.invoice) + '">') +
+      F('单据日期', '<input class="form-control" id="fDateFrom" type="date" style="width:138px;" value="' + filters.dateFrom + '">' +
+        '<span class="text-secondary">-</span>' +
+        '<input class="form-control" id="fDateTo" type="date" style="width:138px;" value="' + filters.dateTo + '">') +
       '<button class="btn btn-outline-primary" id="btnQuery">查询</button>' +
       '<button class="btn btn-outline-secondary" id="btnReset">重置</button>' +
-      '<div class="ms-auto"><button class="btn btn-outline-primary" id="btnPrint">⎙ 打印</button></div>' +
       '</div></div></div>';
   }
 
@@ -50,10 +55,12 @@
       return '<tr class="pch-doc-row' + (d.billNo === sel ? ' pch-doc-sel' : '') + '" data-sel="' + esc(d.billNo) + '">' +
         '<td>' + (i + 1) + '</td>' +
         '<td><b>' + esc(d.billNo) + '</b>' + (d.source === '手动' ? ' <span class="badge bg-orange-lt">手动</span>' : '') + '</td>' +
-        '<td class="text-secondary">' + esc(d.date) + '</td><td>' + esc(d.supplier) + '</td>' +
+        '<td>采购入库</td>' +
+        '<td class="text-secondary">' + esc(d.date) + '</td><td>' + esc(d.shipper || d.supplier) + '</td>' +
+        '<td>' + esc(d.receiver || '—') + '</td>' +
         '<td>' + esc(d.warehouse) + (d.location ? '<br><span class="text-secondary" style="font-size:12px;">库位 ' + esc(d.location) + '</span>' : '') + '</td>' +
         '<td class="text-secondary">' + esc(d.invoice || '—') + '</td>' +
-        '<td><b>' + d.codes.length + '</b></td>' +
+        '<td><b>' + d.codes.length + '</b></td><td>' + checkedCount(d) + '</td>' +
         '<td>' + esc(d.auditor) + '</td><td class="text-secondary">' + esc(d.auditDate) + '</td>' +
         '<td>' + UI.light(d.hisPush || '未推送') + '</td>' +
         '<td>' + UI.light(d.miPush || '未推送') + '</td>' +
@@ -63,51 +70,66 @@
           '<button class="btn btn-sm btn-outline-azure" data-flow="' + esc(d.billNo) + '">流转</button> ' +
           '<button class="btn btn-sm btn-outline-warning" data-unaudit="' + esc(d.billNo) + '">反审核</button></td></tr>';
     }).join('');
-    if (!list.length) rows = '<tr><td colspan="12" class="text-center text-secondary" style="padding:32px;">暂无入库单——到货单在「采购到货单」页审核后自动生成（已审核·在架·HIS 已推送）</td></tr>';
+    if (!list.length) rows = '<tr><td colspan="15" class="text-center text-secondary" style="padding:32px;">暂无入库单——到货单在「采购到货单」页审核后自动生成（已审核·在架·HIS 已推送）</td></tr>';
     return '<div class="card mb-3"><div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>序号</th><th>单据编号</th><th>单据日期</th><th>供应商</th><th>库房</th><th>发票号</th><th>码数</th><th>审核人</th><th>审核时间</th><th>HIS推送</th><th>医保推送</th><th>操作</th></tr></thead>' +
+      '<thead><tr><th>序号</th><th>单据编号</th><th>单据类型</th><th>单据日期</th><th>发货方</th><th>收货方</th><th>库房</th><th>发票号</th><th>码数</th><th>扫码数量</th><th>审核人</th><th>审核时间</th><th>HIS推送</th><th>医保推送</th><th>操作</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div>' +
-      '<div class="card-footer" style="font-size:12.5px;"><span class="text-secondary">共 ' + list.length + ' 条 · 推送HIS/推送医保=补推或重推两通道；流转=以本单码直接生成领用出库草稿或采购退货单；反审核后入库单消失、码撤出架、HIS 撤回，对应到货单退回「采购到货单」待审核</span></div></div>';
+      '</div>';
   }
 
-  // ===== 两只读页签：码详情（带药名通用名）/ 药品清单 =====
+  // ===== 两只读页签：码详情 / 药品清单 → PulDocDetail 标准 model/options → 公共组件渲染 =====
+  var ISSUER = { '阿里': '码上放心', 'GS1': 'GS1', 'IDCODE': 'IDCODE' };
+  var LVL_TXT = { 1: '一级码', 2: '二级码', 3: '三级码' };
+  var detailModel = { drugs: [], codes: [], bad: [], activeTab: tab, empty: true };
   function tabSection() {
     var d = selDoc();
-    var tabs = [{ key: 'codes', name: '码详情' }, { key: 'drugs', name: '药品清单' }];
-    var body;
-    if (!d) body = '<div class="text-center text-secondary" style="padding:40px;">点击上方单据行，查看码详情</div>';
-    else if (tab === 'codes') body = codesPanel(d);
-    else body = drugsPanel(d);
-    return '<div class="card">' + UI.tabsHeader(tabs, tab) + '<div class="pch-tab-panel">' + body + '</div></div>';
+    detailModel = d ? { drugs: drugsPanel(d), codes: codesPanel(d), bad: [], activeTab: tab }
+      : { drugs: [], codes: [], bad: [], activeTab: tab, empty: true };
+    return window.PulDocDetail.renderTabs(detailModel, {
+      title: '入库明细',
+      metaHtml: d ? '<span class="text-secondary ms-2" style="font-size:12.5px;">' + esc(d.billNo) + ' · 共 ' + d.codes.length + ' 个追溯码</span>' : '',
+      emptyText: '点击上方单据行，查看码详情',
+      tabs: ['codes', 'drugs'],
+      counts: { codes: 'rows' },
+      codes: {
+        // 码表公共 12 列子集（旧 8 列收敛：药品追溯码(一级)→药品追溯码、二级/三级码列→码层级/父级码公共口径）
+        columns: ['seq', 'code', 'drugName', 'level', 'parentCode', 'batch', 'prodDate', 'expDate'],
+        emptyText: '码清单为空'
+      },
+      drugs: {
+        columns: ['seq', 'drugName', 'formSpec', 'packSpec', 'batch', 'prodDate', 'expDate', 'qty', 'unit', 'approval', 'maker'],
+        emptyText: '暂无可解析药品'
+      }
+    });
   }
 
+  // 码详情（2026-10-10 拍板：删 拆零/拆零数 两列——拆零信息在药品清单与库存查询表达，逐码视图不重复展示）
   function codesPanel(d) {
-    var rows = d.codes.map(function (c, i) {
+    return d.codes.map(function (c) {
       var p = P.parseCode(c.code, S.dict);
-      return '<tr><td>' + (i + 1) + '</td>' +
-        '<td style="font-family:Consolas,monospace;font-size:12.5px;">' + esc(c.code) + '</td>' +
-        '<td>' + esc(c.split) + '</td><td>' + esc(c.splitQty || '—') + '</td>' +
-        '<td>' + esc(c.batch) + '</td><td>' + esc(c.prodDate) + '</td><td>' + esc(c.expDate) + '</td>' +
-        '<td>' + esc(p.dict ? p.dict.drugName : '—') + '</td>' +
-        '<td style="font-family:Consolas,monospace;font-size:12px;" class="text-secondary">' + esc(c.code2 || '—') + '</td>' +
-        '<td style="font-family:Consolas,monospace;font-size:12px;" class="text-secondary">' + esc(c.code3 || '—') + '</td></tr>';
-    }).join('');
-    return '<div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>序号</th><th>药品追溯码(一级)</th><th>拆零</th><th>拆零数</th><th>批次号</th><th>生产日期</th><th>有效期至</th><th>药名通用名</th><th>药品追溯码(二级)</th><th>药品追溯码(三级)</th></tr></thead>' +
-      '<tbody>' + rows + '</tbody></table></div>';
+      return {
+        raw: c,
+        code: c.code,
+        drugName: p.dict ? p.dict.drugName : '—',
+        level: p.dict ? (LVL_TXT[p.dict.level] || (p.dict.level + '级码')) : '—',
+        parentCode: c.parentCode || '—',
+        batch: c.batch || '—',
+        prodDate: c.prodDate || '—',
+        expDate: c.expDate || '—'
+      };
+    });
   }
 
+  // 药品清单（2026-10-14 需求拍板：「扫码数量」口径保留——summarize 第三参 true 只统计已核对码，与列表扫码数量列同源）
   function drugsPanel(d) {
-    var list = P.summarize(d.codes, S.dict);
-    var rows = list.map(function (r, i) {
-      return '<tr><td>' + (i + 1) + '</td><td><b>' + esc(r.drugName) + '</b></td><td>' + esc(r.formSpec) + '</td>' +
-        '<td>' + esc(r.packSpec) + '</td><td>' + esc(r.batch) + '</td><td>' + esc(r.prodDate) + '</td><td>' + esc(r.expDate) + '</td>' +
-        '<td><b>' + r.qty + '</b></td><td>' + esc(r.unit) + '</td>' +
-        '<td class="text-secondary">' + esc(r.approval) + '</td><td class="text-secondary">' + esc(r.maker) + '</td></tr>';
-    }).join('');
-    return '<div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>序号</th><th>药名通用名</th><th>制剂规格</th><th>包装规格</th><th>批次号</th><th>生产日期</th><th>有效期至</th><th>数量</th><th>单位</th><th>批准文号</th><th>生产企业</th></tr></thead>' +
-      '<tbody>' + rows + '</tbody></table></div>';
+    return P.summarize(d.codes, S.dict, true).map(function (r) {
+      return {
+        raw: r,
+        drugName: r.drugName, formSpec: r.formSpec, packSpec: r.packSpec,
+        batch: r.batch, prodDate: r.prodDate, expDate: r.expDate,
+        qty: r.qty, unit: r.unit, approval: r.approval, maker: r.maker
+      };
+    });
   }
 
   function renderAll() {
@@ -124,23 +146,21 @@
     return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
   }
 
-  // ===== 推送HIS（老系统图二：推送=含码明细 / 无码推送=只推单据头 / 不推送=人工标记跳过） =====
+  // ===== 推送HIS（2026-10-13 Round BV 用户拍板：只保留「推送」，无码推送/不推送两通道删除） =====
   function openPushHis(billNo) {
     var d = docByNo(billNo);
     if (!d) return;
     UI.modalShell('pchPushHis', '提示',
       '<div style="font-size:14px;line-height:1.8;">当前单据：<b>' + esc(billNo) + '</b>，是否推送 HIS？' +
-      '<div class="text-secondary" style="font-size:12.5px;margin-top:6px;">推送=单据头 + ' + d.codes.length + ' 个追溯码明细；无码推送=只推单据头与药品汇总；不推送=标记本单跳过（可稍后重推）。</div></div>',
+      '<div class="text-secondary" style="font-size:12.5px;margin-top:6px;">推送=单据头 + ' + d.codes.length + ' 个追溯码明细。</div></div>',
       '<button class="btn btn-primary" data-his="已推送">推送</button>' +
-      '<button class="btn btn-outline-primary" data-his="无码推送">无码推送</button>' +
-      '<button class="btn btn-outline-secondary" data-his="不推送">不推送</button>' +
       '<button class="btn btn-outline-secondary" data-mclose>取消</button>', 460);
     var el = UI.open('pchPushHis');
     el.querySelectorAll('[data-his]').forEach(function (b) {
       b.addEventListener('click', function () {
         d.hisPush = b.getAttribute('data-his');
         P.save(S); UI.close('pchPushHis'); renderAll();
-        window.showToast(d.hisPush === '不推送' ? '已标记 ' + billNo + ' 不推送 HIS' : '已推送 HIS（' + d.hisPush + '）：' + billNo);
+        window.showToast('已推送 HIS：' + billNo);
       });
     });
   }
@@ -207,7 +227,9 @@
         items: [], badCodes: [], createTime: t, submitTime: t, outTime: '', inTime: '',
         codes: d.codes.map(function (c) { return Object.assign({}, c, { scanHead: '库房备货', shelfTime: '', phLoc: c.phLoc || '', expectLoc: c.expectLoc || '' }); }) });
       W.save(wh);
-      location.href = 'quick-scan.html?billNo=' + encodeURIComponent(billNo);
+      UI.close('pchFlowPick');
+      // 2026-10-13 Round BT：跳页改弹窗（复用 scan-hub?embed=1），关闭回本页刷新
+      UI.openScanHub(billNo, renderAll);
     });
   }
 
@@ -234,22 +256,21 @@
 
   function bind() {
     document.getElementById('btnQuery').addEventListener('click', function () {
-      filters = { billNo: v('fBillNo'), supplier: v('fSupplier'), invoice: v('fInvoice'),
+      filters = { billNo: v('fBillNo'), shipper: v('fShipper'), receiver: v('fReceiver'), invoice: v('fInvoice'),
         dateFrom: v('fDateFrom'), dateTo: v('fDateTo') };
       renderAll();
     });
     document.getElementById('btnReset').addEventListener('click', function () {
-      filters = { billNo: '', supplier: '', invoice: '', dateFrom: '', dateTo: '' };
+      filters = { billNo: '', shipper: '', receiver: '', invoice: '', dateFrom: '', dateTo: '' };
       renderAll();
-    });
-    document.getElementById('btnPrint').addEventListener('click', function () {
-      window.showToast('已生成打印预览（原型演示）');
     });
     content.querySelectorAll('[data-sel]').forEach(function (tr) {
       tr.addEventListener('click', function () { sel = tr.getAttribute('data-sel'); renderAll(); });
     });
-    content.querySelectorAll('[data-ptab]').forEach(function (b) {
-      b.addEventListener('click', function () { tab = b.getAttribute('data-ptab'); renderAll(); });
+    // 明细双页签切换统一走 PulDocDetail.bind（替代原页签行监听；只读无行级动作）
+    window.PulDocDetail.bind(content, {
+      model: detailModel,
+      onTab: function (key) { tab = key; renderAll(); }
     });
     content.querySelectorAll('[data-push-his]').forEach(function (b) {
       b.addEventListener('click', function () { openPushHis(b.getAttribute('data-push-his')); });
@@ -260,12 +281,15 @@
     content.querySelectorAll('[data-flow]').forEach(function (b) {
       b.addEventListener('click', function () { openFlow(b.getAttribute('data-flow')); });
     });
-    // 反审核：删入库单 + 码撤出架 + HIS 撤回 + 到货单回「待审核」；防呆——已有审核退货单引用本单码时拦截（先冲正退货单）
+    // 反审核：删入库单 + 码撤出架 + HIS 撤回 + 到货单回「待审核」；防呆（2026-10-13 Round BV 用户拍板）：已推送 HIS / 码已入库药房 不允许反审核；
+    // 已有审核退货单引用本单码时也拦截（先冲正退货单）
     content.querySelectorAll('[data-unaudit]').forEach(function (b) {
       b.addEventListener('click', function () {
         var billNo = b.getAttribute('data-unaudit');
         var d = S.inDocs.filter(function (x) { return x.billNo === billNo; })[0];
         if (!d) return;
+        if (d.hisPush === '已推送') { window.showToast('不可反审核：单据已推送 HIS，请先在 HIS 侧撤回'); return; }
+        if ((d.codes || []).some(function (c) { return c.phLoc; })) { window.showToast('不可反审核：追溯码已入库药房（已上架货位），请先走退货流程'); return; }
         var consumed = [];
         S.outDocs.forEach(function (od) {
           if (od.status !== '已审核') return;
@@ -285,7 +309,7 @@
           } else {
             // 兜底：到货单缺失时按入库单快照重建（验收态保留，回到待审核）
             S.arrive.unshift({ orderNo: d.billNo, orderTime: d.date, supplier: d.supplier, shipper: d.supplier,
-              receiver: '云岭总医院', docType: '销售出库', source: d.source === '手动' ? '手动' : '拉取',
+              receiver: '中心院区', docType: '销售出库', source: d.source === '手动' ? '手动' : '拉取',
               confirm: '未确认', downloaded: '否', invoice: d.invoice || '',
               warehouse: d.warehouse || '', loc: d.location || '',
               codes: d.codes.map(function (c) { return Object.assign({}, c); }) });

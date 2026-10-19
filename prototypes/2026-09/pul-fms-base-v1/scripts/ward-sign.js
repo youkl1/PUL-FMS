@@ -3,7 +3,7 @@
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'wardSign', crumb: ['发药管理', '病区签收'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'wardSign', crumb: ['出库管理', '病区签收'] });
   if (!content) return;
 
   var W = window.PUL_WH, R = window.PUL_RX, UI = window.PchUI, esc = UI.esc;
@@ -91,30 +91,33 @@
         '</td></tr>';
     }).join('');
     if (!rows) rows = '<tr><td colspan="8" class="text-center text-secondary" style="padding:28px;">' +
-      (tab === '待签收' ? '暂无待签收——先在「摆药单业务」把一张做到已完成' : '暂无已签收单') + '</td></tr>';
+      (tab === '待签收' ? '暂无待签收——先在「摆药单批量赋码」把一张做到已完成' : '暂无已签收单') + '</td></tr>';
     return '<div class="card mb-3"><div class="table-responsive"><table class="table table-vcenter card-table">' +
       '<thead><tr><th>摆药单号</th><th>摆药完成</th><th>住院号</th><th>病区/床</th><th>患者</th><th>已扫/应扫</th><th>状态</th><th>操作</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div></div>';
   }
 
+  // 2026-10-18 Task5：码清单迁移 PulDocDetail.renderCodes 独立表格（签收状态 pch-light 走 extraColumns；卡片壳/患者绑定说明保留）
   function codesCard() {
     var d = selDoc();
     if (!d) return '<div class="card"><div class="card-body text-center text-secondary" style="padding:28px;">点选单据看码清单（患者已随单绑定）</div></div>';
-    var rows = allCodes(d).map(function (c, i) {
-      return '<tr><td>' + (i + 1) + '</td>' +
-        '<td style="font-family:Consolas,monospace;font-size:12.5px;">' + esc(c.code) + '</td>' +
-        '<td>' + esc(drugName(c._drug)) + '</td><td>' + esc(c.batch) + '</td><td>' + esc(c.phLoc || '—') + '</td>' +
-        '<td>' + (c.wardSigned || isDone(d)
+    var rows = allCodes(d).map(function (c) {
+      return {
+        code: c.code, drugName: drugName(c._drug), batch: c.batch, location: c.phLoc || '—',
+        _signCell: (c.wardSigned || isDone(d)
           ? '<span class="pch-light ok"><i class="pch-dot"></i>已确认</span>'
-          : '<span class="pch-light mute"><i class="pch-dot"></i>未扫</span>') + '</td></tr>';
-    }).join('');
-    if (!rows) rows = '<tr><td colspan="6" class="text-center text-secondary">无码</td></tr>';
+          : '<span class="pch-light mute"><i class="pch-dot"></i>未扫</span>')
+      };
+    });
+    var table = window.PulDocDetail.renderCodes({ codes: rows }, {
+      columns: ['seq', 'code', 'drugName', 'batch', 'location'],
+      extraColumns: [{ key: 'sign', title: '签收', cell: function (r) { return r._signCell; } }],
+      emptyText: '无码'
+    });
     return '<div class="card"><div class="card-header"><b>码清单</b>' +
       '<span class="text-secondary ms-2" style="font-size:12.5px;">' + esc(d.trayNo) + ' · ' + esc(d.patient) +
       ' · 患者已绑，病区只确认收到</span></div>' +
-      '<div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>#</th><th>追溯码</th><th>药品</th><th>批次</th><th>货位</th><th>签收</th></tr></thead>' +
-      '<tbody>' + rows + '</tbody></table></div></div>';
+      table + '</div>';
   }
 
   function finish(d) {
@@ -124,9 +127,29 @@
     save(); renderAll();
   }
 
+  // 二期 Task B：openScan 大版面接线适配——药品清单行模型（按药品聚合签收进度，仅视图模型，不改业务）
+  function scanDrugRows(d) {
+    return (d.items || []).map(function (it) {
+      var codes = it.codes || [];
+      var signed = codes.filter(function (c) { return c.wardSigned; }).length;
+      var dd = R.drugOf(it.drugCode) || {};
+      return { drugName: drugName(it.drugCode), formSpec: dd.formSpec || '—',
+        qty: it.qty, unit: it.unit, scanText: signed + ' / ' + it.qty };
+    });
+  }
+
   function openScan(d) {
+    var all = allCodes(d), signed = signedCnt(d);
     UI.openScan({
       title: '病区签收 · ' + d.trayNo,
+      headerHtml: '<div class="pch-scan-fields">' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">单据类型</span>病区签收</span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">单据单号</span><b>' + esc(d.trayNo) + '</b></span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">单据时间</span>' + esc(d.doneTime || d.date) + '</span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">发货方</span>' + esc(d.pharmacy) + '</span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">收货方</span>' + esc(d.ward) + ' / ' + esc(d.bed) + '</span></div>',
+      drugsRows: function () { return scanDrugRows(d); },
+      drugsOptions: { columns: ['seq', 'drugName', 'formSpec', 'qty', 'scanQty', 'unit'], emptyText: '无明细' },
       hint: '扫本单追溯码确认收到。不在清单=红。齐了自动签收。',
       table: true,
       onScan: function (code) {

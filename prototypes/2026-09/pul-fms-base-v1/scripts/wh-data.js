@@ -2,12 +2,15 @@
  * wh-data.js — 库房管理 Mock 数据（store 命名空间 wh）
  * 码状态机原型实现 = 集合推导（与 pch.stockCodes 同款扩展）：
  *   在架 = 采购入库单(已审核) + 其他入库单(已审核) + 退回入库单(已审核)
- *        − 采购退货单(已审核) − 领用单(已出库·待入库/已入库·待上架) − 其他出库单(已审核) − 损耗出库(已审核)
- *   在途 = 领用单 status='已出库·待入库'（出库审核即扣账）；'已入库·待上架' 闭环；「已上架」为推导展示态
+ *        − 采购退货单(已审核) − 领用单(已出库/已入库) − 其他出库单(已审核) − 损耗出库(已审核)
+ *   在途 = 领用单 status='已出库'（出库审核即扣账）；'已入库' 闭环；「已上架」为推导展示态（上架状态独立列）
  * 领用单 = 单池 pickDocs（2026-10-05 两池并一池：申请/备货/出库/入库全程同单同号，reqPool 已废除）
+ * 词表 v3（2026-10-08 拍板）：草稿/待出库/已出库/已入库/已作废；上架状态=待上架/已上架（推导，不落库）
  */
 (function () {
   'use strict';
+
+  var V = window.PUL_VOCAB.ST;   // 状态词表常量（store.js 先行加载）
 
   // ===== 业务枚举（基础字典 IO_TYPE 的业务化子集；损耗原因 Q7 拍板=要） =====
   var OTH_IN_TYPES = ['赠品入库', '期初补录', '其他'];
@@ -43,101 +46,105 @@
   );
   var OTH_IN_DOCS = [
     { billNo: 'QTRK20260901001', date: '2026-09-01 09:30', type: '期初补录', supplier: '', warehouse: '中心库', remark: '系统上线期初库存补录',
-      status: '已审核', auditTime: '2026-09-01 10:05', auditor: '王铁军', codes: OTH_IN_SEED_CODES },
+      status: V.AUDITED, auditTime: '2026-09-01 10:05', auditor: '王铁军', codes: OTH_IN_SEED_CODES },
     // 未审核演示单：扫码入库入口开箱可见（码 000500301 为全新码，不在在架；批次挂码记录）
+    // 2026-10-10 Round BC：+ 未解析码 8999001-…002（标识码未维护，采购异常码台账已有「解析失败」条目）
+    //   → 列表 实物2/解析1/扫码2 三列差异 + 异常码页签 + 审核硬拦演示；扫码移除或维护字典后放行
     { billNo: 'QTRK20261002001', date: '2026-10-02 14:20', type: '赠品入库', supplier: '国药控股福建有限公司', warehouse: '中心库', remark: '厂家赠品随货同行',
       status: '未审核', auditTime: '', auditor: '',
-      codes: [code('8461935', '000500301', '0000', '250915', '2025-09-10', '2027-09-09', { checked: true })] },
+      codes: [code('8461935', '000500301', '0000', '250915', '2025-09-10', '2027-09-09', { checked: true }),
+              code('8999001', '000000002', '9999', '', '', '', { checked: true })] },
+    // 2026-10-14 Round CB(批2) 批次未补齐演示单：2 解析码批次/效期空 → 审核「补全批次/效期」拦截 + 编辑弹窗/药品清单行补全演示
+    { billNo: 'QTRK20261014001', date: '2026-10-14 09:40', type: '其他', supplier: '福建三明同春医药有限公司', warehouse: '中心库', remark: '批次效期待补全演示',
+      status: '未审核', auditTime: '', auditor: '',
+      codes: [code('8400431', '000490010', '8010', '', '', '', { checked: true }),
+              code('8441916', '000490011', '8011', '', '', '', { checked: true })] },
     // 2026-10-03 期初补录第二批：给其他出库演示单供码（依姆多 500007-500008 / 唯可来 500104）
     { billNo: 'QTRK20261003001', date: '2026-10-03 09:10', type: '期初补录', supplier: '', warehouse: '中心库', remark: '期初补录第二批',
-      status: '已审核', auditTime: '2026-10-03 09:25', auditor: '王铁军',
+      status: V.AUDITED, auditTime: '2026-10-03 09:25', auditor: '王铁军',
       codes: [].concat(
         codes('8461935', 500007, 2, '250603', '2025-06-15', '2028-06-14', { checked: true, location: 'A-02-01' }),
         codes('8416917', 500104, 1, '250704', '2025-07-20', '2027-07-19', { checked: true, location: 'A-02-02' })) },
     // 2026-10-04 期初补录第三批：给领用入库单演示供码（审核在架 → 被领用在途/已入库扣减）
     { billNo: 'QTRK20261004001', date: '2026-10-04 08:50', type: '期初补录', supplier: '', warehouse: '中心库', remark: '期初补录第三批（领用入库演示供码）',
-      status: '已审核', auditTime: '2026-10-04 09:05', auditor: '王铁军',
+      status: V.AUDITED, auditTime: '2026-10-04 09:05', auditor: '王铁军',
       codes: OTH_IN3_CODES }
   ];
   // 领用单池（2026-10-05 两池并一池：申请→备货→出库→入库→上架全程同单同号）
-  // 五态：待提交/待出库/已出库·待入库/已入库·待上架/已作废；「已上架」=全码 phLoc 非空推导（不落库）
-  // items[].qty=计划数量 docQty=单据数量（扫码折合渐满） slot=上架货位（随单传递到码 expectLoc）
+  // 词表 v3（2026-10-08 拍板）：草稿/待出库/已出库/已入库/已作废；上架状态独立推导（待上架/已上架，不落库）
+  // items[].qty=计划数量 docQty=实物数量（扫码折合渐满） slot=上架货位（随单传递到码 expectLoc）
   // codes[].scanHead=扫码头（库房备货/药房上架/药房直生） phLoc=实际上架货位 shelfTime=上架时间
   var PICK_DOCS = [
-    // —— 待提交草稿（药房申请 + 库房制单各 1）——
+    // —— 草稿（仅药房申请；2026-10-08 起库房不再手动新增领用单，库房制单草稿链路删除）——
     { billNo: 'LY20261004001', date: '2026-10-04 09:20', pharmacy: '门诊药房', warehouse: '中心库',
-      applicant: '陈静', operator: '陈静', source: '药房申请', status: '待提交', remark: '草稿演示：待提交库房备货',
+      applicant: '陈静', operator: '陈静', source: '药房申请', status: V.DRAFT, remark: '草稿演示：提交后库房备货',
       items: [{ drugCode: 'YP010388', qty: 10, docQty: 0, slot: 'M-02' }], codes: [], badCodes: [], shelfLoc: '',
       createTime: '2026-10-04 09:20', submitTime: '', outTime: '', inTime: '' },
-    { billNo: 'LY20261001001', date: '2026-10-01 09:58', pharmacy: '门诊药房', warehouse: '中心库',
-      applicant: '王铁军', operator: '王铁军', source: '库房制单', status: '待提交', remark: '缺货驱动制单演示',
-      items: [{ drugCode: 'YP010312', qty: 2, docQty: 0, slot: '' }], codes: [], badCodes: [], shelfLoc: '',
-      createTime: '2026-10-01 09:58', submitTime: '', outTime: '', inTime: '' },
     // —— 待出库（申请已提交，未开始备货）——
     { billNo: 'LY20260914001', date: '2026-09-14 08:40', pharmacy: '门诊药房', warehouse: '中心库',
-      applicant: '陈静', operator: '陈静', source: '药房申请', status: '待出库', remark: '周末门急诊备货',
+      applicant: '陈静', operator: '陈静', source: '药房申请', status: V.PENDING_OUT, remark: '周末门急诊备货',
       items: [{ drugCode: 'YP010245', qty: 5, docQty: 0, slot: 'M-01' }, { drugCode: 'YP010529', qty: 2, docQty: 0, slot: 'CB01-C1-02' }],
       codes: [], badCodes: [], shelfLoc: '',
       createTime: '2026-09-14 08:40', submitTime: '2026-09-14 08:40', outTime: '', inTime: '' },
     { billNo: 'LY20260914002', date: '2026-09-14 09:15', pharmacy: '住院药房', warehouse: '中心库',
-      applicant: '陈静', operator: '陈静', source: '药房申请', status: '待出库', remark: '',
+      applicant: '陈静', operator: '陈静', source: '药房申请', status: V.PENDING_OUT, remark: '',
       items: [{ drugCode: 'YP010388', qty: 60, docQty: 0, slot: 'Z-01' }, { drugCode: 'YP010477', qty: 10, docQty: 0, slot: '' }],
       codes: [], badCodes: [], shelfLoc: '',
       createTime: '2026-09-14 09:15', submitTime: '2026-09-14 09:15', outTime: '', inTime: '' },
-    // —— 待出库（直接出库草稿，带码渐满）——
+    // —— 待出库（直接出库草稿，带码渐满；2026-10-09 拍板：领用备货单必有计划数量，新增备货单必选清单）——
     { billNo: 'LYCK20261001001', date: '2026-10-01 09:40', pharmacy: '门诊药房', warehouse: '中心库',
-      applicant: '王铁军', operator: '王铁军', source: '库房制单', status: '待出库', remark: '新增备货单演示（直接出库草稿）',
-      items: [], badCodes: [], shelfLoc: '',
+      applicant: '王铁军', operator: '王铁军', source: '库房制单', status: V.PENDING_OUT, remark: '新增备货单演示（直接出库草稿）',
+      items: [{ drugCode: 'YP010388', qty: 60, docQty: 60, slot: '' }], badCodes: [], shelfLoc: '',
       codes: [{ code: '84147840007702017701', level: 1, split: '否', splitQty: '', batch: '250702',
         prodDate: '2025-07-10', expDate: '2027-07-09', checked: true, code2: '', code3: '', location: 'A-01-02',
         expectLoc: '', phLoc: '', scanHead: '库房备货', shelfTime: '' }],
       createTime: '2026-10-01 09:40', submitTime: '', outTime: '', inTime: '' },
     // —— 已出库·待入库（在途 3 + 住院隔离演示 1）——
     { billNo: 'LYCK20260913001', date: '2026-09-13 14:20', pharmacy: '门诊药房', warehouse: '中心库',
-      applicant: '陈静', operator: '王铁军', source: '药房申请', status: '已出库·待入库', remark: '',
+      applicant: '陈静', operator: '王铁军', source: '药房申请', status: V.OUT, remark: '',
       items: [{ drugCode: 'YP010245', qty: 3, docQty: 3, slot: 'M-01' }], badCodes: [], shelfLoc: '',
       codes: OTH_IN_SEED_CODES.slice(0, 3).map(function (c) { return Object.assign({}, c, { expectLoc: 'M-01', scanHead: '库房备货', shelfTime: '' }); }),
       createTime: '2026-09-13 14:02', submitTime: '2026-09-13 14:02', outTime: '2026-09-13 14:35', inTime: '' },
     { billNo: 'LYCK20261002001', date: '2026-10-02 21:21', pharmacy: '门诊药房', warehouse: '中心库',
-      applicant: '陈静', operator: '王铁军', source: '药房申请', status: '已出库·待入库', remark: '夜间急诊备货',
+      applicant: '陈静', operator: '王铁军', source: '药房申请', status: V.OUT, remark: '夜间急诊备货',
       items: [{ drugCode: 'YP010245', qty: 2, docQty: 2, slot: 'M-01' }, { drugCode: 'YP010401', qty: 1, docQty: 1, slot: 'M-01' }],
       badCodes: [], shelfLoc: '',
       codes: OTH_IN3_CODES.slice(0, 3).map(function (c) { return Object.assign({}, c, { expectLoc: 'M-01', scanHead: '库房备货', shelfTime: '' }); }),
       createTime: '2026-10-02 20:50', submitTime: '2026-10-02 20:50', outTime: '2026-10-02 21:30', inTime: '' },
     { billNo: 'LYCK20261003001', date: '2026-10-03 16:05', pharmacy: '门诊药房', warehouse: '中心库',
-      applicant: '王铁军', operator: '王铁军', source: '库房制单', status: '已出库·待入库', remark: '效期周转主动配送',
+      applicant: '王铁军', operator: '王铁军', source: '库房制单', status: V.OUT, remark: '效期周转主动配送',
       items: [{ drugCode: 'YP010312', qty: 2, docQty: 2, slot: 'M-03' }], badCodes: [], shelfLoc: '',
       codes: OTH_IN3_CODES.slice(3, 5).map(function (c) { return Object.assign({}, c, { expectLoc: 'M-03', scanHead: '库房备货', shelfTime: '' }); }),
       createTime: '2026-10-03 15:50', submitTime: '2026-10-03 15:50', outTime: '2026-10-03 16:20', inTime: '' },
     { billNo: 'LYCK20261003002', date: '2026-10-03 11:40', pharmacy: '住院药房', warehouse: '中心库',
-      applicant: '王铁军', operator: '王铁军', source: '库房制单', status: '已出库·待入库', remark: '住院药房在途（演示药房隔离）',
-      items: [], badCodes: [], shelfLoc: '',
+      applicant: '王铁军', operator: '王铁军', source: '库房制单', status: V.OUT, remark: '住院药房在途（演示药房隔离）',
+      items: [{ drugCode: 'YP010477', qty: 60, docQty: 60, slot: 'Z-01' }], badCodes: [], shelfLoc: '',
       codes: OTH_IN3_CODES.slice(7, 9).map(function (c) { return Object.assign({}, c, { expectLoc: 'Z-01', scanHead: '库房备货', shelfTime: '' }); }),
       createTime: '2026-10-03 11:40', submitTime: '2026-10-03 11:40', outTime: '2026-10-03 11:55', inTime: '' },
     // —— 已入库·待上架（闭环 2；全码有 phLoc 时展示推导态「已上架」）——
     { billNo: 'LYCK20260912001', date: '2026-09-12 10:08', pharmacy: '门诊药房', warehouse: '中心库',
-      applicant: '陈静', operator: '王铁军', source: '药房申请', status: '已入库·待上架', remark: '',
+      applicant: '陈静', operator: '王铁军', source: '药房申请', status: V.IN, remark: '',
       items: [{ drugCode: 'YP010401', qty: 1, docQty: 1, slot: 'M-01' }, { drugCode: 'YP010312', qty: 2, docQty: 2, slot: 'M-03' }],
       badCodes: [], shelfLoc: '',
       codes: OTH_IN_SEED_CODES.slice(6, 7).map(function (c) { return Object.assign({}, c, { expectLoc: 'M-01', scanHead: '库房备货', shelfTime: '' }); })
         .concat(OTH_IN_SEED_CODES.slice(9, 11).map(function (c) { return Object.assign({}, c, { expectLoc: 'M-03', scanHead: '库房备货', shelfTime: '' }); })),
       createTime: '2026-09-12 09:50', submitTime: '2026-09-12 09:50', outTime: '2026-09-12 10:22', inTime: '2026-09-12 10:22' },
     { billNo: 'LYCK20261002002', date: '2026-10-02 10:15', pharmacy: '门诊药房', warehouse: '中心库',
-      applicant: '王铁军', operator: '王铁军', source: '库房制单', status: '已入库·待上架', remark: '直接出库闭环演示',
-      items: [], badCodes: [], shelfLoc: 'M-01',
+      applicant: '王铁军', operator: '王铁军', source: '库房制单', status: V.IN, remark: '直接出库闭环演示',
+      items: [{ drugCode: 'YP010529', qty: 2, docQty: 2, slot: 'M-01' }], badCodes: [], shelfLoc: 'M-01',
       codes: OTH_IN3_CODES.slice(5, 7).map(function (c) { return Object.assign({}, c, { expectLoc: 'M-01', scanHead: '库房备货', shelfTime: '' }); }),
       createTime: '2026-10-02 10:15', submitTime: '2026-10-02 10:15', outTime: '2026-10-02 10:30', inTime: '2026-10-02 10:30' }
   ];
-  PICK_DOCS[5].codes[0].phLoc = 'M-01';   // LYCK20260913001 在途单：预写上架货位（演示在途码已定位边界）
-  PICK_DOCS[9].codes[0].phLoc = 'M-01';   // LYCK20260912001 唯可来已上架 1/3（演示上下架 + 已入库单上架进度）
-  PICK_DOCS[10].codes[0].phLoc = 'M-01';  // LYCK20261002002 复方氨基酸已上架 1/2（演示 shelfLoc 与上架进度）
+  PICK_DOCS[4].codes[0].phLoc = 'M-01';   // LYCK20260913001 在途单：预写上架货位（演示在途码已定位边界）
+  PICK_DOCS[8].codes[0].phLoc = 'M-01';   // LYCK20260912001 唯可来已上架 1/3（演示上下架 + 已入库单上架进度）
+  PICK_DOCS[9].codes[0].phLoc = 'M-01';  // LYCK20261002002 复方氨基酸已上架 1/2（演示 shelfLoc 与上架进度）
   // 退回单池（药房退回出库单，待库房接收入库）：码必须来自已领出（在途/药房在架）的码；splitQty>0 演示拆零退回提示
   // refNo = 来源领用出库单号（2026-10-03 拍板：药房退回必须从领用出库单发起；库房直收为空）
   var RET_POOL = [
-    { retNo: 'TH20260914001', date: '2026-09-14 10:20', pharmacy: '门诊药房', warehouse: '中心库', operator: '陈静', status: '待入库',
+    { retNo: 'TH20260914001', date: '2026-09-14 10:20', pharmacy: '门诊药房', warehouse: '中心库', operator: '陈静', status: V.PENDING_IN,
       refNo: 'LYCK20260913001',
       codes: [Object.assign({}, OTH_IN_SEED_CODES[1], { split: '是', splitQty: 4 }), Object.assign({}, OTH_IN_SEED_CODES[2])] },
-    { retNo: 'TH20260914002', date: '2026-09-14 11:05', pharmacy: '门诊药房', warehouse: '中心库', operator: '陈静', status: '待入库',
+    { retNo: 'TH20260914002', date: '2026-09-14 11:05', pharmacy: '门诊药房', warehouse: '中心库', operator: '陈静', status: V.PENDING_IN,
       refNo: 'LYCK20260912001',
       codes: [Object.assign({}, OTH_IN_SEED_CODES[10])] }
   ];
@@ -145,38 +152,55 @@
   // 码取 OTH_IN_SEED_CODES 未被占用者：[3][4]=唯可来 500004/500005、[12]=健脾 500204、[7]=依姆多 500102
   var OTH_OUT_DOCS = [
     { billNo: 'QTCK20260920001', date: '2026-09-20 10:15', type: '借出', receiver: '滨海院区急诊科', warehouse: '中心库',
-      remark: '急诊抢救车临时借药，下周归还', status: '已审核', auditTime: '2026-09-20 10:32', auditor: '王铁军',
+      remark: '急诊抢救车临时借药，下周归还', status: V.AUDITED, auditTime: '2026-09-20 10:32', auditor: '王铁军',
       codes: [Object.assign({}, OTH_IN_SEED_CODES[3]), Object.assign({}, OTH_IN_SEED_CODES[4])] },
     { billNo: 'QTCK20260928001', date: '2026-09-28 15:40', type: '样品', receiver: '市药品检验所', warehouse: '中心库',
-      remark: '年度抽检送样', status: '已审核', auditTime: '2026-09-28 16:02', auditor: '王铁军',
+      remark: '年度抽检送样', status: V.AUDITED, auditTime: '2026-09-28 16:02', auditor: '王铁军',
       codes: [Object.assign({}, OTH_IN_SEED_CODES[12])] },
+    // 2026-10-10 Round BC：核对态落码记录（c.checked 持久化）——未审核演示单 checked=false，扫码核对进度从零演示
     { billNo: 'QTCK20261002001', date: '2026-10-02 11:10', type: '其他', receiver: '设备科', warehouse: '中心库',
       remark: '未审核草稿演示：可继续扫码、审核后扣账', status: '未审核', auditTime: '', auditor: '',
-      codes: [Object.assign({}, OTH_IN_SEED_CODES[7])] },
+      codes: [Object.assign({}, OTH_IN_SEED_CODES[7], { checked: false })] },
     // 2026-10-03 补模拟数据：①已审核借出单 ②未审核带码草稿（演示行内扫码/编辑/审核/删除）
     { billNo: 'QTCK20260930001', date: '2026-09-30 16:45', type: '借出', receiver: '滨海院区骨科', warehouse: '中心库',
-      remark: '骨科手术临时借药', status: '已审核', auditTime: '2026-09-30 17:02', auditor: '王铁军',
+      remark: '骨科手术临时借药', status: V.AUDITED, auditTime: '2026-09-30 17:02', auditor: '王铁军',
       codes: [Object.assign({}, OTH_IN_SEED_CODES[5])] },
     { billNo: 'QTCK20261001001', date: '2026-10-01 15:20', type: '样品', receiver: '省药械展组委会', warehouse: '中心库',
       remark: '展会送样，待审核', status: '未审核', auditTime: '', auditor: '',
-      codes: [Object.assign({}, OTH_IN_SEED_CODES[8])] }
+      codes: [Object.assign({}, OTH_IN_SEED_CODES[8], { checked: false })] }
   ];
   // 损耗出库单种子（已审核；来源列：日常报损/盘亏转入/数据迁移 —— Q1 拍板口径）
   var LOSS_DOCS = [
+    // Round CB(批2) 未审核报损演示单：扫码选码（重复⚠/不在架×）/编辑/红 confirm 销毁终态全流程开箱可演（码=pch 在架 000220061）
+    { billNo: 'SHCK20261014001', date: '2026-10-14 10:20', reason: '破损', source: '日常报损', warehouse: '中心库',
+      status: '未审核', auditTime: '', auditor: '', remark: '货架倾倒破损待审核',
+      codes: [code('8416917', '000220061', '1201', '241105', '2024-11-20', '2027-11-19', { checked: true, location: 'A-02-03' })] },
     { billNo: 'SHCK20260905001', date: '2026-09-05 11:20', reason: '破损', source: '日常报损', warehouse: '中心库',
-      status: '已审核', auditTime: '2026-09-05 11:40', auditor: '王铁军', remark: '搬运跌落破损',
+      status: V.AUDITED, auditTime: '2026-09-05 11:40', auditor: '王铁军', remark: '搬运跌落破损',
       codes: [Object.assign({}, OTH_IN_SEED_CODES[11])] },
     { billNo: 'SHCK20260820001', date: '2026-08-20 15:30', reason: '过期', source: '数据迁移', warehouse: '中心库',
-      status: '已审核', auditTime: '2026-08-20 15:45', auditor: '王铁军', remark: '老系统迁移的历史报损',
+      status: V.AUDITED, auditTime: '2026-08-20 15:45', auditor: '王铁军', remark: '老系统迁移的历史报损',
       codes: [code('8400431', '000490001', '8000', '240301', '2024-03-10', '2026-03-09', { checked: true })] }
+  ];
+  // 药房损耗单种子（Round CB(批2)：原空池——补未审核全流程单 + 已审核终态对照）
+  // 未审核单码=门诊药房在架（LYCK20260912001 已上架码 000500101）；已审核单用全新历史码（不在任何在架推导集，剔除无副作用）
+  var PH_LOSS_DOCS = [
+    { billNo: 'YFSH20261013001', date: '2026-10-13 16:40', reason: '破损', pharmacy: '门诊药房',
+      status: '未审核', auditTime: '', auditor: '', remark: '调剂摔损待审核',
+      codes: [Object.assign({}, OTH_IN_SEED_CODES[6], { phLoc: 'M-01' })] },
+    { billNo: 'YFSH20260920001', date: '2026-09-20 11:10', reason: '过期', pharmacy: '门诊药房',
+      status: V.AUDITED, auditTime: '2026-09-20 11:35', auditor: '王铁军', remark: '效期核查下架销毁',
+      codes: [code('8400431', '000490020', '8020', '240301', '2024-03-10', '2026-03-09', { checked: true })] }
   ];
 
   function migrate(s) {
     ['pickDocs', 'retInDocs', 'othInDocs', 'othOutDocs', 'lossDocs', 'reqPool', 'retPool', 'phLossDocs'].forEach(function (k) {
       if (!s[k]) s[k] = [];
     });
-    // ===== 2026-10-05 领用单统一：老状态词→五态 + 字段兜底 + reqPool 并入（幂等）=====
-    var OLD2NEW = { '待备货': '待出库', '备货中': '待出库', '已出库': '已出库·待入库', '药房已入库': '已入库·待上架' };
+    // ===== 词表 v3 迁移（2026-10-08 精简）：老词→新词 + 字段兜底 + reqPool 并入（幂等）=====
+    // 老五态：待提交→草稿 / 已出库·待入库→已出库 / 已入库·待上架→已入库；更老两池词：待备货·备货中·已出库→已出库 / 药房已入库·已完成→已入库
+    var OLD2NEW = { '待提交': V.DRAFT, '待备货': V.PENDING_OUT, '备货中': V.PENDING_OUT, '已出库·待入库': V.OUT,
+      '已出库': V.OUT, '药房已入库': V.IN, '已入库·待上架': V.IN, '已完成': V.IN };
     (s.pickDocs || []).forEach(function (d) {
       if (OLD2NEW[d.status]) d.status = OLD2NEW[d.status];
       if (d.shelfLoc === undefined) d.shelfLoc = '';
@@ -184,9 +208,9 @@
       if (!d.items) d.items = [];
       if (!d.badCodes) d.badCodes = [];
       if (d.createTime === undefined) d.createTime = d.date || '';
-      if (d.submitTime === undefined) d.submitTime = d.status === '待提交' ? '' : (d.date || '');
-      if (d.outTime === undefined) d.outTime = (d.status === '已出库·待入库' || d.status === '已入库·待上架') ? (d.auditTime || '') : '';
-      if (d.inTime === undefined) d.inTime = d.status === '已入库·待上架' ? (d.auditTime || '') : '';
+      if (d.submitTime === undefined) d.submitTime = d.status === V.DRAFT ? '' : (d.date || '');
+      if (d.outTime === undefined) d.outTime = (d.status === V.OUT || d.status === V.IN) ? (d.auditTime || '') : '';
+      if (d.inTime === undefined) d.inTime = d.status === V.IN ? (d.auditTime || '') : '';
       (d.items || []).forEach(function (it) { if (it.docQty === undefined) it.docQty = 0; if (it.slot === undefined) it.slot = ''; });
       (d.codes || []).forEach(function (cd) {
         if (cd.phLoc === undefined) cd.phLoc = '';
@@ -211,7 +235,7 @@
       } else {
         s.pickDocs.push({ billNo: r.reqNo, date: r.date, pharmacy: r.pharmacy, warehouse: r.warehouse,
           applicant: r.applicant || '', operator: r.applicant || '', source: r.source || '药房申请',
-          status: r.status === '待提交' ? '待提交' : '待出库', remark: r.remark || '',
+          status: r.status === '待提交' ? V.DRAFT : V.PENDING_OUT, remark: r.remark || '',
           items: items, codes: [], badCodes: [], shelfLoc: '',
           createTime: r.date || '', submitTime: r.status === '待提交' ? '' : (r.date || ''), outTime: '', inTime: '' });
       }
@@ -237,6 +261,20 @@
       if (d.prodDate === undefined) d.prodDate = '';
       if (d.expDate === undefined) d.expDate = '';
     });
+    // 2026-10-10 Round BC：其他入库演示单补未解析码（实物/解析/扫码三列差异 + 审核硬拦演示，按码幂等；已审核不注入防未解析码混进在架）
+    (s.othInDocs || []).forEach(function (d) {
+      if (d.billNo === 'QTRK20261002001' && d.status !== V.AUDITED &&
+          !(d.codes || []).some(function (c) { return c.code === '8999001' + '000000002' + '9999'; })) {
+        d.codes.push(code('8999001', '000000002', '9999', '', '', '', { checked: true }));
+      }
+    });
+    // 2026-10-10 Round BC：其他出库核对态落码记录（c.checked 持久化）——老会话两张未审核演示单进度归零（_ckMig 一次性幂等，用户自建单不碰）
+    (s.othOutDocs || []).forEach(function (d) {
+      if ((d.billNo === 'QTCK20261002001' || d.billNo === 'QTCK20261001001') && !d._ckMig) {
+        d._ckMig = 1;
+        if (d.status === '未审核') (d.codes || []).forEach(function (c) { c.checked = false; });
+      }
+    });
     // 老会话种子：已入库单若完全没货位，补一码已上架便于演示（不覆盖用户已上架）
     (s.pickDocs || []).forEach(function (d) {
       if (d.billNo === 'LYCK20260912001' && d.codes && d.codes[0] &&
@@ -252,13 +290,20 @@
     OTH_OUT_DOCS.forEach(function (d) {
       if (!s.othOutDocs.some(function (x) { return x.billNo === d.billNo; })) s.othOutDocs.push(d);
     });
+    // Round CB(批2) 老会话补种：库房报损未审核演示单 + 药房损耗两单（按 billNo 幂等，不覆盖用户已建单）
+    LOSS_DOCS.forEach(function (d) {
+      if (!s.lossDocs.some(function (x) { return x.billNo === d.billNo; })) s.lossDocs.push(Object.assign({}, d, { codes: d.codes.map(function (c) { return Object.assign({}, c); }) }));
+    });
+    PH_LOSS_DOCS.forEach(function (d) {
+      if (!(s.phLossDocs || []).some(function (x) { return x.billNo === d.billNo; })) (s.phLossDocs = s.phLossDocs || []).push(Object.assign({}, d, { codes: d.codes.map(function (c) { return Object.assign({}, c); }) }));
+    });
     return s;
   }
   function load() {
     var s = window.store ? window.store.load() : {};
     if (s.wh) return migrate(s.wh);
     var seed = { pickDocs: PICK_DOCS, retInDocs: [], othInDocs: OTH_IN_DOCS, othOutDocs: OTH_OUT_DOCS,
-      lossDocs: LOSS_DOCS, reqPool: [], retPool: RET_POOL, phLossDocs: [] };
+      lossDocs: LOSS_DOCS, reqPool: [], retPool: RET_POOL, phLossDocs: PH_LOSS_DOCS };
     if (window.store) window.store.update({ wh: seed });
     return seed;
   }
@@ -270,38 +315,61 @@
     return d.warehouse === warehouse;
   }
   function pickPosted(d) {
-    return d.status === '已出库·待入库' || d.status === '已入库·待上架' || d.status === '已上架';
+    return d.status === V.OUT || d.status === V.IN || d.status === V.SHELVED;
   }
-  // 展示态推导：已入库·待上架 且全码有 phLoc → 已上架（不落库，2026-10-05 拍板#3）
+  // 展示态推导：已入库 且全码有 phLoc → 已上架（不落库，2026-10-05 拍板#3；状态列仍显示已入库，已上架在「上架状态」列）
   function pickStatus(d) {
-    if (d.status === '已入库·待上架' && (d.codes || []).length &&
-        d.codes.every(function (c) { return c.phLoc; })) return '已上架';
+    if (d.status === V.IN && (d.codes || []).length &&
+        d.codes.every(function (c) { return c.phLoc; })) return V.SHELVED;
     return d.status;
+  }
+  // 上架状态列（2026-10-08 拍板）：已入库单 → 待上架/已上架；其余单据=''
+  function pickShelf(d) {
+    if (d.status !== V.IN) return '';
+    return pickStatus(d) === V.SHELVED ? V.SHELVED : '待上架';
+  }
+  // 领用入库审核落账（2026-10-09 拍板：库房备货已扫过码，药房「直接入库」与「扫码核对后审核」两入口共用）
+  // 守卫：仅「已出库」在途单可入；落 status/inTime、码 scanHead 保底；存储由调用方 save
+  function auditPickIn(doc) {
+    if (!doc || doc.status !== V.OUT) return null;
+    doc.status = V.IN;
+    if (!doc.inTime) doc.inTime = now();
+    (doc.codes || []).forEach(function (c) { c.scanHead = c.scanHead || '库房备货'; });
+    return doc;
+  }
+  // 展示词视角映射（2026-10-08 拍板：词表精简不动存储）：药房视角 已出库→待入库、草稿→待出库；库房视角原样
+  function pickView(d, side) {
+    var st = pickStatus(d);
+    if (side === 'ph') {
+      if (st === V.OUT) return V.PENDING_IN;
+      if (st === V.DRAFT) return V.PENDING_OUT;
+    }
+    return st;
   }
   function stockAll(pch, wh, warehouse) {
     var map = {};
     function addIn(codes, src) { (codes || []).forEach(function (c) { map[c.code] = Object.assign({}, c, { _src: src }); }); }
     function addOut(codes) { (codes || []).forEach(function (c) { delete map[c.code]; }); }
     (pch.inDocs || []).forEach(function (d) {
-      if (d.audit === '已审核' && matchNode(d, warehouse)) addIn(d.codes, '采购入库单 ' + d.billNo);
+      if (d.audit === V.AUDITED && matchNode(d, warehouse)) addIn(d.codes, '采购入库单 ' + d.billNo);
     });
     (wh.othInDocs || []).forEach(function (d) {
-      if (d.status === '已审核' && matchNode(d, warehouse)) addIn(d.codes, '其他入库单 ' + d.billNo);
+      if (d.status === V.AUDITED && matchNode(d, warehouse)) addIn(d.codes, '其他入库单 ' + d.billNo);
     });
     (wh.retInDocs || []).forEach(function (d) {
-      if (d.status === '已审核' && matchNode(d, warehouse)) addIn(d.codes, '退回入库单 ' + d.billNo);
+      if (d.status === V.AUDITED && matchNode(d, warehouse)) addIn(d.codes, '退回入库单 ' + d.billNo);
     });
     (pch.outDocs || []).forEach(function (d) {
-      if (d.status === '已审核' && matchNode(d, warehouse)) addOut(d.codes);
+      if (d.status === V.AUDITED && matchNode(d, warehouse)) addOut(d.codes);
     });
     (wh.pickDocs || []).forEach(function (d) {
       if (pickPosted(d) && matchNode(d, warehouse)) addOut(d.codes);
     });
     (wh.othOutDocs || []).forEach(function (d) {
-      if (d.status === '已审核' && matchNode(d, warehouse)) addOut(d.codes);
+      if (d.status === V.AUDITED && matchNode(d, warehouse)) addOut(d.codes);
     });
     (wh.lossDocs || []).forEach(function (d) {
-      if (d.status === '已审核' && matchNode(d, warehouse)) addOut(d.codes);
+      if (d.status === V.AUDITED && matchNode(d, warehouse)) addOut(d.codes);
     });
     return Object.keys(map).map(function (k) { return map[k]; });
   }
@@ -309,7 +377,7 @@
   function transitByReq(wh, warehouse) {
     var map = {};
     (wh.pickDocs || []).forEach(function (d) {
-      if (d.status !== '已出库·待入库') return;
+      if (d.status !== V.OUT) return;
       if (warehouse && d.warehouse !== warehouse) return;
       (d.codes || []).forEach(function (c) {
         var key = c.code.slice(0, 7) + '|' + c.batch;   // 标识码+批次（2026-10-02 收口：与库存账行粒度对齐）
@@ -402,7 +470,7 @@
   function pharmacyStock(wh, pharmacy, warehouse) {
     var map = {};
     (wh.pickDocs || []).forEach(function (d) {
-      if (d.status !== '已入库·待上架' && d.status !== '已上架') return;
+      if (d.status !== V.IN && d.status !== V.SHELVED) return;
       if (pharmacy && d.pharmacy !== pharmacy) return;
       if (warehouse && d.warehouse !== warehouse) return;
       (d.codes || []).forEach(function (c) {
@@ -413,7 +481,7 @@
       (r.codes || []).forEach(function (c) { delete map[c.code]; });
     });
     (wh.phLossDocs || []).forEach(function (d) {
-      if (d.status !== '已审核') return;
+      if (d.status !== V.AUDITED) return;
       (d.codes || []).forEach(function (c) { delete map[c.code]; });
     });
     occupiedRxCodes().forEach(function (code) { delete map[code]; });
@@ -431,7 +499,7 @@
   function findPhCode(wh, code20) {
     var found = null;
     (wh.pickDocs || []).forEach(function (d) {
-      if (d.status !== '已入库·待上架' && d.status !== '已上架') return;
+      if (d.status !== V.IN && d.status !== V.SHELVED) return;
       (d.codes || []).forEach(function (c) { if (c.code === code20) found = c; });
     });
     return found;
@@ -447,7 +515,7 @@
   function phTransit(wh, pharmacy) {
     var n = 0;
     (wh.pickDocs || []).forEach(function (d) {
-      if (d.status !== '已出库·待入库') return;
+      if (d.status !== V.OUT) return;
       if (pharmacy && d.pharmacy !== pharmacy) return;
       n += (d.codes || []).length;
     });
@@ -476,7 +544,7 @@
       items[dc].qty += base; items[dc].docQty += base;
     });
     var doc = { billNo: nextNo('LY', s.pickDocs), date: t, pharmacy: pharmacy, warehouse: warehouse,
-      applicant: operator || '', operator: operator || '', source: '扫码直生', status: '已入库·待上架',
+      applicant: operator || '', operator: operator || '', source: '扫码直生', status: V.IN,
       remark: '扫码直生（无在途单，上架扫码补建）', shelfLoc: '',
       items: order.map(function (k) { return items[k]; }),
       codes: scannedCodes.map(function (cd) { return Object.assign({}, cd, { scanHead: '药房直生', shelfTime: t }); }),
@@ -494,7 +562,7 @@
     var inv = window.store ? (window.store.load().inv || {}) : {};
     var docs = inv.countDocs || [];
     for (var i = 0; i < docs.length; i++) {
-      if (docs[i].node === nodeName && docs[i].status !== '已审核') return true;
+      if (docs[i].node === nodeName && docs[i].status !== V.AUDITED) return true;
     }
     return false;
   }
@@ -545,7 +613,7 @@
     summarizeStock: summarizeStock, expStatus: expStatus, nextNo: nextNo, now: now,
     curPharm: curPharm, pharmacyStock: pharmacyStock,
     findPhCode: findPhCode, setPhLoc: setPhLoc, phTransit: phTransit,
-    pickPosted: pickPosted, pickStatus: pickStatus, directPick: directPick, nodeFrozen: nodeFrozen, blockMove: blockMove, assertUnfrozen: assertUnfrozen,
+    pickPosted: pickPosted, pickStatus: pickStatus, pickShelf: pickShelf, pickView: pickView, directPick: directPick, auditPickIn: auditPickIn, nodeFrozen: nodeFrozen, blockMove: blockMove, assertUnfrozen: assertUnfrozen,
     OTH_IN_TYPES: OTH_IN_TYPES, OTH_OUT_TYPES: OTH_OUT_TYPES, LOSS_REASONS: LOSS_REASONS, LOSS_SOURCES: LOSS_SOURCES,
     mkCodes: codes };
 })();

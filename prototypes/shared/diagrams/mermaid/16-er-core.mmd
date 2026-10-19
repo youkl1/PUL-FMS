@@ -1,0 +1,96 @@
+%% 16 表结构 ER 轻量草图（Mermaid erDiagram · DrawDB 案例测试离线对照）
+%% 字段口径同 ../er/pul-fms-core.sql 与图 12；核心七表 + 异常码台账，字典表只挂关系不展开
+erDiagram
+    WAREHOUSE ||--o{ DRUGS : "所属库房分别建档"
+    DRUGS ||--o{ IDCODES : "标识码子表"
+    DRUGS ||--o{ REQ_ITEM : "药品口径申请行"
+    REQ ||--o{ REQ_ITEM : "包含"
+    PHARMACY ||--o{ REQ : "申请药房"
+    WAREHOUSE ||--o{ REQ : "供货库房"
+    WAREHOUSE ||--o{ DOC : "库房单据"
+    PHARMACY ||--o{ DOC : "药房单据"
+    DOC ||--o{ DOC_CODE : "码清单"
+    TRACE_CODE ||--o{ DOC_CODE : "码实例"
+    IDCODES ||--o{ TRACE_CODE : "前7位逻辑关联"
+    WH_LOCATION ||--o{ TRACE_CODE : "库位"
+    PHARMACY ||--o{ CABINET : "本期字典"
+
+    DRUGS {
+        string drugCode PK "药品编码 YP010201"
+        string drugName "品名"
+        string formSpec "规格"
+        string dosForm "剂型"
+        string maker "生产厂家"
+        string approval "批准文号"
+        string category "分类"
+        string baseUnit "库存基本单位·链尾"
+        json units "换算链 1箱=60盒"
+        json minUnit "拆零 1盒=7片"
+        int ipUnpack "住院拆零"
+        int opUnpack "门诊拆零"
+        float price "参考进价"
+        string warehouse FK "所属库房"
+        string status "启用/停用"
+    }
+    IDCODES {
+        string idcode PK "7位标识码"
+        string drugCode FK "→DRUGS"
+        int level "码等级 1盒2箱"
+        string packSpec "包装规格"
+        string packUnit "包装单位"
+        string status "启用/停用"
+    }
+    BAD_CODES {
+        string idcode PK "7位标识码"
+        int level "码等级"
+        string snapshot "药品/厂家快照"
+        string type "未维护/解析失败"
+    }
+    TRACE_CODE {
+        string code PK "20位=7+9+4"
+        string batch "批次号"
+        string prodDate "生产日期"
+        string expDate "有效期至·FEFO"
+        int level "恒=1"
+        string location FK "库位"
+        string split "拆零标记"
+        int splitQty "拆零数"
+        int checked "已验收"
+        string code2 "二级码"
+        string code3 "三级码"
+    }
+    DOC {
+        string billNo PK "单号"
+        string docType "7类单据"
+        string date "单据日期"
+        string warehouse FK "库房"
+        string pharmacy FK "药房"
+        string supplier "供应商"
+        string status "状态机"
+        string auditTime "审核时间"
+        string auditor "审核人"
+        string operator "经办人"
+        string invoice "发票号"
+        string remark "备注"
+    }
+    DOC_CODE {
+        string billNo PK,FK "→DOC"
+        string code PK,FK "→TRACE_CODE"
+        string batch "批次快照"
+        string expDate "效期快照"
+        string location "库位快照"
+        string split "拆零快照"
+    }
+    REQ {
+        string reqNo PK "申请单号"
+        string date "申请日期"
+        string pharmacy FK "药房"
+        string warehouse FK "库房"
+        string applicant "申请人"
+        string status "待备货/已完成"
+    }
+    REQ_ITEM {
+        string reqNo PK,FK "→REQ"
+        string drugCode PK,FK "→DRUGS"
+        int qty "申请数量·基本单位"
+    }

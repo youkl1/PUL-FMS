@@ -1,9 +1,9 @@
 /**
- * rx-ret.js — 处方退药：已完成处方还码；码回本药房在架
+ * rx-ret.js — 处方单退药：已完成处方还码；码回本药房在架
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'rxret', crumb: ['发药管理', '处方退药'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'rxret', crumb: ['出库管理', '处方单退药'] });
   if (!content) return;
 
   var W = window.PUL_WH, R = window.PUL_RX, UI = window.PchUI, esc = UI.esc;
@@ -53,36 +53,33 @@
         ? '<span class="pch-light mute"><i class="pch-dot"></i>已退药</span>'
         : '<span class="pch-light ok"><i class="pch-dot"></i>已完成</span>';
       return '<tr class="pch-doc-row' + (d.rxNo === sel ? ' pch-doc-sel' : '') + '" data-sel="' + esc(d.rxNo) + '">' +
-        '<td><b>' + esc(d.rxNo) + '</b></td><td class="text-secondary">' + esc(d.doneTime || d.date) + '</td>' +
+        '<td><b>' + esc(d.rxNo) + '</b></td><td>处方退药</td><td class="text-secondary">' + esc(d.doneTime || d.date) + '</td>' +
         '<td>' + esc(d.patient) + '</td><td>' + esc(d.dept) + '</td>' +
         '<td>' + n + '</td><td>' + st + '</td>' +
         '<td onclick="event.stopPropagation()">' +
           (d.status === '已完成'
             ? '<button class="btn btn-sm btn-outline-primary" data-ret="' + esc(d.rxNo) + '">退药</button>'
-            : '<span class="text-secondary" style="font-size:12.5px;">终态</span>') +
+            : '<span class="text-secondary">—</span>') +
         '</td></tr>';
     }).join('');
-    if (!rows) rows = '<tr><td colspan="7" class="text-center text-secondary" style="padding:28px;">暂无已发处方——先在「处方发药扫码」走完一张</td></tr>';
+    if (!rows) rows = '<tr><td colspan="8" class="text-center text-secondary" style="padding:28px;">暂无已发处方——先在「处方发药扫码」走完一张</td></tr>';
     return '<div class="card mb-3"><div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>处方号</th><th>发药时间</th><th>患者</th><th>科室</th><th>码数</th><th>状态</th><th>操作</th></tr></thead>' +
+      '<thead><tr><th>处方号</th><th>单据类型</th><th>发药时间</th><th>患者</th><th>科室</th><th>码数</th><th>状态</th><th>操作</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div></div>';
   }
 
+  // 2026-10-18 Task5：码表迁移 PulDocDetail.renderCodes 独立表格（列名按组件标准收敛：#→序号、货位→库位；卡片壳保留）
   function codesCard() {
     var d = selDoc();
     if (!d) return '<div class="card"><div class="card-body text-center text-secondary" style="padding:28px;">点选处方行查看当时绑定的码</div></div>';
     var codes = allCodes(d);
-    var rows = codes.length ? codes.map(function (c, i) {
-      return '<tr><td>' + (i + 1) + '</td>' +
-        '<td style="font-family:Consolas,monospace;font-size:12.5px;">' + esc(c.code) + '</td>' +
-        '<td>' + esc(drugName(c._drug)) + '</td><td>' + esc(c.batch) + '</td>' +
-        '<td>' + esc(c.expDate) + '</td><td>' + esc(c.phLoc || '—') + '</td></tr>';
-    }).join('') : '<tr><td colspan="6" class="text-center text-secondary">无码（已退空）</td></tr>';
+    var rows = codes.map(function (c) {
+      return { code: c.code, drugName: drugName(c._drug), batch: c.batch, expDate: c.expDate, location: c.phLoc || '—' };
+    });
+    var table = window.PulDocDetail.renderCodes({ codes: rows }, { emptyText: '无码（已退空）' });
     return '<div class="card"><div class="card-header"><b>已绑码</b>' +
       '<span class="text-secondary ms-2" style="font-size:12.5px;">' + esc(d.rxNo) + ' · ' + esc(d.patient) + '</span></div>' +
-      '<div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>#</th><th>追溯码</th><th>药品</th><th>批次</th><th>效期</th><th>货位</th></tr></thead>' +
-      '<tbody>' + rows + '</tbody></table></div></div>';
+      table + '</div>';
   }
 
   function doRet(d) {

@@ -1,6 +1,6 @@
 /**
  * ph-ret-out.js — 退回出库单：从领用出库单申请退回 → 扫码核对 → 确认出库 → 库房退回单池
- * 口径（2026-10-03 拍板）：药房退回必须锚定领用出库单（仅「已入库·待上架 / 已上架」可退；在途货未到手不退）
+ * 口径（2026-10-03 拍板）：药房退回必须锚定领用出库单（仅「已入库 / 已上架」可退；在途货未到手不退）
  * 交互对齐采购退货单：选单选码（从来源单勾选补入）+ 扫码核对实物；全部核对完才能确认出库
  * 未出库=草稿（可编辑备注/移除码/撤销）；确认后 status=待入库，库房「领用退回」可见
  * 一码不能同时在两张退回单；已审核损耗码不可退
@@ -58,11 +58,11 @@
     var occ = occupiedSet();
     return (doc.codes || []).filter(function (c) { return !occ[c.code]; });
   }
-  // 可发起退回的领用出库单：本药房 · 已入库·待上架/已上架 · 有可退码（在途=货未到手，不退）
+  // 可发起退回的领用出库单：本药房 · 已入库/已上架 · 有可退码（在途=货未到手，不退）
   function returnableDocs() {
     var ph = curPharm();
     return (S.pickDocs || []).filter(function (d) {
-      return d.pharmacy === ph && (d.status === '已入库·待上架' || d.status === '已上架') && retirableOfDoc(d).length > 0;
+      return d.pharmacy === ph && (d.status === '已入库' || d.status === '已上架') && retirableOfDoc(d).length > 0;
     });
   }
   function pickDocOf(billNo) {
@@ -97,23 +97,25 @@
           '<button class="btn btn-sm btn-outline-primary" data-edit="' + esc(r.retNo) + '">编辑</button> ' +
           '<button class="btn btn-sm btn-success" data-audit="' + esc(r.retNo) + '"' + (r.codes.length ? '' : ' disabled') + '>确认出库</button> ' +
           '<button class="btn btn-sm btn-outline-danger" data-del="' + esc(r.retNo) + '">撤销</button>'
-        : '<span class="text-secondary" style="font-size:12.5px;">' + (r.status === '待入库' ? '待库房收' : '闭环') + '</span>';
+        : '<span class="text-secondary">—</span>';
       return '<tr class="pch-doc-row' + (r.retNo === sel ? ' pch-doc-sel' : '') + '" data-sel="' + esc(r.retNo) + '">' +
-        '<td><b>' + esc(r.retNo) + '</b></td><td class="text-secondary">' + esc(r.date) + '</td>' +
+        '<td><b>' + esc(r.retNo) + '</b></td><td>退回出库</td><td class="text-secondary">' + esc(r.date) + '</td>' +
         '<td>' + (r.refNo ? '<b>' + esc(r.refNo) + '</b>' : '<span class="text-secondary">—</span>') + '</td>' +
         '<td>' + esc(r.warehouse) + '</td><td>' + esc(r.operator) + '</td><td>' + r.codes.length + '</td>' +
         '<td>' + stHtml(r.status) + '</td>' +
         '<td onclick="event.stopPropagation()">' + op + '</td></tr>';
     }).join('');
-    if (!list.length) rowsHtml = '<tr><td colspan="8" class="text-center text-secondary" style="padding:28px;">暂无退回单——点右上「新增退回」，从领用出库单发起</td></tr>';
+    if (!list.length) rowsHtml = '<tr><td colspan="9" class="text-center text-secondary" style="padding:28px;">暂无退回单——点右上「新增退回」，从领用出库单发起</td></tr>';
     return '<div class="card mb-3"><div class="card-header"><b>退回出库单</b>' +
       '<span class="text-secondary ms-2" style="font-size:12.5px;">从领用出库单申请退回 · 确认后进入库房「领用退回」单池 · 本药房 ' + list.length + ' 单</span></div>' +
       '<div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>退回单号</th><th>时间</th><th>来源出库单</th><th>退回库房</th><th>经手人</th><th>码数</th><th>状态</th><th>操作</th></tr></thead>' +
+      '<thead><tr><th>退回单号</th><th>单据类型</th><th>时间</th><th>来源出库单</th><th>退回库房</th><th>经手人</th><th>码数</th><th>状态</th><th>操作</th></tr></thead>' +
       '<tbody>' + rowsHtml + '</tbody></table></div></div>';
   }
 
-  // ===== 工作台（对齐领用备货单：下左药品明细 / 下右追溯码明细 + 底部进度条） =====
+  // ===== 工作台（对齐领用备货单：下左药品明细 / 下右追溯码明细 + 底部进度条）
+  // 2026-10-18 Task5：双表迁移 PulDocDetail 独立表格 API（应退/已核对聚合 extraColumns 对齐 wh-other-out 先例；
+  // data-uncode 移除监听不动；卡片壳/选单选码按钮/进度条保留） =====
   function checkedCount(r) {
     return r.codes.filter(function (c) { return checked[c.code]; }).length;
   }
@@ -125,32 +127,44 @@
       map[key].qty += 1;
       if (checked[c.code]) map[key].done += 1;
     });
-    var rowsHtml = Object.keys(map).map(function (k, i) {
+    var rows = Object.keys(map).map(function (k) {
       var g = map[k], p = P.parseCode(g.code.code, DICT), d = p.dict || {};
-      return '<tr><td>' + (i + 1) + '</td><td><b>' + esc(d.drugName || '未解析') + '</b></td>' +
-        '<td>' + esc(d.formSpec || '-') + '</td><td>' + esc(g.code.batch) + '</td>' +
-        '<td><b>' + g.qty + '</b></td>' +
-        '<td>' + (draft ? '<b class="' + (g.done === g.qty ? 'text-success' : 'text-warning') + '">' + g.done + '</b>' : '<span class="text-secondary">—</span>') + '</td></tr>';
-    }).join('');
-    if (!rowsHtml) rowsHtml = '<tr><td colspan="6" class="text-center text-secondary" style="padding:24px;">暂无药品</td></tr>';
+      return { raw: g, drugName: d.drugName || '未解析', formSpec: d.formSpec || '-', batch: g.code.batch, qty: g.qty };
+    });
+    var table = window.PulDocDetail.renderDrugs({ drugs: rows }, {
+      columns: ['seq', 'drugName', 'formSpec', 'batch'],
+      extraColumns: [
+        { key: 'planQty', title: '应退', cell: function (row) { return '<b>' + row.qty + '</b>'; } },
+        { key: 'doneQty', title: '已核对', cell: function (row) {
+            if (!draft) return '<span class="text-secondary">—</span>';
+            return '<b class="' + (row.raw.done === row.raw.qty ? 'text-success' : 'text-warning') + '">' + row.raw.done + '</b>';
+          } }
+      ],
+      emptyText: '暂无药品'
+    });
     return '<div class="card" style="height:100%;"><div class="card-header"><b>药品明细清单</b>' +
       '<span class="text-secondary ms-2" style="font-size:12.5px;">应退 vs 已核对</span></div>' +
-      '<div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>序号</th><th>药品通用名</th><th>制剂规格</th><th>批次</th><th>应退</th><th>已核对</th></tr></thead>' +
-      '<tbody>' + rowsHtml + '</tbody></table></div></div>';
+      table + '</div>';
   }
   function codesCard(r, draft) {
-    var rowsHtml = r.codes.map(function (c, i) {
+    var rows = r.codes.map(function (c) {
       var ck = !!checked[c.code];
-      var splitTip = +c.splitQty > 0 ? '<span class="wh-exp-badge warn">已拆零发出 ' + c.splitQty + '</span>' : '<span class="text-secondary">—</span>';
-      return '<tr class="' + (ck && draft ? 'pch-row-picked' : '') + '"><td>' + (i + 1) + '</td>' +
-        '<td style="font-family:Consolas,monospace;font-size:12.5px;">' + esc(c.code) + '</td>' +
-        '<td><b>' + esc(drugNameOf(c.code)) + '</b></td>' +
-        '<td>' + esc(c.batch) + '</td><td>' + esc(c.expDate) + '</td><td>' + splitTip + '</td>' +
-        '<td>' + (draft ? (ck ? '<span class="text-success">✓ 已核对</span>' : '<span class="text-secondary">未核对</span>') : '<span class="text-secondary">—</span>') + '</td>' +
-        (draft ? '<td><button class="btn btn-sm btn-outline-danger" data-uncode="' + esc(c.code) + '">移除</button></td>' : '') + '</tr>';
-    }).join('');
-    if (!r.codes.length) rowsHtml = '<tr><td colspan="' + (draft ? 8 : 7) + '" class="text-center text-secondary" style="padding:24px;">码清单为空——用「选单选码」' + (r.refNo ? '从来源出库单勾选' : '绑定来源出库单并勾选') + '</td></tr>';
+      return {
+        raw: c,
+        className: ck && draft ? 'pch-row-picked' : '',
+        code: c.code, drugName: drugNameOf(c.code), batch: c.batch, expDate: c.expDate,
+        _splitCell: +c.splitQty > 0 ? '<span class="wh-exp-badge warn">已拆零发出 ' + esc(c.splitQty) + '</span>' : '<span class="text-secondary">—</span>',
+        status: draft ? { kind: ck ? 'done' : 'todo', text: ck ? '✓ 已核对' : '未核对' } : null,
+        _opCell: draft ? '<button class="btn btn-sm btn-outline-danger" data-uncode="' + esc(c.code) + '">移除</button>' : ''
+      };
+    });
+    var extras = [{ key: 'splitTip', title: '拆零提示', cell: function (row) { return row._splitCell; } }];
+    if (draft) extras.push({ key: 'op', title: '操作', cell: function (row) { return row._opCell; } });
+    var table = window.PulDocDetail.renderCodes({ codes: rows }, {
+      columns: ['seq', 'code', 'drugName', 'batch', 'expDate', 'checkStatus'],
+      extraColumns: extras,
+      emptyText: '码清单为空——用「选单选码」' + (r.refNo ? '从来源出库单勾选' : '绑定来源出库单并勾选')
+    });
     var bar = '';
     if (draft) {
       var done = checkedCount(r), all = r.codes.length;
@@ -163,9 +177,7 @@
     return '<div class="card" style="height:100%;"><div class="card-header"><b>追溯码明细清单</b>' +
       '<span class="text-secondary ms-2" style="font-size:12.5px;">' + esc(r.retNo) + ' · ' + r.codes.length + ' 个码' + (r.refNo ? ' · 来源 ' + esc(r.refNo) : '') + '</span>' +
       (draft ? '<div class="ms-auto"><button class="btn btn-sm btn-outline-primary" id="btnPick">☰ 选单选码</button></div>' : '') + '</div>' +
-      '<div class="table-responsive" style="max-height:300px;overflow-y:auto;"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>序号</th><th>追溯码</th><th>药品</th><th>批次</th><th>效期</th><th>拆零提示</th><th>核对</th>' + (draft ? '<th>操作</th>' : '') + '</tr></thead>' +
-      '<tbody>' + rowsHtml + '</tbody></table></div>' + bar + '</div>';
+      table + bar + '</div>';
   }
   function workbench() {
     var r = selRet();
@@ -204,7 +216,7 @@
           '<thead><tr><th style="width:36px;"></th><th>追溯码</th><th>药品</th><th>批次</th><th>效期</th></tr></thead>' +
           '<tbody id="raRows">' + codeRows(docs[0].billNo) + '</tbody></table></div>' +
           '<div class="text-secondary" style="font-size:12.5px;">勾选本次要退的码（默认全选）；创建后扫码核对实物，全部核对完成才能确认出库。在途（已出库未入库）的单不可退。</div>'
-        : '<div class="text-center text-secondary" style="padding:24px;">本药房暂无可退的领用出库单<br><span style="font-size:12px;">仅「已入库·待上架/已上架」且码未被其他退回单占用的领用出库单可发起退回</span></div>'),
+        : '<div class="text-center text-secondary" style="padding:24px;">本药房暂无可退的领用出库单<br><span style="font-size:12px;">仅「已入库/已上架」且码未被其他退回单占用的领用出库单可发起退回</span></div>'),
       '<button class="btn btn-outline-secondary" data-mclose>取消</button>' +
       (docs.length ? '<button class="btn btn-primary" id="raOk">创建退回单</button>' : ''), 760);
     var el = UI.open('phRetAdd');
@@ -266,7 +278,7 @@
             return '<option value="' + esc(d2.billNo) + '">' + esc(d2.billNo) + ' · ' + esc(d2.date.slice(0, 10)) + ' · 可退 ' + retirableOfDoc(d2).length + ' 码</option>';
           }).join('') + '</select></div>' +
           '<div class="text-secondary mb-2" style="font-size:12.5px;">该退回单为老数据、未绑定来源单；勾选加入后自动绑定。</div>'
-        : '<div class="text-center text-secondary" style="padding:24px;">本药房暂无可退的领用出库单<br><span style="font-size:12px;">仅「已入库·待上架/已上架」且码未被其他退回单占用的领用出库单可作为来源；也可直接「撤销」该草稿</span></div>');
+        : '<div class="text-center text-secondary" style="padding:24px;">本药房暂无可退的领用出库单<br><span style="font-size:12px;">仅「已入库/已上架」且码未被其他退回单占用的领用出库单可作为来源；也可直接「撤销」该草稿</span></div>');
     var init = rowsFor(firstNo);
     var canPick = doc || docs.length;
     UI.modalShell('phRetPick', '选单选码 · ' + r.retNo,
@@ -300,6 +312,27 @@
     });
   }
 
+  // 二期 Task B：openScan 大版面接线适配——退回码按 药品+批次 聚合（与 drugsCard 同源口径），仅视图模型不改业务
+  function scanDrugRows(r) {
+    var map = {};
+    r.codes.forEach(function (c) {
+      var key = c.code.slice(0, 7) + '|' + c.batch;
+      if (!map[key]) map[key] = { qty: 0, done: 0, drugName: '—', formSpec: '—', batch: c.batch };
+      map[key].qty += 1;
+      if (checked[c.code]) map[key].done += 1;
+      if (map[key].drugName === '—') {
+        var p = P.parseCode(c.code, DICT);
+        if (p.dict) { map[key].drugName = p.dict.drugName; map[key].formSpec = p.dict.formSpec || '—'; }
+      }
+    });
+    return Object.keys(map).map(function (k) {
+      var g = map[k];
+      return { drugName: g.drugName, formSpec: g.formSpec, batch: g.batch, qty: g.qty,
+        scanText: g.done + ' / ' + g.qty,
+        diff: g.done === g.qty ? { kind: 'full', text: '核对齐' } : { kind: 'short', text: '缺 ' + (g.qty - g.done) } };
+    });
+  }
+
   // ===== 扫码核对：单内码√已核对 / 来源单内未勾选⚠提示选单选码 / 单外码×拦截 =====
   function openScanModal() {
     var r = selRet();
@@ -307,6 +340,14 @@
     var srcDoc = pickDocOf(r.refNo);
     UI.openScan({
       title: '扫码核对 · ' + r.retNo,
+      headerHtml: '<div class="pch-scan-fields">' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">单据类型</span>退回出库</span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">单据单号</span><b>' + esc(r.retNo) + '</b></span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">单据时间</span>' + esc(r.date) + '</span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">发货方</span>' + esc(r.pharmacy) + '</span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">收货方</span>' + esc(r.warehouse) + '</span></div>',
+      drugsRows: function () { return scanDrugRows(r); },
+      drugsOptions: { columns: ['seq', 'drugName', 'formSpec', 'batch', 'qty', 'scanQty', 'diff'], emptyText: '码清单为空' },
       hint: '扫退回实物码：清单内码标记已核对；来源单内但未勾选的码请用「选单选码」补入；无关码拦截',
       gate: 'in', node: curPharm(),
       onScan: function (code) {

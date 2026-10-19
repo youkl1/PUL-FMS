@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
   <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 基础管理">
-  <title>取药柜 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <title>取药柜维护 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -31,8 +31,8 @@
     <header class="pi-header">
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">取药柜</h1>
-        <span class="pi-subtitle">原型页 · 三级结构：取药柜（挂药房）→ 摆药层 → 取药槽（客户新版字典 #5，本期只做字典）</span>
+        <h1 class="pi-title">取药柜维护</h1>
+        <span class="pi-subtitle">原型页 · 三栏联动：取药柜（挂药房→货位，物理/逻辑）→ 摆药层（高层标记）→ 取药槽（药/灯对照）</span>
       </div>
       <div class="pi-header-right">
         <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
@@ -57,31 +57,32 @@
           <p class="subtitle">基础管理 · 取药柜挂药房，一个取药柜有多个摆药层，一个摆药层有多个取药槽</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>本页维护智能取药柜的三级结构：取药柜必须指定所属药房，柜下自动生成摆药层、层下自动生成取药槽；本期只建字典结构，药品↔取药槽绑定后期开放（客户拍板）。</p>
+      <p class="lead"><strong>一句话概括：</strong>本页维护取药柜三级结构（三栏联动）：取药柜挂「院区→药房→货位」，分<b>物理/逻辑</b>两种类型——物理柜新增时按「层数 × 每层槽数」自动生成结构；逻辑柜自动生成 1 层，取药槽靠「选药品生成」（一药一槽、建槽即完成药品对照、无需对照灯组）。药品↔取药槽（一对多）与取药槽↔灯组（一对一）的扫码对照在系统管理菜单的两个对照页维护，本页右栏即对照结果查看。</p>
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
         <div class="card-grid">
           <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
             <div class="info-card-title">系统管理员（信息科）</div>
-            <div class="info-card-desc">新增取药柜时按「层数 × 每层槽数」自动生成结构；层级结构保存后不可改，改结构需停用重建</div></div></div>
+            <div class="info-card-desc">新增取药柜时选类型：物理柜按「层数 × 每层槽数」自动生成结构；逻辑柜自动 1 层、取药槽选药品生成</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
-            <div class="info-card-desc">上游：药房货位（取药柜挂药房）；下游（后期）：取药槽绑定药品 + 绑定取药灯组（亮灯指引取药）</div></div></div>
+            <div class="info-card-desc">上游：药房货位维护（取药柜挂药房的货位）；下游：取药槽药品对照 / 取药槽灯组对照（系统管理），本页右栏查看对照结果</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">如何使用</div>
         <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">查取药柜</div><div class="step-desc">按所属药房/名称/状态筛选；点行查看摆药层与取药槽</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">新增取药柜</div><div class="step-desc">选所属药房（院区随药房带出）→ 填层数与每层槽数 → 保存自动生成三级结构</div></div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">看层级</div><div class="step-desc">子表每个摆药层一行，行内以徽标列出全部取药槽及其状态</div></div></div>
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">查取药柜</div><div class="step-desc">按药房/货位/编号名称筛选；绑定药品、绑定灯组筛选作用于右栏取药槽</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">新增取药柜</div><div class="step-desc">选所属药房与货位 → 选类型：物理柜填层数与每层槽数自动生成；逻辑柜自动 1 层</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">逻辑柜建槽</div><div class="step-desc">选中逻辑柜 → 右栏「选药品生成取药槽」→ 勾选药品，一药一槽、建槽即完成药品对照</div></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">删除校验</div><div class="step-desc">柜下有层、层下有槽、槽已绑灯组均拦截删除并提示原因；槽已对照药品时删除需确认解除对照</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
-          <div class="example-item-title">取药柜（本页）↔ 基站灯组（后期绑定）</div>
-          <div class="example-item-desc">客户口径：一个药品可占一个或多个取药槽，一个取药槽对应一个取药灯组——绑定关系维护界面后期再议，本期字典先把三级结构立住。</div>
+          <div class="example-item-title">取药柜（本页）↔ 取药槽药品对照 / 取药槽灯组对照 ↔ 基站灯组维护</div>
+          <div class="example-item-desc">一个药品可对照多个取药槽（一对多），一个取药槽只对照一个灯组（一对一，仅物理柜）；摆药层「高层」为提示标记（位置偏高、上货需登高），可勾选批量设置。</div>
         </div></div>
       </div>
     </div>
@@ -96,12 +97,13 @@
 
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/facility-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/cabinet.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/facility-data.js?v=20261015-3"></script>
+  <script src="scripts/drug-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/cabinet.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

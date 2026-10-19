@@ -68,15 +68,15 @@
       var items = d.items.map(function (it) { return drugName(it.drugCode) + '×' + it.qty; }).join('、');
       var short = d.items.some(function (it) { return it.shortage; });
       return '<tr class="pch-doc-row' + (d.trayNo === sel ? ' pch-doc-sel' : '') + '" data-sel="' + esc(d.trayNo) + '">' +
-        '<td><b>' + esc(d.trayNo) + '</b></td><td class="text-secondary">' + esc(d.date) + '</td>' +
+        '<td><b>' + esc(d.trayNo) + '</b></td><td>摆药出库</td><td class="text-secondary">' + esc(d.date) + '</td>' +
         '<td>' + esc(d.inpatientNo) + '</td><td>' + esc(d.ward) + ' / ' + esc(d.bed) + '</td>' +
         '<td>' + esc(d.patient) + '</td><td>' + esc(items) + '</td>' +
         '<td>' + stHtml(d.status) + (short ? ' <span class="badge bg-red-lt">无库存</span>' : '') + '</td>' +
         '<td onclick="event.stopPropagation()">' + ops(d) + '</td></tr>';
     }).join('');
-    if (!rows) rows = '<tr><td colspan="8" class="text-center text-secondary" style="padding:28px;">本页签无单据——点右上「HIS 拉取」</td></tr>';
+    if (!rows) rows = '<tr><td colspan="9" class="text-center text-secondary" style="padding:28px;">本页签无单据——点右上「HIS 拉取」</td></tr>';
     return '<div class="card mb-3"><div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>摆药单号</th><th>开单时间</th><th>住院号</th><th>病区/床</th><th>患者</th><th>药品</th><th>状态</th><th>操作</th></tr></thead>' +
+      '<thead><tr><th>摆药单号</th><th>单据类型</th><th>开单时间</th><th>住院号</th><th>病区/床</th><th>患者</th><th>药品</th><th>状态</th><th>操作</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div></div>';
   }
   function ops(d) {
@@ -87,9 +87,11 @@
     }
     if (d.status === '摆药中') return '<button class="btn btn-sm btn-primary" data-scan="' + esc(d.trayNo) + '">▸ 扫码绑码</button> ' +
       '<button class="btn btn-sm btn-outline-warning" data-finish="' + esc(d.trayNo) + '">完成摆药·事后补绑</button>';
-    return '<span class="text-secondary" style="font-size:12.5px;">患者已绑</span>';
+    return '<span class="text-secondary">—</span>';
   }
 
+  // 2026-10-18 Task5：药品清单迁移 PulDocDetail.renderDrugs 独立表格
+  // （应摆、已扫/应扫、锁/在架、建议货位、建议码、手动补绑 data-mbind / 待补绑徽标走 extraColumns，监听不动；卡片壳保留）
   function itemsCard() {
     var d = selDoc();
     if (!d) return '<div class="card"><div class="card-body text-center text-secondary" style="padding:28px;">点选摆药单，查看药品 / 已扫应扫 / 建议货位</div></div>';
@@ -101,23 +103,34 @@
       var onh = R.availableQty(WH, S, ph(), it.drugCode);
       if (d.status === '待摆药' && !it.shortage) onh += it.qty - scanned;
       var done = R.itemDone(it);
-      var pend = R.excPendingFor(S, d.trayNo, it.drugCode);
       var canBind = !done && (d.status === '摆药中' || d.status === '已完成');
-      return '<tr><td>' + (i + 1) + '</td><td><b>' + esc(drugName(it.drugCode)) + '</b></td>' +
-        '<td class="text-secondary">' + esc(formSpec(it.drugCode)) + '</td>' +
-        '<td>' + it.qty + esc(it.unit) + '</td><td>' + scanned + ' / ' + it.qty + '</td>' +
-        '<td>' + (it.shortage ? '<span class="badge bg-red-lt">无库存</span>' : ('锁 ' + it.qty + ' · 在架 ' + onh)) + '</td>' +
-        '<td>' + esc(loc) + '</td>' +
-        '<td style="font-family:Consolas,monospace;font-size:12px;">' + esc(sugCode) + '</td>' +
-        '<td>' + (canBind ? '<button class="btn btn-sm btn-outline-primary" data-mbind="' + i + '">手动补绑</button>' : '') +
-        (done || d.status !== '已完成' ? '' : '<span class="badge bg-orange-lt">待补绑</span>') + '</td></tr>';
-    }).join('');
+      return {
+        drugName: drugName(it.drugCode), formSpec: formSpec(it.drugCode),
+        _qtyCell: esc(it.qty) + esc(it.unit),
+        _scanCell: scanned + ' / ' + it.qty,
+        _lockCell: it.shortage ? '<span class="badge bg-red-lt">无库存</span>' : ('锁 ' + it.qty + ' · 在架 ' + onh),
+        _locCell: esc(loc),
+        _sugCell: '<span style="font-family:Consolas,monospace;font-size:12px;">' + esc(sugCode) + '</span>',
+        _opCell: (canBind ? '<button class="btn btn-sm btn-outline-primary" data-mbind="' + i + '">手动补绑</button>' : '') +
+          (done || d.status !== '已完成' ? '' : '<span class="badge bg-orange-lt">待补绑</span>')
+      };
+    });
+    var table = window.PulDocDetail.renderDrugs({ drugs: rows }, {
+      columns: ['seq', 'drugName', 'formSpec'],
+      extraColumns: [
+        { key: 'qty', title: '应摆', cell: function (r) { return r._qtyCell; } },
+        { key: 'scan', title: '已扫/应扫', cell: function (r) { return r._scanCell; } },
+        { key: 'lock', title: '锁 / 在架', cell: function (r) { return r._lockCell; } },
+        { key: 'loc', title: '建议货位', cell: function (r) { return r._locCell; } },
+        { key: 'sug', title: '建议码', cell: function (r) { return r._sugCell; } },
+        { key: 'op', title: '操作', cell: function (r) { return r._opCell; } }
+      ],
+      emptyText: '暂无药品明细'
+    });
     return '<div class="card"><div class="card-header"><b>药品清单</b>' +
       '<span class="text-secondary ms-2" style="font-size:12.5px;">' + esc(d.trayNo) + ' · ' + esc(d.patient) +
       ' · ' + esc(d.ward) + esc(d.bed) + ' · 码随单绑患者</span></div>' +
-      '<div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>#</th><th>药品</th><th>规格</th><th>应摆</th><th>已扫/应扫</th><th>锁 / 在架</th><th>建议货位</th><th>建议码</th><th>操作</th></tr></thead>' +
-      '<tbody>' + rows + '</tbody></table></div></div>';
+      table + '</div>';
   }
 
   function openHis() {
@@ -224,9 +237,26 @@
     });
   }
 
+  // 二期 Task B：openScan 大版面接线适配——药品清单行模型（复用 itemsCard 同源数据，仅视图模型，不改业务）
+  function scanDrugRows(d) {
+    return d.items.map(function (it) {
+      return { drugName: drugName(it.drugCode), formSpec: formSpec(it.drugCode),
+        qty: it.qty, unit: it.unit, scanText: (it.codes || []).length + ' / ' + it.qty };
+    });
+  }
+
   function openScan(d) {
     UI.openScan({
       title: '扫码绑码 · ' + d.trayNo,
+      headerHtml: '<div class="pch-scan-fields">' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">单据类型</span>摆药出库</span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">单据单号</span><b>' + esc(d.trayNo) + '</b></span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">单据时间</span>' + esc(d.date) + '</span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">发货方</span>' + esc(d.pharmacy) + '</span>' +
+        '<span class="pch-scan-field"><span class="pch-scan-field-label">收货方</span>' + esc(d.patient) +
+        '（' + esc(d.ward) + ' / ' + esc(d.bed) + '）</span></div>',
+      drugsRows: function () { return scanDrugRows(d); },
+      drugsOptions: { columns: ['seq', 'drugName', 'formSpec', 'qty', 'scanQty', 'unit'], emptyText: '暂无明细' },
       hint: '扫建议码。齐了自动完成。病区无扫码条件可走「完成摆药·事后补绑」。',
       gate: 'out', node: ph(),
       onScan: function (code) {

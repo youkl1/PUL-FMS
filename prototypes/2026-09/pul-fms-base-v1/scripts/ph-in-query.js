@@ -1,5 +1,5 @@
 /**
- * ph-in-query.js — 入库明细查询（药房）：领用入库单（pickDocs 已入库·待上架/已上架）的收货侧对账
+ * ph-in-query.js — 入库明细查询（药房）：领用入库单（pickDocs 已入库/已上架）的收货侧对账
  * 主从联动对齐老系统「采购明细」：药品汇总主表 → 点行下钻单据列表 → 码明细弹窗
  * 与库房「出库明细查询」互为镜像；拆零列取药品字典 ipUnpack/opUnpack
  */
@@ -17,10 +17,10 @@
   function ph() { return W.curPharm(); }
   function v(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
 
-  // 药房入库事实 = 领用出库单闭环（已入库·待上架；全码有 phLoc 时推导已上架），按当前药房过滤
+  // 药房入库事实 = 领用出库单闭环（已入库；全码有 phLoc 时推导已上架），按当前药房过滤
   function docs() {
     return (S.pickDocs || []).filter(function (d) {
-      if (d.status !== '已入库·待上架') return false;
+      if (d.status !== '已入库') return false;
       if (d.pharmacy !== ph()) return false;
       if (filters.billNo && d.billNo.indexOf(filters.billNo) === -1) return false;
       if (filters.wh && d.warehouse.indexOf(filters.wh) === -1) return false;

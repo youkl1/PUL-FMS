@@ -6,48 +6,366 @@
   "quality_profile": "showcase",
   "text_policy": "strict",
   "width": 1360,
-  "height": 1020,
-  "title": "采购入库流程",
-  "subtitle": "扫码 → 解析 → 命中/异常码 → 人工补录兜底 → 审核入在架",
+  "height": 1120,
+  "title": "采购到货入库流程",
+  "subtitle": "平台自动拉取/手动新增 → 拉取即解析（点下载可再解析）→ 扫码匹配或免扫码人工验收 → 审核入库；入库单=结果台账+反审核",
   "containers": [
-    { "id": "lane-sup", "x": 40, "y": 100, "width": 1280, "height": 100, "label": "供应商", "stroke": "#d0d5dd", "fill": "#f6f8fb" },
-    { "id": "lane-buyer", "x": 40, "y": 220, "width": 1280, "height": 230, "label": "采购员", "stroke": "#b7cdf0", "fill": "#eef4fb" },
-    { "id": "lane-sys", "x": 40, "y": 478, "width": 1280, "height": 330, "label": "系统 · 解析引擎", "stroke": "#d0d5dd", "fill": "#f6f8fb" },
-    { "id": "lane-admin", "x": 40, "y": 832, "width": 1280, "height": 110, "label": "库房管理员 · 人工兜底", "stroke": "#b7e0c4", "fill": "#eef8f0" }
+    {
+      "id": "lane-sup",
+      "x": 40,
+      "y": 90,
+      "width": 1280,
+      "height": 100,
+      "label": "供应商平台",
+      "stroke": "#d0d5dd",
+      "fill": "#f6f8fb"
+    },
+    {
+      "id": "lane-buyer",
+      "x": 40,
+      "y": 200,
+      "width": 1280,
+      "height": 330,
+      "label": "采购员 · 采购到货单页",
+      "stroke": "#b7cdf0",
+      "fill": "#eef4fb"
+    },
+    {
+      "id": "lane-sys",
+      "x": 40,
+      "y": 550,
+      "width": 1280,
+      "height": 330,
+      "label": "系统 · 解析引擎",
+      "stroke": "#d0d5dd",
+      "fill": "#f6f8fb"
+    },
+    {
+      "id": "lane-admin",
+      "x": 40,
+      "y": 900,
+      "width": 1280,
+      "height": 130,
+      "label": "库房管理员 · 兜底",
+      "stroke": "#b7e0c4",
+      "fill": "#eef8f0"
+    }
   ],
   "nodes": [
-    { "id": "S1", "kind": "rect", "x": 60, "y": 124, "width": 300, "height": 56, "type_label": "DELIVER", "label": "送货：实物 + 20 位追溯码", "sublabel": "箱码/盒码混装", "fill": "#ffffff", "stroke": "#626976", "flat": true },
-    { "id": "B1", "kind": "rect", "x": 110, "y": 252, "width": 200, "height": 64, "type_label": "RECEIVE", "label": "到货登记", "sublabel": "采购订单 → 到货单", "fill": "#ffffff", "stroke": "#206bc4" },
-    { "id": "B2", "kind": "rect", "x": 940, "y": 252, "width": 280, "height": 64, "type_label": "SCAN", "label": "扫码枪逐码扫描", "sublabel": "连续扫码 · 逐条 ok/warn/bad", "fill": "#ffffff", "stroke": "#206bc4" },
-    { "id": "B4", "kind": "rect", "x": 180, "y": 362, "width": 280, "height": 64, "type_label": "CONFIRM", "label": "确认入库明细", "sublabel": "药品清单 + 批次 + 效期", "fill": "#ffffff", "stroke": "#206bc4" },
-    { "id": "END1", "kind": "cylinder", "x": 540, "y": 362, "width": 300, "height": 64, "type_label": "STOCK", "label": "在架库存 +码", "sublabel": "逐码带批次/效期/库位", "fill": "#ffffff", "stroke": "#2fb344" },
-    { "id": "Y1", "kind": "rect", "x": 940, "y": 504, "width": 280, "height": 60, "type_label": "PARSE", "label": "parseCode · 取前 7 位", "sublabel": "查标识码字典 IDCODES", "fill": "#ffffff", "stroke": "#626976", "flat": true },
-    { "id": "Y2", "kind": "hexagon", "x": 995, "y": 610, "width": 170, "height": 80, "type_label": "CHECK", "label": "命中？", "fill": "#fff7e6", "stroke": "#d48806" },
-    { "id": "Y3", "kind": "rect", "x": 180, "y": 620, "width": 280, "height": 60, "type_label": "MAP", "label": "药品 + 码等级 + 包装单位", "sublabel": "扫上级码按换算链展开下级", "fill": "#ffffff", "stroke": "#626976", "flat": true },
-    { "id": "Y4", "kind": "rect", "x": 980, "y": 730, "width": 200, "height": 56, "type_label": "HOLD", "label": "异常码暂存", "sublabel": "bad-codes 台账", "fill": "#fdecea", "stroke": "#d63939", "flat": true },
-    { "id": "A1", "kind": "rect", "x": 940, "y": 862, "width": 280, "height": 60, "type_label": "UPSERT", "label": "异常码维护补录 · upsert", "sublabel": "补标识码子表 · 必要时建药品主表", "fill": "#ffffff", "stroke": "#206bc4" }
+    {
+      "id": "P1",
+      "kind": "cylinder",
+      "x": 80,
+      "y": 110,
+      "width": 280,
+      "height": 56,
+      "type_label": "PLATFORM",
+      "label": "供应商平台码单池",
+      "sublabel": "订单 · 发货企业 · 发票 · 码单 · 自动推送",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "B1",
+      "kind": "rect",
+      "x": 80,
+      "y": 222,
+      "width": 280,
+      "height": 70,
+      "type_label": "DOWNLOAD",
+      "label": "自动拉取 · 生成到货单",
+      "sublabel": "推送/定时拉取 · 拉取即解析码，点下载可再解析",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "B1b",
+      "kind": "rect",
+      "x": 80,
+      "y": 332,
+      "width": 280,
+      "height": 60,
+      "type_label": "MANUAL",
+      "label": "手动新增到货单",
+      "sublabel": "断网 / 平台未推送 · 人工兜底 · 亦可扫码验收",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "B2a",
+      "kind": "rect",
+      "x": 940,
+      "y": 222,
+      "width": 300,
+      "height": 70,
+      "type_label": "SCAN",
+      "label": "扫码验收 · 逐码匹配",
+      "sublabel": "核对 / 录入双模式 · 匹配通过",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "B2b",
+      "kind": "rect",
+      "x": 430,
+      "y": 332,
+      "width": 300,
+      "height": 60,
+      "type_label": "MANUAL-OK",
+      "label": "人工验收 · 免扫码",
+      "sublabel": "不扫码 · 人工核对单据直接验收通过",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "B4",
+      "kind": "rect",
+      "x": 430,
+      "y": 432,
+      "width": 300,
+      "height": 70,
+      "type_label": "AUDIT",
+      "label": "审核入库 · 生成采购入库单",
+      "sublabel": "门槛：无码 / 异常码 / 未验收 / 盘点冻结",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "Y1",
+      "kind": "rect",
+      "x": 950,
+      "y": 574,
+      "width": 280,
+      "height": 60,
+      "type_label": "PARSE",
+      "label": "parseCode · 前 7 位查字典",
+      "sublabel": "IDCODES 标识码字典",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "Y2",
+      "kind": "hexagon",
+      "x": 1005,
+      "y": 676,
+      "width": 170,
+      "height": 80,
+      "type_label": "CHECK",
+      "label": "字典命中？",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "Y3",
+      "kind": "rect",
+      "x": 430,
+      "y": 686,
+      "width": 300,
+      "height": 60,
+      "type_label": "MAP",
+      "label": "药品 + 批次 + 效期聚合",
+      "sublabel": "上级码按换算链展开下级",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "Y4",
+      "kind": "rect",
+      "x": 980,
+      "y": 800,
+      "width": 220,
+      "height": 60,
+      "type_label": "HOLD",
+      "label": "异常码台账",
+      "sublabel": "硬拦截审核入库",
+      "fill": "#fdecea",
+      "stroke": "#d63939",
+      "flat": true
+    },
+    {
+      "id": "E1",
+      "kind": "cylinder",
+      "x": 80,
+      "y": 574,
+      "width": 280,
+      "height": 70,
+      "type_label": "RESULT",
+      "label": "采购入库单（已审核）",
+      "sublabel": "码入在架 · HIS 推送 · 结果台账",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "A1",
+      "kind": "rect",
+      "x": 950,
+      "y": 924,
+      "width": 280,
+      "height": 60,
+      "type_label": "UPSERT",
+      "label": "异常码维护补录",
+      "sublabel": "补标识码字典 · 异常页维护",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "A2",
+      "kind": "rect",
+      "x": 80,
+      "y": 924,
+      "width": 280,
+      "height": 70,
+      "type_label": "REVERT",
+      "label": "反审核（入库单页）",
+      "sublabel": "撤架 · HIS 撤回 · 到货单回待审核",
+      "fill": "#ffffff",
+      "stroke": "#f59f00"
+    }
   ],
   "arrows": [
-    { "id": "a1", "source": "S1", "target": "B1", "source_port": "bottom", "target_port": "top", "flow": "control" },
-    { "id": "a2", "source": "B1", "target": "B2", "source_port": "right", "target_port": "left", "flow": "control" },
-    { "id": "a3", "source": "B2", "target": "Y1", "source_port": "bottom", "target_port": "top", "flow": "read" },
-    { "id": "a4", "source": "Y1", "target": "Y2", "source_port": "bottom", "target_port": "top", "flow": "read" },
-    { "id": "a5", "source": "Y2", "target": "Y3", "source_port": "left", "target_port": "right", "flow": "control", "label": "命中" },
-    { "id": "a6", "source": "Y3", "target": "B4", "source_port": "top", "target_port": "bottom", "flow": "control" },
-    { "id": "a7", "source": "Y2", "target": "Y4", "source_port": "bottom", "target_port": "top", "flow": "feedback" },
-    { "id": "a8", "source": "Y4", "target": "A1", "source_port": "bottom", "target_port": "top", "flow": "feedback", "label": "人工补录" },
-    { "id": "a9", "source": "A1", "target": "B2", "source_port": "right", "target_port": "right", "flow": "feedback", "label": "补录完成 · 重扫" },
-    { "id": "a10", "source": "B4", "target": "END1", "source_port": "right", "target_port": "left", "flow": "control", "label": "审核入库" }
+    {
+      "id": "a1",
+      "source": "P1",
+      "target": "B1",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control",
+      "label": "自动推送"
+    },
+    {
+      "id": "a2",
+      "source": "B1",
+      "target": "B2a",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control"
+    },
+    {
+      "id": "a3",
+      "source": "B1",
+      "target": "B2b",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control",
+      "label": "免扫码人工验收"
+    },
+    {
+      "id": "a4",
+      "source": "B1b",
+      "target": "B2b",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control"
+    },
+    {
+      "id": "a5",
+      "source": "B2a",
+      "target": "Y1",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "read",
+      "label": "扫码比对"
+    },
+    {
+      "id": "a6",
+      "source": "Y1",
+      "target": "Y2",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "read"
+    },
+    {
+      "id": "a7",
+      "source": "Y2",
+      "target": "Y3",
+      "source_port": "left",
+      "target_port": "right",
+      "flow": "control",
+      "label": "命中"
+    },
+    {
+      "id": "a8",
+      "source": "Y2",
+      "target": "Y4",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "feedback",
+      "label": "未命中 · 硬拦截"
+    },
+    {
+      "id": "a9",
+      "source": "Y4",
+      "target": "A1",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "feedback",
+      "label": "人工补录"
+    },
+    {
+      "id": "a10",
+      "source": "A1",
+      "target": "Y1",
+      "source_port": "right",
+      "target_port": "right",
+      "flow": "feedback",
+      "label": "补录后重新解析"
+    },
+    {
+      "id": "a11",
+      "source": "Y3",
+      "target": "B4",
+      "source_port": "top",
+      "target_port": "bottom",
+      "flow": "control",
+      "label": "明细回单"
+    },
+    {
+      "id": "a12",
+      "source": "B2b",
+      "target": "B4",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "a13",
+      "source": "B4",
+      "target": "E1",
+      "source_port": "left",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "a14",
+      "source": "A2",
+      "target": "E1",
+      "source_port": "top",
+      "target_port": "bottom",
+      "flow": "feedback",
+      "label": "反审核撤回"
+    }
   ],
   "legend_orientation": "horizontal",
   "legend_x": 60,
-  "legend_y": 966,
+  "legend_y": 1062,
   "legend": [
-    { "flow": "control", "label": "主流程" },
-    { "flow": "read", "label": "扫码解析" },
-    { "flow": "feedback", "label": "拦截 · 补录回写" }
+    {
+      "flow": "control",
+      "label": "主流程"
+    },
+    {
+      "flow": "read",
+      "label": "扫码解析"
+    },
+    {
+      "flow": "feedback",
+      "label": "拦截 · 补录 · 反审核"
+    }
   ],
-  "footer": "PUL-FMS · 02 采购入库流程 · fireworks-tech-graph Style 1",
+  "footer": "PUL-FMS · 02 采购到货入库流程（2026-10-04 自动拉取+双验收路径口径）· fireworks-tech-graph Style 1",
   "footer_x": 48,
-  "footer_y": 1004
+  "footer_y": 1098
 }

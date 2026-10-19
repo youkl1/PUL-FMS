@@ -1,0 +1,819 @@
+{
+  "canvas": {
+    "height": 1370.0,
+    "width": 2200.0
+  },
+  "composition": {
+    "limits": {
+      "max_bends_per_edge": 12,
+      "max_bridged_crossings": 8,
+      "max_route_stretch": 5.0,
+      "max_total_bends": 100,
+      "min_container_gutter": 0.0,
+      "min_label_clearance": 2.0,
+      "min_node_gap": 0.0,
+      "min_segment_length": 0.0,
+      "profile": "standard"
+    },
+    "metrics": {
+      "bridged_crossings": 3,
+      "max_route_stretch": 1.894,
+      "minimum_container_gutter": 20.0,
+      "minimum_node_gap": 60.0,
+      "shortest_segment": 9.0,
+      "total_bends": 28
+    },
+    "ok": true,
+    "profile": "standard",
+    "score": 58,
+    "violations": []
+  },
+  "edges": [
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "a01",
+      "length": 85.0,
+      "route": [
+        [
+          930.0,
+          215.0
+        ],
+        [
+          930.0,
+          300.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "D1",
+      "source_port": [
+        930.0,
+        215.0
+      ],
+      "target": "M1",
+      "target_port": [
+        930.0,
+        300.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 1,
+      "bridges": [],
+      "crossings": [],
+      "id": "a02",
+      "length": 590.0,
+      "route": [
+        [
+          770.0,
+          340.0
+        ],
+        [
+          300.0,
+          340.0
+        ],
+        [
+          300.0,
+          460.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "M1",
+      "source_port": [
+        770.0,
+        340.0
+      ],
+      "target": "M2A",
+      "target_port": [
+        300.0,
+        460.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 2,
+      "bridges": [],
+      "crossings": [],
+      "id": "a03",
+      "length": 281.0,
+      "route": [
+        [
+          921.0,
+          380.0
+        ],
+        [
+          921.0,
+          400.4
+        ],
+        [
+          720.0,
+          400.4
+        ],
+        [
+          720.0,
+          460.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "M1",
+      "source_port": [
+        921.0,
+        380.0
+      ],
+      "target": "M2B",
+      "target_port": [
+        720.0,
+        460.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 2,
+      "bridges": [],
+      "crossings": [],
+      "id": "a04",
+      "length": 281.0,
+      "route": [
+        [
+          939.0,
+          380.0
+        ],
+        [
+          939.0,
+          400.4
+        ],
+        [
+          1140.0,
+          400.4
+        ],
+        [
+          1140.0,
+          460.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "M1",
+      "source_port": [
+        939.0,
+        380.0
+      ],
+      "target": "M2C",
+      "target_port": [
+        1140.0,
+        460.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 1,
+      "bridges": [],
+      "crossings": [],
+      "id": "a07",
+      "length": 590.0,
+      "route": [
+        [
+          1090.0,
+          340.0
+        ],
+        [
+          1560.0,
+          340.0
+        ],
+        [
+          1560.0,
+          460.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "M1",
+      "source_port": [
+        1090.0,
+        340.0
+      ],
+      "target": "SP1",
+      "target_port": [
+        1560.0,
+        460.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 1,
+      "bridges": [],
+      "crossings": [],
+      "id": "a05",
+      "length": 431.0,
+      "route": [
+        [
+          300.0,
+          550.0
+        ],
+        [
+          300.0,
+          681.0
+        ],
+        [
+          600.0,
+          681.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "M2A",
+      "source_port": [
+        300.0,
+        550.0
+      ],
+      "target": "DEC",
+      "target_port": [
+        600.0,
+        681.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "a10",
+      "length": 100.0,
+      "route": [
+        [
+          720.0,
+          550.0
+        ],
+        [
+          720.0,
+          650.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "M2B",
+      "source_port": [
+        720.0,
+        550.0
+      ],
+      "target": "DEC",
+      "target_port": [
+        720.0,
+        650.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 1,
+      "bridges": [],
+      "crossings": [],
+      "id": "a06",
+      "length": 440.0,
+      "route": [
+        [
+          1140.0,
+          550.0
+        ],
+        [
+          1140.0,
+          690.0
+        ],
+        [
+          840.0,
+          690.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "M2C",
+      "source_port": [
+        1140.0,
+        550.0
+      ],
+      "target": "DEC",
+      "target_port": [
+        840.0,
+        690.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [],
+      "crossings": [],
+      "id": "a12",
+      "length": 100.0,
+      "route": [
+        [
+          1560.0,
+          550.0
+        ],
+        [
+          1560.0,
+          650.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "SP1",
+      "source_port": [
+        1560.0,
+        550.0
+      ],
+      "target": "DEC2",
+      "target_port": [
+        1560.0,
+        650.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 2,
+      "bridges": [],
+      "crossings": [],
+      "id": "a13",
+      "length": 491.0,
+      "route": [
+        [
+          720.0,
+          730.0
+        ],
+        [
+          720.0,
+          750.4
+        ],
+        [
+          1131.0,
+          750.4
+        ],
+        [
+          1131.0,
+          810.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "DEC",
+      "source_port": [
+        720.0,
+        730.0
+      ],
+      "target": "OUT",
+      "target_port": [
+        1131.0,
+        810.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 2,
+      "bridges": [],
+      "crossings": [],
+      "id": "a14",
+      "length": 491.0,
+      "route": [
+        [
+          1560.0,
+          730.0
+        ],
+        [
+          1560.0,
+          750.4
+        ],
+        [
+          1149.0,
+          750.4
+        ],
+        [
+          1149.0,
+          810.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "DEC2",
+      "source_port": [
+        1560.0,
+        730.0
+      ],
+      "target": "OUT",
+      "target_port": [
+        1149.0,
+        810.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 1,
+      "bridges": [],
+      "crossings": [],
+      "id": "a22",
+      "length": 970.0,
+      "route": [
+        [
+          1290.0,
+          850.0
+        ],
+        [
+          1900.0,
+          850.0
+        ],
+        [
+          1900.0,
+          1210.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "OUT",
+      "source_port": [
+        1290.0,
+        850.0
+      ],
+      "target": "W1",
+      "target_port": [
+        1900.0,
+        1210.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 3,
+      "bridges": [],
+      "crossings": [],
+      "id": "a15",
+      "length": 539.0,
+      "route": [
+        [
+          600.0,
+          699.0
+        ],
+        [
+          536.0,
+          699.0
+        ],
+        [
+          536.0,
+          969.6
+        ],
+        [
+          720.0,
+          969.6
+        ],
+        [
+          720.0,
+          990.0
+        ]
+      ],
+      "route_stretch": 1.311,
+      "source": "DEC",
+      "source_port": [
+        600.0,
+        699.0
+      ],
+      "target": "E1",
+      "target_port": [
+        720.0,
+        990.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 3,
+      "bridges": [],
+      "crossings": [],
+      "id": "a16",
+      "length": 2576.0,
+      "route": [
+        [
+          1680.0,
+          690.0
+        ],
+        [
+          2074.0,
+          690.0
+        ],
+        [
+          2074.0,
+          1304.0
+        ],
+        [
+          720.0,
+          1304.0
+        ],
+        [
+          720.0,
+          1090.0
+        ]
+      ],
+      "route_stretch": 1.894,
+      "source": "DEC2",
+      "source_port": [
+        1680.0,
+        690.0
+      ],
+      "target": "E1",
+      "target_port": [
+        720.0,
+        1090.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 1,
+      "bridges": [],
+      "crossings": [],
+      "id": "a18",
+      "length": 351.0,
+      "route": [
+        [
+          930.0,
+          1031.0
+        ],
+        [
+          1140.0,
+          1031.0
+        ],
+        [
+          1140.0,
+          890.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "E1",
+      "source_port": [
+        930.0,
+        1031.0
+      ],
+      "target": "OUT",
+      "target_port": [
+        1140.0,
+        890.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 2,
+      "bridges": [],
+      "crossings": [],
+      "id": "a19",
+      "length": 479.0,
+      "route": [
+        [
+          930.0,
+          1049.0
+        ],
+        [
+          1133.8,
+          1049.0
+        ],
+        [
+          1133.8,
+          1040.0
+        ],
+        [
+          1400.0,
+          1040.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "E1",
+      "source_port": [
+        930.0,
+        1049.0
+      ],
+      "target": "E2",
+      "target_port": [
+        1400.0,
+        1040.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 2,
+      "bridges": [
+        [
+          1140.0,
+          914.0
+        ]
+      ],
+      "crossings": [
+        [
+          1140.0,
+          914.0
+        ]
+      ],
+      "id": "a17",
+      "length": 1020.0,
+      "route": [
+        [
+          1610.0,
+          990.0
+        ],
+        [
+          1610.0,
+          914.0
+        ],
+        [
+          700.0,
+          914.0
+        ],
+        [
+          700.0,
+          880.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "E2",
+      "source_port": [
+        1610.0,
+        990.0
+      ],
+      "target": "BK",
+      "target_port": [
+        700.0,
+        880.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 4,
+      "bridges": [
+        [
+          720.0,
+          1245.0
+        ]
+      ],
+      "crossings": [
+        [
+          720.0,
+          1245.0
+        ]
+      ],
+      "id": "a20",
+      "length": 2050.8,
+      "route": [
+        [
+          1750.0,
+          1245.0
+        ],
+        [
+          464.0,
+          1245.0
+        ],
+        [
+          464.0,
+          922.0
+        ],
+        [
+          119.6,
+          922.0
+        ],
+        [
+          119.6,
+          845.0
+        ],
+        [
+          140.0,
+          845.0
+        ]
+      ],
+      "route_stretch": 1.02,
+      "source": "W1",
+      "source_port": [
+        1750.0,
+        1245.0
+      ],
+      "target": "R2",
+      "target_port": [
+        140.0,
+        845.0
+      ],
+      "waypoints": []
+    },
+    {
+      "bends": 0,
+      "bridges": [
+        [
+          536.0,
+          845.0
+        ]
+      ],
+      "crossings": [
+        [
+          536.0,
+          845.0
+        ]
+      ],
+      "id": "a21",
+      "length": 60.0,
+      "route": [
+        [
+          500.0,
+          845.0
+        ],
+        [
+          560.0,
+          845.0
+        ]
+      ],
+      "route_stretch": 1.0,
+      "source": "R2",
+      "source_port": [
+        500.0,
+        845.0
+      ],
+      "target": "BK",
+      "target_port": [
+        560.0,
+        845.0
+      ],
+      "waypoints": []
+    }
+  ],
+  "input_schema": "v1",
+  "issues": [
+    {
+      "code": "EDGE_CROSSING_BRIDGED",
+      "coordinates": [
+        [
+          1140.0,
+          914.0
+        ]
+      ],
+      "element": "a17",
+      "severity": "info"
+    },
+    {
+      "code": "EDGE_CROSSING_BRIDGED",
+      "coordinates": [
+        [
+          720.0,
+          1245.0
+        ]
+      ],
+      "element": "a20",
+      "severity": "info"
+    },
+    {
+      "code": "EDGE_CROSSING_BRIDGED",
+      "coordinates": [
+        [
+          536.0,
+          845.0
+        ]
+      ],
+      "element": "a21",
+      "severity": "info"
+    }
+  ],
+  "mode": "architecture",
+  "ok": true,
+  "palette": {
+    "below_target": [],
+    "minimum_target": 4.5,
+    "ratios": {
+      "section_sub_fill": 4.76,
+      "text_muted": 4.76,
+      "text_primary": 17.74,
+      "text_secondary": 4.83
+    },
+    "scope": "default opaque canvas text tokens; not a full rendered accessibility audit",
+    "unsupported_tokens": []
+  },
+  "placements": {
+    "legend": {
+      "actual": [
+        50.0,
+        1290.0
+      ],
+      "bounds": [
+        40.0,
+        1276.0,
+        571.12,
+        1322.0
+      ],
+      "moved": true,
+      "requested": [
+        48.0,
+        1310.0
+      ]
+    }
+  },
+  "schema_version": 1,
+  "semantics": {
+    "details": {},
+    "ok": true,
+    "profile": "generic",
+    "style": 1,
+    "visual_theme": "Flat Icon"
+  },
+  "style": {
+    "id": 1,
+    "name": "Flat Icon"
+  },
+  "summary": {
+    "bridged_crossings": 3,
+    "edges": 19,
+    "nodes": 16
+  },
+  "text_metrics": "heuristic-v1",
+  "typography": {
+    "complete_text": true,
+    "hint": null,
+    "metrics": "heuristic widths; inspect the actual rendered font",
+    "truncated": []
+  }
+}

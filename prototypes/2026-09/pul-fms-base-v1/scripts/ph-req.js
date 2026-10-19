@@ -1,8 +1,9 @@
 /**
  * ph-req.js — 领用申请单：药房按品规+数量向库房请领（药视角，不扫码）
- * 2026-10-05 单池化：读写 pickDocs（reqPool 废除）；新建=待提交草稿，提交→待出库；
- * 待出库(codes 空)可编辑/撤销(撤销=作废终态)，库房已开扫(codes 非空)锁定；已出库起只读，按 pickStatus 推导展示已上架
- * 待提交（库房制单草稿）仅库房侧可见，本页不显示；本药房待提交草稿照常显示
+ * 2026-10-05 单池化：读写 pickDocs（reqPool 废除）；新建=待出库直提或存草稿，提交→待出库；
+ * 词表 v3（2026-10-08）：草稿（原待提交）→待出库→已出库（药房视角=待入库）→已入库；上架状态列=待上架/已上架
+ * 待出库(codes 空)可编辑/撤销(撤销=作废终态)，库房已开扫(codes 非空)锁定；已出库起只读
+ * 草稿（库房制单）仅库房侧可见，本页不显示；本药房草稿照常显示
  */
 (function () {
   'use strict';
@@ -12,7 +13,7 @@
   var W = window.PUL_WH, D = window.PUL_DRUG, UI = window.PchUI, esc = UI.esc;
   var S = W.load(), DS = D.load(), FS = window.PUL_FACILITY.load();
   var sel = null;
-  var filters = { status: '全部', kw: '' };
+  var filters = { status: '待出库', kw: '' };   // 2026-10-09 拍板：默认只看待出库（与领用备货单同口径）
 
   function save() { W.save(S); }
   function curUser() { return window.store.load().currentUser || {}; }
@@ -26,9 +27,9 @@
     var ph = curPharm();
     return S.pickDocs.filter(function (d) {
       if (d.pharmacy !== ph) return false;
-      if (d.status === '待提交' && d.source === '库房制单') return false;   // 库房制单草稿仅库房侧可见
+      if (d.status === '草稿' && d.source === '库房制单') return false;   // 库房制单草稿仅库房侧可见
       if (d.source === '扫码直生') return false;   // 直生单在「领用入库单/药品扫码上架」链路查看
-      if (filters.status !== '全部' && W.pickStatus(d) !== filters.status) return false;
+      if (filters.status !== '全部' && W.pickView(d, 'ph') !== filters.status) return false;
       if (filters.kw && d.billNo.indexOf(filters.kw) === -1) return false;
       return true;
     });
@@ -55,7 +56,7 @@
     return '<div class="card mb-3"><div class="card-body" style="padding:12px 16px;">' +
       '<div class="d-flex flex-wrap align-items-center" style="gap:10px;">' +
       '<select class="form-select" id="fStatus" style="width:120px;">' +
-        ['全部', '待提交', '待出库', '已出库·待入库', '已入库·待上架', '已上架', '已作废'].map(function (o) { return opt(filters.status, o, o === '全部' ? '状态' : o); }).join('') + '</select>' +
+        ['全部', '待出库', '待入库', '已入库', '已作废'].map(function (o) { return opt(filters.status, o, o === '全部' ? '状态' : o); }).join('') + '</select>' +
       '<input class="form-control" id="fKw" style="width:170px;" placeholder="单据编号" value="' + esc(filters.kw) + '">' +
       '<button class="btn btn-outline-primary" id="btnQuery">查询</button>' +
       '<button class="btn btn-outline-secondary" id="btnReset">重置</button>' +
@@ -68,59 +69,70 @@
     var list = myReqs();
     var rowsHtml = list.map(function (r, i) {
       var items = r.items.map(function (it) { return drugName(it.drugCode) + '×' + it.qty + baseUnit(it.drugCode); }).join('、');
-      var pst = W.pickStatus(r);
-      var st = pst === '已上架'
-        ? '<span class="pch-light ok"><i class="pch-dot"></i>已上架</span>'
-        : (pst === '已入库·待上架'
-          ? '<span class="pch-light" style="color:#2FB344;"><i class="pch-dot" style="background:#2FB344;"></i>已入库 · 待上架</span>' // TODO(light): 待 PchUI.light 扩展收编
-          : (pst === '已出库·待入库'
-            ? '<span class="pch-light" style="color:#F59E0B;"><i class="pch-dot" style="background:#F59E0B;"></i>已出库 · 待入库</span>' // TODO(light): 待 PchUI.light 扩展收编
-            : (pst === '已作废'
-              ? '<span class="pch-light mute"><i class="pch-dot"></i>已作废</span>'
-              : (pst === '待提交'
-                ? '<span class="badge bg-secondary-lt">待提交</span>'
-                : '<span class="pch-light" style="color:#206BC4;"><i class="pch-dot" style="background:#206BC4;"></i>待出库</span>')))); // TODO(light): 待 PchUI.light 扩展收编
+      var planQty = r.items.reduce(function (n, it) { return n + (it.qty || 0); }, 0);   // 2026-10-09 拍板：列表加计划数量列
+      // 2026-10-09 拍板：三单列表统一补齐 出库库房/领用药房/上架货位
+      var slots = [];
+      (r.items || []).forEach(function (it) { if (it.slot && slots.indexOf(it.slot) === -1) slots.push(it.slot); });
+      var pst = W.pickView(r, 'ph');
+      var st = pst === '已入库'
+        ? '<span class="pch-light ok"><i class="pch-dot"></i>已入库</span>'
+        : (pst === '待入库'
+          ? '<span class="pch-light" style="color:#F59E0B;"><i class="pch-dot" style="background:#F59E0B;"></i>待入库</span>' // TODO(light): 待 PchUI.light 扩展收编
+          : (pst === '已作废'
+            ? '<span class="pch-light mute"><i class="pch-dot"></i>已作废</span>'
+            : (pst === '待出库'
+              ? '<span class="pch-light" style="color:#206BC4;"><i class="pch-dot" style="background:#206BC4;"></i>待出库</span>' // TODO(light): 待 PchUI.light 扩展收编
+              : '<span class="badge bg-secondary-lt">草稿</span>')));
+      var shelfHtml = r.status === '已入库'
+        ? (W.pickShelf(r) === '已上架'
+          ? '<span class="pch-light ok"><i class="pch-dot"></i>已上架</span>'
+          : '<span class="pch-light" style="color:#F59E0B;"><i class="pch-dot" style="background:#F59E0B;"></i>待上架</span>') // TODO(light): 待 PchUI.light 扩展收编
+        : '<span class="text-secondary">—</span>';
       var locked = r.status === '待出库' && (r.codes || []).length > 0;   // 库房已开扫，锁定
-      var op = r.status === '待提交'
+      var op = r.status === '草稿'
         ? '<button class="btn btn-sm btn-outline-primary" data-edit="' + esc(r.billNo) + '">编辑</button> ' +
           '<button class="btn btn-sm btn-success" data-submit="' + esc(r.billNo) + '">提交库房备货</button> ' +
           '<button class="btn btn-sm btn-outline-danger" data-del="' + esc(r.billNo) + '">删除</button>'
         : (r.status === '待出库' && !locked
           ? '<button class="btn btn-sm btn-outline-secondary" data-edit="' + esc(r.billNo) + '">编辑</button> ' +
             '<button class="btn btn-sm btn-outline-danger" data-del="' + esc(r.billNo) + '">撤销</button>'
-          : (locked
-            ? '<span class="text-secondary" style="font-size:12.5px;">库房已开扫</span>'
-            : '<span class="text-secondary" style="font-size:12.5px;">只读</span>'));
+          : '<span class="text-secondary">—</span>');   // 2026-10-09 拍板：操作栏只留按钮（库房已开扫/只读在状态列表达）
       return '<tr class="pch-doc-row' + (r.billNo === sel ? ' pch-doc-sel' : '') + '" data-sel="' + esc(r.billNo) + '">' +
         '<td>' + (i + 1) + '</td><td><b>' + esc(r.billNo) + '</b></td>' +
+        '<td>领用申请</td>' +
         '<td class="text-secondary">' + esc(r.date) + '</td>' +
-        '<td>' + esc(r.warehouse) + '</td><td>' + esc(r.applicant) + '</td>' +
-        '<td style="max-width:280px;">' + esc(items) + '</td><td>' + st + '</td>' +
+        '<td>' + esc(r.warehouse) + '</td><td>' + esc(r.pharmacy) + '</td>' +
+        '<td>' + (slots.length ? esc(slots.join('、')) : '<span class="text-secondary">—</span>') + '</td>' +
+        '<td>' + esc(r.applicant) + '</td>' +
+        '<td style="max-width:240px;">' + esc(items) + '</td><td><b>' + planQty + '</b></td><td>' + st + '</td><td>' + shelfHtml + '</td>' +
         '<td onclick="event.stopPropagation()">' + op + '</td></tr>';
     }).join('');
-    if (!list.length) rowsHtml = '<tr><td colspan="8" class="text-center text-secondary" style="padding:28px;">暂无申请单——点右上「新增申请」向库房请领</td></tr>';
+    if (!list.length) rowsHtml = '<tr><td colspan="13" class="text-center text-secondary" style="padding:28px;">暂无申请单——点右上「新增申请」向库房请领</td></tr>';
     return '<div class="card mb-3"><div class="card-header"><b>领用申请单</b>' +
       '<span class="text-secondary ms-2" style="font-size:12.5px;">提交后进入库房「领用备货单」单据列表 · 本药房 ' + list.length + ' 单</span></div>' +
       '<div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>序号</th><th>单据编号</th><th>申请时间</th><th>供货库房</th><th>申请人</th><th>品规明细</th><th>状态</th><th>操作</th></tr></thead>' +
+      '<thead><tr><th>序号</th><th>单据编号</th><th>单据类型</th><th>申请时间</th><th>出库库房</th><th>领用药房</th><th>上架货位</th><th>申请人</th><th>品规明细</th><th>计划数量</th><th>状态</th><th>上架状态</th><th>操作</th></tr></thead>' +
       '<tbody>' + rowsHtml + '</tbody></table></div></div>';
   }
 
+  // 2026-10-18 Task5：申请药品明细迁移 PulDocDetail.renderDrugs 独立表格
+  // （对齐 wh-pick 先例：预期货位公共列承载上架货位；计划数量 extraColumns 原样；卡片壳/编辑申请入口保留）
   function itemsCard() {
     var r = selReq();
     var body;
     if (!r) {
       body = '<div class="text-center text-secondary" style="padding:28px;">点选申请单查看明细</div>';
     } else {
-      var rowsHtml = r.items.map(function (it, i) {
-        return '<tr><td>' + (i + 1) + '</td><td>' + esc(it.drugCode) + '</td><td><b>' + esc(drugName(it.drugCode)) + '</b></td>' +
-          '<td>' + esc(drugForm(it.drugCode)) + '</td><td>' + esc(maker(it.drugCode)) + '</td><td>' + esc(approval(it.drugCode)) + '</td>' +
-          '<td>' + (it.slot ? '<span class="badge bg-blue-lt">' + esc(it.slot) + '</span>' : '<span class="text-secondary">—</span>') + '</td>' +
-          '<td><b>' + it.qty + '</b></td><td>' + (it.docQty || 0) + '</td><td>' + esc(baseUnit(it.drugCode)) + '</td></tr>';
-      }).join('');
-      body = '<div class="table-responsive"><table class="table table-vcenter card-table">' +
-        '<thead><tr><th>序号</th><th>药品编码</th><th>药品通用名</th><th>制剂规格</th><th>生产厂家</th><th>批准文号</th><th>上架货位</th><th>申请数</th><th>单据数</th><th>单位</th></tr></thead>' +
-        '<tbody>' + rowsHtml + '</tbody></table></div>';
+      var rows = r.items.map(function (it) {
+        return { drugCode: it.drugCode, drugName: drugName(it.drugCode), formSpec: drugForm(it.drugCode),
+          maker: maker(it.drugCode), approval: approval(it.drugCode), expectLoc: it.slot || '', qty: it.qty,
+          unit: baseUnit(it.drugCode) };
+      });
+      body = window.PulDocDetail.renderDrugs({ drugs: rows }, {
+        columns: ['seq', 'drugCode', 'drugName', 'formSpec', 'maker', 'approval', 'expectLoc', 'unit'],
+        extraColumns: [{ key: 'planQty', title: '计划数量', cell: function (row) { return '<b>' + row.qty + '</b>'; } }],
+        emptyText: '暂无申请明细'
+      });
     }
     return '<div class="card"><div class="card-header"><b>申请药品明细清单</b>' +
       (r ? '<span class="text-secondary ms-2" style="font-size:12.5px;">' + esc(r.billNo) + (r.remark ? ' · ' + esc(r.remark) : '') + '</span>' : '') +
@@ -151,19 +163,19 @@
 
   function openEdit(req) {
     var isNew = !req;
-    var isDraft = req && req.status === '待提交';
+    var isDraft = req && req.status === '草稿';
     var defWh = req ? req.warehouse : '中心库';
     var whOpts = warehouses().map(function (w) {
       return '<option' + (defWh === w ? ' selected' : '') + '>' + esc(w) + '</option>';
     }).join('');
-    UI.modalShell('phReqEdit', isNew ? '新增领用申请单' : (isDraft ? '编辑领用申请单（待提交）' : '编辑领用申请单'),
+    UI.modalShell('phReqEdit', isNew ? '新增领用申请单' : (isDraft ? '编辑领用申请单（草稿）' : '编辑领用申请单'),
       '<div class="row g-3 mb-2">' +
       '<div class="col-6"><label class="form-label">领用药房</label><input class="form-control" value="' + esc(curPharm()) + '" disabled></div>' +
       '<div class="col-6"><label class="form-label required">供货库房</label><select class="form-select" id="rqWh">' + whOpts + '</select></div></div>' +
       '<div id="rqPick"></div>' +
       '<div class="mt-2 mb-2"><label class="form-label">备注</label><input class="form-control" id="rqRemark" value="' + esc(req ? (req.remark || '') : '') + '"></div>',
       '<button class="btn btn-outline-secondary" data-mclose>取消</button>' +
-      (isNew ? '<button class="btn btn-outline-primary" id="rqDraft">存草稿（待提交）</button>' : '') +
+      (isNew ? '<button class="btn btn-outline-primary" id="rqDraft">存草稿</button>' : '') +
       '<button class="btn btn-primary" id="rqOk">' + (isNew ? '提交申请' : '保存') + '</button>', 1100);
     var el = UI.open('phReqEdit');
     var picker = window.PulDrugPicker.mount(el.querySelector('#rqPick'), {
@@ -187,10 +199,10 @@
         warehouse: el.querySelector('#rqWh').value, applicant: curUser().name || '演示员',
         operator: curUser().name || '演示员', source: '药房申请', status: status, remark: el.querySelector('#rqRemark').value.trim(),
         items: items, codes: [], badCodes: [], shelfLoc: '',
-        createTime: t, submitTime: status === '待提交' ? '' : t, outTime: '', inTime: '' };
+        createTime: t, submitTime: status === '草稿' ? '' : t, outTime: '', inTime: '' };
       S.pickDocs.unshift(r); sel = r.billNo;
       save(); UI.close('phReqEdit'); renderAll();
-      window.showToast(status === '待提交' ? '已存草稿（待提交），可在列表「提交库房备货」' : '已提交申请，库房「领用备货单」可见');
+      window.showToast(status === '草稿' ? '已存草稿，可在列表「提交库房备货」' : '已提交申请，库房「领用备货单」可见');
     }
     el.querySelector('#rqOk').addEventListener('click', function () {
       if (isNew) { applyNew('待出库'); return; }
@@ -202,7 +214,7 @@
       save(); UI.close('phReqEdit'); renderAll();
       window.showToast('已保存申请');
     });
-    if (isNew) el.querySelector('#rqDraft').addEventListener('click', function () { applyNew('待提交'); });
+    if (isNew) el.querySelector('#rqDraft').addEventListener('click', function () { applyNew('草稿'); });
   }
 
   function renderAll() { content.innerHTML = filterBar() + docsCard() + itemsCard(); bind(); }
@@ -211,7 +223,7 @@
       filters = { status: v('fStatus'), kw: v('fKw') }; renderAll();
     });
     document.getElementById('btnReset').addEventListener('click', function () {
-      filters = { status: '全部', kw: '' }; renderAll();
+      filters = { status: '待出库', kw: '' }; renderAll();
     });
     document.getElementById('btnAdd').addEventListener('click', function () { openEdit(null); });
     content.querySelectorAll('[data-sel]').forEach(function (tr) {
@@ -239,8 +251,8 @@
         var target = null;
         S.pickDocs.forEach(function (d) { if (d.billNo === no) target = d; });
         if (!target) return;
-        var isDraft = target.status === '待提交';
-        UI.confirm((isDraft ? '删除待提交申请 ' : '撤销申请 ') + '<b>' + esc(no) + '</b>？' + (isDraft ? '未提交不产生影响。' : '撤销=作废终态，库房单池同步可见。'), function () {
+        var isDraft = target.status === '草稿';
+        UI.confirm((isDraft ? '删除草稿申请 ' : '撤销申请 ') + '<b>' + esc(no) + '</b>？' + (isDraft ? '未提交不产生影响。' : '撤销=作废终态，库房单池同步可见。'), function () {
           if (isDraft) {
             S.pickDocs = S.pickDocs.filter(function (d) { return d.billNo !== no; });
           } else {

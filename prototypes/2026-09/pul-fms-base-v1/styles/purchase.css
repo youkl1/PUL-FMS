@@ -55,6 +55,11 @@
 .pch-scan-item.warn .msg { color: var(--pch-warn); font-weight: 600; }
 .pch-scan-flags { display: flex; gap: 18px; margin-top: 12px; font-size: 13px; color: #475569; }
 .pch-scan-empty { text-align: center; color: #B0BAC9; padding: 18px 0; font-size: 12.5px; }
+/* 扫码弹窗 加入/移除模式切换（2026-10-10 拍板：镜像 wh.css .qs-mode 视觉，与备货出库扫码工作台同款；待抽 PchUI.scanBar 时统一收编） */
+.pch-scan-mode { display: inline-flex; border: 1px solid #D9DEE4; border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+.pch-scan-mode button { border: none; background: #fff; padding: 10px 20px; font-size: 14px; font-weight: 600; color: #64748B; cursor: pointer; font-family: inherit; }
+.pch-scan-mode button.active-add { background: #2563EB; color: #fff; }
+.pch-scan-mode button.active-rm { background: #D63939; color: #fff; }
 
 /* ===== 行内验收勾选 ===== */
 .pch-check { width: 17px; height: 17px; cursor: pointer; accent-color: var(--pch-ok); }
@@ -70,3 +75,30 @@ tr.pch-row-picked:hover > td { background: #BFDBFE; }
 tr.pch-doc-sel > td { background: #EFF6FF !important; }
 tbody tr.pch-doc-row { cursor: pointer; }
 tbody tr.pch-doc-row:hover > td { background: #F8FAFC; }
+
+/* ===== 药品选择器紧凑密度（2026-10-13 Round BX：表头过大挤占清单加入/移除交互区） ===== */
+.dp-compact table { font-size: 12.5px; margin-bottom: 0; }
+.dp-compact th, .dp-compact td { padding: 4px 8px; line-height: 1.4; }
+.dp-compact thead th { font-size: 12px; font-weight: 600; color: #626976; background: #f8fafc; position: sticky; top: 0; z-index: 1; }
+.dp-compact .form-control-sm, .dp-compact .form-select-sm { font-size: 12.5px; padding: 2px 8px; }
+.dp-compact .btn-sm { padding: 2px 10px; font-size: 12.5px; }
+
+/* ===== 二期 Task B：openScan 1280+ 大版面双栏（左药品清单 ⇄ 右码明细扫码过程；视觉语言对齐 scan-hub hub-duo） ===== */
+.pch-scan-header { border: 1px solid #E5E7EB; border-radius: 8px; background: #FAFBFC; padding: 8px 12px; margin-bottom: 12px; font-size: 13px; line-height: 1.8; }
+.pch-scan-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; align-items: start; margin-top: 12px; }
+.pch-scan-duo-col { min-width: 0; }
+.pch-scan-duo-col .table-responsive { height: 360px; overflow-y: auto; }
+.pch-scan-duo-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+/* 二期验收微调（2026-10-18）：双栏紧凑密度，对齐 scan-hub hub-duo——尽量把列展示全 */
+.pch-scan-duo .table th, .pch-scan-duo .table td { padding: 3px 6px; font-size: 12px; line-height: 1.35; }
+.pch-scan-duo .table th { white-space: nowrap; }
+.pch-scan-duo .table [style*="Consolas"] { font-size: 11px !important; }
+.pch-scan-duo .table .progress { max-width: 110px !important; height: 5px !important; margin-top: 2px !important; }
+.pch-scan-duo .table .btn-sm { padding: 1px 6px; font-size: 11.5px; }
+@media (max-width: 1200px) { .pch-scan-duo { grid-template-columns: 1fr; row-gap: 14px; } }
+
+/* ===== 二期 Task E：扫码标题头统一五字段行（单据类型/单据单号/单据时间/发货方/收货方） =====
+   scan-hub banner 与 9 页 openScan headerHtml 共用：标签=灰小字，值=正文；一行放不下自动换行 */
+.pch-scan-fields { display: flex; flex-wrap: wrap; column-gap: 18px; row-gap: 2px; margin-top: 4px; font-size: 13px; }
+.pch-scan-field-label { color: #6c757d; font-size: 12px; margin-right: 4px; }
+.pch-scan-header .pch-scan-fields { margin-top: 0; }

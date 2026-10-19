@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
-  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 采购管理">
-  <title>已完成单 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 系统管理">
+  <title>取药槽药品对照 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -31,8 +31,8 @@
     <header class="pi-header">
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">已完成单</h1>
-        <span class="pi-subtitle">原型页 · 已审核入库单只读档案 · HIS 推送回执</span>
+        <h1 class="pi-title">取药槽药品对照</h1>
+        <span class="pi-subtitle">原型页 · 扫药品追溯码 + 扫取药槽 → 一对多绑定（一个药品可对照多个取药槽）</span>
       </div>
       <div class="pi-header-right">
         <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
@@ -51,42 +51,37 @@
     <div class="detail-modal">
       <button class="close-detail-modal" id="btnIntroClose" type="button">×</button>
       <div class="detail-modal-header">
-        <div class="detail-modal-icon">✅</div>
+        <div class="detail-modal-icon">💊</div>
         <div class="detail-modal-title-wrap">
-          <h2>已完成单</h2>
-          <p class="subtitle">采购管理 · 已审核入库单的只读档案</p>
+          <h2>取药槽药品对照</h2>
+          <p class="subtitle">系统管理 · 药品 ↔ 取药槽 一对多绑定（物理柜扫码对照；逻辑柜建槽即对照）</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>采购入库审核通过后单据进入本页归档，只读不可改，记录审核人、审核时间与 HIS 推送回执，是账务核对与审计追溯的入口。</p>
+      <p class="lead"><strong>一句话概括：</strong>扫药品追溯码（20 位，取前 7 位产品资源码解析药品，也可直接输 7 位标识码）自动带出药品信息，再扫（或输）取药槽编号，点「绑定」完成对照；一个药品可对照多个取药槽（一对多），一个取药槽只对照一个药品。逻辑取药柜建槽时已对照药品，本页仅展示其记录、不允许改绑。</p>
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
         <div class="card-grid">
           <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
-            <div class="info-card-title">药库管理员 / 院区管理员</div>
-            <div class="info-card-desc">对账、查历史、打印存档；发现异常只能走采购退货冲正，不能直接改单</div></div></div>
+            <div class="info-card-title">系统管理员（信息科）</div>
+            <div class="info-card-desc">物理取药柜药品对照的扫码维护；换绑需确认</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
-            <div class="info-card-desc">上游：采购入库（审核动作）；下游：HIS 接口（入库信息推送回执）、台账管理</div></div></div>
+            <div class="info-card-desc">上游：药品字典（启用药品+标识码）、取药柜维护（取药槽）；下游：取药柜维护右栏对照结果查看、发药拣选定位</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">如何使用</div>
         <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">查单</div><div class="step-desc">按单据编号/供应商/发票号/日期筛选</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">看明细</div><div class="step-desc">点行查看码详情/药品清单/异常码三页签（只读）</div></div></div>
-        </div>
-      </div>
-      <div class="section">
-        <div class="section-title">示例</div>
-        <div class="example-box"><div class="example-title">场景示例</div>
-          <div class="example-text">财务月底对账：筛供应商「三明鹭燕」→ 逐单核对发票号与入库数量 → 发现异议的码，去「追溯码查询」拉全程轨迹。</div>
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">扫药品</div><div class="step-desc">扫药品追溯码（或输 7 位标识码）回车 → 只读带出通用名、规格、所属库房</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">扫取药槽</div><div class="step-desc">输入/扫取药槽编号回车 → 只读带出取药柜、摆药层；逻辑柜槽在此拦截（建槽已对照）</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">绑定 / 解绑</div><div class="step-desc">点「绑定」完成对照；槽已对照其他药品时提示换绑；右侧记录可逐条解绑（逻辑柜记录仅展示）</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
-          <div class="example-item-title">采购入库 → 已完成单（本页）→ HIS / 台账</div>
-          <div class="example-item-desc">字段对齐老系统（HIS推送/下载时间/审核日期/审核人）；已审核单据在所有页面只读，是状态机事务性的体现。</div>
+          <div class="example-item-title">取药槽药品对照（本页）↔ 取药槽灯组对照 → 取药柜对照结果</div>
+          <div class="example-item-desc">客户口径第 7 条三步对照：①药品↔取药槽（本页，一对多）②取药槽↔灯组（一对一）③结果查看（取药柜维护右栏）。</div>
         </div></div>
       </div>
     </div>
@@ -96,18 +91,18 @@
     style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
            background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
            font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
-    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 采购管理</span>
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 系统管理</span>
   </div>
 
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/drug-data.js"></script>
-  <script src="scripts/purchase-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/purchase-done.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/facility-data.js?v=20261015-3"></script>
+  <script src="scripts/drug-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/slot-drug-map.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

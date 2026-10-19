@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
-  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 库房业务">
-  <title>退回入库 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 库房管理">
+  <title>领用退回 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
-  <link rel="stylesheet" href="styles/wh.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/wh.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -32,8 +32,8 @@
     <header class="pi-header">
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">退回入库</h1>
-        <span class="pi-subtitle">原型页 · 逆向迁移：药房在架 → 库房在架（领用退回，扫码/人工双通道核对）</span>
+        <h1 class="pi-title">领用退回</h1>
+        <span class="pi-subtitle">原型页 · 逆向迁移：药房 → 库房（退回单池核对 + 库房直收，扫码/人工双通道）</span>
       </div>
       <div class="pi-header-right">
         <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
@@ -54,28 +54,28 @@
       <div class="detail-modal-header">
         <div class="detail-modal-icon">↩️</div>
         <div class="detail-modal-title-wrap">
-          <h2>退回入库</h2>
-          <p class="subtitle">库房业务 · 码状态机逆向：药房在架 → 库房在架（与采购退货镜像对称）</p>
+          <h2>领用退回</h2>
+          <p class="subtitle">库房管理 · 码状态机逆向：药房（在架/在途）→ 库房在架（与采购退货单镜像对称）</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>药房领错、多用或停用的药退回库房——库房按退回单逐码核对（扫码或人工勾选双通道），审核后码回到在架，可再次领用。</p>
+      <p class="lead"><strong>一句话概括：</strong>药房领错、多用或停用的药退回库房——两条通道：①药房建单传来，库房逐码核对收；②库房「+ 新增退回」直收（药房没建单也能收：选药房 → 扫/填追溯码 → 审核一次落账）。退回的码不要求在货架上，只要扫得出追溯码（在架 + 在途都可退）。</p>
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
         <div class="card-grid">
           <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
             <div class="info-card-title">药库管理员</div>
-            <div class="info-card-desc">接收药房退回出库单 → 逐码核对实物 → 审核入库</div></div></div>
+            <div class="info-card-desc">单池核对收药 或 新增退回直收 → 审核入库回在架</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
-            <div class="info-card-desc">上游：药房「退回出库」（本期种子模拟退回单池）；下游：码回在架后参与再次领用/盘点；拆零退回的码给出提示</div></div></div>
+            <div class="info-card-desc">上游：药房「退回出库单」（场景A）/ 库房直收（场景B）；下游：码回在架后参与再次领用/盘点；拆零退回的码给出提示</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">如何使用</div>
         <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">选退回单</div><div class="step-desc">退回单池点选「待入库」单，码清单列出应退的全部追溯码</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">核对</div><div class="step-desc">扫码核对（单内码√/单外码×拦截），或点行人工勾选；拆零码黄色提示「已拆零发出 N」</div></div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">审核入库</div><div class="step-desc">全部核对完自动提示审核；审核后码回在架，退回单转「已入库」</div></div></div>
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">选退回单 / 新增退回</div><div class="step-desc">单池点选「待入库」单核对；或「+ 新增退回」选退回药房建单直收</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">核对 / 收码</div><div class="step-desc">单池单：扫码核对（单内√/单外×）或点行人工勾选；直收单：扫码=收码（限该药房领出未回的码），也可手输</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">审核入库</div><div class="step-desc">审核后码回在架、退回单转「已入库」；直收单同步扣药房在架，药房端退回出库单列表可见</div></div></div>
         </div>
       </div>
       <div class="section">
@@ -87,8 +87,8 @@
       <div class="section">
         <div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
-          <div class="example-item-title">退回入库（本页）⇄ 领用备货出库 ⇄ 库房库存</div>
-          <div class="example-item-desc">与采购退货镜像：采购退货 = 库房→供应商，退回入库 = 药房→库房；审核后库房库存「在架数」即时回补。</div>
+          <div class="example-item-title">领用退回（本页）⇄ 领用备货单 ⇄ 库房库存查询</div>
+          <div class="example-item-desc">与采购退货单镜像：采购退货单 = 库房→供应商，领用退回 = 药房→库房；审核后库房库存查询库存数量即时回补。</div>
         </div></div>
       </div>
     </div>
@@ -98,19 +98,21 @@
     style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
            background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
            font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
-    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 库房业务</span>
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 库房管理</span>
   </div>
 
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/drug-data.js"></script>
-  <script src="scripts/purchase-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/wh-data.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/wh-return-in.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/drug-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/wh-data.js?v=20261015-6"></script>
+  <script src="scripts/facility-data.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/doc-detail.js?v=20261016-1"></script>
+  <script src="scripts/wh-return-in.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

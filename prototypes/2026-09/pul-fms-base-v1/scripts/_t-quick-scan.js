@@ -1,9 +1,9 @@
 /**
- * _t-quick-scan.js — 领用快捷扫码自动交互验证（截图用，非交付页面）
+ * _t-quick-scan.js — 备货出库扫码自动交互验证（截图用，非交付页面）
  * 流程：选单 LY20260914002（加罗新×60瓶）→ 点行选中 →「选择」确认（待出库单内备货，落盘）
  *      → 扫箱码（+60备齐）→ 重复扫（自动过滤⚠）→ 扫非在架码（红拦截）
  *      → 切「扫码移除」→ 再扫箱码（➖已剔除）→ 切回加入再扫箱码
- *      → 审核出库（推进同一单为已出库·待入库，不新建单据）→ 跳 wh-pick 看终态行
+ *      → 审核出库（推进同一单为已出库，不新建单据）→ 跳 wh-pick 看终态行
  */
 window.addEventListener('load', function () {
   setTimeout(function () {
@@ -35,9 +35,9 @@ window.addEventListener('load', function () {
                       document.getElementById('qsAudit').click();
                       setTimeout(function () {
                         var okBtn = document.querySelector('#pchConfirm [data-ok]');
-                        if (okBtn) okBtn.click();           // 审核出库（单推进已出库·待入库）
+                        if (okBtn) okBtn.click();           // 审核出库（单推进已出库）
                         setTimeout(function () {
-                          location.href = 'wh-pick.html';   // 回列表看终态（已出库·待入库）
+                          location.href = 'wh-pick.html';   // 回列表看终态（已出库）
                         }, 400);
                       }, 300);
                     });

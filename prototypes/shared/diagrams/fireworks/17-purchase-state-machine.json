@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 860,
+  "title": "采购到货单 · 进度状态机",
+  "subtitle": "一维生命周期：待审核 → 已入库（扫码核对是单内动作，不占状态位）；异常=第二维阻断标记，审核须全部码解析成功（2026-10-04 拍板）",
+  "containers": [],
+  "nodes": [
+    {
+      "id": "E2",
+      "kind": "rect",
+      "x": 140,
+      "y": 110,
+      "width": 220,
+      "height": 54,
+      "label": "＋ 手动新增",
+      "sublabel": "人工兜底 · 无码建单 · 直接扫码",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "E1",
+      "kind": "rect",
+      "x": 560,
+      "y": 110,
+      "width": 220,
+      "height": 54,
+      "label": "⇩ 下载单据",
+      "sublabel": "平台拉取 · 自带码",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "S1",
+      "kind": "rect",
+      "x": 350,
+      "y": 300,
+      "width": 220,
+      "height": 70,
+      "label": "待审核",
+      "sublabel": "建单/下载即入 · 扫码核对 C/N",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "S2",
+      "kind": "rect",
+      "x": 780,
+      "y": 300,
+      "width": 220,
+      "height": 70,
+      "label": "已入库",
+      "sublabel": "生成入库单 · 在架 · HIS 推送",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "S3",
+      "kind": "rect",
+      "x": 340,
+      "y": 560,
+      "width": 240,
+      "height": 70,
+      "label": "已退货",
+      "sublabel": "终态 · 未入库可到货退",
+      "fill": "#f6f8fb",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "G2",
+      "kind": "rect",
+      "x": 60,
+      "y": 700,
+      "width": 560,
+      "height": 76,
+      "label": "异常标记 = 第二维（不占状态位）",
+      "sublabel": "未解析码数>0 叠加 ⚠ 徽标 · 补录字典后自动消除 · 审核前置=全部码解析成功",
+      "fill": "#fdecea",
+      "stroke": "#d63939",
+      "flat": true
+    },
+    {
+      "id": "G1",
+      "kind": "rect",
+      "x": 660,
+      "y": 700,
+      "width": 560,
+      "height": 76,
+      "label": "审核守卫（四道闸）",
+      "sublabel": "无码拦截 · 全部码解析成功（异常=0）· 未验收软确认 · 盘点冻结",
+      "fill": "#fff7e6",
+      "stroke": "#d48806",
+      "flat": true
+    }
+  ],
+  "arrows": [
+    {
+      "id": "a1",
+      "source": "E2",
+      "target": "S1",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "a2",
+      "source": "E1",
+      "target": "S1",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "a3",
+      "source": "S1",
+      "target": "S2",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control",
+      "label": "审核入库（四道闸）"
+    },
+    {
+      "id": "a4",
+      "source": "S2",
+      "target": "S1",
+      "source_port": "top",
+      "target_port": "top",
+      "flow": "feedback",
+      "label": "反审核 · 验收记录保留"
+    },
+    {
+      "id": "a5",
+      "source": "S1",
+      "target": "S3",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "feedback",
+      "label": "到货退货审核"
+    }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 48,
+  "legend_y": 812,
+  "legend": [
+    {
+      "flow": "control",
+      "label": "正向流转（事件驱动）"
+    },
+    {
+      "flow": "feedback",
+      "label": "逆向 · 反审核 / 到货退货"
+    }
+  ],
+  "footer": "PUL-FMS · 17 采购到货单进度状态机（两态口径 · 扫码不占状态位）· fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 840
+}

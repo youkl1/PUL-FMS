@@ -8,7 +8,7 @@
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'shelf', crumb: ['药房管理', '药品扫码上架'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'shelf', crumb: ['扫码管理', '药品扫码上架'] });
   if (!content) return;
 
   var W = window.PUL_WH, D = window.PUL_DRUG, P = window.PUL_PCH, UI = window.PchUI, esc = UI.esc;
@@ -239,7 +239,7 @@
       // 跃迁检测：写货位前捕获所在单推导态，仅在 未上架→已上架 跃迁时弹🎉（防换位/重扫重复弹）
       var shelfDoc = null, prePick = '';
       (S.pickDocs || []).forEach(function (d) {
-        if (d.pharmacy !== ph() || d.status !== '已入库·待上架') return;
+        if (d.pharmacy !== ph() || d.status !== '已入库') return;
         if ((d.codes || []).some(function (c) { return c.code === code; })) shelfDoc = d;
       });
       if (shelfDoc) prePick = W.pickStatus(shelfDoc);
@@ -265,7 +265,7 @@
       renderAll();
     }
   }
-  // 捷径C 直生确认：本库房在架码 → 一步建「已入库·待上架」领用单（码带 phLoc → 推导已上架）
+  // 捷径C 直生确认：本库房在架码 → 一步建「已入库」领用单（码带 phLoc → 推导已上架）
   // srcWh = warehouseOfCode 实查的持有库房（严禁传药房节点名，否则 doc.warehouse 不匹配 stockAll 扣减 → 双计）
   function openDirect(whCode, srcWh) {
     if (!loc) { window.showToast('请先选择上架货位再直生'); return; }

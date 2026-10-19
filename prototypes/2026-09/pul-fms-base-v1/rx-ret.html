@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
-  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 发药管理">
-  <title>处方退药 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 出库管理">
+  <title>处方单退药 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
-  <link rel="stylesheet" href="styles/wh.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/wh.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -32,7 +32,7 @@
     <header class="pi-header">
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">处方退药</h1>
+        <h1 class="pi-title">处方单退药</h1>
         <span class="pi-subtitle">原型页 · 已发处方还码还数量；未发作废只放锁不涉码</span>
       </div>
       <div class="pi-header-right">
@@ -48,8 +48,8 @@
       <div class="detail-modal-header">
         <div class="detail-modal-icon">↩️</div>
         <div class="detail-modal-title-wrap">
-          <h2>处方退药</h2>
-          <p class="subtitle">发药管理 · 已完成处方的码回到本药房在架</p>
+          <h2>处方单退药</h2>
+          <p class="subtitle">出库管理 · 已完成处方的码回到本药房在架</p>
         </div>
       </div>
       <p class="lead"><strong>一句话概括：</strong>选已发处方，核对码清单后确认退药；码回在架，处方改已退药。</p>
@@ -60,7 +60,7 @@
             <div class="info-card-desc">只退本药房已完成处方</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
-            <div class="info-card-desc">上游处方发药已完成；下游药房库存该码回来</div></div></div>
+            <div class="info-card-desc">上游处方发药已完成；下游药房库存查询该码回来</div></div></div>
         </div></div>
       <div class="section"><div class="section-title">如何使用</div>
         <div class="steps">
@@ -70,7 +70,7 @@
         </div></div>
       <div class="section"><div class="section-title">示例</div>
         <div class="example-box"><div class="example-title">张伟唯可来退回</div>
-          <div class="example-text">发药完成后再进本页，勾码确认 → 药房库存唯可来 M-01 回来。</div>
+          <div class="example-text">发药完成后再进本页，勾码确认 → 药房库存查询唯可来 M-01 回来。</div>
         </div></div>
       <div class="section"><div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
@@ -80,18 +80,19 @@
     </div>
   </div>
   <div class="plan-badge" id="planBadge" style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
-    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 发药管理</span>
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 出库管理</span>
   </div>
   <div class="toast" id="toast"></div>
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/drug-data.js"></script>
-  <script src="scripts/purchase-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/wh-data.js"></script>
-  <script src="scripts/rx-data.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/rx-ret.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/drug-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/wh-data.js?v=20261015-6"></script>
+  <script src="scripts/rx-data.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/doc-detail.js?v=20261016-1"></script>
+  <script src="scripts/rx-ret.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

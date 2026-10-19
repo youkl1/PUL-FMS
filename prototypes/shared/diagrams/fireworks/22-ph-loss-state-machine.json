@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 860,
+  "title": "药房损耗（报损）· 进度状态机",
+  "subtitle": "一维生命周期：未审核（草稿） → 已审核=已销毁终态；草稿不扣账可删除，审核即扣本药房在架不可恢复（独立于库房损耗单，不碰库房 lossDocs）",
+  "containers": [],
+  "nodes": [
+    {
+      "id": "E1",
+      "kind": "rect",
+      "x": 140,
+      "y": 110,
+      "width": 220,
+      "height": 54,
+      "label": "药房新增报损",
+      "sublabel": "扫本房在架码 · 建草稿",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "S1",
+      "kind": "rect",
+      "x": 140,
+      "y": 300,
+      "width": 220,
+      "height": 70,
+      "label": "未审核",
+      "sublabel": "草稿扫码 · 落盘不扣账",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "S2",
+      "kind": "rect",
+      "x": 570,
+      "y": 300,
+      "width": 220,
+      "height": 70,
+      "label": "已审核 = 已销毁",
+      "sublabel": "终态 · 扣本房在架 · 不可恢复",
+      "fill": "#ffffff",
+      "stroke": "#d63939"
+    },
+    {
+      "id": "S3",
+      "kind": "rect",
+      "x": 140,
+      "y": 560,
+      "width": 220,
+      "height": 70,
+      "label": "已删除",
+      "sublabel": "终态 · 草稿未过账不进流水",
+      "fill": "#f6f8fb",
+      "stroke": "#626976"
+    },
+    {
+      "id": "G1",
+      "kind": "rect",
+      "x": 60,
+      "y": 700,
+      "width": 560,
+      "height": 76,
+      "label": "选码守卫（三道闸）",
+      "sublabel": "仅本药房在架码 · 已退/已报损码拦截 · 重复扫码拦截",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "G2",
+      "kind": "rect",
+      "x": 660,
+      "y": 700,
+      "width": 560,
+      "height": 76,
+      "label": "审核守卫（审核即终态）",
+      "sublabel": "审核=已销毁 · 只扣本药房在架 · 不碰库房损耗单 · 不可恢复",
+      "fill": "#fdecea",
+      "stroke": "#d63939"
+    }
+  ],
+  "arrows": [
+    { "id": "a1", "source": "E1", "target": "S1", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "a2", "source": "S1", "target": "S2", "source_port": "right", "target_port": "left", "flow": "control", "label": "审核 · 即销毁" },
+    { "id": "a3", "source": "S1", "target": "S3", "source_port": "bottom", "target_port": "top", "flow": "feedback", "label": "删除草稿" }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 48,
+  "legend_y": 812,
+  "legend": [
+    { "flow": "control", "label": "正向流转（事件驱动）" },
+    { "flow": "feedback", "label": "逆向 · 删除草稿" }
+  ],
+  "footer": "PUL-FMS · 22 药房损耗（报损）进度状态机（审核即销毁终态口径 · 药房管理）· fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 840
+}

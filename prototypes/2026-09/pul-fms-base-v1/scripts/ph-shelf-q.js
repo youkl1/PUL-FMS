@@ -1,9 +1,9 @@
 /**
- * ph-shelf-q.js — 待上架查询：本药房在架且 phLoc 为空的码清单（只读）
+ * ph-shelf-q.js — 待上架药品查询：本药房在架且 phLoc 为空的码清单（只读）
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'shelfQ', crumb: ['药房管理', '待上架查询'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'shelfQ', crumb: ['药房管理', '待上架药品查询'] });
   if (!content) return;
 
   var W = window.PUL_WH, D = window.PUL_DRUG, P = window.PUL_PCH, UI = window.PchUI, esc = UI.esc;
@@ -51,7 +51,7 @@
         '<td><span class="wh-exp-badge ' + cls + '">' + st + '</span></td>' +
         '<td class="text-secondary">' + esc(c._src || '—') + '</td></tr>';
     }).join('');
-    if (!rows.length) trs = '<tr><td colspan="7" class="text-center text-secondary" style="padding:32px;">无待上架码——领用入库后未绑货位的码会出现在此</td></tr>';
+    if (!rows.length) trs = '<tr><td colspan="7" class="text-center text-secondary" style="padding:32px;">无待上架码——领用入库单后未绑货位的码会出现在此</td></tr>';
     return '<div class="card"><div class="card-header"><b>待上架码</b>' +
       '<span class="text-secondary ms-2" style="font-size:12.5px;">在架且货位为空 · ' + rows.length + ' 个</span></div>' +
       '<div class="table-responsive"><table class="table table-vcenter card-table">' +

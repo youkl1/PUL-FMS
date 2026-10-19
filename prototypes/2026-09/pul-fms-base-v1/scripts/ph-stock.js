@@ -1,6 +1,6 @@
 /**
  * ph-stock.js — 药房库存查询：本药房在架码集合呈现（数量=码 count）
- * 待上架=phLoc 空；待收=pickDocs 已出库·待入库；货位列替代库房库位维护
+ * 待上架=phLoc 空；待收=pickDocs 已出库；货位列替代库房库位维护
  */
 (function () {
   'use strict';
@@ -100,7 +100,7 @@
     return '<div class="card"><div class="table-responsive"><table class="table table-vcenter card-table">' +
       '<thead><tr><th>序号</th><th>药品通用名</th><th>制剂规格</th><th>批次号</th><th>有效期至</th><th>效期状态</th><th>在架数</th><th>待上架</th><th>操作</th></tr></thead>' +
       '<tbody>' + trs + '</tbody></table></div>' +
-      '<div class="card-footer" style="font-size:12.5px;"><span class="text-secondary">共 ' + list.length + ' 个批次 · FEFO 近效期在前 · 在架数=码 count · 待上架=货位为空</span></div></div>';
+      '</div>';
   }
 
   function openCodes(key) {

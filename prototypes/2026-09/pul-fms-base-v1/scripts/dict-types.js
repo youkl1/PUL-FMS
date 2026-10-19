@@ -31,7 +31,7 @@
       '<div class="table-responsive"><table class="table table-vcenter table-hover card-table">' +
       '<thead><tr><th>分类编码</th><th>分类名称</th><th>管控级别</th><th>用途</th><th class="text-center">字典项数</th><th>状态</th><th>操作</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div>' +
-      '<div class="card-footer text-secondary" style="font-size:12px;">全局字典：总院统一维护、全院区共用；院区级字典：仅本院区生效，不可覆盖全局字典（5.1）。</div></div>';
+      '</div>';
   }
 
   function modalHtml(t) {

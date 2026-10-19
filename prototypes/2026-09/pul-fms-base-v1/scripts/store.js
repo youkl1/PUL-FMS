@@ -7,6 +7,27 @@
  *   window.store.update({ key: value });         // 深合并写
  *   window.store.go('list.html');                // 跳页（自动保存）
  */
+
+// ===== PUL_VOCAB 状态词表（2026-10-15 拍板：全站代码级唯一事实源）=====
+// 状态词/字段词变更只改这里；数据层与页面脚本一律引用常量，禁止再写带引号字面量。
+// store.js 在所有页面与 node 测试中均最先加载，挂此处即可全局可用。
+// 词面口径与 .claude/guides/pul-fms-doc-page-conventions.md 状态词表保持一致。
+window.PUL_VOCAB = {
+  ST: {
+    DRAFT: '草稿',            // 新建未提交
+    PENDING_AUDIT: '待审核',  // 审核制单据：已提交待审核
+    AUDITED: '已审核',        // 审核通过（过账）
+    VOID: '已作废',           // 终态作废
+    PENDING_OUT: '待出库',    // 领用链：已提交待库房备货出库
+    OUT: '已出库',            // 领用链：出库审核即扣账，在途
+    PENDING_IN: '待入库',     // 退回/领用入库链：待收货入库
+    IN: '已入库',             // 领用链闭环 / 退回入库完成
+    SHELVED: '已上架'         // 推导展示态（不落库，由码的 phLoc 齐备推导）
+  },
+  // 领用单链推进顺序（时间轴/下钻用）
+  PICK_FLOW: ['草稿', '待出库', '已出库', '已入库', '已上架']
+};
+
 (function () {
   'use strict';
 

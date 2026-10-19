@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="prototype-category" content="web-admin">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 系统管理">
+  <title>取药槽灯组对照 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
+  <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
+  <style>
+    body { background: #F5F7FA !important; }
+    .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
+    .pi-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+    .pi-badge { flex-shrink: 0; padding: 2px 8px; background: var(--wa-primary-light); color: var(--wa-primary); border: 1px solid var(--wa-primary-border); border-radius: 4px; font-size: 11px; font-weight: 500; }
+    .pi-title { margin: 0; font-size: 16px; font-weight: 600; color: var(--wa-text-title); white-space: nowrap; }
+    .pi-subtitle { font-size: 12px; color: var(--wa-text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pi-header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .pi-main { grid-template-columns: 1fr !important; max-width: 1920px !important; padding: 12px 20px !important; gap: 12px !important; }
+    .pi-desktop-col { min-width: 0; overflow: auto; background: var(--pi-card-bg); border: 1px solid var(--pi-border); border-radius: var(--pi-radius); }
+    .pi-desktop-col .desktop-preview { width: 100%; min-width: 1280px; min-height: 720px; }
+    #btnIntroDetail { border: 1px solid var(--wa-border); background: var(--wa-bg-white); color: var(--wa-text-body); padding: 6px 14px; border-radius: 6px; font-size: 13px; cursor: pointer; transition: all var(--wa-transition); margin-right: 8px; font-family: inherit; }
+    #btnIntroDetail:hover { border-color: var(--wa-primary); color: var(--wa-primary); background: var(--wa-primary-light); }
+  </style>
+</head>
+<body>
+  <div class="pi-layout">
+    <header class="pi-header">
+      <div class="pi-header-left">
+        <span class="pi-badge">Web 管理后台</span>
+        <h1 class="pi-title">取药槽灯组对照</h1>
+        <span class="pi-subtitle">原型页 · 扫取药槽 + 扫灯组 → 一对一绑定（仅物理柜）；右侧绑定记录可解绑</span>
+      </div>
+      <div class="pi-header-right">
+        <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
+        <a class="pi-back" href="plan.html">← 返回方案总览</a>
+      </div>
+    </header>
+
+    <main class="pi-main">
+      <div class="pi-desktop-col">
+        <div class="desktop-preview" id="desktopPreview"></div>
+      </div>
+    </main>
+  </div>
+
+  <div class="detail-modal-overlay" id="introModal" style="display:none;">
+    <div class="detail-modal">
+      <button class="close-detail-modal" id="btnIntroClose" type="button">×</button>
+      <div class="detail-modal-header">
+        <div class="detail-modal-icon">🔗</div>
+        <div class="detail-modal-title-wrap">
+          <h2>取药槽灯组对照</h2>
+          <p class="subtitle">系统管理 · 取药槽 ↔ 取药灯组 一对一绑定（仅物理类型取药柜）</p>
+        </div>
+      </div>
+      <p class="lead"><strong>一句话概括：</strong>扫（或输）取药槽编号自动带出所属取药柜/摆药层，再扫（或输）灯组编号自动带出所属基站/IP，点「绑定」完成一对一对照；换绑自动释放旧关系，右侧绑定记录可随时解绑。逻辑取药柜的取药槽无需对照灯组，输入即拦截。</p>
+      <div class="section">
+        <div class="section-title">使用角色 + 上下游</div>
+        <div class="card-grid">
+          <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
+            <div class="info-card-title">系统管理员（信息科）</div>
+            <div class="info-card-desc">新柜上架或灯组更换时做对照；换绑需确认，旧绑定自动解除</div></div></div>
+          <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
+            <div class="info-card-title">上下游</div>
+            <div class="info-card-desc">上游：取药柜维护（物理柜取药槽）、基站灯组维护（灯组台账）；下游：发药亮灯指引、取药柜维护右栏对照结果查看</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">如何使用</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">扫取药槽</div><div class="step-desc">输入/扫取药槽编号回车 → 只读带出取药柜编号、取药柜说明、摆药层编号；逻辑柜槽在此拦截</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">扫灯组</div><div class="step-desc">输入/扫灯组编号回车 → 只读带出所属基站、基站IP、基站说明</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">绑定 / 解绑</div><div class="step-desc">点「绑定」完成一对一对照；槽或灯已有旧绑定时提示换绑；右侧记录可逐条解绑</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">场景呼应</div>
+        <div class="example-list"><div class="example-item">
+          <div class="example-item-title">取药槽灯组对照（本页）→ 发药亮灯指引</div>
+          <div class="example-item-desc">一个取药槽只能对照一个灯组（一对一）；绑定记录实时同步到基站灯组维护的「取药槽编号」列与取药柜维护右栏。</div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-badge" id="planBadge"
+    style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
+           background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
+           font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 系统管理</span>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/facility-data.js?v=20261015-3"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/slot-lamp-map.js?v=20261015-3"></script>
+  <script>
+    (function(){
+      var modal = document.getElementById('introModal');
+      function openIntro(){ modal.style.display = 'flex'; requestAnimationFrame(function(){ modal.classList.add('show'); }); }
+      function closeIntro(){ modal.classList.remove('show'); modal.style.display = 'none'; }
+      document.getElementById('btnIntroDetail').addEventListener('click', openIntro);
+      document.getElementById('btnIntroClose').addEventListener('click', closeIntro);
+      modal.addEventListener('click', function(e){ if (e.target === modal) closeIntro(); });
+      document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.style.display !== 'none') closeIntro(); });
+      document.getElementById('planBadge').addEventListener('click', function() { window.location.href = 'plan.html'; });
+    })();
+  </script>
+</body>
+</html>

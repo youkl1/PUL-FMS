@@ -6,12 +6,12 @@
   <meta name="prototype-category" content="web-admin">
   <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 药房管理">
   <title>领用申请单 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
-  <link rel="stylesheet" href="styles/wh.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/wh.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -74,7 +74,7 @@
         <div class="steps">
           <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">新增申请</div><div class="step-desc">选供货库房，逐行加药品（基本单位数量），提交后状态=待出库</div></div></div>
           <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">待出库可改</div><div class="step-desc">库房尚未出库前可编辑明细或撤销；撤销后库房单池同步消失</div></div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">已出库·待入库（只读）</div><div class="step-desc">库房审核出库后单转「已出库·待入库」，本页不再改</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">已出库（只读）</div><div class="step-desc">库房在备货出库扫码页审核出库后单转「已出库」，本页不再改；药房视角显示待入库</div></div></div>
         </div>
       </div>
       <div class="section">
@@ -101,17 +101,18 @@
   </div>
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/drug-data.js"></script>
-  <script src="scripts/purchase-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/wh-data.js"></script>
-  <script src="scripts/drug-picker.js"></script>
-  <script src="scripts/facility-data.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/ph-req.js"></script>
-  <script src="scripts/_t-ph-req.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/drug-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/wh-data.js?v=20261015-6"></script>
+  <script src="scripts/drug-picker.js?v=20261015-12"></script>
+  <script src="scripts/facility-data.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/doc-detail.js?v=20261016-1"></script>
+  <script src="scripts/ph-req.js?v=20261015-3"></script>
+  <script src="scripts/_t-ph-req.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

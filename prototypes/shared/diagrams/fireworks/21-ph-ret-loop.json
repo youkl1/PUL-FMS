@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 800,
+  "title": "退回出库 → 库房验收闭环",
+  "subtitle": "药房退库房收 · 对偶图03（领用=库房发药房收）· 选在架码预占不扣账 · 全部核对才审核 · 审核即扣药房在架",
+  "containers": [
+    {
+      "id": "lane-wh",
+      "x": 40,
+      "y": 100,
+      "width": 1280,
+      "height": 125,
+      "label": "库房 · 验收人",
+      "stroke": "#b7e0c4",
+      "fill": "#eef8f0"
+    },
+    {
+      "id": "lane-ph",
+      "x": 40,
+      "y": 245,
+      "width": 1280,
+      "height": 165,
+      "label": "药房 · 退回人",
+      "stroke": "#b7cdf0",
+      "fill": "#eef4fb"
+    },
+    {
+      "id": "lane-sys",
+      "x": 40,
+      "y": 430,
+      "width": 1280,
+      "height": 250,
+      "label": "系统 · 码⇄药转换引擎",
+      "stroke": "#d0d5dd",
+      "fill": "#f6f8fb"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "K3",
+      "kind": "rect",
+      "x": 80,
+      "y": 138,
+      "width": 240,
+      "height": 64,
+      "type_label": "AUDIT IN",
+      "label": "审核入库 · 库房在架回补",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "K2",
+      "kind": "rect",
+      "x": 640,
+      "y": 138,
+      "width": 220,
+      "height": 64,
+      "type_label": "SCAN",
+      "label": "验收扫码核对（码 ⇄ 单）",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "K1",
+      "kind": "rect",
+      "x": 1100,
+      "y": 138,
+      "width": 200,
+      "height": 64,
+      "type_label": "POOL",
+      "label": "待验收单池 · 或库房直收",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "P1",
+      "kind": "rect",
+      "x": 80,
+      "y": 292,
+      "width": 220,
+      "height": 68,
+      "type_label": "CREATE",
+      "label": "新建退回出库单（药品口径）",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "P2",
+      "kind": "rect",
+      "x": 370,
+      "y": 292,
+      "width": 250,
+      "height": 68,
+      "type_label": "PRE-LOCK",
+      "label": "选在架码 · 预占（落盘不扣账）",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "P3",
+      "kind": "rect",
+      "x": 680,
+      "y": 292,
+      "width": 180,
+      "height": 68,
+      "type_label": "SCAN",
+      "label": "行内扫码核对",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "P4",
+      "kind": "rect",
+      "x": 1100,
+      "y": 292,
+      "width": 200,
+      "height": 68,
+      "type_label": "AUDIT OUT",
+      "label": "确认出库 · 扣在架",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "Y1",
+      "kind": "rect",
+      "x": 640,
+      "y": 468,
+      "width": 260,
+      "height": 64,
+      "type_label": "PARSE",
+      "label": "parseCode 解析：码→药品·折基本单位",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "Y2",
+      "kind": "hexagon",
+      "x": 940,
+      "y": 458,
+      "width": 130,
+      "height": 84,
+      "type_label": "CHECK",
+      "label": "校验",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "Y3",
+      "kind": "rect",
+      "x": 1115,
+      "y": 468,
+      "width": 170,
+      "height": 64,
+      "type_label": "OK",
+      "label": "✓ 计入已核对数",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "Y4",
+      "kind": "rect",
+      "x": 815,
+      "y": 585,
+      "width": 380,
+      "height": 60,
+      "type_label": "REJECT",
+      "label": "✕拦截：非本房在架/一码两单 ⚠重复 → 提示后重扫",
+      "fill": "#fdecea",
+      "stroke": "#d63939",
+      "flat": true
+    }
+  ],
+  "arrows": [
+    {
+      "id": "a1",
+      "source": "P1",
+      "target": "P2",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control"
+    },
+    {
+      "id": "a2",
+      "source": "P2",
+      "target": "P3",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control"
+    },
+    {
+      "id": "a3",
+      "source": "P3",
+      "target": "Y1",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "read",
+      "label": "扫 20 位追溯码"
+    },
+    {
+      "id": "a4",
+      "source": "Y1",
+      "target": "Y2",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "read"
+    },
+    {
+      "id": "a5",
+      "source": "Y2",
+      "target": "Y3",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control"
+    },
+    {
+      "id": "a6",
+      "source": "Y3",
+      "target": "P4",
+      "source_port": "top",
+      "target_port": "bottom",
+      "flow": "control",
+      "label": "全部核对 → 可审核"
+    },
+    {
+      "id": "a7",
+      "source": "P4",
+      "target": "K1",
+      "source_port": "top",
+      "target_port": "bottom",
+      "flow": "control",
+      "label": "出库单 · 在途"
+    },
+    {
+      "id": "a8",
+      "source": "K1",
+      "target": "K2",
+      "source_port": "left",
+      "target_port": "right",
+      "flow": "control"
+    },
+    {
+      "id": "a9",
+      "source": "K2",
+      "target": "K3",
+      "source_port": "left",
+      "target_port": "right",
+      "flow": "control"
+    },
+    {
+      "id": "a10",
+      "source": "Y2",
+      "target": "Y4",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "feedback",
+      "label": "✕/⚠ 拦截"
+    }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 800,
+  "legend_y": 732,
+  "legend": [
+    {
+      "flow": "control",
+      "label": "主流程"
+    },
+    {
+      "flow": "read",
+      "label": "扫码解析"
+    },
+    {
+      "flow": "feedback",
+      "label": "校验拦截"
+    }
+  ],
+  "footer": "PUL-FMS · 21 退回出库→库房验收闭环（对偶图03 · 药房管理）· fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 775
+}

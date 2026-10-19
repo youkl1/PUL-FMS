@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta charset="utf-8"><title>DBG2</title></head>
+<body>
+<pre id="out">boot</pre>
+<script>
+window._errs = [];
+window.onerror = function (m, s, l) { window._errs.push(m + ' @' + (s || '').split('/').pop() + ':' + l); };
+</script>
+<script src="scripts/store.js?v=20261015-6"></script>
+<script src="scripts/data.js?v=20261015-3"></script>
+<script src="scripts/drug-data.js?v=20261016-1"></script>
+<script src="scripts/purchase-data.js?v=20261016-1"></script>
+<script src="scripts/wh-data.js?v=20261015-6"></script>
+<script src="scripts/facility-data.js?v=20261015-3"></script>
+<script src="scripts/drug-picker.js?v=20261015-12"></script>
+<script src="scripts/purchase-shared.js?v=20261015-3"></script>
+<script src="scripts/app-shell.js?v=20261016-3"></script>
+<script src="scripts/ph-scan-in.js?v=20261015-3"></script>
+<script>
+window.addEventListener('load', function () {
+  setTimeout(function () {
+    var no = new URLSearchParams(location.search).get('billNo');
+    var input = document.getElementById('siInput');
+    document.getElementById('out').textContent = JSON.stringify({
+      no: no, input: !!input, disabled: input ? input.disabled : null,
+      errs: window._errs
+    });
+    document.title = 'DBG2-DONE';
+  }, 400);
+});
+</script>
+</body>
+</html>

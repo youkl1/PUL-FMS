@@ -90,7 +90,7 @@
       html += '<div class="card mb-3" style="border-left:4px solid #206bc4;"><div class="card-body" style="padding:12px 18px;">' +
         '<span class="badge bg-blue-lt me-2">案例</span><span style="font-size:13px;">' + d.case + '</span></div></div>';
     }
-    // 功能入口（保留 NAV 的子组结构，如库房管理的采购管理/库房业务）
+    // 功能入口（保留 NAV 的子组结构，如库房管理的采购管理/库房管理）
     html += '<div class="card"><div class="card-header"><div class="card-title">功能入口</div>' +
       '<span class="badge bg-blue-lt ms-auto">正向</span>&nbsp;<span class="badge bg-orange-lt">逆向</span>&nbsp;<span class="badge bg-red-lt">兜底</span></div>' +
       '<div class="card-body">';

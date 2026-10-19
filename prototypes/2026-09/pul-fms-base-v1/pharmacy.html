@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
-  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 组织管理">
-  <title>药房货位 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 基础管理">
+  <title>药房货位维护 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -31,7 +31,7 @@
     <header class="pi-header">
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">药房货位</h1>
+        <h1 class="pi-title">药房货位维护</h1>
         <span class="pi-subtitle">原型页 · 主子表：药房（挂院区）↔ 货位（客户新版字典 #3）</span>
       </div>
       <div class="pi-header-right">
@@ -53,11 +53,11 @@
       <div class="detail-modal-header">
         <div class="detail-modal-icon">💊</div>
         <div class="detail-modal-title-wrap">
-          <h2>药房货位</h2>
-          <p class="subtitle">组织管理 · 药房必须指定所属院区，一个药房有多个货位</p>
+          <h2>药房货位维护</h2>
+          <p class="subtitle">基础管理 · 药房必须指定所属院区，一个药房有多个货位</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>本页维护药房与货位两级结构：药房挂所属院区，一个药房下建多个货位；货位是药房库存落位与发药拣选的最小位置单位（对应码状态机「药房在架」的位置粒度）。</p>
+      <p class="lead"><strong>一句话概括：</strong>本页维护药房与货位两级结构：药房挂所属院区，一个药房下建多个货位；货位是药房库存查询落位与发药拣选的最小位置单位（对应码状态机「药房在架」的位置粒度）。</p>
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
         <div class="card-grid">
@@ -66,7 +66,7 @@
             <div class="info-card-desc">新增/编辑药房、维护货位；停用药房后登录选择中不可见，历史数据保留</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
-            <div class="info-card-desc">上游：院区管理（L2）；下游：角色数据范围-自定义节点、登录页药房选择、领用入库/发药/药房盘点落位、取药柜与基站挂靠</div></div></div>
+            <div class="info-card-desc">上游：院区字典维护（L2）；下游：角色数据范围-自定义节点、登录页药房选择、领用入库单/发药/药房盘点落位、取药柜与基站挂靠</div></div></div>
         </div>
       </div>
       <div class="section">
@@ -80,8 +80,8 @@
       <div class="section">
         <div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
-          <div class="example-item-title">药房货位（本页）→ 取药柜 / 基站灯组</div>
-          <div class="example-item-desc">取药柜与基站都必须挂到本页维护的药房之下；领用入库存量落到货位，码状态「库房库位 → 药房货位」的位置粒度由本页定义。</div>
+          <div class="example-item-title">药房货位维护（本页）→ 取药柜 / 基站灯组维护</div>
+          <div class="example-item-desc">取药柜与基站都必须挂到本页维护的药房之下；领用入库单存量落到货位，码状态「库房库位维护 → 药房货位维护」的位置粒度由本页定义。</div>
         </div></div>
       </div>
     </div>
@@ -91,17 +91,17 @@
     style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
            background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
            font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
-    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 组织管理</span>
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 基础管理</span>
   </div>
 
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/facility-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/pharmacy.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/facility-data.js?v=20261015-3"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/pharmacy.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

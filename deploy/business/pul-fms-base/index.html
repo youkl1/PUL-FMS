@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PUL-FMS 药品精细化管理系统 · 基础平台骨架 - PUL-FMS 原型库</title>
+  <style>
+    :root {
+      --bg: #030712;
+      --bg-elevated: #0b1221;
+      --surface: rgba(17, 25, 40, 0.78);
+      --surface-hover: rgba(23, 33, 54, 0.86);
+      --border: rgba(148, 163, 184, 0.12);
+      --border-strong: rgba(56, 189, 248, 0.28);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --cyan: #22d3ee;
+      --cyan-glow: rgba(34, 211, 238, 0.35);
+      --violet: #8b5cf6;
+      --violet-glow: rgba(139, 92, 246, 0.35);
+      --amber: #f59e0b;
+      --amber-glow: rgba(245, 158, 11, 0.35);
+      --desktop: #38bdf8;
+      --mobile: #34d399;
+      --shadow-card: 0 8px 32px rgba(2, 8, 23, 0.45);
+      --shadow-glow: 0 0 40px rgba(34, 211, 238, 0.10);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    .site-header {
+      position: relative;
+      background: radial-gradient(ellipse at 50% 0%, rgba(56, 189, 248, 0.14), transparent 55%),
+                  linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg) 100%);
+      color: #fff;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .site-header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(34, 211, 238, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 211, 238, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 80%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 80%);
+      pointer-events: none;
+    }
+
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    .glow-orb.cyan { top: -70px; right: 8%; width: 280px; height: 280px; background: var(--cyan); }
+
+    .header-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 24px 36px;
+    }
+
+    .breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 16px;
+      transition: color 160ms ease-out;
+    }
+
+    .breadcrumb:hover { color: var(--cyan); }
+
+    h1 {
+      font-size: clamp(28px, 4.2vw, 42px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #fff 0%, #bae6fd 60%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 640px;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .header-stat {
+      min-width: 88px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-stat::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0.6;
+    }
+
+    .header-stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .header-stat-value.accent { color: var(--amber); text-shadow: 0 0 14px var(--amber-glow); }
+
+    .header-stat-label {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .filter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(3, 7, 18, 0.86);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .filter-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+
+    .segmented {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .tab {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 160ms ease-out;
+      white-space: nowrap;
+    }
+
+    .tab:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+
+    .tab.active {
+      background: linear-gradient(135deg, rgba(34,211,238,0.16), rgba(139,92,246,0.16));
+      color: #fff;
+      border-color: var(--border-strong);
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.12);
+    }
+
+    .tab-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .tab.active .tab-count {
+      background: rgba(34, 211, 238, 0.18);
+      color: var(--cyan);
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: var(--text);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), border-color 220ms ease-out, box-shadow 220ms ease-out;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 50%), rgba(34, 211, 238, 0.09), transparent 40%);
+      opacity: 0;
+      transition: opacity 220ms ease-out;
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-card), var(--shadow-glow);
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card-accent {
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      opacity: 0.8;
+    }
+    .card-desktop .card-accent { background: linear-gradient(90deg, var(--desktop), #60a5fa); }
+    .card-mobile .card-accent { background: linear-gradient(90deg, var(--mobile), #6ee7b7); }
+
+    .card-body {
+      padding: 18px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .tag-desktop { background: rgba(56, 189, 248, 0.10); color: var(--desktop); }
+    .tag-mobile { background: rgba(52, 211, 153, 0.10); color: var(--mobile); }
+
+    .date {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-top: auto;
+    }
+
+    .card-arrow {
+      width: 16px;
+      height: 16px;
+      color: var(--text-dim);
+      flex-shrink: 0;
+      transition: transform 160ms ease-out, color 160ms ease-out;
+    }
+
+    .card:hover .card-arrow {
+      color: var(--cyan);
+      transform: translateX(3px);
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 64px 24px;
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+    }
+
+    footer {
+      text-align: center;
+      padding: 28px 24px 40px;
+      font-size: 12px;
+      color: var(--text-dim);
+      border-top: 1px solid var(--border);
+      background: var(--bg-elevated);
+    }
+
+    @media (max-width: 1024px) {
+      .card-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 720px) {
+      .header-inner { padding: 32px 16px 28px; }
+      .header-stats { flex-wrap: wrap; }
+      .filter-inner { padding: 12px 16px; }
+      .container { padding: 24px 16px 48px; }
+      .card-grid { grid-template-columns: 1fr; gap: 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card, .card::before, .card-arrow, .tab { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="glow-orb cyan" aria-hidden="true"></div>
+    <div class="header-inner">
+      <a class="breadcrumb" href="../../">← 返回原型库首页</a>
+      <h1>PUL-FMS 药品精细化管理系统 · 基础平台骨架</h1>
+      <p class="subtitle">该分类下暂无描述</p>
+      <div class="header-stats">
+        <div class="header-stat"><div class="header-stat-value">1</div><div class="header-stat-label">总原型数</div></div>
+        <div class="header-stat"><div class="header-stat-value accent">1</div><div class="header-stat-label">电脑端</div></div>
+        <div class="header-stat"><div class="header-stat-value accent">0</div><div class="header-stat-label">移动端</div></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="filter-bar">
+    <div class="filter-inner">
+      <nav class="segmented" id="categoryTabs" aria-label="端别筛选"></nav>
+    </div>
+  </div>
+
+  <main class="container">
+    <div class="card-grid" id="cardGrid"></div>
+  </main>
+
+  <footer>
+    部署于 /opt/pul-fms · nginx 静态站点 · 自动同步
+  </footer>
+
+  <script>
+    var PROTOTYPES = [{"file":"index.html","relPath":"2026-09/pul-fms-base-v1/","monthOverride":"2026年9月","hidden":false,"title":"工作台 · PUL-FMS","category":"desktop","desc":"工作台 · PUL-FMS","businessCategory":"PUL-FMS 药品精细化管理系统 · 基础平台骨架","businessCategoryDesc":"","updatedAt":"2026-10-16T15:11:04.669Z","localMd5":"5af8bc9288e06c5de7f012e6b1387702","localSize":8723,"month":"2026年9月","date":"2026-10-16"}];
+    var CATEGORIES = [
+      { key: 'all', label: '全部' },
+      { key: 'desktop', label: '电脑端' },
+      { key: 'mobile', label: '移动端' },
+    ];
+
+    var state = { category: 'all' };
+
+    function getCounts() {
+      var all = 0, desktop = 0, mobile = 0;
+      PROTOTYPES.forEach(function(p) {
+        if (p.hidden) return;
+        all++;
+        if (p.category === 'desktop') desktop++;
+        if (p.category === 'mobile') mobile++;
+      });
+      return { all: all, desktop: desktop, mobile: mobile };
+    }
+
+    function renderTabs() {
+      var counts = getCounts();
+      document.getElementById('categoryTabs').innerHTML = CATEGORIES.map(function(c) {
+        return '<button class="tab ' + (state.category === c.key ? 'active' : '') + '" data-category="' + c.key + '">' +
+          c.label + '<span class="tab-count">' + counts[c.key] + '</span></button>';
+      }).join('');
+    }
+
+    function renderGrid() {
+      var grid = document.getElementById('cardGrid');
+      var filtered = PROTOTYPES
+        .filter(function(p) { return state.category === 'all' || p.category === state.category; })
+        .filter(function(p) { return !p.hidden; });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div class="empty">该分类下暂无原型</div>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(function(item) {
+        var isMobile = item.category === 'mobile';
+        return '<a class="card card-' + item.category + '" href="../../prototypes/' + item.relPath + '" target="_blank" rel="noopener">' +
+          '<div class="card-accent"></div>' +
+          '<div class="card-body">' +
+            '<div class="card-meta">' +
+              '<span class="tag tag-' + item.category + '">' + (isMobile ? '移动端' : '电脑端') + '</span>' +
+              '<span class="date">' + item.date + '</span>' +
+              '<svg class="card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
+            '</div>' +
+            '<div class="card-title">' + escapeHtml(item.title) + '</div>' +
+            '<div class="card-desc">' + escapeHtml(item.desc) + '</div>' +
+          '</div>' +
+        '</a>';
+      }).join('');
+
+      document.querySelectorAll('.card').forEach(function(card) {
+        card.addEventListener('mousemove', function(e) {
+          var rect = card.getBoundingClientRect();
+          card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+          card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+        });
+      });
+    }
+
+    function escapeHtml(text) {
+      var div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    document.getElementById('categoryTabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.tab');
+      if (tab) {
+        state.category = tab.dataset.category;
+        renderTabs();
+        renderGrid();
+      }
+    });
+
+    renderTabs();
+    renderGrid();
+  </script>
+</body>
+</html>

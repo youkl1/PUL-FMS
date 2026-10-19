@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="prototype-category" content="web-admin">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 库房管理">
+  <title>其他入库单 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
+  <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/wh.css?v=20261015-3">
+  <style>
+    body { background: #F5F7FA !important; }
+    .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
+    .pi-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+    .pi-badge { flex-shrink: 0; padding: 2px 8px; background: var(--wa-primary-light); color: var(--wa-primary); border: 1px solid var(--wa-primary-border); border-radius: 4px; font-size: 11px; font-weight: 500; }
+    .pi-title { margin: 0; font-size: 16px; font-weight: 600; color: var(--wa-text-title); white-space: nowrap; }
+    .pi-subtitle { font-size: 12px; color: var(--wa-text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pi-header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .pi-main { grid-template-columns: 1fr !important; max-width: 1920px !important; padding: 12px 20px !important; gap: 12px !important; }
+    .pi-desktop-col { min-width: 0; overflow: auto; background: var(--pi-card-bg); border: 1px solid var(--pi-border); border-radius: var(--pi-radius); }
+    .pi-desktop-col .desktop-preview { width: 100%; min-width: 1280px; min-height: 720px; }
+    #btnIntroDetail { border: 1px solid var(--wa-border); background: var(--wa-bg-white); color: var(--wa-text-body); padding: 6px 14px; border-radius: 6px; font-size: 13px; cursor: pointer; transition: all var(--wa-transition); margin-right: 8px; font-family: inherit; }
+    #btnIntroDetail:hover { border-color: var(--wa-primary); color: var(--wa-primary); background: var(--wa-primary-light); }
+  </style>
+</head>
+<body>
+  <div class="pi-layout">
+    <header class="pi-header">
+      <div class="pi-header-left">
+        <span class="pi-badge">Web 管理后台</span>
+        <h1 class="pi-title">其他入库单</h1>
+        <span class="pi-subtitle">原型页 · 无上游单据的通用入库：赠品/期初补录/其他，扫码录码（未解析码拦截审核）+ 审核表单进在架</span>
+      </div>
+      <div class="pi-header-right">
+        <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
+        <a class="pi-back" href="plan.html">← 返回方案总览</a>
+      </div>
+    </header>
+
+    <main class="pi-main">
+      <div class="pi-desktop-col">
+        <div class="desktop-preview" id="desktopPreview"></div>
+      </div>
+    </main>
+  </div>
+
+  <div class="detail-modal-overlay" id="introModal" style="display:none;">
+    <div class="detail-modal">
+      <button class="close-detail-modal" id="btnIntroClose" type="button">×</button>
+      <div class="detail-modal-header">
+        <div class="detail-modal-icon">📥</div>
+        <div class="detail-modal-title-wrap">
+          <h2>其他入库单</h2>
+          <p class="subtitle">库房管理 · 通用入库兜底：没有供应商码单时的码进通道</p>
+        </div>
+      </div>
+      <p class="lead"><strong>一句话概括：</strong>采购以外的入库都走这里：赠品入库、期初补录、其他。建单选类型与供应商，扫码枪连续扫码入库（未解析码允许进单、计实物数量，但拦截审核——「异常码」页签移除或到采购到货单「异常码台账」维护字典），批次/效期按药品补全（与采购入库单同逻辑），审核表单确认库房/库位后码进在架。列表「实物数量/解析数量/扫码数量」三列与采购到货单同口径。</p>
+      <div class="section">
+        <div class="section-title">使用角色 + 上下游</div>
+        <div class="card-grid">
+          <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
+            <div class="info-card-title">药库管理员</div>
+            <div class="info-card-desc">建单（类型+供应商）→ 扫码入库 → 按药品补批次 → 审核入架</div></div></div>
+          <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
+            <div class="info-card-title">上下游</div>
+            <div class="info-card-desc">上游：无（人工发起）；下游：审核后库房库存查询即时增加，与采购入库单同权参与领用/盘点</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">如何使用</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">建单</div><div class="step-desc">「+ 新增入库单」选类型（赠品入库/期初补录/其他）+ 供应商 + 备注</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">扫码</div><div class="step-desc">选中单据「扫码入库」：扫码枪连续扫新到追溯码，同药品自动继承已填批次，重复自动过滤、已在架拦截、未解析码进单但拦截审核（「异常码」页签移除或维护字典）；支持扫码移除/拆零，弹窗内可「直接审核」</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">补批次</div><div class="step-desc">「药品清单」页签或行内「编辑」按药品填批次/生产日期/效期，同药品全部码记录一次生效（与采购入库单同逻辑，挂在码记录上）</div></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">审核</div><div class="step-desc">批次效期补全 + 异常码清零后才能审核：审核表单确认入库库房/库位，码进在架（库房库存查询立即可见）</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">示例</div>
+        <div class="example-box"><div class="example-title">期初补录（系统上线场景）</div>
+          <div class="example-text">新系统上线时老库存无码单 → 建「期初补录」单，逐盒扫追溯码：依姆多 6 盒 → 药品行补批次 250603/效期（6 个码一次生效）→ 审核后库房库存查询 +6 盒，效期预警随即生效。</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">场景呼应</div>
+        <div class="example-list"><div class="example-item">
+          <div class="example-item-title">其他入库单（本页）⇄ 采购入库单 ⇄ 库房库存查询</div>
+          <div class="example-item-desc">推论 2：入库单据只是码进在架的载体，采购/其他/退回三通道殊途同归；列表「实物/解析/扫码」三数量列与明细「码详情/药品清单/异常码」页签和采购到货单同构，扫码组件与采购到货验收、其他出库选码同一套。</div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-badge" id="planBadge"
+    style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
+           background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
+           font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 库房管理</span>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/drug-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/wh-data.js?v=20261015-6"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/doc-detail.js?v=20261016-1"></script>
+  <script src="scripts/wh-other-in.js?v=20261015-3"></script>
+  <script src="scripts/_t-oth-in.js"></script>
+  <script>
+    (function(){
+      var modal = document.getElementById('introModal');
+      function openIntro(){ modal.style.display = 'flex'; requestAnimationFrame(function(){ modal.classList.add('show'); }); }
+      function closeIntro(){ modal.classList.remove('show'); modal.style.display = 'none'; }
+      document.getElementById('btnIntroDetail').addEventListener('click', openIntro);
+      document.getElementById('btnIntroClose').addEventListener('click', closeIntro);
+      modal.addEventListener('click', function(e){ if (e.target === modal) closeIntro(); });
+      document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.style.display !== 'none') closeIntro(); });
+      document.getElementById('planBadge').addEventListener('click', function() { window.location.href = 'plan.html'; });
+    })();
+  </script>
+</body>
+</html>

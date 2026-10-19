@@ -1,0 +1,8 @@
+{
+  "host": "youkailong.cn",
+  "port": 24678,
+  "username": "root",
+  "password": "Sxc88889999",
+  "remoteDir": "/opt/qipeiyun/pul-fms",
+  "domain": "http://youkailong.cn/pul-fms"
+}

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="prototype-category" content="web-admin">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 扫码管理">
+  <title>统一扫码验证 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
+  <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/wh.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/scan.css?v=20261015-3">
+  <style>
+    body { background: #F5F7FA !important; }
+    .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
+    .pi-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+    .pi-badge { flex-shrink: 0; padding: 2px 8px; background: var(--wa-primary-light); color: var(--wa-primary); border: 1px solid var(--wa-primary-border); border-radius: 4px; font-size: 11px; font-weight: 500; }
+    .pi-title { margin: 0; font-size: 16px; font-weight: 600; color: var(--wa-text-title); white-space: nowrap; }
+    .pi-subtitle { font-size: 12px; color: var(--wa-text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pi-header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .pi-main { grid-template-columns: 1fr !important; max-width: 1920px !important; padding: 12px 20px !important; gap: 12px !important; }
+    .pi-desktop-col { min-width: 0; overflow: auto; background: var(--pi-card-bg); border: 1px solid var(--pi-border); border-radius: var(--pi-radius); }
+    .pi-desktop-col .desktop-preview { width: 100%; min-width: 1280px; min-height: 720px; }
+    #btnIntroDetail { border: 1px solid var(--wa-border); background: var(--wa-bg-white); color: var(--wa-text-body); padding: 6px 14px; border-radius: 6px; font-size: 13px; cursor: pointer; transition: all var(--wa-transition); margin-right: 8px; font-family: inherit; }
+    #btnIntroDetail:hover { border-color: var(--wa-primary); color: var(--wa-primary); background: var(--wa-primary-light); }
+
+
+  </style>
+</head>
+<body>
+  <div class="pi-layout">
+    <header class="pi-header">
+      <div class="pi-header-left">
+        <span class="pi-badge">Web 管理后台</span>
+        <h1 class="pi-title">统一扫码验证</h1>
+        <span class="pi-subtitle">原型页 · 扫码公共流程沙盒：六业务场景 × 清单四态（每场景都可能四种清单判断），单位换算 / 拆零 / 自动赋码 / 异常拦截 / 审核收口一页验证</span>
+      </div>
+      <div class="pi-header-right">
+        <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
+        <a class="pi-back" href="plan.html">← 返回方案总览</a>
+      </div>
+    </header>
+
+    <main class="pi-main">
+      <div class="pi-desktop-col">
+        <div class="desktop-preview" id="desktopPreview"></div>
+      </div>
+    </main>
+  </div>
+
+  <div class="detail-modal-overlay" id="introModal" style="display:none;">
+    <div class="detail-modal">
+      <button class="close-detail-modal" id="btnIntroClose" type="button">×</button>
+      <div class="detail-modal-header">
+        <div class="detail-modal-icon">🧪</div>
+        <div class="detail-modal-title-wrap">
+          <h2>统一扫码验证</h2>
+          <p class="subtitle">扫码管理 · 公共扫码流程的交互沙盒（设计文档 docs/superpowers/specs/2026-10-11-scan-lab-design.md）</p>
+        </div>
+      </div>
+      <p class="lead"><strong>一句话概括：</strong>把采购入库、库房备货出库、药房领用入库、药品上架、门诊出药、住院摆药六类扫码作业收敛成一条公共主干——<strong>每个场景都可能遇到清单四态</strong>（无清单 / 数量=0 / 数量&gt;0·有码单 / 数量&gt;0·无码单），场景只决定方向（入/出/移位）与节点，四态决定校验分支与码源。悬浮面板按「六场景 × 四态」矩阵逐格演示。</p>
+      <div class="section">
+        <div class="section-title">统一主干（所有场景所有格共有）</div>
+        <div class="example-box"><div class="example-text">解析（parseCode）→ 闸门（盘点冻结）→ 方向校验（入库：码不能已在库存=重复入库×；出库：码须在本节点在架=不在库房内×；移位上架：码须在本药房待上架集）→ 码源分支（有码单=核对验收：码单外=多送/串货×、重复=重复验收⚠；无码单=录入：重复⚠、被占用×）→ 清单态分支（无清单=码驱动建药品行；数量=0=归属校验；数量&gt;0=归属+超量校验，勾拆零扫整盒=只取差额、余量回架）→ 落账（码明细机器事实 + 药品清单人读视图实时联动，双层表达）。</div></div>
+      </div>
+      <div class="section">
+        <div class="section-title">单位换算（计划数量=销售单位，扫码数量=库存单位）</div>
+        <div class="example-box"><div class="example-text">清单「计划数量」按销售单位（HIS 结算口径，如盒/片）；扫码落账按库存单位（如支），备齐判定先换算再比较。换算走药品字典换算链：尿素乳膏 1箱=60盒、1盒=10支（扫盒码 +10 支）；依姆多 1盒=7片（处方 15 片 = 需扫 2 盒零 1 片——整零分解显示，拆零扫码演示「只取差额」）。</div></div>
+      </div>
+      <div class="section">
+        <div class="section-title">场景特有点</div>
+        <div class="card-grid">
+          <div class="info-card"><div class="info-card-icon">🏥</div><div class="info-card-body">
+            <div class="info-card-title">③领用入库 → ④药品上架 连演</div>
+            <div class="info-card-desc">领用入库审核后码落本药房「待上架」→ 切到上架场景直接有货可扫（写货位、标已上架）</div></div></div>
+          <div class="info-card"><div class="info-card-icon">🏨</div><div class="info-card-body">
+            <div class="info-card-title">⑥住院摆药 = 自动赋码主线</div>
+            <div class="info-card-desc">「⚡ 自动赋码」按 FIFO 整码配齐（超额不硬塞），配不齐的药提示去异常赋码台账补绑；拆零手动补扫收尾</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">如何使用</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">选场景格</div><div class="step-desc">右下角「🧪 场景」悬浮面板：六场景 × 四态矩阵点击即切（置灰格=业务上不存在该形态）</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">扫码</div><div class="step-desc">面板「演示码速查」点击=模拟扫码枪（带拆零标记的会自动勾拆零）；三态反馈 + 药品清单⇄码明细双页签联动</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">审核</div><div class="step-desc">卡脚「✓ 审核/完成发药/完成摆药」演示守卫链（异常码硬拦→冻结→软确认）；无清单/数量=0 格审核后计划数量←扫码数量；上架场景无审核、扫码即生效</div></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">重置</div><div class="step-desc">审核会动沙盒库存（入库加·落药房自动待上架 / 出库减·拆零码余量回架）；「↺ 重置本场景」还原当前格单据与沙盒库存</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">已知边界</div>
+        <div class="example-list"><div class="example-item">
+          <div class="example-item-title">沙盒独立数据，不碰真实业务</div>
+          <div class="example-item-desc">单据/码池/库存快照为本页迷你种子（store 独立命名空间），药品字典与换算链只读复用 PUL_DRUG 真实数据；图二「补库房/药房入库记录」经拍板不开补录通道（入库必须过单据审核），演示到异常台账为止；盘点扫码未纳入。</div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-badge" id="planBadge"
+    style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
+           background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
+           font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
+    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 扫码管理</span>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/drug-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/scan-lab-data.js?v=20261015-6"></script>
+  <script src="scripts/scan-core.js?v=20261015-11"></script>
+  <script src="scripts/scan-lab.js?v=20261015-3"></script>
+  <script src="scripts/doc-detail.js?v=20261016-1"></script>
+  <script src="scripts/scan-lab-ui.js?v=20261016-1"></script>
+  <script>
+    (function(){
+      var modal = document.getElementById('introModal');
+      function openIntro(){ modal.style.display = 'flex'; requestAnimationFrame(function(){ modal.classList.add('show'); }); }
+      function closeIntro(){ modal.classList.remove('show'); modal.style.display = 'none'; }
+      document.getElementById('btnIntroDetail').addEventListener('click', openIntro);
+      document.getElementById('btnIntroClose').addEventListener('click', closeIntro);
+      modal.addEventListener('click', function(e){ if (e.target === modal) closeIntro(); });
+      document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.style.display !== 'none') closeIntro(); });
+      document.getElementById('planBadge').addEventListener('click', function() { window.location.href = 'plan.html'; });
+    })();
+  </script>
+</body>
+</html>

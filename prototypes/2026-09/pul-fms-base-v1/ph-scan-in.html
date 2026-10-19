@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="prototype-category" content="web-admin">
+  <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 扫码管理">
+  <title>领用扫码入库 → 已并入统一扫码 · PUL-FMS</title>
+</head>
+<body style="font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#F5F7FA;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;">
+  <div style="text-align:center;color:#626976;">
+    <p style="font-size:15px;">「领用扫码入库」已并入「统一扫码」工作台（2026-10-11 一体化），正在跳转…</p>
+    <p style="font-size:13px;"><a id="go" href="scan-hub.html">未自动跳转？点这里进入</a></p>
+  </div>
+  <script>
+    var target = 'scan-hub.html' + (location.search || '');
+    document.getElementById('go').href = target;
+    location.replace(target);
+  </script>
+</body>
+</html>

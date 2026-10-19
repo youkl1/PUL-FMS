@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
   <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 基础管理">
-  <title>药品字典 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <title>药品字典维护 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -31,7 +31,7 @@
     <header class="pi-header">
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">药品字典</h1>
+        <h1 class="pi-title">药品字典维护</h1>
         <span class="pi-subtitle">原型页 · 主子表主表：药品级属性 + 单位换算链 + 拆零标记（码⇄药转换层地基）</span>
       </div>
       <div class="pi-header-right">
@@ -57,7 +57,7 @@
           <p class="subtitle">基础管理 · 主子表之主表：药品级属性与单位换算链</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>一条药品 ↔ 多条标识码。本页维护药品级属性：品名/规格/厂家/批准文号、单位换算链（1箱=60瓶）、拆零标记——它们是「码进药出」转换层的数据地基。药品必须指定所属库房，同一标识码在不同库房分别建档；药品可手工新增，也可通过 HIS 接口导入（HIS 有更新时可重复导入，幂等更新）。</p>
+      <p class="lead"><strong>一句话概括：</strong>一条药品 ↔ 多条标识码。主列表只展示常用字段；新增/编辑弹窗按 <code>/api/DM_DrugInfo</code> 维护药品内码、药品编码、医保编码、供应商、价格、仓库/药库、追溯与计量等必填字段，并保留单位换算链和拆零口径。一级标识码与包装规格由子表维护；子表业务字段只保留层级、生产企业信息、药名通用名、剂型、批准文号、包装规格。</p>
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
         <div class="card-grid">
@@ -66,28 +66,29 @@
             <div class="info-card-desc">维护药品档案与换算关系；新增药品默认「待审核」，审核后启用</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
-            <div class="info-card-desc">下游全系统：采购/库房/药房所有单据的码解析、单位切换、拆零发药都读本表；子表维护见「标识码字典」</div></div></div>
+            <div class="info-card-desc">下游全系统：采购/库房/药房所有单据的码解析、单位切换、拆零发药都读本表；子表维护见「药品标识码查询」</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">如何使用</div>
         <div class="steps">
           <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">查药品</div><div class="step-desc">按所属库房/通用名/编码/分类/拆零标记筛选，点行查看该药品的标识码子表</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">维护换算</div><div class="step-desc">编辑弹窗维护基本单位、大包装换算（1箱=60瓶）、拆零最小单位（1盒=7片）</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">维护换算</div><div class="step-desc">编辑弹窗维护库存单位（追溯码最小销售包装）、销售单位（HIS 结算单位）、拆零最小单位（1盒=7片）——单位均下拉选自「包装单位字典」；多级换算链由下方「标识码子表」按层级+换算比例维护，列表「换算关系」列以累计比例格式显示（如 1:60:600）</div></div></div>
           <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">HIS 导入</div><div class="step-desc">点「HIS 导入」选目标库房 → 目录内按编码匹配：新药品建档（待审核）、已有药品幂等更新，可多次重复导入</div></div></div>
-          <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">审核启用</div><div class="step-desc">新增药品为「待审核」，点「审核」转为启用后才参与业务解析</div></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">更新标识码</div><div class="step-desc">点「更新标识码」接收追溯平台下发的对照包：按药品匹配挂入标识码子表，已存在/未建档自动跳过（幂等），新增即启用可扫码解析</div></div></div>
+          <div class="step"><div class="step-num">5</div><div class="step-body"><div class="step-title">审核启用</div><div class="step-desc">新增药品为「待审核」，点「审核」转为启用后才参与业务解析</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">示例</div>
         <div class="example-box"><div class="example-title">单位换算链（U0-U3 落地口径）</div>
-          <div class="example-text">加罗新：换算链 箱→瓶（1箱 = 60瓶），库存基本单位=瓶 → 库房扫 2 个箱码，库房库存可切换显示「2 箱」或「120 瓶」；依姆多拆零标记「1盒 = 7片」，门诊拆零=是 → 药房发药可按片拆零。</div>
+          <div class="example-text">加罗新：换算链 箱→瓶（1箱 = 60瓶），库存单位=瓶，列表换算关系列显示「1:60」 → 库房扫 2 个箱码，库房库存查询可切换显示「2 箱」或「120 瓶」；依姆多拆零标记「1盒 = 7片」，门诊拆零=是 → 药房发药可按片拆零；尿素乳膏（三级链演示）：1箱 = 60盒、1盒 = 10支，库存单位=支，换算关系列显示「1:60:600」（对齐客户天泰台账口径），标识码子表三条码分别对应 1级支 / 2级盒 / 3级箱，详情只展示六项业务字段。</div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
-          <div class="example-item-title">药品字典（本页）↔ 标识码字典 ↔ 全业务单据</div>
+          <div class="example-item-title">药品字典维护（本页）↔ 药品标识码查询 ↔ 全业务单据</div>
           <div class="example-item-desc">架构原则 3/8：字典主子表 + 双层表达。本表是全系统「码⇄药」转换的唯一事实源（PUL_DRUG），采购模块经 flat() 兼容层读取，老口径不变。</div>
         </div></div>
       </div>
@@ -103,13 +104,14 @@
 
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/facility-data.js"></script>
-  <script src="scripts/drug-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/drug.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/facility-data.js?v=20261015-3"></script>
+  <script src="scripts/drug-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/drug-sync.js?v=20261016-1"></script>
+  <script src="scripts/drug.js?v=20261017-1"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

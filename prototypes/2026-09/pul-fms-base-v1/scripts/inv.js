@@ -56,7 +56,9 @@
         ? '<span class="pch-light ok"><i class="pch-dot"></i>已审核</span>'
         : '<span class="pch-light" style="color:#F59E0B;"><i class="pch-dot" style="background:#F59E0B;"></i>未审核</span>';
       return '<tr class="pch-doc-row' + (d.billNo === sel ? ' pch-doc-sel' : '') + '" data-sel="' + esc(d.billNo) + '">' +
-        '<td><b>' + esc(d.billNo) + '</b></td><td class="text-secondary">' + esc(d.date) + '</td>' +
+        '<td><b>' + esc(d.billNo) + '</b></td>' +
+        // 单据类型列（2026-10-14 图三口径：盘点单无单据类型，占位显 —）
+        '<td class="text-secondary">—</td><td class="text-secondary">' + esc(d.date) + '</td>' +
         '<td>' + (d.sysCodes || []).length + '</td><td>' + (d.scanned || []).length + '</td>' +
         '<td>' + df.match + '</td><td class="text-success">' + df.gain.length + '</td>' +
         '<td class="text-danger">' + df.loss.length + '</td><td>' + st + '</td>' +
@@ -66,9 +68,9 @@
             : '<button class="btn btn-sm btn-primary" data-audit="' + esc(d.billNo) + '">审核</button>') +
         '</td></tr>';
     }).join('');
-    if (!rows) rows = '<tr><td colspan="9" class="text-center text-secondary" style="padding:28px;">暂无单据——点右上新增</td></tr>';
+    if (!rows) rows = '<tr><td colspan="10" class="text-center text-secondary" style="padding:28px;">暂无单据——点右上新增</td></tr>';
     return '<div class="card mb-3"><div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>单号</th><th>日期</th><th>账存</th><th>实扫</th><th>相符</th><th>盘盈</th><th>盘亏</th><th>状态</th><th>操作</th></tr></thead>' +
+      '<thead><tr><th>单号</th><th>单据类型</th><th>日期</th><th>账存</th><th>实扫</th><th>相符</th><th>盘盈</th><th>盘亏</th><th>状态</th><th>操作</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div></div>';
   }
 

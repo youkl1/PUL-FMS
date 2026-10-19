@@ -1,14 +1,16 @@
 /**
- * tray-q.js — HIS 摆药单查询（只读）
+ * tray-q.js — HIS HIS摆药单查询（只读）
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'trayQ', crumb: ['发药管理', 'HIS摆药单查询'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'trayQ', crumb: ['HIS单据', 'HIS摆药单查询'] });
   if (!content) return;
 
   var W = window.PUL_WH, R = window.PUL_RX, UI = window.PchUI, esc = UI.esc;
   var S = R.load();
   var kw = '', sel = null;
+  var qsTray = new URLSearchParams(location.search).get('trayNo');   // 摆药单退药查询/处方药品汇总查询深链
+  if (qsTray) { sel = qsTray; kw = qsTray; }
 
   function ph() { return W.curPharm(); }
   function v(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
@@ -52,7 +54,7 @@
       var d = trayOf(h.trayNo);
       var go = h.pulled
         ? '<a class="btn btn-sm btn-outline-primary" href="tray.html?trayNo=' + encodeURIComponent(h.trayNo) + '">去摆药单</a>'
-        : '<span class="text-secondary" style="font-size:12.5px;">在业务页拉取</span>';
+        : '<span class="text-secondary">—</span>';
       return '<tr class="pch-doc-row' + (h.trayNo === sel ? ' pch-doc-sel' : '') + '" data-sel="' + esc(h.trayNo) + '">' +
         '<td><b>' + esc(h.trayNo) + '</b></td><td class="text-secondary">' + esc(h.date) + '</td>' +
         '<td>' + esc(h.inpatientNo) + '</td><td>' + esc(h.ward) + ' / ' + esc(h.bed) + '</td>' +
@@ -93,6 +95,6 @@
   }
 
   var first = rows()[0];
-  if (first) sel = first.trayNo;
+  if (first && !sel) sel = first.trayNo;
   renderAll();
 })();

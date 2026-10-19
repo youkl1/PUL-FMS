@@ -1,9 +1,9 @@
 /**
- * ledger.js — 药品台账：库房在架 + 药房在架（码 count），点行看该药流向
+ * ledger.js — 日记账查询：库房在架 + 药房在架（码 count），点行看该药流向
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'ledger', crumb: ['台账管理', '药品台账'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'ledger', crumb: ['台账管理', '日记账查询'] });
   if (!content) return;
 
   var L = window.PUL_LEDGER, UI = window.PchUI, esc = UI.esc;

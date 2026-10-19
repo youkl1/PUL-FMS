@@ -8,7 +8,7 @@
   "width": 1360,
   "height": 800,
   "title": "领用出库 → 药房入库闭环",
-  "subtitle": "申请(药) ⇄ 备货(码) 双层表达 · 审核即扣账 · 在途闭环",
+  "subtitle": "申请(药) → 直接扫码备货·反向解析自动匹配 → 审核即扣账 · 在途闭环",
   "containers": [
     {
       "id": "lane-ph",
@@ -74,31 +74,21 @@
       "width": 220,
       "height": 68,
       "type_label": "POOL",
-      "label": "申请单池选单（或一步式领用）",
-      "fill": "#ffffff",
-      "stroke": "#2fb344"
-    },
-    {
-      "id": "W2",
-      "kind": "rect",
-      "x": 370,
-      "y": 292,
-      "width": 250,
-      "height": 68,
-      "type_label": "DUAL VIEW",
-      "label": "双层表达：药品明细 ⇄ 码清单",
+      "label": "待备货申请池",
+      "sublabel": "按码自动匹配 · 免选单",
       "fill": "#ffffff",
       "stroke": "#2fb344"
     },
     {
       "id": "W3",
       "kind": "rect",
-      "x": 680,
+      "x": 370,
       "y": 292,
-      "width": 180,
+      "width": 220,
       "height": 68,
       "type_label": "SCAN",
-      "label": "扫码备货",
+      "label": "扫码备货 · 反向解析",
+      "sublabel": "直接扫码 · 免选单",
       "fill": "#ffffff",
       "stroke": "#2fb344"
     },
@@ -117,12 +107,12 @@
     {
       "id": "Y1",
       "kind": "rect",
-      "x": 640,
+      "x": 340,
       "y": 468,
-      "width": 260,
+      "width": 280,
       "height": 64,
       "type_label": "PARSE",
-      "label": "parseCode 解析：码→药品·折基本单位",
+      "label": "parseCode 反解析：码→药品·折基本单位",
       "fill": "#ffffff",
       "stroke": "#626976",
       "flat": true
@@ -160,7 +150,7 @@
       "width": 380,
       "height": 60,
       "type_label": "REJECT",
-      "label": "✕拦截：非在架/不在本单 ⚠重复/超申请 → 提示后重扫",
+      "label": "✕拦截：非在架/无匹配申请 ⚠重复/超申请 → 提示后重扫",
       "fill": "#fdecea",
       "stroke": "#d63939",
       "flat": true
@@ -179,14 +169,6 @@
     {
       "id": "a2",
       "source": "W1",
-      "target": "W2",
-      "source_port": "right",
-      "target_port": "left",
-      "flow": "control"
-    },
-    {
-      "id": "a3",
-      "source": "W2",
       "target": "W3",
       "source_port": "right",
       "target_port": "left",
@@ -262,7 +244,7 @@
       "label": "校验拦截"
     }
   ],
-  "footer": "PUL-FMS · 03 领用出库→药房入库闭环 · fireworks-tech-graph Style 1",
+  "footer": "PUL-FMS · 03 领用出库→药房入库闭环（2026-10-04 直接扫码反解析口径）· fireworks-tech-graph Style 1",
   "footer_x": 48,
   "footer_y": 775
 }

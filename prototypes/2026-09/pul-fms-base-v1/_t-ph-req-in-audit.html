@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
   <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 药房管理">
-  <title>[冒烟] 领用入库单-审核入库 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <title>[冒烟] 领用扫码入库 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
-  <link rel="stylesheet" href="styles/wh.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/wh.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -32,8 +32,8 @@
     <header class="pi-header">
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">领用入库单</h1>
-        <span class="pi-subtitle">原型页 · 库房出库在途 → 药房在架：审核入库不扫码（货位非必填），扫码留到上架</span>
+        <h1 class="pi-title">领用扫码入库</h1>
+        <span class="pi-subtitle">原型页 · 领出在途 → 药房在架：逐码核对全部通过才放行「审核入库」（复用备货出库扫码工作台范式）</span>
       </div>
       <div class="pi-header-right">
         <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
@@ -51,43 +51,43 @@
     <div class="detail-modal">
       <button class="close-detail-modal" id="btnIntroClose" type="button">×</button>
       <div class="detail-modal-header">
-        <div class="detail-modal-icon">📥</div>
+        <div class="detail-modal-icon">📷</div>
         <div class="detail-modal-title-wrap">
-          <h2>领用入库单</h2>
-          <p class="subtitle">药房管理 · 码状态机：领出在途 → 药房在架（上架扫码后→已上架）</p>
+          <h2>领用扫码入库</h2>
+          <p class="subtitle">药房管理 · 高拍仪连续作业 · 码状态机：领出在途 → 药房在架</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>库房出库后码在「在途」；药房选中出库单点「审核入库」（可选上架货位，非必填）即确认收货——入库不扫码，在途清零、药房在架增加；扫码留到「药品扫码上架」。</p>
+      <p class="lead"><strong>一句话概括：</strong>领用入库的扫码核对工作台：选本药房在途单 → 高拍仪逐码过机（单外码拦截、重复过滤）→ 全部码核对完成才放行「审核入库」，整单进入本药房在架、库房在途清零。</p>
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
         <div class="card-grid">
           <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
-            <div class="info-card-title">发药药师</div>
-            <div class="info-card-desc">接库房出库单 → 审核入库（可选货位）→ 到「药品扫码上架」逐码扫码上架</div></div></div>
+            <div class="info-card-title">药房药师</div>
+            <div class="info-card-desc">从「领用入库单」点「扫码入库」深链进入 → 逐码过机核对 → 审核入库 → 到「药品扫码上架」指定货位</div></div></div>
           <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
             <div class="info-card-title">上下游</div>
-            <div class="info-card-desc">上游：库房「领用备货单」（含直接出库）；下游：药品扫码上架 → 药房在架，可供退回/发药</div></div></div>
+            <div class="info-card-desc">上游：库房「领用备货单」审核出库（码在途）；下游：药品扫码上架 → 药房在架，可供退回/发药</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">如何使用</div>
         <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">选出库单</div><div class="step-desc">待入库=库房已出库未闭环；直接出库无申请单号，照常收；点行看药品清单/码详情</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">审核入库</div><div class="step-desc">弹窗选上架货位（非必填，仅作待上架提示），确认即整单入库——不扫码</div></div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">扫码上架</div><div class="step-desc">到「药品扫码上架」逐码扫入货位；确认入库后状态=已入库·待上架，库房在途清零</div></div></div>
+          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">新增领用单（选在途单）</div><div class="step-desc">点「+ 新增领用单」弹出本药房待入库在途单（库房已出库的备货单，预览品规明细），选择后逐码核对</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">逐码核对</div><div class="step-desc">在途单核对模式：扫本单在途码✓亮一个、单外码×拦截、重复⚠提示；药品汇总实时显示 计划数量/扫码数量/已核对数/差额</div></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">审核入库</div><div class="step-desc">全部码核对完「审核入库」才亮：在途单整单入本房在架、库房在途清零</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">示例</div>
         <div class="example-box"><div class="example-title">收在途 3 盒依姆多</div>
-          <div class="example-text">库房出库单 LYCK20260913001（3 个码，门诊药房）→ 本页待入库 → 点「✓ 审核入库」选货位 M-01（可空）确认 → 药房在架 +3、库房在途归零 → 扫码上架时逐码扫入 M-01。</div>
+          <div class="example-text">选单 LYCK20260913001（3 码在途）→ 高拍仪连扫 3 盒 → 反馈条「✓ 全部 3 码核对完成，可审核入库」→ 点「✓ 审核入库」→ 药房在架 +3、库房在途归零 → 到「药品扫码上架」逐码指定货位。</div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
-          <div class="example-item-title">领用入库单（本页）= 闭环唯一入口，入库不扫码</div>
-          <div class="example-item-desc">库房「领用备货单」审核出库后单到本页待入库；本页审核入库即闭环（2026-10-02 起库房侧不再代确认，只读提示；2026-10-04 起入库不扫码，扫码核对收敛到「药品扫码上架」）。</div>
+          <div class="example-item-title">领用扫码入库（本页）⇄ 领用入库单 ⇄ 药品扫码上架</div>
+          <div class="example-item-desc">本页=入库核对作业视角（扫码是主角），领用入库单=单据管理视角（列表/筛选/明细只读，行内「扫码入库」深链跳入本页）；两页同写 pickDocs，数据互通</div>
         </div></div>
       </div>
     </div>
@@ -101,15 +101,16 @@
   </div>
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/drug-data.js"></script>
-  <script src="scripts/purchase-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/wh-data.js"></script>
-  <script src="scripts/facility-data.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/ph-req-in.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/drug-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/wh-data.js?v=20261015-6"></script>
+  <script src="scripts/facility-data.js?v=20261015-3"></script>
+  <script src="scripts/drug-picker.js?v=20261015-12"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/ph-scan-in.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');
@@ -123,24 +124,49 @@
     })();
   </script>
 <script>
-// 冒烟：自动点「审核入库」→ 选第一个货位 → 确认入库
+// 冒烟：深链选在途单 LYCK20260913001（3 码）→ 逐码扫入核对 → 全齐后「审核入库」→ 断言 status=已入库
+// 两段式：无 smoke 参数先重定向挂上 ?billNo=&smoke=1（模拟领用入库单「扫码入库」深链跳入）
 window.addEventListener('load', function(){
+  var qs = new URLSearchParams(location.search);
+  if (!qs.get('smoke')) {
+    location.href = '_t-ph-req-in-audit.html?billNo=LYCK20260913001&smoke=1';
+    return;
+  }
   setTimeout(function(){
-    var btn = document.querySelector('[data-audit]');
-    if (!btn) { document.title='SMOKE-FAIL:无审核按钮'; return; }
-    btn.click();
-    setTimeout(function(){
-      var sel = document.getElementById('priShelfLoc');
-      if (!sel) { document.title='SMOKE-FAIL:弹窗未开'; return; }
-      if (sel.options.length > 1) sel.selectedIndex = 1;
-      document.getElementById('priAuditOk').click();
+    var W = window.PUL_WH;
+    function docOf() {
+      return W.load().pickDocs.filter(function(x){ return x.billNo === 'LYCK20260913001'; })[0];
+    }
+    var d = docOf();
+    if (!d || d.status !== '已出库') { document.title = 'SMOKE-FAIL:单据不在途'; return; }
+    var codes = (d.codes || []).map(function(c){ return c.code; });
+    if (!codes.length) { document.title = 'SMOKE-FAIL:无在途码'; return; }
+    var i = 0;
+    function scanOne() {
+      var input = document.getElementById('siInput');
+      if (!input || input.disabled) { document.title = 'SMOKE-FAIL:无扫码输入框'; return; }
+      input.value = codes[i];
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      i++;
+      if (i < codes.length) { setTimeout(scanOne, 250); return; }
       setTimeout(function(){
-        var S = window.PUL_WH.load();
-        var d = S.pickDocs.filter(function(x){return x.billNo==='LYCK20260913001';})[0];
-        document.title = (d && d.status==='已入库·待上架' && d.shelfLoc) ? 'SMOKE-OK '+d.shelfLoc : 'SMOKE-FAIL:状态未翻转';
-      }, 200);
-    }, 300);
-  }, 500);
+        var btn = document.getElementById('siAudit');
+        if (!btn || btn.disabled) { document.title = 'SMOKE-FAIL:审核按钮不可用'; return; }
+        btn.click();
+        setTimeout(function(){
+          var ok = document.querySelector('#pchConfirm [data-ok]');
+          if (!ok) { document.title = 'SMOKE-FAIL:确认框未弹'; return; }
+          ok.click();
+          setTimeout(function(){
+            var d2 = docOf();
+            document.title = (d2 && d2.status === '已入库' && d2.inTime)
+              ? 'SMOKE-OK 已入库 ' + d2.inTime : 'SMOKE-FAIL:状态未翻转';
+          }, 250);
+        }, 250);
+      }, 250);
+    }
+    scanOne();
+  }, 600);
 });
 </script>
 </body>

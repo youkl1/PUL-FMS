@@ -6,12 +6,12 @@
   <meta name="prototype-category" content="web-admin">
   <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 药房管理">
   <title>退回出库单 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
-  <link rel="stylesheet" href="styles/wh.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/wh.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -57,7 +57,7 @@
           <p class="subtitle">药房管理 · 码状态机逆向：领用出库单 → 库房「领用退回」</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>领错、多用或停用的药退回库房——必须锚定本药房已闭环（已入库·待上架/已上架）的领用出库单，从来源单选码 + 扫码核对，确认出库后进入库房「领用退回」单池。</p>
+      <p class="lead"><strong>一句话概括：</strong>领错、多用或停用的药退回库房——必须锚定本药房已闭环（已入库）的领用出库单，从来源单选码 + 扫码核对，确认出库后进入库房「领用退回」单池。</p>
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
         <div class="card-grid">
@@ -80,7 +80,7 @@
       <div class="section">
         <div class="section-title">示例</div>
         <div class="example-box"><div class="example-title">退唯可来 1 盒</div>
-          <div class="example-text">门诊药房 LYCK20260912001 已入库·待上架 → 新增退回锚定该单、勾选要退的码 → 扫码核对后确认出库 → 库房「领用退回」出现 TH 单。</div>
+          <div class="example-text">门诊药房 LYCK20260912001 已入库 → 新增退回锚定该单、勾选要退的码 → 扫码核对后确认出库 → 库房「领用退回」出现 TH 单。</div>
         </div>
       </div>
       <div class="section">
@@ -101,14 +101,15 @@
   </div>
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/drug-data.js"></script>
-  <script src="scripts/purchase-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/wh-data.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/ph-ret-out.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/drug-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/wh-data.js?v=20261015-6"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/doc-detail.js?v=20261016-1"></script>
+  <script src="scripts/ph-ret-out.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

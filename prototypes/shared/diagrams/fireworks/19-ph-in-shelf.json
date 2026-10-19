@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 860,
+  "title": "领用入库 → 上架 · 药房侧状态机",
+  "subtitle": "待入库·在途 → 已入库·待上架 → 已上架；下架 / 退回 / 报损为逆向回路（衔接图18「已出库·在途」；前两态=单据进度，已上架=码级；扫码在「药品扫码上架」环节，2026-10-04 口径）",
+  "containers": [],
+  "nodes": [
+    {
+      "id": "E1",
+      "kind": "rect",
+      "x": 60,
+      "y": 110,
+      "width": 220,
+      "height": 54,
+      "label": "库房审核出库",
+      "sublabel": "图18 已出库·在途 · 库房已扣账",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "S1",
+      "kind": "rect",
+      "x": 60,
+      "y": 300,
+      "width": 220,
+      "height": 70,
+      "label": "待入库 · 在途",
+      "sublabel": "审核入库 · 货位可选",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "S2",
+      "kind": "rect",
+      "x": 420,
+      "y": 300,
+      "width": 240,
+      "height": 70,
+      "label": "已入库 · 待上架",
+      "sublabel": "确认入库 · 码进本房在架",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "S3",
+      "kind": "rect",
+      "x": 800,
+      "y": 300,
+      "width": 220,
+      "height": 70,
+      "label": "已上架",
+      "sublabel": "写货位 phLoc · 可发药可退回",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "R1",
+      "kind": "rect",
+      "x": 420,
+      "y": 560,
+      "width": 240,
+      "height": 70,
+      "label": "退回库房（逆向）",
+      "sublabel": "退回出库单 · 详见图20",
+      "fill": "#f6f8fb",
+      "stroke": "#626976"
+    },
+    {
+      "id": "R2",
+      "kind": "rect",
+      "x": 800,
+      "y": 560,
+      "width": 220,
+      "height": 70,
+      "label": "药房报损（逆向）",
+      "sublabel": "报损单：未审核→已审核 · 已销毁终态",
+      "fill": "#f6f8fb",
+      "stroke": "#626976"
+    },
+    {
+      "id": "G1",
+      "kind": "rect",
+      "x": 60,
+      "y": 700,
+      "width": 560,
+      "height": 76,
+      "label": "入库守卫",
+      "sublabel": "整单审核即入库 · 上架货位非必填仅提示 · 盘点冻结拦截",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    },
+    {
+      "id": "G2",
+      "kind": "rect",
+      "x": 660,
+      "y": 700,
+      "width": 560,
+      "height": 76,
+      "label": "上架守卫（三道闸）",
+      "sublabel": "仅本房在架码（已退/已报损拦截）· 已上架再扫=换货位 · 预期货位不一致提示",
+      "fill": "#fdecea",
+      "stroke": "#d63939"
+    }
+  ],
+  "arrows": [
+    { "id": "a1", "source": "E1", "target": "S1", "source_port": "bottom", "target_port": "top", "flow": "control" },
+    { "id": "a2", "source": "S1", "target": "S2", "source_port": "right", "target_port": "left", "flow": "control", "label": "审核入库" },
+    { "id": "a3", "source": "S2", "target": "S3", "source_port": "right", "target_port": "left", "flow": "control", "label": "扫码上架" },
+    { "id": "a4", "source": "S3", "target": "S2", "source_port": "top", "target_port": "top", "flow": "feedback", "label": "扫码下架" },
+    { "id": "a5", "source": "S2", "target": "R1", "source_port": "bottom", "target_port": "top", "flow": "feedback", "label": "退回出库" },
+    { "id": "a6", "source": "S3", "target": "R2", "source_port": "bottom", "target_port": "top", "flow": "feedback", "label": "报损出库" }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 48,
+  "legend_y": 812,
+  "legend": [
+    { "flow": "control", "label": "正向流转（事件驱动）" },
+    { "flow": "feedback", "label": "逆向 · 下架 / 退回 / 报损" }
+  ],
+  "footer": "PUL-FMS · 19 领用入库到上架状态机（药房侧正向链）· fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 840
+}

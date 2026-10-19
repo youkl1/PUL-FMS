@@ -5,120 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
   <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 采购管理">
-  <title>异常标识码 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
-  <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
-  <style>
-    body { background: #F5F7FA !important; }
-    .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
-    .pi-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
-    .pi-badge { flex-shrink: 0; padding: 2px 8px; background: var(--wa-primary-light); color: var(--wa-primary); border: 1px solid var(--wa-primary-border); border-radius: 4px; font-size: 11px; font-weight: 500; }
-    .pi-title { margin: 0; font-size: 16px; font-weight: 600; color: var(--wa-text-title); white-space: nowrap; }
-    .pi-subtitle { font-size: 12px; color: var(--wa-text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .pi-header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-    .pi-main { grid-template-columns: 1fr !important; max-width: 1920px !important; padding: 12px 20px !important; gap: 12px !important; }
-    .pi-desktop-col { min-width: 0; overflow: auto; background: var(--pi-card-bg); border: 1px solid var(--pi-border); border-radius: var(--pi-radius); }
-    .pi-desktop-col .desktop-preview { width: 100%; min-width: 1280px; min-height: 720px; }
-    #btnIntroDetail { border: 1px solid var(--wa-border); background: var(--wa-bg-white); color: var(--wa-text-body); padding: 6px 14px; border-radius: 6px; font-size: 13px; cursor: pointer; transition: all var(--wa-transition); margin-right: 8px; font-family: inherit; }
-    #btnIntroDetail:hover { border-color: var(--wa-primary); color: var(--wa-primary); background: var(--wa-primary-light); }
-  </style>
+  <title>异常标识码 → 已并入采购到货单 · PUL-FMS</title>
+  <meta http-equiv="refresh" content="0;url=purchase-arrive.html?view=bad">
 </head>
-<body>
-  <div class="pi-layout">
-    <header class="pi-header">
-      <div class="pi-header-left">
-        <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">异常标识码</h1>
-        <span class="pi-subtitle">原型页 · 解析兜底：维护字典 → 入库单恢复可审</span>
-      </div>
-      <div class="pi-header-right">
-        <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
-        <a class="pi-back" href="plan.html">← 返回方案总览</a>
-      </div>
-    </header>
-
-    <main class="pi-main">
-      <div class="pi-desktop-col">
-        <div class="desktop-preview" id="desktopPreview"></div>
-      </div>
-    </main>
+<body style="font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#F5F7FA;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;">
+  <div style="text-align:center;color:#626976;">
+    <p style="font-size:15px;">「异常标识码」已并入「采购到货单」页的 <b>异常码台账</b> 视图（2026-10-03），正在跳转…</p>
+    <p style="font-size:13px;"><a href="purchase-arrive.html?view=bad">未自动跳转？点这里进入</a></p>
   </div>
-
-  <div class="detail-modal-overlay" id="introModal" style="display:none;">
-    <div class="detail-modal">
-      <button class="close-detail-modal" id="btnIntroClose" type="button">×</button>
-      <div class="detail-modal-header">
-        <div class="detail-modal-icon">🛠️</div>
-        <div class="detail-modal-title-wrap">
-          <h2>异常标识码</h2>
-          <p class="subtitle">采购管理 · 场景 S6：解析覆盖率的兜底机制</p>
-        </div>
-      </div>
-      <p class="lead"><strong>一句话概括：</strong>扫码/下载时解析不了的标识码在这里集中兜底——手动补录字典或从码上放心平台下载更新，维护后相关入库单的异常码自动恢复可解析，审核解除拦截。</p>
-      <div class="section">
-        <div class="section-title">使用角色 + 上下游</div>
-        <div class="card-grid">
-          <div class="info-card"><div class="info-card-icon">👤</div><div class="info-card-body">
-            <div class="info-card-title">系统管理员（信息科）/ 验收员</div>
-            <div class="info-card-desc">验收员发现异常 → 信息科维护字典 → 单据恢复可审核</div></div></div>
-          <div class="info-card"><div class="info-card-icon">🔀</div><div class="info-card-body">
-            <div class="info-card-title">上下游</div>
-            <div class="info-card-desc">上游：各单据解析失败的标识码、码上放心平台（字典下载源）；下游：标识码字典（主子表）、被拦截的入库单</div></div></div>
-        </div>
-      </div>
-      <div class="section">
-        <div class="section-title">如何使用</div>
-        <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">查异常</div><div class="step-desc">按异常类型/标识码/药品通用名筛选</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">维护或更新</div><div class="step-desc">点「维护」手动补录字典；或点「更新信息」从码上放心平台批量下载补录</div></div></div>
-        </div>
-      </div>
-      <div class="section">
-        <div class="section-title">示例</div>
-        <div class="example-box"><div class="example-title">场景示例（对应需求场景 S6）</div>
-          <div class="example-text">入库单 204-13809882 扫到标识码 8999001 无法解析被拦截 → 本页查到该异常 → 「维护」补录药名/规格/厂家/批准文号 → 回到采购入库，该单「解析」变正常，可审核。</div>
-        </div>
-      </div>
-      <div class="section">
-        <div class="section-title">场景呼应</div>
-        <div class="example-list"><div class="example-item">
-          <div class="example-item-title">采购入库（异常码拦截）→ 异常标识码（本页兜底）→ 标识码字典</div>
-          <div class="example-item-desc">字段对齐老系统（标识码/层级/药名通用名/制剂规格/包装规格/生产厂家/批准文号/异常信息）；解析覆盖率决定系统可用性（推论 3）。</div>
-        </div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="plan-badge" id="planBadge"
-    style="position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;
-           background:rgba(0,0,0,0.6);color:#fff;padding:8px 12px;border-radius:20px;
-           font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
-    📋 <span class="plan-title">PUL-FMS 药品精细化管理系统 · 采购管理</span>
-  </div>
-
-  <div class="toast" id="toast"></div>
-
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/drug-data.js"></script>
-  <script src="scripts/purchase-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/bad-codes.js"></script>
-  <script>
-    (function(){
-      var modal = document.getElementById('introModal');
-      function openIntro(){ modal.style.display = 'flex'; requestAnimationFrame(function(){ modal.classList.add('show'); }); }
-      function closeIntro(){ modal.classList.remove('show'); modal.style.display = 'none'; }
-      document.getElementById('btnIntroDetail').addEventListener('click', openIntro);
-      document.getElementById('btnIntroClose').addEventListener('click', closeIntro);
-      modal.addEventListener('click', function(e){ if (e.target === modal) closeIntro(); });
-      document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.style.display !== 'none') closeIntro(); });
-      document.getElementById('planBadge').addEventListener('click', function() { window.location.href = 'plan.html'; });
-    })();
-  </script>
+  <script>location.replace('purchase-arrive.html?view=bad');</script>
 </body>
 </html>

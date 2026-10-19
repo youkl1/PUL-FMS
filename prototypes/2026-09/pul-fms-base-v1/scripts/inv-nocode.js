@@ -54,7 +54,7 @@
       '<div class="card"><div class="table-responsive"><table class="table table-vcenter card-table">' +
       '<thead><tr><th>记录号</th><th>日期</th><th>节点</th><th>药品</th><th>数量</th><th>原因</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div>' +
-      '<div class="card-footer text-secondary" style="font-size:12.5px;">无 20 位追溯码，不进码集合，只记数量</div></div>';
+      '</div>';
     document.getElementById('btnQuery').addEventListener('click', function () { kw = v('fKw'); renderAll(); });
     document.getElementById('btnReset').addEventListener('click', function () { kw = ''; renderAll(); });
     document.getElementById('btnAdd').addEventListener('click', openAdd);

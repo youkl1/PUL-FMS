@@ -82,7 +82,7 @@ var DIAGRAMS = [
   { f: '14-stocktake',   t: '盘点流程（期初→盘点→盈亏）', c: '账面5片实数4片：盘亏1片出库；码损走无码记录' },
   { grp: '机制与数据（技术）' },
   { f: '06-data-model',  t: '数据模型 ER（概念总览）', c: '' },
-  { f: '12-er-fields',   t: '表结构 ER（字段级 · 核心七表）', c: '' },
+  { f: '12-er-fields',   t: '表结构 ER（关系版 · 核心七表）', c: '只列主外键+表作用；含 STOCK_BALANCE 派生视图与 SCAN_LOG【规划】；字段级见 er/pul-fms-full.sql' },
   { f: '16-er-core', dir: 'mermaid', t: '表结构 ER（轻量草图 · Mermaid）', c: '与图12同口径；DrawDB 美化的离线对照，DDL 见 er/pul-fms-core.sql' },
   { f: '09-state-machine', t: '状态机（场景式 · 码 × 单据）', c: '一个码的一生：8 场景 × 每列三问（码怎么变→哪张单据驱动→库存怎么动）+ 守恒总账' },
   { f: '11-usecase',     t: '用例图（按角色）', c: '' }

@@ -1408,9 +1408,13 @@ async function sync() {
         const remotePath = `${config.remoteDir}/prototypes/${f.remote}`;
         const remote = await remoteStat(sftp, remotePath);
         if (remote && remote.size === localSize) {
-          console.log(`  ⏭ 跳过 ${f.remote}（远程文件大小相同）`);
-          skipped++;
-          continue;
+          // 大小相同仍需校验 MD5（同 HTML 通道）：改名类编辑字节数不变（5字→5字），只看大小会漏传
+          const remoteMd5 = await exec(`md5sum ${remotePath} | awk '{print $1}'`);
+          if (remoteMd5.stdout.trim() === md5File(f.local)) {
+            console.log(`  ⏭ 跳过 ${f.remote}（远程文件内容相同）`);
+            skipped++;
+            continue;
+          }
         }
         await uploadFile(sftp, f.local, remotePath);
         console.log(`  ↑ 上传 ${f.remote} (${(localSize / 1024).toFixed(1)} KB)`);

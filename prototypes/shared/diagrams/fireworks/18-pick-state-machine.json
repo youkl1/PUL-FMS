@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "mode": "architecture",
+  "template_type": "architecture",
+  "style": 1,
+  "quality_profile": "showcase",
+  "text_policy": "strict",
+  "width": 1360,
+  "height": 860,
+  "title": "领用申请 → 出库单 · 进度状态机",
+  "subtitle": "一维生命周期对齐老系统四态：待提交（药房申请草稿·仅本侧可见；库房制单=空单直入待备货） → 待备货（直接扫码备货=动作不占状态位） → 待出库 → 待入库 → 药房已入库；草稿不扣账，审核出库即扣账",
+  "containers": [],
+  "nodes": [
+    {
+      "id": "E1",
+      "kind": "rect",
+      "x": 40,
+      "y": 110,
+      "width": 200,
+      "height": 54,
+      "label": "药房申请",
+      "sublabel": "领用申请单 · 草稿待提交",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "E2",
+      "kind": "rect",
+      "x": 305,
+      "y": 110,
+      "width": 220,
+      "height": 54,
+      "label": "库房制备货单",
+      "sublabel": "空单 · 直接进待备货",
+      "fill": "#ffffff",
+      "stroke": "#626976",
+      "flat": true
+    },
+    {
+      "id": "S1",
+      "kind": "rect",
+      "x": 40,
+      "y": 300,
+      "width": 200,
+      "height": 70,
+      "label": "待提交",
+      "sublabel": "药房申请草稿 · 仅本侧可见",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "S2",
+      "kind": "rect",
+      "x": 315,
+      "y": 300,
+      "width": 200,
+      "height": 70,
+      "label": "待备货",
+      "sublabel": "直接扫码备货 · 反解析匹配",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "S3",
+      "kind": "rect",
+      "x": 590,
+      "y": 300,
+      "width": 200,
+      "height": 70,
+      "label": "待出库",
+      "sublabel": "备齐待审核 · 落盘不扣账",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "S4",
+      "kind": "rect",
+      "x": 865,
+      "y": 300,
+      "width": 200,
+      "height": 70,
+      "label": "待入库",
+      "sublabel": "审核即扣账 · 码进在途",
+      "fill": "#ffffff",
+      "stroke": "#206bc4"
+    },
+    {
+      "id": "S5",
+      "kind": "rect",
+      "x": 1140,
+      "y": 300,
+      "width": 200,
+      "height": 70,
+      "label": "药房已入库",
+      "sublabel": "闭环 · 领用入库单核对",
+      "fill": "#ffffff",
+      "stroke": "#2fb344"
+    },
+    {
+      "id": "S6",
+      "kind": "rect",
+      "x": 570,
+      "y": 560,
+      "width": 240,
+      "height": 70,
+      "label": "已作废 / 已删除",
+      "sublabel": "终态 · 不进流水不扣账",
+      "fill": "#f6f8fb",
+      "stroke": "#626976"
+    },
+    {
+      "id": "G2",
+      "kind": "rect",
+      "x": 340,
+      "y": 700,
+      "width": 560,
+      "height": 76,
+      "label": "待备货 / 待出库 = 不占在架不扣账",
+      "sublabel": "集合推导只减过账单 · 扫码落盘刷新续作 · 作废即释放",
+      "fill": "#fdecea",
+      "stroke": "#d63939"
+    },
+    {
+      "id": "G1",
+      "kind": "rect",
+      "x": 940,
+      "y": 700,
+      "width": 390,
+      "height": 76,
+      "label": "出库守卫（四道闸）",
+      "sublabel": "失效码剔除 · 非申请药品禁止 · 过期/停用 · 盘点冻结",
+      "fill": "#fff7e6",
+      "stroke": "#d48806"
+    }
+  ],
+  "arrows": [
+    {
+      "id": "a1",
+      "source": "E1",
+      "target": "S1",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "a2",
+      "source": "E2",
+      "target": "S2",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "control"
+    },
+    {
+      "id": "a4",
+      "source": "S1",
+      "target": "S2",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control",
+      "label": "提交备货"
+    },
+    {
+      "id": "a5",
+      "source": "S2",
+      "target": "S3",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control",
+      "label": "扫码备齐"
+    },
+    {
+      "id": "a6",
+      "source": "S3",
+      "target": "S4",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control",
+      "label": "审核出库"
+    },
+    {
+      "id": "a7",
+      "source": "S4",
+      "target": "S5",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "control",
+      "label": "药房入库"
+    },
+    {
+      "id": "a8",
+      "source": "S1",
+      "target": "S6",
+      "source_port": "bottom",
+      "target_port": "left",
+      "flow": "feedback",
+      "label": "删除制单 / 删除草稿"
+    },
+    {
+      "id": "a9",
+      "source": "S3",
+      "target": "S6",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "feedback",
+      "label": "作废·释放码"
+    }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 48,
+  "legend_y": 812,
+  "legend": [
+    {
+      "flow": "control",
+      "label": "正向流转（事件驱动）"
+    },
+    {
+      "flow": "feedback",
+      "label": "逆向 · 删除 / 作废"
+    }
+  ],
+  "footer": "PUL-FMS · 18 领用申请→出库单进度状态机（2026-10-04 对齐老系统四态：待提交/待备货/待出库/待入库）· fireworks-tech-graph Style 1",
+  "footer_x": 48,
+  "footer_y": 840
+}

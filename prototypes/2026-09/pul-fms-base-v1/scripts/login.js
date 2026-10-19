@@ -1,6 +1,6 @@
 /**
  * login.js — 客户新版登录流程（2026-09-21 拍板）：
- * ① 账号密码校验 → ② 超级用户选院区 / 非超管自动进入唯一所属院区
+ * ① 账号密码校验 → ② 授权覆盖多院区时选院区（单院区锁定）
  * → ③ 既属库房又属药房的用户先选「库房管理/药房管理」→ ④ 选具体库房/药房
  * 单一授权用户（候选=1 且非超管）直达工作台；行数据按所选上下文自动隔离。
  */
@@ -61,18 +61,23 @@
     cands.forEach(function (c) { kinds[c.kind] = true; });
     var dual = kinds['库房'] && kinds['药房']; // 既属库房又属药房
     document.getElementById('step2Desc').textContent =
-      u.name + '（' + window.PUL.userRoleNames(u) + '），本次登录可进入 ' + cands.length + ' 个库房/药房';
-    // 院区：超级用户可选全部；非超管锁定其唯一所属院区
+      u.name + ' · ' + window.PUL.userRoleNames(u) + ' · 可进入 ' + cands.length + ' 个库房/药房';
+    // 院区：候选跨多个院区时可选，只覆盖一个院区时锁定（选项带数量，value 保持纯院区名）
     var orgs = [];
     cands.forEach(function (c) { if (orgs.indexOf(c.org) === -1) orgs.push(c.org); });
-    selOrg.innerHTML = orgs.map(function (o) { return '<option>' + o + '</option>'; }).join('');
-    selOrg.disabled = !u.super;
-    document.getElementById('orgHint').textContent = u.super ? '（超级用户可选院区）' : '（按所属院区自动进入）';
+    selOrg.innerHTML = orgs.map(function (o) {
+      var n = cands.filter(function (c) { return c.org === o; }).length;
+      return '<option value="' + o + '">' + o + '（' + n + ' 个）</option>';
+    }).join('');
+    selOrg.disabled = orgs.length <= 1;
+    document.getElementById('orgHint').textContent = orgs.length > 1 ? '（可切换）' : '（已锁定）';
     // 模式选择：仅双栖用户出现
     modeField.style.display = dual ? 'block' : 'none';
     if (dual) {
       modeCards.querySelectorAll('.mode-card').forEach(function (b) { b.classList.remove('active'); });
-      selNode.innerHTML = '<option value="">请先选择业务模块</option>';
+      selNode.innerHTML = '<option value="">请先选择上方管理类型</option>';
+      document.getElementById('nodeCount').textContent = '';
+      updateModeCounts();
     } else {
       pending.mode = kinds['药房'] ? '药房管理' : '库房管理';
       fillNodes();
@@ -91,6 +96,18 @@
     });
   });
 
+  // 模式卡徽标：显示当前院区下各类数量
+  function updateModeCounts() {
+    if (!pending) return;
+    modeCards.querySelectorAll('.mode-count').forEach(function (s) {
+      var kind = s.getAttribute('data-kind');
+      var n = pending.cands.filter(function (c) {
+        return c.org === selOrg.value && c.kind === kind;
+      }).length;
+      s.textContent = n;
+    });
+  }
+
   function fillNodes() {
     if (!pending) return;
     var kind = pending.mode === '药房管理' ? '药房' : '库房';
@@ -98,11 +115,15 @@
       return c.org === selOrg.value && (!pending.mode || c.kind === kind);
     });
     document.getElementById('nodeLabel').textContent = pending.mode === '药房管理' ? '药房' : '库房 / 药房';
+    document.getElementById('nodeCount').textContent = list.length + ' 个可选';
     selNode.innerHTML = list.map(function (c) {
-      return '<option value="' + c.node + '">' + c.node + '（' + c.type + '）</option>';
+      // 类型与名称相同时不重复展示（如「中心库（中心库）」→「中心库」）
+      var text = c.node === c.type ? c.node : c.node + '（' + c.type + '）';
+      return '<option value="' + c.node + '">' + text + '</option>';
     }).join('');
   }
   selOrg.addEventListener('change', function () {
+    updateModeCounts();
     if (pending && pending.mode) fillNodes();
     else if (pending && modeField.style.display === 'none') fillNodes();
   });
@@ -132,7 +153,7 @@
     if (!pwd) { setError('请输入密码'); return; }
     var u = window.PUL.findUser(account);
     if (!u) { fail('账号不存在，请检查输入'); return; }
-    if (u.status !== '正常') { fail('该账号已禁用，请联系上级管理员（4.4.4 权限注销）'); return; }
+    if (u.status !== '正常') { fail('该账号已禁用，请联系上级管理员'); return; }
     if (pwd !== '123456') { fail('密码错误（演示密码统一为 123456）'); return; }
     var cands = window.PUL.candidateContexts(u);
     // 直达：非超管且唯一候选节点（无需选模式）

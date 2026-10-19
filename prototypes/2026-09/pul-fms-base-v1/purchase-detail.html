@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="prototype-category" content="web-admin">
   <meta name="business-category" content="PUL-FMS 药品精细化管理系统 · 采购管理">
-  <title>采购明细查询 · PUL-FMS</title>
-  <link rel="stylesheet" href="styles/prototype-intro.css">
-  <link rel="stylesheet" href="styles/base.css">
+  <title>采购明细 · PUL-FMS</title>
+  <link rel="stylesheet" href="styles/prototype-intro.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/base.css?v=20261015-3">
   <link rel="stylesheet" href="../../shared/tabler/tabler.min.css">
-  <link rel="stylesheet" href="styles/tabler-preview.css">
-  <link rel="stylesheet" href="styles/purchase.css">
+  <link rel="stylesheet" href="styles/tabler-preview.css?v=20261015-3">
+  <link rel="stylesheet" href="styles/purchase.css?v=20261015-3">
   <style>
     body { background: #F5F7FA !important; }
     .pi-header { padding: 8px 20px !important; gap: 12px !important; min-height: 44px; }
@@ -31,8 +31,8 @@
     <header class="pi-header">
       <div class="pi-header-left">
         <span class="pi-badge">Web 管理后台</span>
-        <h1 class="pi-title">采购明细查询</h1>
-        <span class="pi-subtitle">原型页 · 药品维度汇总 → 单据维度下钻</span>
+        <h1 class="pi-title">采购明细</h1>
+        <span class="pi-subtitle">原型页 · 药品维度汇总 → 来源单据 → 码明细下钻</span>
       </div>
       <div class="pi-header-right">
         <button class="btn btn-ghost btn-sm" id="btnIntroDetail" type="button">详情</button>
@@ -53,11 +53,11 @@
       <div class="detail-modal-header">
         <div class="detail-modal-icon">🔍</div>
         <div class="detail-modal-title-wrap">
-          <h2>采购明细查询</h2>
+          <h2>采购明细</h2>
           <p class="subtitle">采购管理 · 人读视图：按药品查采购总量与来源单据</p>
         </div>
       </div>
-      <p class="lead"><strong>一句话概括：</strong>把所有入库单的码清单按药品聚合成「人读」明细（什么药、多少、哪个厂家），点药品行可下钻到来源单据，支持按追溯码/拆零属性/供应商多维筛选。</p>
+      <p class="lead"><strong>一句话概括：</strong>把所有入库单的码清单按药品聚合成「人读」明细（什么药、多少、哪个厂家）；点药品行下钻来源单据，再点「码明细」看逐码清单（监管码/父码/码等级/批次效期）；「流转」可从药品批次直接转领用出库/采购退货。</p>
       <div class="section">
         <div class="section-title">使用角色 + 上下游</div>
         <div class="card-grid">
@@ -73,20 +73,20 @@
         <div class="section-title">如何使用</div>
         <div class="steps">
           <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">筛选</div><div class="step-desc">按追溯码/药名/拆零属性/供应商/日期组合查询</div></div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">下钻</div><div class="step-desc">上表点药品行 → 下表显示该药的来源单据与数量</div></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">下钻</div><div class="step-desc">上表点药品行 → 下表来源单据 → 「码明细」看逐码清单；上表「流转」转领用出库/采购退货</div></div></div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">示例</div>
         <div class="example-box"><div class="example-title">场景示例</div>
-          <div class="example-text">查「健脾生血片」本月采购：上表显示总数 3 盒、健民集团 → 点行下钻，下表显示来自国药控股票据 4VS26091000041665，发票号 FP2026091008。</div>
+          <div class="example-text">查「健脾生血片」本月采购：上表显示总数 2 盒、健民集团 → 点行下钻，下表显示来自三明鹭燕票据 204-13898695，发票号 91350424。</div>
         </div>
       </div>
       <div class="section">
         <div class="section-title">场景呼应</div>
         <div class="example-list"><div class="example-item">
-          <div class="example-item-title">采购入库/已完成单（单据视角）⇄ 采购明细（本页，药品视角）</div>
-          <div class="example-item-desc">字段对齐老系统（药名通用名/药品规格/总数/住院拆零/门诊拆零/药品编码 + 单据编号/发票号/数量）；是架构原则 8「双层表达」的查询侧呈现。</div>
+          <div class="example-item-title">采购入库单/已完成单（单据视角）⇄ 采购明细（本页，药品视角）</div>
+          <div class="example-item-desc">字段对齐老系统采购明细（药名通用名/药品规格/总数/住院拆零/门诊拆零/药品编码 + 单据编号/发票号/数量 + 码明细/流转操作）；是架构原则 8「双层表达」的查询侧呈现。</div>
         </div></div>
       </div>
     </div>
@@ -101,13 +101,15 @@
 
   <div class="toast" id="toast"></div>
 
-  <script src="scripts/store.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="scripts/drug-data.js"></script>
-  <script src="scripts/purchase-data.js"></script>
-  <script src="scripts/purchase-shared.js"></script>
-  <script src="scripts/app-shell.js"></script>
-  <script src="scripts/purchase-detail.js"></script>
+  <script src="scripts/store.js?v=20261015-6"></script>
+  <script src="scripts/data.js?v=20261015-3"></script>
+  <script src="scripts/drug-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-data.js?v=20261016-1"></script>
+  <script src="scripts/purchase-shared.js?v=20261015-3"></script>
+  <script src="scripts/wh-data.js?v=20261015-6"></script>
+  <script src="scripts/facility-data.js?v=20261015-3"></script>
+  <script src="scripts/app-shell.js?v=20261016-3"></script>
+  <script src="scripts/purchase-detail.js?v=20261015-3"></script>
   <script>
     (function(){
       var modal = document.getElementById('introModal');

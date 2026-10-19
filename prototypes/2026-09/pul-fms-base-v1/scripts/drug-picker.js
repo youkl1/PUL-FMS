@@ -9,6 +9,7 @@
  *     pharmacy: '门诊药房',       // 药房存量口径 + 货位过滤的码来源
  *     slots: [{code:'M-01',name:'M 区 1 位'}],   // 货位下拉（facility pharmacies[].slots）
  *     showSlot: true,             // 已选清单是否带货位列（申请/制单用）
+ *     scanGot: function(drugCode)→number,   // 可选（2026-10-15 Round CR）：已选清单补 扫码总量/差异 两列（扫码核对场景编辑弹窗用）；数量变更即重渲染联动差异
  *     items: [{drugCode, qty, slot}]             // 预填已选
  *   });
  *   api.getItems() → [{drugCode, qty, slot}]（读 DOM 当前值）
@@ -111,26 +112,38 @@
           '<td>' + (sel ? '<span class="badge bg-green-lt">已选</span>' : '<button class="btn btn-sm btn-outline-primary" data-add="' + esc(d.drugCode) + '">+ 加入</button>') + '</td></tr>';
       }).join('');
       if (!rows) rows = '<tr><td colspan="12" class="text-center text-secondary" style="padding:20px;">无匹配药品</td></tr>';
-      return '<div class="table-responsive" style="max-height:260px;overflow-y:auto;"><table class="table table-vcenter card-table table-sm">' +
+      return '<div class="table-responsive dp-compact" style="max-height:220px;overflow-y:auto;"><table class="table table-vcenter card-table table-sm">' +
         '<thead><tr><th>序号</th><th>药品名称</th><th>规格</th><th>剂型</th><th>药房存量</th><th>药房零头</th><th>库房存量</th><th>库房零头</th><th>生产厂家</th><th>批准文号</th><th>药品编码</th><th></th></tr></thead>' +
         '<tbody>' + rows + '</tbody></table></div>';
     }
     function selTable() {
+      var sg = typeof opts.scanGot === 'function';   // 2026-10-15 Round CR：可选 扫码总量/差异 列（扫码核对场景的编辑弹窗用）
       var rows = items.map(function (it, i) {
         var d = drugOf(it.drugCode);
+        var scanCells = '';
+        var gotN = 0;
+        if (sg) {
+          gotN = opts.scanGot(it.drugCode) || 0;
+          var diff = (it.qty || 0) - gotN;
+          var diffCell = Math.abs(diff) < 1e-6 && gotN > 0 ? '<span class="badge bg-green-lt">✓ 备齐</span>'
+            : (diff > 0 ? '<span class="badge bg-orange-lt">缺 ' + diff + '</span>' : '<span class="badge bg-red-lt">超 ' + (-diff) + '</span>');
+          scanCells = '<td><b>' + gotN + '</b></td><td>' + diffCell + '</td>';
+        }
         return '<tr><td>' + (i + 1) + '</td><td><b>' + esc(d.drugName || it.drugCode) + '</b></td>' +
           '<td class="text-secondary">' + esc(d.formSpec || '') + '</td>' +
-          '<td><input class="form-control form-control-sm" data-dpqty="' + i + '" type="number" min="1" style="width:80px;" value="' + (it.qty || 1) + '"></td>' +
+          // Round CT：带 scanGot 时 min=扫码总量（计划数量不能小于扫码总量，输入级拦截）
+          '<td><input class="form-control form-control-sm" data-dpqty="' + i + '" type="number" min="' + (sg && gotN > 0 ? gotN : 1) + '" style="width:80px;" value="' + (it.qty || 1) + '"' + (sg && gotN > 0 ? ' title="计划数量不能小于扫码总量（' + gotN + '）"' : '') + '></td>' +
+          scanCells +
           '<td>' + esc(d.baseUnit || '') + '</td>' +
           (opts.showSlot ? '<td><select class="form-select form-select-sm" data-dpslot="' + i + '" style="width:110px;">' + slotOptsHtml(it.slot) + '</select></td>' : '') +
           '<td class="text-secondary" style="font-size:12px;">' + esc(d.approval || '') + '</td>' +
           '<td>' + esc(it.drugCode) + '</td>' +
           '<td><button class="btn btn-sm btn-outline-danger" data-dprm="' + i + '">删除</button></td></tr>';
       }).join('');
-      if (!rows) rows = '<tr><td colspan="9" class="text-center text-secondary" style="padding:16px;">点上方候选行「+ 加入」选择药品</td></tr>';
+      if (!rows) rows = '<tr><td colspan="' + (sg ? 11 : 9) + '" class="text-center text-secondary" style="padding:16px;">点上方候选行「+ 加入」选择药品</td></tr>';
       return '<div class="mt-2 mb-1"><b>已选清单</b><span class="text-secondary ms-2" style="font-size:12.5px;">' + items.length + ' 项 · 数量按基本单位</span></div>' +
-        '<div class="table-responsive" style="max-height:180px;overflow-y:auto;"><table class="table table-vcenter card-table table-sm">' +
-        '<thead><tr><th>序号</th><th>药品名称</th><th>规格</th><th>数量</th><th>单位</th>' + (opts.showSlot ? '<th>上架货位</th>' : '') + '<th>批准文号</th><th>药品编码</th><th></th></tr></thead>' +
+        '<div class="table-responsive dp-compact" style="max-height:160px;overflow-y:auto;"><table class="table table-vcenter card-table table-sm">' +
+        '<thead><tr><th>序号</th><th>药品名称</th><th>规格</th><th>计划数量</th>' + (sg ? '<th>扫码总量</th><th>差异</th>' : '') + '<th>单位</th>' + (opts.showSlot ? '<th>上架货位</th>' : '') + '<th>批准文号</th><th>药品编码</th><th></th></tr></thead>' +
         '<tbody>' + rows + '</tbody></table></div>';
     }
 
@@ -164,11 +177,27 @@
       });
       container.querySelectorAll('[data-dprm]').forEach(function (b) {
         b.addEventListener('click', function () {
-          readBack(); items.splice(+b.getAttribute('data-dprm'), 1); render();
+          var i = +b.getAttribute('data-dprm');
+          // 2026-10-15 Round CT 用户拍板：存在扫码总量的行删除需弹窗提示（已扫记录不受删行影响，须去扫码录入弹窗移除）
+          var got = (typeof opts.scanGot === 'function' && items[i]) ? (opts.scanGot(items[i].drugCode) || 0) : 0;
+          var doRm = function () { readBack(); items.splice(i, 1); render(); };
+          if (got > 0) {
+            var d = drugOf(items[i].drugCode);
+            window.PchUI.confirm('「' + esc(d.drugName || items[i].drugCode) + '」已扫码 ' + got + ' ' + esc(d.baseUnit || '') +
+              '——删除清单行不会移除已扫码记录（多扫的请到「扫码录入」弹窗移除），确认删除？', doRm, '仍要删除');
+          } else doRm();
         });
       });
       container.querySelectorAll('[data-dpqty],[data-dpslot]').forEach(function (inp) {
-        inp.addEventListener('change', readBack);
+        // Round CR：带 scanGot 时数量变更即重渲染（差异徽标联动更新）；Round CT：计划数量 < 扫码总量 即时回正+提示
+        inp.addEventListener('change', function () {
+          if (typeof opts.scanGot === 'function' && inp.hasAttribute('data-dpqty')) {
+            var i = +inp.getAttribute('data-dpqty'), got = opts.scanGot(items[i].drugCode) || 0;
+            var val = parseInt(inp.value, 10) || 0;
+            if (val < got) { window.showToast('计划数量不能小于扫码总量（' + got + '）'); inp.value = got; }
+          }
+          readBack(); if (typeof opts.scanGot === 'function') render();
+        });
       });
     }
     function kwFocus() {

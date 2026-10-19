@@ -1,12 +1,12 @@
 /**
- * quick-scan.js — 领用快捷扫码（高拍仪连续作业页）
+ * quick-scan.js — 备货出库扫码（高拍仪连续作业页，原「领用快捷扫码」2026-10-08 改名）
  * 单据模型（2026-10-05 单池化）：备货=待出库单内动作（docQty 渐满，状态不变）；本页=唯一扫码工作台
  * 三入口同构：?billNo= 深链续作 / 选单（待出库单）/ 新增备货单（直接出库→即建待出库单）
- * 每扫一码实时落盘；四道闸拦截码入 doc.badCodes；审核出库→已出库·待入库（重验在架，不再回写申请）
+ * 每扫一码实时落盘；四道闸拦截码入 doc.badCodes；审核出库→已出库（重验在架，不再回写申请）
  */
 (function () {
   'use strict';
-  var content = window.AppShell.render('desktopPreview', { active: 'quickScan', crumb: ['库房管理', '领用快捷扫码'] });
+  var content = window.AppShell.render('desktopPreview', { active: 'quickScan', crumb: ['扫码管理', '备货出库扫码'] });
   if (!content) return;
 
   var W = window.PUL_WH, D = window.PUL_DRUG, P = window.PUL_PCH, UI = window.PchUI, esc = UI.esc;
@@ -138,7 +138,7 @@
           '<td class="text-secondary">—</td><td><b>' + byDrug[dc].qty + '</b></td><td>' + esc(baseUnit(dc)) + '</td>' +
           '<td class="text-secondary">快捷</td></tr>';
       }).join('');
-      if (!dcs.length) rowsHtml = '<tr><td colspan="11" class="text-center text-secondary" style="padding:28px;">快捷单：扫码后此处按药品汇总实出数</td></tr>';
+      if (!dcs.length) rowsHtml = '<tr><td colspan="11" class="text-center text-secondary" style="padding:28px;">快捷单：扫码后此处按药品汇总实物数量</td></tr>';
     } else {
       rowsHtml = (doc.items || []).map(function (it, i) {
         var got = byDrug[it.drugCode] ? byDrug[it.drugCode].qty : 0;
@@ -153,9 +153,9 @@
       }).join('');
     }
     return '<div class="card"><div class="card-header"><b>药品汇总</b>' +
-      '<span class="text-secondary ms-2" style="font-size:12.5px;">' + (doc && (doc.items || []).length ? '申请数 vs 已扫数（基本单位口径，拆零按零头折计）' : '实出汇总') + '</span></div>' +
+      '<span class="text-secondary ms-2" style="font-size:12.5px;">' + (doc && (doc.items || []).length ? '计划数量 vs 扫码数量（基本单位口径，拆零按零头折计）' : '实出汇总') + '</span></div>' +
       '<div class="table-responsive"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>ID</th><th>药品编码</th><th>药名通用名</th><th>制剂规格</th><th>生产厂家</th><th>批准文号</th><th>上架货位</th><th>申请数</th><th>已扫数</th><th>单位</th><th>差额</th></tr></thead>' +
+      '<thead><tr><th>ID</th><th>药品编码</th><th>药名通用名</th><th>制剂规格</th><th>生产厂家</th><th>批准文号</th><th>上架货位</th><th>计划数量</th><th>扫码数量</th><th>单位</th><th>差额</th></tr></thead>' +
       '<tbody>' + rowsHtml + '</tbody></table></div></div>';
   }
 
@@ -251,7 +251,7 @@
       '<div class="mb-2 text-secondary" style="font-size:12.5px;">追溯码 ' + esc(code) + ' · 1' + esc(baseUnit(dc)) + ' = ' + per + esc(minUnitName(dc)) + '</div>' +
       '<label class="form-label required">零头数量（' + esc(minUnitName(dc)) + '）</label>' +
       '<input class="form-control" id="qsSplitQty" type="number" min="1" max="' + (per - 1) + '" value="' + (c.split === '是' ? esc(c.splitQty) : 1) + '">' +
-      '<div class="text-secondary mt-2" style="font-size:12.5px;">拆零后折合按 零头/' + per + ' 计入已扫数；清空零头请把数量改为 0 或直接剔除该码</div>',
+      '<div class="text-secondary mt-2" style="font-size:12.5px;">拆零后折合按 零头/' + per + ' 计入扫码数量；清空零头请把数量改为 0 或直接剔除该码</div>',
       '<button class="btn btn-outline-secondary" data-mclose>取消</button>' +
       '<button class="btn btn-primary" id="qsSplitOk">保存</button>', 420);
     var el = UI.open('qsSplit');
@@ -270,7 +270,7 @@
   function openNew() {
     var phs = (FS.pharmacies || []).filter(function (p) { return p.status === '启用'; });
     var phOpts = phs.map(function (p) { return '<option value="' + esc(p.name) + '">' + esc(p.name) + '</option>'; }).join('');
-    UI.modalShell('qsNewM', '新增备货单（直接出库）',
+    UI.modalShell('qsNewM', '新增备货单',
       '<div class="mb-3"><label class="form-label required">出库库房</label>' +
       '<select class="form-select" id="qsNewWh" disabled title="出库库房=当前登录库房，只能出本库房的货"><option>' + esc(curWh()) + '</option></select></div>' +
       '<div class="mb-3"><label class="form-label required">领用药房</label><select class="form-select" id="qsNewPh">' + phOpts + '</select></div>' +
@@ -342,7 +342,7 @@
       var r = null;
       base.forEach(function (x) { if (x.billNo === selNo) r = x; });
       if (!r) return '<tr><td colspan="10" class="text-center text-secondary" style="padding:20px;">选择上方单据后预览品规明细</td></tr>';
-      // 扫码数量实算：单池待出库单可带部分进度（codes 渐满），按药品聚合并按 toBase 折合（与「已扫数」同口径）
+      // 扫码数量实算：单池待出库单可带部分进度（codes 渐满），按药品聚合并按 toBase 折合（与「扫码数量」同口径）
       var gotMap = {};
       (r.codes || []).forEach(function (c) {
         var dc = drugOfCode(c.code);
@@ -375,7 +375,7 @@
       '<tbody id="qsPickDocs"></tbody></table></div>' +
       '<div class="text-secondary mt-1 mb-2" style="font-size:12px;" id="qsPickCount"></div>' +
       '<div class="table-responsive" style="max-height:180px;overflow-y:auto;"><table class="table table-vcenter card-table">' +
-      '<thead><tr><th>序号</th><th>上架货位</th><th>药品编码</th><th>药名通用名</th><th>药品规格</th><th>单据数量</th><th>扫码数量</th><th>单位</th><th>生产厂家</th><th>批准文号</th></tr></thead>' +
+      '<thead><tr><th>序号</th><th>上架货位</th><th>药品编码</th><th>药名通用名</th><th>药品规格</th><th>计划数量</th><th>扫码数量</th><th>单位</th><th>生产厂家</th><th>批准文号</th></tr></thead>' +
       '<tbody id="qsPickItems"></tbody></table></div>',
       '<button class="btn btn-outline-secondary" data-mclose>取消</button>', 980);
     var el = UI.open('qsPickM');
@@ -408,7 +408,7 @@
     refresh();
   }
 
-  // ===== 审核出库（待出库单推进为「已出库·待入库」；重验在架防跨时段失效码） =====
+  // ===== 审核出库（待出库单推进为「已出库」；重验在架防跨时段失效码） =====
   function openAudit() {
     var keys = Object.keys(picked);
     if (!doc || !keys.length) return;
@@ -436,7 +436,7 @@
       function () {
         var user = window.store.load().currentUser || {};
         var hasItems2 = (doc.items || []).length > 0;
-        doc.status = '已出库·待入库';
+        doc.status = '已出库';
         doc.outTime = W.now();
         doc.operator = user.name || '演示员';
         var byDrug2 = pickedByDrug();
@@ -469,7 +469,7 @@
 
   function bind() {
     document.getElementById('qsNew').addEventListener('click', openNew);
-    // 进度已落盘：换单/关闭不丢进度（单池同单，回到「领用备货单」可继续备货）
+    // 进度已落盘：换单/关闭不丢进度（单池同单，回到「领用备货单」可继续备货出库扫码）
     document.getElementById('qsPick').addEventListener('click', openPickReq);
     var qc = document.getElementById('qsClose');
     if (qc) qc.addEventListener('click', function () {
@@ -510,7 +510,7 @@
     });
   }
 
-  // 深链：?billNo= 待出库单续作（领用备货单「备货 / 继续备货 / 新增备货单」跳入）
+  // 深链：?billNo= 待出库单续作（领用备货单「备货出库扫码 / ＋新增备货单」跳入）
   (function initDeepLink() {
     var no = new URLSearchParams(location.search).get('billNo');
     if (!no) return;

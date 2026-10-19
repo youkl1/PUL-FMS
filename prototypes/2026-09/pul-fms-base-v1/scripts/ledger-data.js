@@ -4,6 +4,8 @@
 (function () {
   'use strict';
 
+  var V = window.PUL_VOCAB.ST;   // 状态词表常量（store.js 先行加载）
+
   function dict() { return window.PUL_DRUG.flat(window.PUL_DRUG.load()); }
   function parse(code) { return window.PUL_PCH.parseCode(code, dict()); }
   function drugName(code) {
@@ -28,37 +30,37 @@
     var out = [];
 
     (pch.inDocs || []).forEach(function (d) {
-      if (d.audit !== '已审核') return;
+      if (d.audit !== V.AUDITED) return;
       out.push(ev(d.auditDate || d.date, '采购入库单', d.billNo, 'purchase-in.html?billNo=' + encodeURIComponent(d.billNo),
         d.warehouse, codesOf(d)));
     });
     (pch.outDocs || []).forEach(function (d) {
-      if (d.status !== '已审核') return;
+      if (d.status !== V.AUDITED) return;
       out.push(ev(d.auditTime || d.date, '采购退货单', d.billNo, 'purchase-out.html', d.warehouse, codesOf(d)));
     });
     (wh.othInDocs || []).forEach(function (d) {
-      if (d.status !== '已审核') return;
+      if (d.status !== V.AUDITED) return;
       out.push(ev(d.auditTime || d.date, '其他入库单', d.billNo, 'wh-other-in.html', d.warehouse, codesOf(d)));
     });
     (wh.othOutDocs || []).forEach(function (d) {
-      if (d.status !== '已审核') return;
+      if (d.status !== V.AUDITED) return;
       out.push(ev(d.auditTime || d.date, '其他出库单', d.billNo, 'wh-other-out.html', d.warehouse, codesOf(d)));
     });
     (wh.lossDocs || []).forEach(function (d) {
-      if (d.status !== '已审核') return;
+      if (d.status !== V.AUDITED) return;
       out.push(ev(d.auditTime || d.date, '库房损耗', d.billNo, 'wh-loss-out.html?billNo=' + encodeURIComponent(d.billNo),
         d.warehouse, codesOf(d)));
     });
     (wh.pickDocs || []).forEach(function (d) {
-      if (!window.PUL_WH.pickPosted(d)) return;   // 待提交/待出库/已作废未过账，不是出库事实
-      var t = d.status === '已出库·待入库' ? '领用出库' : '药房入库';
-      out.push(ev((d.status === '已出库·待入库' ? d.outTime : d.inTime) || d.date, t, d.billNo, 'wh-pick.html', d.pharmacy || d.warehouse, codesOf(d)));
+      if (!window.PUL_WH.pickPosted(d)) return;   // 草稿/待出库/已作废未过账，不是出库事实
+      var t = d.status === V.OUT ? '领用出库' : '药房入库';
+      out.push(ev((d.status === V.OUT ? d.outTime : d.inTime) || d.date, t, d.billNo, 'wh-pick.html', d.pharmacy || d.warehouse, codesOf(d)));
     });
     (wh.retPool || []).forEach(function (d) {
       out.push(ev(d.date, '药房退回', d.retNo, 'ph-ret-out.html', d.pharmacy, codesOf(d)));
     });
     (wh.phLossDocs || []).forEach(function (d) {
-      if (d.status !== '已审核') return;
+      if (d.status !== V.AUDITED) return;
       out.push(ev(d.auditTime || d.date, '药房损耗', d.billNo, 'ph-loss.html', d.pharmacy, codesOf(d)));
     });
     (rx.rxDocs || []).forEach(function (d) {
