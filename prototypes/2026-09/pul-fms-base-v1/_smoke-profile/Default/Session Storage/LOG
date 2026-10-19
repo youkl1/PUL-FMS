@@ -1,6 +1,0 @@
-2026/10/03-22:25:23.293 41c8 Reusing MANIFEST D:\Claude-code\PUL-FMS\PUL-FMS\prototypes\2026-09\pul-fms-base-v1\_smoke-profile\Default\Session Storage/MANIFEST-000001
-2026/10/03-22:25:23.293 41c8 Recovering log #3
-2026/10/03-22:25:23.296 41c8 Reusing old log D:\Claude-code\PUL-FMS\PUL-FMS\prototypes\2026-09\pul-fms-base-v1\_smoke-profile\Default\Session Storage/000003.log 
-2026/10/03-22:25:24.171 c3bc Level-0 table #5: started
-2026/10/03-22:25:24.183 c3bc Level-0 table #5: 20356 bytes OK
-2026/10/03-22:25:24.201 c3bc Delete type=0 #3

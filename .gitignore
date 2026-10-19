@@ -2,3 +2,4 @@
 **/_shots/*
 !**/fireworks/_shots/_shot-*.png
 _shots${p}.png
+prototypes/**/_smoke-profile/
