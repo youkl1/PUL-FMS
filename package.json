@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "deploy": "node deploy/sync.js"
+  },
+  "devDependencies": {
+    "mermaid": "^10.9.8",
+    "ssh2": "^1.17.0"
+  }
+}

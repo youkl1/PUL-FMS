@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>采购入库单 · 功能分支验证清单（Round CB）</title>
+<!--
+  verification/pul-fms/arrive-branches.html — 采购到货单 37 分支待办验证清单（Round CA，2026-10-14）
+  用途：逐分支验证原型实现准确性——勾选持久化（localStorage），点「直达」深链到演示单据现场。
+  位置约定：本目录独立于 prototypes/（不被 deploy 扫描上线）；后续其他单据清单放同目录扩展。
+  演示单号约定：专号专用不复用；种子变更须同步本清单（数据源在下方 BRANCHES 数组）。
+-->
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f1f5f9; color: #1f2937;
+    font: 13.5px/1.65 -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 16px 16px 60px; }
+  /* 顶部 sticky 概览 */
+  .hd { position: sticky; top: 0; z-index: 10; background: #fff; border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(15,23,42,.06); padding: 12px 16px; margin: -16px -16px 16px; }
+  .hd-in { max-width: 1068px; margin: 0 auto; }
+  .hd h1 { font-size: 17px; margin: 0 0 2px; }
+  .hd h1 .stamp { font-size: 12px; color: #626976; font-weight: normal; margin-left: 8px; }
+  .hd .sub { font-size: 12px; color: #626976; margin-bottom: 8px; }
+  .hd .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .prog { flex: 1; min-width: 200px; height: 8px; background: #e2e8f0; border-radius: 99px; overflow: hidden; }
+  .prog i { display: block; height: 100%; width: 0; background: #1f9d55; border-radius: 99px; transition: width .2s ease-out; }
+  .prog-txt { font-size: 12.5px; color: #1f2937; white-space: nowrap; }
+  .btn { border: 1px solid #d1d9e0; background: #fff; border-radius: 6px; padding: 4px 12px;
+    font-size: 12.5px; cursor: pointer; color: #1f2937; }
+  .btn:hover { border-color: #206bc4; color: #206bc4; }
+  .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: #626976; margin-top: 8px; }
+  /* 节点卡片 */
+  .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+  .card > h2 { font-size: 14.5px; margin: 0; padding: 10px 16px; background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0; }
+  .card > h2 .cnt { font-size: 12px; color: #626976; font-weight: normal; margin-left: 8px; }
+  /* 分支行 */
+  .it { display: flex; gap: 10px; padding: 10px 16px; border-bottom: 1px solid #f1f5f9; align-items: flex-start; }
+  .it:last-child { border-bottom: 0; }
+  .it.done { background: #f6fbf8; }
+  .it.done .nm { text-decoration: line-through; color: #94a3b8; }
+  .it input[type=checkbox] { margin-top: 3px; width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; }
+  .it .main { flex: 1; min-width: 0; }
+  .it .nm { font-weight: 600; font-size: 13.5px; }
+  .it .id { color: #626976; font-weight: normal; font-family: Consolas, monospace; font-size: 12px; margin-right: 6px; }
+  .it .meta { font-size: 12.5px; color: #475569; margin-top: 3px; }
+  .it .meta b { color: #1f2937; }
+  .it .exp { font-size: 12.5px; margin-top: 3px; }
+  .it .exp::before { content: "验收："; color: #626976; }
+  /* 徽标 */
+  .tag { display: inline-block; font-size: 11px; border-radius: 99px; padding: 1px 8px; margin-left: 6px;
+    vertical-align: 1px; white-space: nowrap; }
+  .tag.ok  { background: #e6f6ee; color: #1f9d55; }
+  .tag.run { background: #fef3e2; color: #b45309; }
+  .tag.glob{ background: #f1f5f9; color: #626976; }
+  .fresh   { display: inline-block; font-size: 11px; border-radius: 99px; padding: 1px 8px; margin-left: 4px;
+    background: #e7f1ff; color: #206bc4; vertical-align: 1px; }
+  .go { flex-shrink: 0; align-self: center; }
+  .go a { display: inline-block; border: 1px solid #cbd5e1; border-radius: 6px; padding: 3px 10px;
+    font-size: 12px; color: #206bc4; text-decoration: none; background: #fff; white-space: nowrap; }
+  .go a:hover { background: #206bc4; color: #fff; border-color: #206bc4; }
+  .go .none { font-size: 12px; color: #cbd5e1; }
+</style>
+</head>
+<body>
+<div class="hd"><div class="hd-in">
+  <h1>采购入库单 · 功能分支验证清单<span class="stamp">Round CB · 2026-10-14 · 原型 pul-fms-base-v1 · 批1 采购域收尾</span></h1>
+  <div class="sub">逐分支验证实现准确性：勾一个亮一格（localStorage 持久化，刷新不丢）；「直达」打开演示单据现场。轮次记录：prototypes/2026-09/pul-fms-base-v1/README.md · Round CB</div>
+  <div class="row">
+    <div class="prog"><i id="bar"></i></div>
+    <span class="prog-txt" id="progTxt"></span>
+    <button class="btn" id="btnReset">重置勾选</button>
+  </div>
+  <div class="legend">
+    <span>✅ 有种子数据</span><span>⚠️ 需前置操作 / 运行时</span><span>🚫 不可种子化</span><span>🧪 本轮补（Round CA 新演示单）</span>
+  </div>
+</div></div>
+<div class="wrap" id="app"></div>
+
+<script>
+(function () {
+  'use strict';
+  var BASE = '../../prototypes/2026-09/pul-fms-base-v1/';
+  var KEY = 'verify:purchase-in-branches:CB';
+  var TAGS = {
+    ok:   ['✅', '有种子数据'],
+    run:  ['⚠️', '需前置操作'],
+    glob: ['🚫', '不可种子化']
+  };
+  var NODES = [
+    { no: 1, name: '单据列表与筛选（结果台账 · 无新增/编辑）' },
+    { no: 2, name: '推送（HIS / 医保双通道）' },
+    { no: 3, name: '流转（以本单码生成下游单据）' },
+    { no: 4, name: '反审核（删单+码撤架+回链到货单，四重守卫）' }
+  ];
+  var BRANCHES = [];
+  // ===== 数据：依赖单号=演示种子（专号专用）；link=相对原型的深链（?billNo= 已支持跨页选中） =====
+  BRANCHES.push(
+    { id: '1.1', node: 1, name: '列表 15 列展示', tag: 'ok', fresh: true, dep: '6 张入库单（含本轮 204-13826100）',
+      how: '打开「采购入库单」页',
+      expect: '15 列齐全；「单据类型」列=采购入库；扫码数量列=已核对码数（BV 口径）', link: 'purchase-in.html' },
+    { id: '1.2', node: 1, name: '六项筛选 + 重置', tag: 'ok', dep: '通用',
+      how: '单据编号/发货方/收货方/发票号/单据日期任填→查询',
+      expect: '过滤正确；重置恢复全量', link: '' },
+    { id: '1.3', node: 1, name: '行选中 → 两只读页签', tag: 'ok', dep: '204-13898695',
+      how: '点行 → 码详情（8 列）/ 药品清单（扫码数量=onlyChecked）',
+      expect: '两页签切换正常、数据联动', link: 'purchase-in.html?billNo=204-13898695' },
+    { id: '1.4', node: 1, name: '手动来源徽标', tag: 'run', dep: '运行时：到货单 6.4 无码审核后生成',
+      how: '先在到货单对 DH20261011001 无码审核 → 回本页看该单',
+      expect: '单号旁橙色「手动」徽标', link: '' },
+    { id: '2.1', node: 2, name: '推送 HIS', tag: 'ok', dep: '204-13898695（未推送）',
+      how: '行内「推送HIS」→ 弹窗确认',
+      expect: 'HIS推送列变「已推送」（绿灯）；toast 确认', link: 'purchase-in.html?billNo=204-13898695' },
+    { id: '2.2', node: 2, name: '推送医保', tag: 'ok', dep: '204-13898695（miPush 未推送）',
+      how: '行内「推送医保」→ 确认',
+      expect: '医保推送列变「已推送」', link: 'purchase-in.html?billNo=204-13898695' },
+    { id: '2.3', node: 2, name: '已推送可重推', tag: 'ok', dep: '204-13832933（已推送）',
+      how: '对已推送单再点「推送HIS」→ 确认',
+      expect: '重推成功仍「已推送」（幂等，BV 只留推送通道）', link: 'purchase-in.html?billNo=204-13832933' },
+    { id: '3.1', node: 3, name: '流转 → 领用出库', tag: 'ok', dep: '任一入库单',
+      how: '「流转」→ 领用出库 → 选领用药房 → 创建草稿并去扫码',
+      expect: '生成 LYCK「待出库」草稿（码预填、备注回链本单）+ 直开统一扫码弹窗', link: '' },
+    { id: '3.2', node: 3, name: '流转 → 采购退货', tag: 'ok', dep: '204-13898695',
+      how: '「流转」→ 采购退货',
+      expect: '生成「未审核」退货单（refOrder 回链本单）并跳采购退货单页', link: 'purchase-in.html?billNo=204-13898695' },
+    { id: '3.3', node: 3, name: '在途退货单复用跳转', tag: 'ok', fresh: true, dep: '204-13832933（本轮 TH20261014002 已挂其名下未审核）',
+      how: '对该单再点「流转」→ 采购退货',
+      expect: 'toast「本单已有在途退货单 TH20261014002，直接跳转」并跳转', link: 'purchase-in.html?billNo=204-13832933' },
+    { id: '4.1', node: 4, name: '正常反审核 + 到货单快照重建', tag: 'ok', fresh: true, dep: '204-13826100（本轮补：到货单缺失快照单）',
+      how: '行内「反审核」→ 确认 → 到「采购到货单」页看',
+      expect: '入库单消失、3 码从在架撤出；按快照重建到货单 204-13826100（待审核、验收态保留）', link: 'purchase-in.html?billNo=204-13826100' },
+    { id: '4.2', node: 4, name: '拦截：已推送 HIS', tag: 'ok', dep: '204-13832933（已推送）',
+      how: '行内「反审核」',
+      expect: 'toast「不可反审核：单据已推送 HIS，请先在 HIS 侧撤回」', link: 'purchase-in.html?billNo=204-13832933' },
+    { id: '4.3', node: 4, name: '拦截：码已入药房', tag: 'ok', fresh: true, dep: 'FK5XSG01481687-1（末码 phLoc=M-01，本轮预置）',
+      how: '行内「反审核」',
+      expect: 'toast「不可反审核：追溯码已入库药房（已上架货位），请先走退货流程」', link: 'purchase-in.html?billNo=FK5XSG01481687-1' },
+    { id: '4.4', node: 4, name: '拦截：被已审核退货单引用', tag: 'ok', fresh: true, dep: '204-13898695 + TH20261013001（已审核退货引用其码 000550202）',
+      how: '行内「反审核」',
+      expect: 'toast「不可反审核：1 个码已被已审核退货单引用，请先处理退货单」', link: 'purchase-in.html?billNo=204-13898695' }
+  );
+
+  function loadState() {
+    try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { return {}; }
+  }
+  function saveState(s) { localStorage.setItem(KEY, JSON.stringify(s)); }
+
+  function render() {
+    var st = loadState();
+    var html = '';
+    NODES.forEach(function (nd) {
+      var items = BRANCHES.filter(function (b) { return b.node === nd.no; });
+      var done = items.filter(function (b) { return st[b.id]; }).length;
+      html += '<div class="card"><h2>' + nd.no + ' · ' + nd.name +
+        '<span class="cnt">' + done + ' / ' + items.length + ' 已验证</span></h2>';
+      items.forEach(function (b) {
+        var t = TAGS[b.tag] || TAGS.ok;
+        var link = b.link ? '<a href="' + BASE + b.link + '" target="_blank">直达 ↗</a>' : '<span class="none">页面操作</span>';
+        html += '<div class="it' + (st[b.id] ? ' done' : '') + '">' +
+          '<input type="checkbox" data-id="' + b.id + '"' + (st[b.id] ? ' checked' : '') + '>' +
+          '<div class="main">' +
+            '<span class="nm"><span class="id">' + b.id + '</span>' + b.name + '</span>' +
+            '<span class="tag ' + b.tag + '">' + t[0] + ' ' + t[1] + '</span>' +
+            (b.fresh ? '<span class="fresh">🧪 本轮补</span>' : '') +
+            (b.dep ? '<div class="meta">依赖：<b>' + b.dep + '</b></div>' : '') +
+            (b.how ? '<div class="meta">操作：' + b.how + '</div>' : '') +
+            '<div class="exp">' + b.expect + '</div>' +
+          '</div>' +
+          '<div class="go">' + link + '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+    });
+    document.getElementById('app').innerHTML = html;
+    bind(st);
+  }
+
+  function progress(st) {
+    var total = BRANCHES.length;
+    var done = BRANCHES.filter(function (b) { return st[b.id]; }).length;
+    document.getElementById('bar').style.width = (total ? Math.round(done * 100 / total) : 0) + '%';
+    document.getElementById('progTxt').textContent = '已验证 ' + done + ' / ' + total;
+  }
+
+  function bind(st) {
+    document.querySelectorAll('[data-id]').forEach(function (cb) {
+      cb.addEventListener('change', function () {
+        var id = cb.getAttribute('data-id');
+        st = loadState();
+        if (cb.checked) st[id] = true; else delete st[id];
+        saveState(st);
+        cb.closest('.it').classList.toggle('done', cb.checked);
+        progress(st);
+      });
+    });
+    progress(st);
+  }
+
+  document.getElementById('btnReset').addEventListener('click', function () {
+    if (confirm('确定清空全部勾选记录？')) { localStorage.removeItem(KEY); render(); }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

@@ -3,3 +3,6 @@
 !**/fireworks/_shots/_shot-*.png
 _shots${p}.png
 prototypes/**/_smoke-profile/
+node_modules/
+.superpowers/
+dom.html
